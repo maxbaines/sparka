@@ -2,6 +2,7 @@ import {
   appendResponseMessages,
   convertToCoreMessages,
   createDataStream,
+  formatDataStreamPart,
   streamText,
 } from 'ai';
 import { auth } from '@/app/(auth)/auth';
@@ -665,10 +666,31 @@ export async function POST(request: NextRequest) {
         }
       });
 
-      console.log('RESPONSE > POST /api/chat: Returning resumable stream');
-      return new Response(
-        await streamContext.resumableStream(streamId, () => stream),
+      // Start background processing
+      after(async () => {
+        await streamContext.resumableStream(streamId, () => stream);
+      });
+
+      // Return early with signal to continue via GET
+      const continueDataStream = createDataStream({
+        execute: (dataStream) => {
+          dataStream.write(
+            formatDataStreamPart('start_step', {
+              messageId,
+            }),
+          );
+
+          dataStream.writeData({
+            type: 'message-continues',
+            messageId: messageId,
+          });
+        },
+      });
+
+      console.log(
+        'RESPONSE > POST /api/chat: Returning message-continues signal',
       );
+      return new Response(continueDataStream);
     } catch (error) {
       clearTimeout(timeoutId);
       if (reservation) {

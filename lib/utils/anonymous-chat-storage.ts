@@ -219,7 +219,19 @@ export async function saveAnonymousMessage(
     }
 
     const allMessages = await loadAnonymousMessagesFromStorage();
-    allMessages.push(message);
+
+    // Check if message with same ID already exists
+    const existingIndex = allMessages.findIndex((msg) => msg.id === message.id);
+    if (existingIndex !== -1) {
+      // Replace existing message but preserve original parentMessageId
+      allMessages[existingIndex] = {
+        ...message,
+        parentMessageId: allMessages[existingIndex].parentMessageId,
+      };
+    } else {
+      // Add new message
+      allMessages.push(message);
+    }
 
     localStorage.setItem(ANONYMOUS_MESSAGES_KEY, JSON.stringify(allMessages));
   } catch (error) {

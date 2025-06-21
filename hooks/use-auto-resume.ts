@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { YourUIMessage } from '@/lib/types/ui';
 
-export type DataPart = { type: 'append-message'; message: string };
+export type DataPart =
+  | { type: 'append-message'; message: string }
+  | { type: 'message-continues'; messageId: string; sequence?: number };
 
 export interface UseAutoResumeProps {
   autoResume: boolean;
@@ -21,6 +23,8 @@ export function useAutoResume({
   data,
   setMessages,
 }: UseAutoResumeProps) {
+  const processedSignals = useRef<Set<string>>(new Set());
+
   useEffect(() => {
     if (!autoResume) return;
 
@@ -41,11 +45,32 @@ export function useAutoResume({
   useEffect(() => {
     if (!data || data.length === 0) return;
 
-    const dataPart = data[0] as DataPart;
+    const dataPart = data[data.length - 1] as DataPart;
 
     if (dataPart.type === 'append-message') {
       const message = JSON.parse(dataPart.message) as YourUIMessage;
       setMessages([...initialMessages, message]);
+    } else if (dataPart.type === 'message-continues') {
+      const signalKey = `continues-${dataPart.messageId}-${dataPart.sequence || 0}`;
+
+      // Only process if we haven't already processed this signal
+      if (!processedSignals.current.has(signalKey)) {
+        console.log(
+          'Received message-continues signal, calling experimental_resume for message:',
+          dataPart.messageId,
+          'sequence:',
+          dataPart.sequence || 0,
+        );
+        processedSignals.current.add(signalKey);
+        experimental_resume();
+      } else {
+        console.log(
+          'Already processed message-continues signal for message:',
+          dataPart.messageId,
+          'sequence:',
+          dataPart.sequence || 0,
+        );
+      }
     }
-  }, [data, initialMessages, setMessages]);
+  }, [data, initialMessages, setMessages, experimental_resume]);
 }

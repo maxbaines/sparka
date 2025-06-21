@@ -25,7 +25,6 @@ import {
   saveAnonymousChatToStorage,
   deleteAnonymousTrailingMessages,
   cloneAnonymousChat,
-  loadAnonymousDocumentsByMessageIds,
   loadAnonymousDocumentsByDocumentId,
   saveAnonymousDocument,
 } from '@/lib/utils/anonymous-chat-storage';
@@ -360,29 +359,36 @@ export function useCloneChat() {
           trpc.chat.getPublicChatMessages.queryKey({ chatId }),
         );
 
-
         if (!originalChat || !originalMessages) {
           throw new Error('Original chat data not found in cache');
         }
 
-        const originalMessagesIds = originalMessages.map((message: any) => message.id);
-        
+        const originalMessagesIds = originalMessages.map(
+          (message: any) => message.id,
+        );
+
         // Get all getPublicDocuments queries from cache and filter documents by messageId
         const allDocumentQueries = queryClient.getQueriesData({
-          queryKey: trpc.document.getPublicDocuments.queryKey({ id: '' }).slice(0, -1) // Remove the specific id filter to match all
+          queryKey: trpc.document.getPublicDocuments
+            .queryKey({ id: '' })
+            .slice(0, -1), // Remove the specific id filter to match all
         });
-        
-        
-        const originalDocuments = allDocumentQueries
-        .flatMap(([_, data]) => data || [])
-        .filter((document: any) => originalMessagesIds.includes(document.messageId));
-        console.log(originalMessages)
-        console.log(originalDocuments);
-          
 
-        
+        const originalDocuments = allDocumentQueries
+          .flatMap(([_, data]) => data || [])
+          .filter((document: any) =>
+            originalMessagesIds.includes(document.messageId),
+          );
+        console.log(originalMessages);
+        console.log(originalDocuments);
+
         const newId = generateUUID();
-        await cloneAnonymousChat(originalMessages, originalChat, originalDocuments, newId);
+        await cloneAnonymousChat(
+          originalMessages,
+          originalChat,
+          originalDocuments,
+          newId,
+        );
         return { chatId: newId };
       }
     },
@@ -445,6 +451,20 @@ export function useSaveMessageMutation() {
             false,
           );
           if (!old) return [newMessage];
+
+          // Check if message with same ID already exists
+          const existingIndex = old.findIndex((msg) => msg.id === message.id);
+          if (existingIndex !== -1) {
+            // Replace existing message but preserve original parentMessageId
+            const updated = [...old];
+            updated[existingIndex] = {
+              ...newMessage,
+              parentMessageId: old[existingIndex].parentMessageId,
+            };
+            return updated;
+          }
+
+          // Append new message
           return [...old, newMessage];
         },
       );
@@ -527,11 +547,11 @@ export function useSetVisibility() {
 }
 
 export function useSaveDocument(
-  documentId: string, 
+  documentId: string,
   messageId: string,
   options?: {
     onSettled?: (result: any, error: any, params: any) => void;
-  }
+  },
 ) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -554,11 +574,13 @@ export function useSaveDocument(
             messageId: messageId,
           };
           await saveAnonymousDocument(documentToSave);
-          return {success: true};
+          return { success: true };
         },
     onMutate: async (newDocument) => {
-      const queryKey = trpc.document.getDocuments.queryKey({ id: newDocument.id });
-      
+      const queryKey = trpc.document.getDocuments.queryKey({
+        id: newDocument.id,
+      });
+
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey });
 
@@ -575,11 +597,11 @@ export function useSaveDocument(
           title: newDocument.title,
           content: newDocument.content,
           kind: newDocument.kind,
-          userId: isAuthenticated ? (userId || '') : (anonymousSession?.id || ''), // Ensure always string
+          userId: isAuthenticated ? userId || '' : anonymousSession?.id || '', // Ensure always string
           messageId: messageId,
         },
       ];
-      
+
       queryClient.setQueryData(queryKey, optimisticData);
 
       return { previousDocuments, newDocument };
@@ -587,7 +609,9 @@ export function useSaveDocument(
     onError: (err, newDocument, context) => {
       // Rollback to previous documents on error
       if (context?.previousDocuments) {
-        const queryKey = trpc.document.getDocuments.queryKey({ id: newDocument.id });
+        const queryKey = trpc.document.getDocuments.queryKey({
+          id: newDocument.id,
+        });
         queryClient.setQueryData(queryKey, context.previousDocuments);
       }
     },
@@ -596,7 +620,7 @@ export function useSaveDocument(
       queryClient.invalidateQueries({
         queryKey: trpc.document.getDocuments.queryKey({ id: params.id }),
       });
-      
+
       // Call custom onSettled if provided
       options?.onSettled?.(result, error, params);
     },
@@ -608,35 +632,44 @@ export function useDocuments(id: string, disable: boolean) {
   const { isShared } = useChatId();
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
-  
+
   const documentsQueryOptions = useMemo(() => {
     if (isShared) {
       return trpc.document.getPublicDocuments.queryOptions(
-        { id: id},
+        { id: id },
         {
           enabled: !disable && !!id,
-        }
+        },
       );
     } else {
-      if(isAuthenticated){
+      if (isAuthenticated) {
         return trpc.document.getDocuments.queryOptions(
-          { id: id  },
+          { id: id },
           {
             enabled: !disable && !!id,
-          }
+          },
         );
-      }else{
+      } else {
         return {
           queryKey: trpc.document.getDocuments.queryKey({ id: id }),
           queryFn: async () => {
-            const documents = await loadAnonymousDocumentsByDocumentId(id || '');
+            const documents = await loadAnonymousDocumentsByDocumentId(
+              id || '',
+            );
             return documents;
           },
           enabled: !disable && !!id,
-        }
+        };
       }
     }
-  }, [trpc.document.getDocuments, trpc.document.getPublicDocuments, id, disable, isShared, isAuthenticated]);
+  }, [
+    trpc.document.getDocuments,
+    trpc.document.getPublicDocuments,
+    id,
+    disable,
+    isShared,
+    isAuthenticated,
+  ]);
 
   return useQuery(documentsQueryOptions);
 }
