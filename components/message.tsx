@@ -22,6 +22,7 @@ import { AttachmentList } from './attachment-list';
 import { Skeleton } from './ui/skeleton';
 import { InstagramChats } from './instagram-chats';
 import { InstagramStories } from './instagram-stories';
+import { InstagramProfile } from './instagram-profile';
 
 const PurePreviewMessage = ({
   chatId,
@@ -207,7 +208,8 @@ const PurePreviewMessage = ({
                       className={cx({
                         skeleton:
                           toolName === 'list_chats' ||
-                          toolName === 'get_user_stories',
+                          toolName === 'get_user_stories' ||
+                          toolName === 'get_user_info',
                       })}
                     >
                       {toolName === 'list_chats' ? (
@@ -219,6 +221,11 @@ const PurePreviewMessage = ({
                         <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
                           <span>Loading Instagram stories...</span>
+                        </div>
+                      ) : toolName === 'get_user_info' ? (
+                        <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
+                          <span>Loading user profile...</span>
                         </div>
                       ) : (
                         <pre>{JSON.stringify(toolInvocation, null, 2)}</pre>
@@ -236,6 +243,8 @@ const PurePreviewMessage = ({
                         <InstagramChats result={result as any} />
                       ) : toolName === 'get_user_stories' ? (
                         <InstagramStories result={result as any} />
+                      ) : toolName === 'get_user_info' ? (
+                        <InstagramProfile result={result as any} />
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>
                       )}
