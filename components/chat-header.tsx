@@ -2,13 +2,13 @@
 import { useWindowSize } from 'usehooks-ts';
 import { SidebarToggle } from '@/components/sidebar-toggle';
 import { Button } from '@/components/ui/button';
-import { PlusIcon } from './icons';
+import { GitIcon, PlusIcon } from './icons';
 import { useSidebar } from './ui/sidebar';
 import { memo } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { ShareButton } from './share-button';
 import { useNavigate } from 'react-router';
-import { Image, Share } from 'lucide-react';
+import { Share } from 'lucide-react';
 
 function PureChatHeader({
   chatId,
@@ -75,12 +75,12 @@ function PureChatHeader({
         asChild
       >
         <a
-          href="https://github.com/franciscomoretti/assistagram"
+          href="https://github.com/franciscomoretti/sparka"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center"
         >
-          <Image size={16} />
+          <GitIcon />
         </a>
       </Button>
     </header>

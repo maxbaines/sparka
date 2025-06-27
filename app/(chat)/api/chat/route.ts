@@ -463,7 +463,7 @@ export async function POST(request: NextRequest) {
     }
 
     // TODO: Do something smarter by truncating the context to a numer of tokens (maybe even based on setting)
-    const contextForLLM = convertToCoreMessages(messages.slice(-5));
+    const contextForLLM = convertToCoreMessages(messages.slice(-2));
 
     // Create AbortController with 55s timeout for credit cleanup
     const abortController = new AbortController();
