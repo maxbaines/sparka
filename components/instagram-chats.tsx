@@ -84,28 +84,40 @@ export function InstagramChats({ result }: InstagramChatsProps) {
                   {chat.users.map((user) => user.username).join(', ')}
                 </div>
 
-                {chat.last_message?.text && (
-                  <div className="text-sm">
-                    <span className="font-medium">
-                      {chat.last_message.is_sent_by_viewer
-                        ? 'You'
-                        : chat.users.find(
-                            (u) => u.pk === chat.last_message.user_id,
-                          )?.username || 'Unknown'}
-                      :
-                    </span>{' '}
-                    <span className="text-muted-foreground truncate">
-                      {chat.last_message.text}
-                    </span>
-                  </div>
-                )}
+                {chat.last_message && (
+                  <div className="text-sm space-y-1">
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant={
+                          chat.last_message.is_sent_by_viewer
+                            ? 'secondary'
+                            : 'default'
+                        }
+                        className="text-xs"
+                      >
+                        {chat.last_message.is_sent_by_viewer
+                          ? 'You sent'
+                          : 'They replied'}
+                      </Badge>
+                      {chat.last_message.item_type !== 'text' && (
+                        <Badge variant="outline" className="text-xs">
+                          {chat.last_message.item_type}
+                        </Badge>
+                      )}
+                    </div>
 
-                {chat.last_message?.item_type !== 'text' && (
-                  <div className="text-sm text-muted-foreground">
-                    <Badge variant="outline" className="text-xs">
-                      {chat.last_message.item_type}
-                    </Badge>{' '}
-                    message
+                    {chat.last_message.text && (
+                      <div className="text-muted-foreground truncate">
+                        "{chat.last_message.text}"
+                      </div>
+                    )}
+
+                    {!chat.last_message.text &&
+                      chat.last_message.item_type !== 'text' && (
+                        <div className="text-muted-foreground text-xs">
+                          {chat.last_message.item_type} message
+                        </div>
+                      )}
                   </div>
                 )}
               </div>

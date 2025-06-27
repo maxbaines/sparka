@@ -99,23 +99,11 @@ type ToolDefinition = {
 };
 
 export const toolsDefinitions: Record<string, ToolDefinition> = {
-  // Instagram MCP tools
+  // Essential Instagram MCP tools for MVP
   send_message: {
     name: 'send_message',
     description: 'Send an Instagram direct message to a user by username',
     cost: 2,
-  },
-  send_photo_message: {
-    name: 'send_photo_message',
-    description:
-      'Send a photo as an Instagram direct message to a user by username',
-    cost: 3,
-  },
-  send_video_message: {
-    name: 'send_video_message',
-    description:
-      'Send a video via Instagram direct message to a user by username',
-    cost: 3,
   },
   list_chats: {
     name: 'list_chats',
@@ -129,86 +117,15 @@ export const toolsDefinitions: Record<string, ToolDefinition> = {
       'Get messages from a specific Instagram Direct Message thread by thread ID',
     cost: 1,
   },
-  mark_message_seen: {
-    name: 'mark_message_seen',
-    description:
-      'Mark a specific message in an Instagram Direct Message thread as seen',
-    cost: 1,
-  },
-  list_pending_chats: {
-    name: 'list_pending_chats',
-    description: 'Get Instagram Direct Message threads from your pending inbox',
-    cost: 1,
-  },
-  search_threads: {
-    name: 'search_threads',
-    description:
-      'Search Instagram Direct Message threads by username or keyword',
-    cost: 1,
-  },
-  get_thread_by_participants: {
-    name: 'get_thread_by_participants',
-    description:
-      'Get an Instagram Direct Message thread by participant user IDs',
-    cost: 1,
-  },
-  get_thread_details: {
-    name: 'get_thread_details',
-    description:
-      'Get details and messages for a specific Instagram Direct Message thread by thread ID',
-    cost: 1,
-  },
-  get_user_id_from_username: {
-    name: 'get_user_id_from_username',
-    description: 'Get the Instagram user ID for a given username',
-    cost: 1,
-  },
-  get_username_from_user_id: {
-    name: 'get_username_from_user_id',
-    description: 'Get the Instagram username for a given user ID',
-    cost: 1,
-  },
   get_user_info: {
     name: 'get_user_info',
     description: 'Get information about a specific Instagram user by username',
-    cost: 1,
-  },
-  check_user_online_status: {
-    name: 'check_user_online_status',
-    description: 'Check the online status of Instagram users',
-    cost: 1,
-  },
-  search_users: {
-    name: 'search_users',
-    description: 'Search for Instagram users by username',
     cost: 1,
   },
   get_user_stories: {
     name: 'get_user_stories',
     description:
       'Get recent stories from a specific Instagram user by username',
-    cost: 1,
-  },
-  like_media: {
-    name: 'like_media',
-    description: 'Like or unlike a specific media post by media ID',
-    cost: 1,
-  },
-  get_user_followers: {
-    name: 'get_user_followers',
-    description:
-      'Get a list of followers for a specific Instagram user by username',
-    cost: 1,
-  },
-  get_user_following: {
-    name: 'get_user_following',
-    description:
-      'Get a list of users that a specific Instagram user is following by username',
-    cost: 1,
-  },
-  get_user_posts: {
-    name: 'get_user_posts',
-    description: 'Get recent posts from a specific Instagram user by username',
     cost: 1,
   },
 };
