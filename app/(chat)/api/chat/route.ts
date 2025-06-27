@@ -437,6 +437,8 @@ export async function POST(request: NextRequest) {
           : 0,
     );
 
+    console.log('RESPONSE > POST /api/chat: Active tools:', activeTools);
+
     if (
       explicitlyRequestedTool &&
       !activeTools.includes(explicitlyRequestedTool)
@@ -509,8 +511,20 @@ export async function POST(request: NextRequest) {
 
       // Build the data stream that will emit tokens
       const stream = createDataStream({
-        execute: (dataStream) => {
+        execute: async (dataStream) => {
           const annotationStream = new AnnotationDataStreamWriter(dataStream);
+
+          const tools = await getTools({
+            dataStream: annotationStream,
+            session: {
+              user: {
+                id: userId || undefined,
+              },
+              expires: 'noop',
+            },
+            contextForLLM,
+            messageId,
+          });
 
           const result = streamText({
             model: getModelProvider(selectedChatModel),
@@ -524,17 +538,7 @@ export async function POST(request: NextRequest) {
               isEnabled: true,
               functionId: 'chat-response',
             },
-            tools: getTools({
-              dataStream: annotationStream,
-              session: {
-                user: {
-                  id: userId || undefined,
-                },
-                expires: 'noop',
-              },
-              contextForLLM,
-              messageId,
-            }),
+            tools,
             abortSignal: abortController.signal, // Pass abort signal to streamText
             ...(modelDefinition.features?.fixedTemperature
               ? {

@@ -4,30 +4,24 @@ import cx from 'classnames';
 import { AnimatePresence, motion } from 'motion/react';
 import { memo, useState } from 'react';
 import type { Vote } from '@/lib/db/schema';
-import { DocumentToolCall, DocumentToolResult } from './document';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
-import { Weather } from './weather';
 import equal from 'fast-deep-equal';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { MessageEditor } from './message-editor';
-import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
 import type { UseChatHelpers } from '@ai-sdk/react';
-import { Retrieve } from './retrieve';
 
-import type { YourToolInvocation } from '@/lib/ai/tools/tools';
-import { StockChartMessage } from './stock-chart-message';
-import { CodeInterpreterMessage } from './code-interpreter-message';
 import type { YourUIMessage } from '@/lib/types/ui';
 import {
   SourcesAnnotations,
   ResearchUpdateAnnotations,
 } from './message-annotations';
-import { ReadDocument } from './read-document';
 import { AttachmentList } from './attachment-list';
 import { Skeleton } from './ui/skeleton';
+import { InstagramChats } from './instagram-chats';
+import { InstagramStories } from './instagram-stories';
 
 const PurePreviewMessage = ({
   chatId,
@@ -200,7 +194,7 @@ const PurePreviewMessage = ({
 
               if (type === 'tool-invocation') {
                 const { toolInvocation: toolInvocationRaw } = part;
-                const toolInvocation = toolInvocationRaw as YourToolInvocation;
+                const toolInvocation = toolInvocationRaw as any;
 
                 if (
                   toolInvocation.state === 'call' ||
@@ -211,116 +205,40 @@ const PurePreviewMessage = ({
                     <div
                       key={toolCallId}
                       className={cx({
-                        skeleton: ['getWeather'].includes(toolName),
+                        skeleton:
+                          toolName === 'list_chats' ||
+                          toolName === 'get_user_stories',
                       })}
                     >
-                      {toolName === 'getWeather' ? (
-                        <Weather />
-                      ) : toolName === 'createDocument' ? (
-                        <DocumentPreview
-                          isReadonly={isReadonly}
-                          args={args}
-                          messageId={message.id}
-                        />
-                      ) : toolName === 'updateDocument' ? (
-                        <DocumentToolCall
-                          type="update"
-                          // @ts-expect-error // TODO: fix this
-                          args={args}
-                          isReadonly={isReadonly}
-                        />
-                      ) : toolName === 'requestSuggestions' ? (
-                        <DocumentToolCall
-                          type="request-suggestions"
-                          // @ts-expect-error // TODO: fix this
-                          args={args}
-                          isReadonly={isReadonly}
-                        />
-                      ) : toolName === 'retrieve' ? (
-                        <Retrieve />
-                      ) : toolName === 'stockChart' ? (
-                        <StockChartMessage result={null} args={args} />
-                      ) : toolName === 'codeInterpreter' ? (
-                        <CodeInterpreterMessage result={null} args={args} />
-                      ) : toolName !== 'deepResearch' &&
-                        // toolName !== 'reasonSearch' &&
-                        toolName !== 'webSearch' ? (
+                      {toolName === 'list_chats' ? (
+                        <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
+                          <span>Loading Instagram chats...</span>
+                        </div>
+                      ) : toolName === 'get_user_stories' ? (
+                        <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
+                          <span>Loading Instagram stories...</span>
+                        </div>
+                      ) : (
                         <pre>{JSON.stringify(toolInvocation, null, 2)}</pre>
-                      ) : null}
+                      )}
                     </div>
                   );
                 }
 
                 if (toolInvocation.state === 'result') {
                   const { toolName, toolCallId, args, result } = toolInvocation;
-                  const shouldShowFullPreview = isLastArtifact(toolCallId);
 
                   return (
                     <div key={toolCallId}>
-                      {toolName === 'getWeather' ? (
-                        <Weather weatherAtLocation={result} />
-                      ) : (toolName === 'createDocument' ||
-                          toolName === 'deepResearch') &&
-                        shouldShowFullPreview ? (
-                        <DocumentPreview
-                          isReadonly={isReadonly}
-                          result={result}
-                          args={args}
-                          messageId={message.id}
-                          type="create"
-                        />
-                      ) : toolName === 'createDocument' ||
-                        toolName === 'deepResearch' ? (
-                        <DocumentToolResult
-                          type="create"
-                          // @ts-expect-error // TODO: fix this
-                          result={result}
-                          isReadonly={isReadonly}
-                          messageId={message.id}
-                        />
-                      ) : toolName === 'updateDocument' &&
-                        shouldShowFullPreview ? (
-                        <DocumentPreview
-                          isReadonly={isReadonly}
-                          result={result}
-                          args={args}
-                          messageId={message.id}
-                          type="update"
-                        />
-                      ) : toolName === 'updateDocument' &&
-                        !shouldShowFullPreview ? (
-                        <DocumentToolResult
-                          type="update"
-                          // @ts-expect-error // TODO: fix this
-                          result={result}
-                          isReadonly={isReadonly}
-                          messageId={message.id}
-                        />
-                      ) : toolName === 'requestSuggestions' ? (
-                        <DocumentToolResult
-                          type="request-suggestions"
-                          // @ts-expect-error // TODO: fix this
-                          result={result}
-                          isReadonly={isReadonly}
-                          messageId={message.id}
-                        />
-                      ) : toolName === 'retrieve' ? (
-                        // @ts-expect-error // TODO: fix this
-                        <Retrieve result={result} />
-                      ) : toolName === 'readDocument' ? (
-                        // @ts-expect-error // TODO: fix this
-                        <ReadDocument result={result} />
-                      ) : toolName === 'stockChart' ? (
-                        // @ts-expect-error // TODO: fix this
-                        <StockChartMessage result={result} args={args} />
-                      ) : toolName === 'codeInterpreter' ? (
-                        // @ts-expect-error // TODO: fix this
-                        <CodeInterpreterMessage result={result} args={args} />
-                      ) : // toolName !== 'reasonSearch' &&
-                      // toolName !== 'deepResearch' &&
-                      toolName !== 'webSearch' ? (
+                      {toolName === 'list_chats' ? (
+                        <InstagramChats result={result as any} />
+                      ) : toolName === 'get_user_stories' ? (
+                        <InstagramStories result={result as any} />
+                      ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>
-                      ) : null}
+                      )}
                     </div>
                   );
                 }

@@ -1,20 +1,11 @@
 import type { ToolCall, ToolResult } from 'ai';
-import { createDocumentTool } from '@/lib/ai/tools/create-document';
-import { updateDocument } from '@/lib/ai/tools/update-document';
-import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
-import { getWeather } from '@/lib/ai/tools/get-weather';
-import { retrieve } from '@/lib/ai/tools/retrieve';
-import { webSearch } from '@/lib/ai/tools/web-search';
-import { stockChart } from '@/lib/ai/tools/stock-chart';
-import { codeInterpreter } from '@/lib/ai/tools/code-interpreter';
 import type { Session } from 'next-auth';
-import { deepResearch } from '@/lib/ai/tools/deep-research/tool';
-import { readDocument } from '@/lib/ai/tools/read-document';
+import { getInstagramMCPTools } from '@/lib/ai/tools/instagram-mcp';
 import type { z } from 'zod';
 import type { AnnotationDataStreamWriter } from './annotation-stream';
 import type { CoreMessage } from 'ai';
 
-export function getTools({
+export async function getTools({
   dataStream,
   session,
   contextForLLM,
@@ -25,42 +16,55 @@ export function getTools({
   contextForLLM?: CoreMessage[];
   messageId: string;
 }) {
-  return {
-    getWeather,
-    createDocument: createDocumentTool({
-      session,
-      dataStream,
-      contextForLLM,
-      messageId,
-    }),
-    updateDocument: updateDocument({
-      session,
-      dataStream,
-      messageId,
-    }),
-    requestSuggestions: requestSuggestions({
-      session,
-      dataStream,
-    }),
-    readDocument: readDocument({
-      session,
-      dataStream,
-    }),
-    // reasonSearch: createReasonSearch({
-    //   session,
-    //   dataStream,
-    // }),
-    retrieve,
-    webSearch: webSearch({ session, dataStream }),
-    stockChart,
-    codeInterpreter,
-    deepResearch: deepResearch({ session, dataStream, messageId }),
-  };
+  const baseTools = {};
+
+  try {
+    // Get Instagram MCP tools and merge them with base tools
+    const instagramTools = await getInstagramMCPTools();
+
+    // Wrap Instagram tools to parse their .text results
+    const wrappedInstagramTools: Record<string, any> = {};
+    for (const [toolName, tool] of Object.entries(instagramTools)) {
+      const typedTool = tool as any;
+      wrappedInstagramTools[toolName] = {
+        ...typedTool,
+        execute: async (...args: any[]) => {
+          const result = await typedTool.execute(...args);
+          try {
+            // Parse the content[0].text property as JSON if it exists
+            if (
+              result?.content?.[0]?.text &&
+              typeof result.content[0].text === 'string'
+            ) {
+              return JSON.parse(result.content[0].text);
+            }
+            return result;
+          } catch (parseError) {
+            console.error(
+              `Failed to parse JSON from ${toolName} result:`,
+              parseError,
+            );
+            // Return original result if JSON parsing fails
+            return result;
+          }
+        },
+      };
+    }
+
+    return {
+      ...baseTools,
+      ...wrappedInstagramTools,
+    };
+  } catch (error) {
+    console.error('Failed to load Instagram MCP tools:', error);
+    // Return base tools if MCP fails
+    return baseTools;
+  }
 }
 
-type AvailableToolsReturn = ReturnType<typeof getTools>;
+type AvailableToolsReturn = Awaited<ReturnType<typeof getTools>>;
 
-export type YourToolName = keyof AvailableToolsReturn;
+export type YourToolName = string & keyof AvailableToolsReturn;
 
 export type ToolResultOf<T extends keyof AvailableToolsReturn> = Awaited<
   ReturnType<AvailableToolsReturn[T]['execute']>
@@ -94,64 +98,119 @@ type ToolDefinition = {
   cost: number;
 };
 
-export const toolsDefinitions: Record<YourToolName, ToolDefinition> = {
-  getWeather: {
-    name: 'getWeather',
-    description: 'Get the weather in a specific location',
-    cost: 1,
+export const toolsDefinitions: Record<string, ToolDefinition> = {
+  // Instagram MCP tools
+  send_message: {
+    name: 'send_message',
+    description: 'Send an Instagram direct message to a user by username',
+    cost: 2,
   },
-  createDocument: {
-    name: 'createDocument',
-    description: 'Create a new document',
-    cost: 5,
-  },
-  updateDocument: {
-    name: 'updateDocument',
-    description: 'Update a document',
-    cost: 5,
-  },
-  requestSuggestions: {
-    name: 'requestSuggestions',
-    description: 'Request suggestions for a document',
-    cost: 1,
-  },
-  readDocument: {
-    name: 'readDocument',
-    description: 'Read the content of a document',
-    cost: 1,
-  },
-  // reasonSearch: {
-  //   name: 'reasonSearch',
-  //   description: 'Search with reasoning',
-  //   cost: 50,
-  // },
-  retrieve: {
-    name: 'retrieve',
-    description: 'Retrieve information from the web',
-    cost: 1,
-  },
-  webSearch: {
-    name: 'webSearch',
-    description: 'Search the web',
+  send_photo_message: {
+    name: 'send_photo_message',
+    description:
+      'Send a photo as an Instagram direct message to a user by username',
     cost: 3,
   },
-  stockChart: {
-    name: 'stockChart',
-    description: 'Get the stock chart for a specific stock',
+  send_video_message: {
+    name: 'send_video_message',
+    description:
+      'Send a video via Instagram direct message to a user by username',
+    cost: 3,
+  },
+  list_chats: {
+    name: 'list_chats',
+    description:
+      'Get Instagram Direct Message threads (chats) from your account, with optional filters/limits',
     cost: 1,
   },
-  codeInterpreter: {
-    name: 'codeInterpreter',
-    description: 'Interpret code in a virtual environment',
-    cost: 10,
+  list_messages: {
+    name: 'list_messages',
+    description:
+      'Get messages from a specific Instagram Direct Message thread by thread ID',
+    cost: 1,
   },
-  deepResearch: {
-    name: 'deepResearch',
-    description: 'Research a topic',
-    cost: 50,
+  mark_message_seen: {
+    name: 'mark_message_seen',
+    description:
+      'Mark a specific message in an Instagram Direct Message thread as seen',
+    cost: 1,
+  },
+  list_pending_chats: {
+    name: 'list_pending_chats',
+    description: 'Get Instagram Direct Message threads from your pending inbox',
+    cost: 1,
+  },
+  search_threads: {
+    name: 'search_threads',
+    description:
+      'Search Instagram Direct Message threads by username or keyword',
+    cost: 1,
+  },
+  get_thread_by_participants: {
+    name: 'get_thread_by_participants',
+    description:
+      'Get an Instagram Direct Message thread by participant user IDs',
+    cost: 1,
+  },
+  get_thread_details: {
+    name: 'get_thread_details',
+    description:
+      'Get details and messages for a specific Instagram Direct Message thread by thread ID',
+    cost: 1,
+  },
+  get_user_id_from_username: {
+    name: 'get_user_id_from_username',
+    description: 'Get the Instagram user ID for a given username',
+    cost: 1,
+  },
+  get_username_from_user_id: {
+    name: 'get_username_from_user_id',
+    description: 'Get the Instagram username for a given user ID',
+    cost: 1,
+  },
+  get_user_info: {
+    name: 'get_user_info',
+    description: 'Get information about a specific Instagram user by username',
+    cost: 1,
+  },
+  check_user_online_status: {
+    name: 'check_user_online_status',
+    description: 'Check the online status of Instagram users',
+    cost: 1,
+  },
+  search_users: {
+    name: 'search_users',
+    description: 'Search for Instagram users by username',
+    cost: 1,
+  },
+  get_user_stories: {
+    name: 'get_user_stories',
+    description:
+      'Get recent stories from a specific Instagram user by username',
+    cost: 1,
+  },
+  like_media: {
+    name: 'like_media',
+    description: 'Like or unlike a specific media post by media ID',
+    cost: 1,
+  },
+  get_user_followers: {
+    name: 'get_user_followers',
+    description:
+      'Get a list of followers for a specific Instagram user by username',
+    cost: 1,
+  },
+  get_user_following: {
+    name: 'get_user_following',
+    description:
+      'Get a list of users that a specific Instagram user is following by username',
+    cost: 1,
+  },
+  get_user_posts: {
+    name: 'get_user_posts',
+    description: 'Get recent posts from a specific Instagram user by username',
+    cost: 1,
   },
 };
 
-export const allTools: YourToolName[] = Object.keys(
-  toolsDefinitions,
-) as YourToolName[];
+export const allTools: string[] = Object.keys(toolsDefinitions);

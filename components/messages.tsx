@@ -39,6 +39,8 @@ function PureMessages({
   // Find the last artifact in all messages
   const lastArtifact = findLastArtifact(messages);
 
+  console.log('MESSAGES:', messages);
+
   return (
     <ScrollArea
       ref={scrollRef}
