@@ -44,7 +44,7 @@ export function InstagramChats({ result }: InstagramChatsProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {chats.map((chat) => {
+          {chats.map((chat, index) => {
             // Get the most recent message (first in array)
             const lastMessage = chat.messages
               ? chat.messages[0]
@@ -52,13 +52,13 @@ export function InstagramChats({ result }: InstagramChatsProps) {
 
             return (
               <div
-                key={chat.pk}
+                key={index}
                 className="flex items-start gap-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors"
               >
                 <div className="flex -space-x-2">
                   {chat.users.slice(0, 2).map((user, index) => (
                     <div
-                      key={user.pk}
+                      key={index}
                       className="h-10 w-10 rounded-full bg-muted border-2 border-background flex items-center justify-center overflow-hidden"
                     >
                       {user.profile_pic_url ? (
@@ -89,70 +89,69 @@ export function InstagramChats({ result }: InstagramChatsProps) {
                     <h3 className="font-medium truncate">
                       {chat.thread_title}
                     </h3>
-                    <span className="text-xs text-muted-foreground shrink-0">
-                      {formatDistanceToNow(new Date(chat.last_activity_at), {
-                        addSuffix: true,
-                      })}
-                    </span>
+                    {chat.last_activity_at && (
+                      <span className="text-xs text-muted-foreground shrink-0">
+                        {formatDistanceToNow(new Date(chat.last_activity_at), {
+                          addSuffix: true,
+                        })}
+                      </span>
+                    )}
                   </div>
 
                   <div className="text-sm text-muted-foreground mb-2">
                     {chat.users.map((user) => user.username).join(', ')}
                   </div>
 
-                  {(chat.messages && chat.messages.length > 0) ||
-                    (chat.last_message && (
-                      <div className="text-sm space-y-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge
-                            variant={
-                              lastMessage.is_sent_by_viewer
-                                ? 'secondary'
-                                : 'default'
-                            }
-                            className="text-xs"
-                          >
-                            {lastMessage.is_sent_by_viewer
-                              ? 'You Said'
-                              : 'Said'}
+                  {((chat.messages && chat.messages.length > 0) ||
+                    chat.last_message) && (
+                    <div className="text-sm space-y-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge
+                          variant={
+                            lastMessage.is_sent_by_viewer
+                              ? 'secondary'
+                              : 'default'
+                          }
+                          className="text-xs"
+                        >
+                          {lastMessage.is_sent_by_viewer ? 'You Said' : 'Said'}
+                        </Badge>
+                        {lastMessage.item_type !== 'text' && (
+                          <Badge variant="outline" className="text-xs">
+                            {lastMessage.item_type}
                           </Badge>
-                          {lastMessage.item_type !== 'text' && (
-                            <Badge variant="outline" className="text-xs">
-                              {lastMessage.item_type}
-                            </Badge>
-                          )}
-                        </div>
+                        )}
+                      </div>
 
-                        {lastMessage.text && (
-                          <div className="text-muted-foreground truncate">
-                            "{lastMessage.text}"
+                      {lastMessage.text && (
+                        <div className="text-muted-foreground truncate">
+                          "{lastMessage.text}"
+                        </div>
+                      )}
+
+                      {!lastMessage.text &&
+                        lastMessage.item_type !== 'text' && (
+                          <div className="text-muted-foreground text-xs">
+                            {lastMessage.item_type === 'clip' && 'Video clip'}
+                            {lastMessage.item_type === 'placeholder' &&
+                              'Unavailable content'}
+                            {lastMessage.item_type === 'expired_placeholder' &&
+                              'Expired content'}
+                            {lastMessage.item_type === 'action_log' && 'Action'}
+                            {lastMessage.item_type === 'xma_reel_mention' &&
+                              'Reel mention'}
+                            {![
+                              'clip',
+                              'placeholder',
+                              'expired_placeholder',
+                              'action_log',
+                              'xma_reel_mention',
+                            ].includes(lastMessage.item_type) &&
+                              `${lastMessage.item_type} message`}
                           </div>
                         )}
-
-                        {!lastMessage.text &&
-                          lastMessage.item_type !== 'text' && (
-                            <div className="text-muted-foreground text-xs">
-                              {lastMessage.item_type === 'clip' && 'Video clip'}
-                              {lastMessage.item_type === 'placeholder' &&
-                                'Unavailable content'}
-                              {lastMessage.item_type ===
-                                'expired_placeholder' && 'Expired content'}
-                              {lastMessage.item_type === 'action_log' &&
-                                'Action'}
-                              {lastMessage.item_type === 'xma_reel_mention' &&
-                                'Reel mention'}
-                              {![
-                                'clip',
-                                'placeholder',
-                                'expired_placeholder',
-                                'action_log',
-                                'xma_reel_mention',
-                              ].includes(lastMessage.item_type) &&
-                                `${lastMessage.item_type} message`}
-                            </div>
-                          )}
-                      </div>
-                    ))}
+                    </div>
+                  )}
                 </div>
               </div>
             );

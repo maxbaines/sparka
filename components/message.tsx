@@ -24,6 +24,7 @@ import { InstagramChats } from './instagram-chats';
 import { InstagramStories } from './instagram-stories';
 import { InstagramProfile } from './instagram-profile';
 import { InstagramMessages } from './instagram-messages';
+import { InstagramSendMessage } from './instagram-send-message';
 
 const PurePreviewMessage = ({
   chatId,
@@ -211,7 +212,8 @@ const PurePreviewMessage = ({
                           toolName === 'list_chats' ||
                           toolName === 'get_user_stories' ||
                           toolName === 'get_user_info' ||
-                          toolName === 'list_messages',
+                          toolName === 'list_messages' ||
+                          toolName === 'send_message',
                       })}
                     >
                       {toolName === 'list_chats' ? (
@@ -234,6 +236,11 @@ const PurePreviewMessage = ({
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
                           <span>Loading Instagram messages...</span>
                         </div>
+                      ) : toolName === 'send_message' ? (
+                        <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
+                          <span>Sending message...</span>
+                        </div>
                       ) : (
                         <pre>{JSON.stringify(toolInvocation, null, 2)}</pre>
                       )}
@@ -254,6 +261,11 @@ const PurePreviewMessage = ({
                         <InstagramProfile result={result as any} />
                       ) : toolName === 'list_messages' ? (
                         <InstagramMessages result={result as any} />
+                      ) : toolName === 'send_message' ? (
+                        <InstagramSendMessage
+                          result={result as any}
+                          args={args as any}
+                        />
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>
                       )}
