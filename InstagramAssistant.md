@@ -1,4 +1,4 @@
-# AssistaGram - Product Requirements Document
+# AssistGram - Product Requirements Document
 
 ## Overview
 An AI-powered Instagram Direct Message assistant that showcases Instagram MCP capabilities in a simple chat interface.

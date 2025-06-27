@@ -160,10 +160,10 @@ export const getModelProviderOptions = (
     if (model.features?.reasoning) {
       return {
         google: {
-          thinkingConfig: {
-            includeThoughts: true,
-            thinkingBudget: 10000,
-          },
+          // thinkingConfig: {
+          //   includeThoughts: true,
+          //   thinkingBudget: 0,
+          // },
         },
       };
     } else {

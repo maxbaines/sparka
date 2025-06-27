@@ -42,7 +42,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
             >
               <span className="text-lg font-semibold px-2 hover:bg-muted rounded-md cursor-pointer flex items-center gap-2">
                 <Image size={20} />
-                AssistaGram
+                AssistGram
               </span>
             </Link>
             <Tooltip>
