@@ -205,7 +205,7 @@ export const LexicalChatInput = forwardRef<
       console.error('Lexical chat input error:', error);
     },
     theme: {
-      link: 'inline-flex items-center bg-blue-500/10 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded-md text-sm font-medium border border-blue-200 dark:border-blue-800',
+      link: 'inline-flex items-center bg-foreground/5 text-foreground px-1 py-0.5 rounded-md text-sm font-medium border border-foreground/10',
     },
   };
 

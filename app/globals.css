@@ -128,12 +128,12 @@
 }
 
 .lexical-editor a {
-    @apply inline-flex items-center bg-blue-500/10 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded-md text-sm font-medium border border-blue-200 dark:border-blue-800;
+    @apply inline-flex items-center bg-accent/30 text-foreground px-0.5 py-0.5 rounded-md border border-foreground/10;
 }
 
 .lexical-editor a:before {
     content: '@';
-    @apply text-blue-500 mr-1;
+    @apply text-foreground mr-1;
 }
 
 .cm-editor,
