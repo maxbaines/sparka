@@ -4,7 +4,12 @@ import { experimental_generateImage } from 'ai';
 
 export const imageDocumentHandler = createDocumentHandler<'image'>({
   kind: 'image',
-  onCreateDocument: async ({ title, description, dataStream, prompt }) => {
+  onCreateDocument: async ({ title, description, dataStream, prompt, session }) => {
+    // Prevent anonymous users from generating images
+    if (!session?.user?.id) {
+      throw new Error('Image generation is not available for anonymous users. Please sign in to generate images.');
+    }
+
     let draftContent = '';
 
     const { image } = await experimental_generateImage({
@@ -25,7 +30,12 @@ export const imageDocumentHandler = createDocumentHandler<'image'>({
 
     return draftContent;
   },
-  onUpdateDocument: async ({ description, dataStream }) => {
+  onUpdateDocument: async ({ description, dataStream, session }) => {
+    // Prevent anonymous users from updating images
+    if (!session?.user?.id) {
+      throw new Error('Image generation is not available for anonymous users. Please sign in to generate images.');
+    }
+
     let draftContent = '';
 
     const { image } = await experimental_generateImage({
