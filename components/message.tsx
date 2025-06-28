@@ -270,6 +270,9 @@ const PurePreviewMessage = ({
                         <StockChartMessage result={null} args={args} />
                       ) : toolName === 'codeInterpreter' ? (
                         <CodeInterpreterMessage result={null} args={args} />
+                      ) : toolName === 'generateImage' ? (
+                        // @ts-expect-error // TODO: fix this
+                        <GeneratedImage args={args} isLoading={true} />
                       ) : toolName !== 'deepResearch' &&
                         // toolName !== 'reasonSearch' &&
                         toolName !== 'webSearch' ? (
@@ -344,6 +347,9 @@ const PurePreviewMessage = ({
                       ) : toolName === 'codeInterpreter' ? (
                         // @ts-expect-error // TODO: fix this
                         <CodeInterpreterMessage result={result} args={args} />
+                      ) : toolName === 'generateImage' ? (
+                        // @ts-expect-error // TODO: fix this
+                        <GeneratedImage result={result} args={args} />
                       ) : // toolName !== 'reasonSearch' &&
                       // toolName !== 'deepResearch' &&
                       toolName !== 'webSearch' ? (
