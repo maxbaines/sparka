@@ -127,6 +127,15 @@
     outline: none;
 }
 
+.lexical-editor a {
+    @apply inline-flex items-center bg-blue-500/10 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded-md text-sm font-medium border border-blue-200 dark:border-blue-800;
+}
+
+.lexical-editor a:before {
+    content: '@';
+    @apply text-blue-500 mr-1;
+}
+
 .cm-editor,
 .cm-gutters {
     @apply bg-background dark:bg-zinc-800 outline-none selection:bg-zinc-900 !important;

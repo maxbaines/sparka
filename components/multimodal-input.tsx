@@ -16,10 +16,12 @@ import { ImageModal } from './image-modal';
 import {
   ChatInputContainer,
   ChatInputTopRow,
-  ChatInputTextArea,
   ChatInputBottomRow,
-  type ChatInputTextAreaRef,
 } from './ui/chat-input';
+import {
+  LexicalChatInput,
+  type LexicalChatInputRef,
+} from './ui/lexical-chat-input';
 import { SuggestedActions } from './suggested-actions';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { YourUIMessage } from '@/lib/types/ui';
@@ -61,7 +63,7 @@ function PureMultimodalInput({
   isEditMode?: boolean;
   parentMessageId: string | null;
 }) {
-  const textareaRef = useRef<ChatInputTextAreaRef>(null);
+  const textareaRef = useRef<LexicalChatInputRef>(null);
   const { width } = useWindowSize();
   const { setChatId } = useChatId();
   const { data: session } = useSession();
@@ -81,8 +83,8 @@ function PureMultimodalInput({
     clearAttachments,
   } = useChatInput();
 
-  const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(event.target.value);
+  const handleInput = (value: string) => {
+    setInput(value);
   };
 
   // Helper function to auto-switch to PDF-compatible model
@@ -234,7 +236,7 @@ function PureMultimodalInput({
     }
     resetData();
 
-    // Reset textarea height after form submission
+    // Reset editor height after form submission
     setTimeout(() => {
       textareaRef.current?.adjustHeight();
     }, 0);
@@ -501,7 +503,7 @@ function PureMultimodalInput({
           </motion.div>
 
           <ScrollArea className="max-h-[70vh]">
-            <ChatInputTextArea
+            <LexicalChatInput
               data-testid="multimodal-input"
               ref={textareaRef}
               placeholder="Send a message..."
@@ -509,12 +511,8 @@ function PureMultimodalInput({
               onChange={handleInput}
               autoFocus
               onPaste={handlePaste}
-              onKeyDown={(event) => {
-                if (
-                  event.key === 'Enter' &&
-                  !event.shiftKey &&
-                  !event.nativeEvent.isComposing
-                ) {
+              onKeyDown={(event: KeyboardEvent) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
                   event.preventDefault();
 
                   if (status !== 'ready') {
