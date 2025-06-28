@@ -71,6 +71,8 @@ function PureArtifactActions({
                 className={cn('h-fit dark:hover:bg-zinc-700', {
                   'p-2': !action.label,
                   'py-1.5 px-2': action.label,
+                  'bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground':
+                    action.description === 'View changes' && mode === 'diff',
                 })}
                 onClick={async () => {
                   setIsLoading(true);
@@ -111,6 +113,7 @@ export const ArtifactActions = memo(
     if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) return false;
     if (prevProps.artifact.content !== nextProps.artifact.content) return false;
     if (prevProps.isReadonly !== nextProps.isReadonly) return false;
+    if (prevProps.mode !== nextProps.mode) return false;
 
     return true;
   },
