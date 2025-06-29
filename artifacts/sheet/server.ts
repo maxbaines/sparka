@@ -7,11 +7,11 @@ import { z } from 'zod';
 
 export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
   kind: 'sheet',
-  onCreateDocument: async ({ title, description, dataStream, prompt }) => {
+  onCreateDocument: async ({ title, description, dataStream, prompt, selectedModel }) => {
     let draftContent = '';
 
     const { fullStream } = streamObject({
-      model: getLanguageModel(DEFAULT_ARTIFACT_MODEL),
+      model: getLanguageModel(selectedModel),
       system: sheetPrompt,
       experimental_telemetry: { isEnabled: true },
       prompt,
@@ -45,11 +45,11 @@ export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
 
     return draftContent;
   },
-  onUpdateDocument: async ({ document, description, dataStream }) => {
+  onUpdateDocument: async ({ document, description, dataStream, selectedModel }) => {
     let draftContent = '';
 
     const { fullStream } = streamObject({
-      model: getLanguageModel(DEFAULT_ARTIFACT_MODEL),
+      model: getLanguageModel(selectedModel),
       system: updateDocumentPrompt(document.content, 'sheet'),
       experimental_telemetry: { isEnabled: true },
       prompt: description,

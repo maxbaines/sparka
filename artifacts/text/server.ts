@@ -6,11 +6,11 @@ import { DEFAULT_ARTIFACT_MODEL } from '@/lib/ai/all-models';
 
 export const textDocumentHandler = createDocumentHandler<'text'>({
   kind: 'text',
-  onCreateDocument: async ({ title, description, dataStream, prompt }) => {
+  onCreateDocument: async ({ title, description, dataStream, prompt, selectedModel }) => {
     let draftContent = '';
 
     const { fullStream } = streamText({
-      model: getLanguageModel(DEFAULT_ARTIFACT_MODEL),
+      model: getLanguageModel(selectedModel),
       providerOptions: {
         experimental_telemetry: { isEnabled: true },
       },
@@ -37,11 +37,11 @@ export const textDocumentHandler = createDocumentHandler<'text'>({
 
     return draftContent;
   },
-  onUpdateDocument: async ({ document, description, dataStream }) => {
+  onUpdateDocument: async ({ document, description, dataStream, selectedModel }) => {
     let draftContent = '';
 
     const { fullStream } = streamText({
-      model: getLanguageModel(DEFAULT_ARTIFACT_MODEL),
+      model: getLanguageModel(selectedModel),
       system: updateDocumentPrompt(document.content, 'text'),
       experimental_transform: smoothStream({ chunking: 'word' }),
       prompt: description,
