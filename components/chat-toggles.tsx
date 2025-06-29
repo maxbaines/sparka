@@ -136,112 +136,95 @@ export function ResponsiveToggles({
   };
 
   return (
-    <>
-      <div className="flex items-center gap-1 @[400px]:gap-2 @[500px]:hidden">
-        {isAnonymous ? (
-          <Popover open={showLoginPopover} onOpenChange={setShowLoginPopover}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="gap-1 @[400px]:gap-2 p-1.5 h-fit rounded-full"
-              >
-                <Settings2 size={14} />
-                <span className="hidden @[400px]:inline">Tools</span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80 p-0" align="start">
-              <LoginPrompt
-                title="Sign in to use Tools"
-                description="Access web search, deep research, and more to get better answers."
-              />
-            </PopoverContent>
-          </Popover>
-        ) : (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="gap-1 @[400px]:gap-2 p-1.5 px-2.5 h-fit rounded-full"
-              >
-                <Settings2 size={14} />
-                <span className="hidden @[400px]:inline">Tools</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="start"
-              className="w-48"
-              onClick={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-            >
-              {enabledTools.map((key) => {
-                const tool = toolDefinitions[key];
-                const isDisabled = key === 'deepResearch' && hasReasoningModel;
-                const Icon = tool.icon;
-                return (
-                  <DropdownMenuItem
-                    key={key}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setTool(data[key] ? null : key);
-                    }}
-                    className="flex items-center gap-2"
-                    disabled={isDisabled}
-                  >
-                    <Icon size={14} />
-                    <span>{tool.name}</span>
-                    {isDisabled && (
-                      <span className="text-xs opacity-60">
-                        (for non-reasoning models)
-                      </span>
-                    )}
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-
-        {activeTool && (
-          <>
-            <Separator
-              orientation="vertical"
-              className="bg-muted-foreground/50 h-4"
-            />
+    <div className="flex items-center gap-1 @[400px]:gap-2">
+      {isAnonymous ? (
+        <Popover open={showLoginPopover} onOpenChange={setShowLoginPopover}>
+          <PopoverTrigger asChild>
             <Button
-              variant="outline"
+              variant="ghost"
+              size="icon"
+              className="gap-1 @[400px]:gap-2 p-1.5 h-fit rounded-full"
+            >
+              <Settings2 size={14} />
+              <span className="hidden @[400px]:inline">Tools</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 p-0" align="start">
+            <LoginPrompt
+              title="Sign in to use Tools"
+              description="Access web search, deep research, and more to get better answers."
+            />
+          </PopoverContent>
+        </Popover>
+      ) : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
               size="sm"
-              onClick={() => setTool(null)}
               className="gap-1 @[400px]:gap-2 p-1.5 px-2.5 h-fit rounded-full"
             >
-              {React.createElement(toolDefinitions[activeTool].icon, {
-                size: 14,
-              })}
-              <span className="hidden @[500px]:inline">
-                {toolDefinitions[activeTool].name}
-              </span>
-              <span className="text-xs opacity-70">×</span>
+              <Settings2 size={14} />
+              <span className="hidden @[400px]:inline">Tools</span>
             </Button>
-          </>
-        )}
-      </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="start"
+            className="w-48"
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            {enabledTools.map((key) => {
+              const tool = toolDefinitions[key];
+              const isDisabled = key === 'deepResearch' && hasReasoningModel;
+              const Icon = tool.icon;
+              return (
+                <DropdownMenuItem
+                  key={key}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setTool(data[key] ? null : key);
+                  }}
+                  className="flex items-center gap-2"
+                  disabled={isDisabled}
+                >
+                  <Icon size={14} />
+                  <span>{tool.name}</span>
+                  {data[key] && <span className="text-xs opacity-70">✓</span>}
+                  {isDisabled && (
+                    <span className="text-xs opacity-60">
+                      (for non-reasoning models)
+                    </span>
+                  )}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
 
-      <div className="hidden @[500px]:flex items-center gap-1 @[400px]:gap-2">
-        {enabledTools.map((key) => {
-          const tool = toolDefinitions[key];
-          const isDisabled = key === 'deepResearch' && hasReasoningModel;
-          return (
-            <ToolToggle
-              key={key}
-              tool={tool}
-              enabled={!!data[key]}
-              setEnabled={(enabled) => setTool(enabled ? key : null)}
-              disabled={isDisabled}
-            />
-          );
-        })}
-      </div>
-    </>
+      {activeTool && (
+        <>
+          <Separator
+            orientation="vertical"
+            className="bg-muted-foreground/50 h-4"
+          />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setTool(null)}
+            className="gap-1 @[400px]:gap-2 p-1.5 px-2.5 h-fit rounded-full"
+          >
+            {React.createElement(toolDefinitions[activeTool].icon, {
+              size: 14,
+            })}
+            <span className="hidden @[500px]:inline">
+              {toolDefinitions[activeTool].name}
+            </span>
+            <span className="text-xs opacity-70">×</span>
+          </Button>
+        </>
+      )}
+    </div>
   );
 }
