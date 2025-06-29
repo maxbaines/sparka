@@ -111,21 +111,28 @@ export function Chat({
           isVisible={!isArtifactVisible}
         />
 
-        <form className="flex mx-auto p-2 @[400px]:px-4 @[400px]:pb-4 @[400px]:md:pb-6 bg-background gap-2 w-full md:max-w-3xl">
-          {!isReadonly ? (
-            <MultimodalInput
-              chatId={id}
-              status={status}
-              stop={stop}
-              messages={chatHelperMessages as YourUIMessage[]}
-              setMessages={setMessages}
-              append={chatHelpers.append}
-              parentMessageId={getLastMessageId()}
-            />
-          ) : (
-            <CloneChatButton chatId={id} className="w-full" />
+        <div 
+          className={cn(
+            "flex flex-col transition-all duration-700 ease-out",
+            chatHelperMessages.length === 0 ? "flex-1 justify-center" : "justify-end"
           )}
-        </form>
+        >
+          <form className="flex mx-auto p-2 @[400px]:px-4 @[400px]:pb-4 @[400px]:md:pb-6 bg-background gap-2 w-full md:max-w-3xl">
+            {!isReadonly ? (
+              <MultimodalInput
+                chatId={id}
+                status={status}
+                stop={stop}
+                messages={chatHelperMessages as YourUIMessage[]}
+                setMessages={setMessages}
+                append={chatHelpers.append}
+                parentMessageId={getLastMessageId()}
+              />
+            ) : (
+              <CloneChatButton chatId={id} className="w-full" />
+            )}
+          </form>
+        </div>
       </div>
 
       <Artifact
