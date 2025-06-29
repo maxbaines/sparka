@@ -62,39 +62,132 @@ function detectRequiredHandlers(code: string): string[] {
   return handlers;
 }
 
+function parseContent(content: string): { code: string; language: string } {
+  try {
+    const parsed = JSON.parse(content);
+    return {
+      code: parsed.code || content,
+      language: parsed.language || 'python',
+    };
+  } catch {
+    // If parsing fails, treat as plain code
+    return {
+      code: content,
+      language: 'python',
+    };
+  }
+}
+
+// TypeScript execution using eval (with basic error handling)
+async function executeTypeScript(code: string): Promise<string> {
+  try {
+    // Simple TypeScript-to-JavaScript transpilation for basic cases
+    // Remove type annotations and interfaces for basic execution
+    const jsCode = code
+      .replace(/:\s*\w+(\[\])?/g, '') // Remove type annotations
+      .replace(/interface\s+\w+\s*{[^}]*}/g, '') // Remove interfaces
+      .replace(/type\s+\w+\s*=\s*[^;]+;/g, '') // Remove type aliases
+      .replace(/export\s+/g, '') // Remove exports
+      .replace(/import\s+.*from\s+['"][^'"]+['"];?/g, ''); // Remove imports
+
+    // Capture console output
+    const originalLog = console.log;
+    const originalError = console.error;
+    let output = '';
+
+    console.log = (...args) => {
+      output +=
+        args
+          .map((arg) =>
+            typeof arg === 'object'
+              ? JSON.stringify(arg, null, 2)
+              : String(arg),
+          )
+          .join(' ') + '\n';
+    };
+
+    console.error = (...args) => {
+      output +=
+        'ERROR: ' +
+        args
+          .map((arg) =>
+            typeof arg === 'object'
+              ? JSON.stringify(arg, null, 2)
+              : String(arg),
+          )
+          .join(' ') +
+        '\n';
+    };
+
+    try {
+      // Execute the JavaScript code
+      // eslint-disable-next-line no-eval
+      const result = eval(jsCode);
+      if (result !== undefined) {
+        output += String(result);
+      }
+    } finally {
+      // Restore original console methods
+      console.log = originalLog;
+      console.error = originalError;
+    }
+
+    return output || 'Code executed successfully (no output)';
+  } catch (error: any) {
+    return `Error: ${error.message}`;
+  }
+}
+
 interface Metadata {
   outputs: Array<ConsoleOutput>;
+  language: string;
 }
 
 export const codeArtifact = new Artifact<'code', Metadata>({
   kind: 'code',
   description:
-    'Useful for code generation; Code execution is only available for python code.',
+    'Useful for code generation; Code execution is available for Python and TypeScript/JavaScript.',
   initialize: async ({ setMetadata }) => {
     setMetadata({
       outputs: [],
+      language: 'python',
     });
   },
-  onStreamPart: ({ streamPart, setArtifact }) => {
+  onStreamPart: ({ streamPart, setArtifact, setMetadata }) => {
     if (streamPart.type === 'code-delta') {
+      const parsedContent = parseContent(streamPart.content as string);
+
       setArtifact((draftArtifact) => ({
         ...draftArtifact,
         content: streamPart.content as string,
         isVisible:
           draftArtifact.status === 'streaming' &&
-          draftArtifact.content.length > 300 &&
-          draftArtifact.content.length < 310
+          parsedContent.code.length > 300 &&
+          parsedContent.code.length < 310
             ? true
             : draftArtifact.isVisible,
         status: 'streaming',
       }));
+
+      // Update language in metadata
+      setMetadata((metadata) => ({
+        ...metadata,
+        language: parsedContent.language,
+      }));
     }
   },
-  content: ({ metadata, setMetadata, isReadonly, ...props }) => {
+  content: ({ metadata, setMetadata, isReadonly, content, ...props }) => {
+    const parsedContent = parseContent(content);
+
     return (
       <>
         <div className="px-1">
-          <CodeEditor {...props} isReadonly={isReadonly} />
+          <CodeEditor
+            {...props}
+            content={parsedContent.code}
+            language={parsedContent.language}
+            isReadonly={isReadonly}
+          />
         </div>
 
         {metadata?.outputs && (
@@ -116,9 +209,10 @@ export const codeArtifact = new Artifact<'code', Metadata>({
       icon: <PlayIcon size={18} />,
       label: 'Run',
       description: 'Execute code',
-      onClick: async ({ content, setMetadata }) => {
+      onClick: async ({ content, setMetadata, metadata }) => {
         const runId = generateUUID();
         const outputContent: Array<ConsoleOutputContent> = [];
+        const parsedContent = parseContent(content);
 
         setMetadata((metadata) => ({
           ...metadata,
@@ -133,54 +227,78 @@ export const codeArtifact = new Artifact<'code', Metadata>({
         }));
 
         try {
-          // @ts-expect-error - loadPyodide is not defined
-          const currentPyodideInstance = await globalThis.loadPyodide({
-            indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/',
-          });
+          if (parsedContent.language === 'python') {
+            // Python execution using Pyodide
+            // @ts-expect-error - loadPyodide is not defined
+            const currentPyodideInstance = await globalThis.loadPyodide({
+              indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.4/full/',
+            });
 
-          currentPyodideInstance.setStdout({
-            batched: (output: string) => {
-              outputContent.push({
-                type: output.startsWith('data:image/png;base64')
-                  ? 'image'
-                  : 'text',
-                value: output,
-              });
-            },
-          });
+            currentPyodideInstance.setStdout({
+              batched: (output: string) => {
+                outputContent.push({
+                  type: output.startsWith('data:image/png;base64')
+                    ? 'image'
+                    : 'text',
+                  value: output,
+                });
+              },
+            });
 
-          await currentPyodideInstance.loadPackagesFromImports(content, {
-            messageCallback: (message: string) => {
-              setMetadata((metadata) => ({
-                ...metadata,
-                outputs: [
-                  ...metadata.outputs.filter((output) => output.id !== runId),
-                  {
-                    id: runId,
-                    contents: [{ type: 'text', value: message }],
-                    status: 'loading_packages',
-                  },
-                ],
-              }));
-            },
-          });
+            await currentPyodideInstance.loadPackagesFromImports(
+              parsedContent.code,
+              {
+                messageCallback: (message: string) => {
+                  setMetadata((metadata) => ({
+                    ...metadata,
+                    outputs: [
+                      ...metadata.outputs.filter(
+                        (output) => output.id !== runId,
+                      ),
+                      {
+                        id: runId,
+                        contents: [{ type: 'text', value: message }],
+                        status: 'loading_packages',
+                      },
+                    ],
+                  }));
+                },
+              },
+            );
 
-          const requiredHandlers = detectRequiredHandlers(content);
-          for (const handler of requiredHandlers) {
-            if (OUTPUT_HANDLERS[handler as keyof typeof OUTPUT_HANDLERS]) {
-              await currentPyodideInstance.runPythonAsync(
-                OUTPUT_HANDLERS[handler as keyof typeof OUTPUT_HANDLERS],
-              );
-
-              if (handler === 'matplotlib') {
+            const requiredHandlers = detectRequiredHandlers(parsedContent.code);
+            for (const handler of requiredHandlers) {
+              if (OUTPUT_HANDLERS[handler as keyof typeof OUTPUT_HANDLERS]) {
                 await currentPyodideInstance.runPythonAsync(
-                  'setup_matplotlib_output()',
+                  OUTPUT_HANDLERS[handler as keyof typeof OUTPUT_HANDLERS],
                 );
+
+                if (handler === 'matplotlib') {
+                  await currentPyodideInstance.runPythonAsync(
+                    'setup_matplotlib_output()',
+                  );
+                }
               }
             }
-          }
 
-          await currentPyodideInstance.runPythonAsync(content);
+            await currentPyodideInstance.runPythonAsync(parsedContent.code);
+          } else if (
+            parsedContent.language === 'typescript' ||
+            parsedContent.language === 'javascript'
+          ) {
+            // TypeScript/JavaScript execution
+            const result = await executeTypeScript(parsedContent.code);
+            outputContent.push({
+              type: 'text',
+              value: result,
+            });
+          } else {
+            // Unsupported language
+            outputContent.push({
+              type: 'text',
+              value: `Code execution not supported for ${parsedContent.language}. Only Python and TypeScript/JavaScript are supported.`,
+            });
+          }
 
           setMetadata((metadata) => ({
             ...metadata,
@@ -241,7 +359,8 @@ export const codeArtifact = new Artifact<'code', Metadata>({
       icon: <CopyIcon size={18} />,
       description: 'Copy code to clipboard',
       onClick: ({ content }) => {
-        navigator.clipboard.writeText(content);
+        const parsedContent = parseContent(content);
+        navigator.clipboard.writeText(parsedContent.code);
         toast.success('Copied to clipboard!');
       },
     },
