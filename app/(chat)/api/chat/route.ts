@@ -471,8 +471,25 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Filter out reasoning parts to ensure compatibility between different models
+    const messagesWithoutReasoning = messages.slice(-5).map((message) => ({
+      ...message,
+      parts: message.parts.filter((part) => {
+        // Keep only known compatible part types to prevent cross-model compatibility issues
+        // This filters out reasoning/thinking blocks that cause errors when switching between models
+        const compatibleTypes = [
+          'text',
+          'file',
+          'source',
+          'step-start',
+          'tool-invocation',
+        ];
+        return compatibleTypes.includes(part.type);
+      }),
+    }));
+
     // TODO: Do something smarter by truncating the context to a numer of tokens (maybe even based on setting)
-    const contextForLLM = convertToCoreMessages(messages.slice(-5));
+    const contextForLLM = convertToCoreMessages(messagesWithoutReasoning);
 
     // Extract the last generated image for use as reference (only from the immediately previous message)
     let lastGeneratedImage: { imageUrl: string; name: string } | null = null;
