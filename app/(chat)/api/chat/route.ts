@@ -56,6 +56,17 @@ import { checkAnonymousRateLimit, getClientIP } from '@/lib/utils/rate-limit';
 
 export const maxDuration = 60;
 
+function filterReasoningParts<T extends { parts: any[] }>(messages: T[]): T[] {
+  return messages.map((message) => ({
+    ...message,
+    parts: message.parts.filter((part) => {
+      // Filter out reasoning parts to prevent cross-model compatibility issues
+      // https://github.com/vercel/ai/discussions/5480
+      return part.type !== 'reasoning';
+    }),
+  }));
+}
+
 async function getCreditReservation(userId: string, baseModelCost: number) {
   const reservedCredits = await reserveCreditsWithCleanup(
     userId,
@@ -472,21 +483,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Filter out reasoning parts to ensure compatibility between different models
-    const messagesWithoutReasoning = messages.slice(-5).map((message) => ({
-      ...message,
-      parts: message.parts.filter((part) => {
-        // Keep only known compatible part types to prevent cross-model compatibility issues
-        // This filters out reasoning/thinking blocks that cause errors when switching between models
-        const compatibleTypes = [
-          'text',
-          'file',
-          'source',
-          'step-start',
-          'tool-invocation',
-        ];
-        return compatibleTypes.includes(part.type);
-      }),
-    }));
+    const messagesWithoutReasoning = filterReasoningParts(messages.slice(-5));
 
     // TODO: Do something smarter by truncating the context to a numer of tokens (maybe even based on setting)
     const contextForLLM = convertToCoreMessages(messagesWithoutReasoning);
