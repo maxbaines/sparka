@@ -2,6 +2,7 @@
 import { Link } from 'react-router';
 import { memo, useState } from 'react';
 import { toast } from 'sonner';
+import { Pin } from 'lucide-react';
 
 import {
   MoreHorizontalIcon,
@@ -48,6 +49,7 @@ const PureSidebarChatItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(chat.title);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
 
   const handleRename = async () => {
     if (editTitle.trim() === '' || editTitle === chat.title) {
@@ -75,6 +77,11 @@ const PureSidebarChatItem = ({
     }
   };
 
+  const handlePin = () => {
+    setIsPinned(!isPinned);
+    toast.success(isPinned ? 'Chat unpinned' : 'Chat pinned');
+  };
+
   return (
     <SidebarMenuItem>
       {isEditing ? (
@@ -96,6 +103,17 @@ const PureSidebarChatItem = ({
           </Link>
         </SidebarMenuButton>
       )}
+
+      <SidebarMenuAction
+        className={`data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mr-0.5 ${
+          isPinned ? 'text-primary' : ''
+        }`}
+        showOnHover={!isActive}
+        onClick={handlePin}
+      >
+        <Pin className={`h-4 w-4 ${isPinned ? 'fill-current' : ''}`} />
+        <span className="sr-only">{isPinned ? 'Unpin' : 'Pin'}</span>
+      </SidebarMenuAction>
 
       <DropdownMenu modal={true}>
         <DropdownMenuTrigger asChild>
