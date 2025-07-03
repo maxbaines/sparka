@@ -55,9 +55,10 @@ export function useSaveChat() {
       // Save chat with temporary title first
       const tempChat = {
         id: chatId,
-        title: 'Untitled',
+        title: 'New Chat',
         createdAt: new Date(),
         visibility: 'private' as const,
+        isPinned: false,
       };
 
       await saveAnonymousChatToStorage(tempChat);
@@ -700,6 +701,7 @@ export function useGetAllChats(limit?: number) {
             title: chat.title,
             visibility: chat.visibility,
             userId: '',
+            isPinned: chat.isPinned || false,
           }));
         },
       };
@@ -736,6 +738,7 @@ export function useGetChatById(chatId: string) {
             title: chat.title,
             visibility: chat.visibility,
             userId: '',
+            isPinned: chat.isPinned || false,
           } satisfies UIChat;
         },
         enabled: !!chatId,

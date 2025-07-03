@@ -31,6 +31,7 @@ import { useChatId } from '@/providers/chat-id-provider';
 import { SidebarChatItem } from './sidebar-chat-item';
 
 type GroupedChats = {
+  pinned: UIChat[];
   today: UIChat[];
   yesterday: UIChat[];
   lastWeek: UIChat[];
@@ -138,6 +139,12 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
     return chats.reduce(
       (groups, chat) => {
+        // Handle pinned chats first
+        if (chat.isPinned) {
+          groups.pinned.push(chat);
+          return groups;
+        }
+
         const chatDate = new Date(chat.createdAt);
 
         if (isToday(chatDate)) {
@@ -155,6 +162,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
         return groups;
       },
       {
+        pinned: [],
         today: [],
         yesterday: [],
         lastWeek: [],
@@ -175,9 +183,30 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                 return (
                   <>
-                    {groupedChats.today.length > 0 && (
+                    {groupedChats.pinned.length > 0 && (
                       <>
                         <div className="px-2 py-1 text-xs text-sidebar-foreground/50">
+                          Pinned
+                        </div>
+                        {groupedChats.pinned.map((chat) => (
+                          <SidebarChatItem
+                            key={chat.id}
+                            chat={chat}
+                            isActive={chat.id === chatId}
+                            onDelete={(chatId) => {
+                              setDeleteId(chatId);
+                              setShowDeleteDialog(true);
+                            }}
+                            onRename={renameChat}
+                            setOpenMobile={setOpenMobile}
+                          />
+                        ))}
+                      </>
+                    )}
+
+                    {groupedChats.today.length > 0 && (
+                      <>
+                        <div className={`px-2 py-1 text-xs text-sidebar-foreground/50 ${groupedChats.pinned.length > 0 ? 'mt-6' : ''}`}>
                           Today
                         </div>
                         {groupedChats.today.map((chat) => (
