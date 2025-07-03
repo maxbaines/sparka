@@ -7,6 +7,7 @@ import {
   MoreHorizontalIcon,
   TrashIcon,
   PencilEditIcon,
+  PinIcon,
 } from '@/components/icons';
 import {
   DropdownMenu,
@@ -23,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import type { UIChat } from '@/lib/types/ui';
 import { ShareDialog } from '@/components/share-button';
 import { ShareMenuItem } from '@/components/upgrade-cta/share-menu-item';
+import { usePinChat } from '@/hooks/use-chat-store';
 
 type GroupedChats = {
   today: UIChat[];
@@ -48,6 +50,7 @@ const PureSidebarChatItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(chat.title);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const pinChatMutation = usePinChat();
 
   const handleRename = async () => {
     if (editTitle.trim() === '' || editTitle === chat.title) {
@@ -64,6 +67,13 @@ const PureSidebarChatItem = ({
       setEditTitle(chat.title);
       setIsEditing(false);
     }
+  };
+
+  const handlePin = () => {
+    pinChatMutation.mutate({
+      chatId: chat.id,
+      isPinned: !chat.isPinned,
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -109,6 +119,11 @@ const PureSidebarChatItem = ({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent side="bottom" align="end">
+          <DropdownMenuItem className="cursor-pointer" onClick={handlePin}>
+            <PinIcon />
+            <span>{chat.isPinned ? 'Unpin' : 'Pin'}</span>
+          </DropdownMenuItem>
+
           <DropdownMenuItem
             className="cursor-pointer"
             onClick={() => {
@@ -149,6 +164,7 @@ export const SidebarChatItem = memo(
     if (prevProps.isActive !== nextProps.isActive) return false;
     if (prevProps.chat.id !== nextProps.chat.id) return false;
     if (prevProps.chat.title !== nextProps.chat.title) return false;
+    if (prevProps.chat.isPinned !== nextProps.chat.isPinned) return false;
     return true;
   },
 );

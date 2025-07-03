@@ -603,6 +603,26 @@ export async function updateChatTitleById({
   }
 }
 
+export async function updateChatPinById({
+  chatId,
+  isPinned,
+}: {
+  chatId: string;
+  isPinned: boolean;
+}) {
+  try {
+    return await db
+      .update(chat)
+      .set({
+        isPinned,
+      })
+      .where(eq(chat.id, chatId));
+  } catch (error) {
+    console.error('Failed to update chat pin status in database');
+    throw error;
+  }
+}
+
 export async function getUserById({
   userId,
 }: { userId: string }): Promise<User | undefined> {

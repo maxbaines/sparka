@@ -58,6 +58,7 @@ export function useSaveChat() {
         title: 'Untitled',
         createdAt: new Date(),
         visibility: 'private' as const,
+        isPinned: false,
       };
 
       await saveAnonymousChatToStorage(tempChat);
@@ -241,6 +242,63 @@ export function useRenameChat() {
   });
 
   return renameMutation;
+}
+
+// Custom hook for pinning chats
+export function usePinChat() {
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  const getAllChatsQueryKey = useMemo(
+    () => trpc.chat.getAllChats.queryKey(),
+    [trpc.chat.getAllChats],
+  );
+
+  return useMutation({
+    mutationFn: isAuthenticated
+      ? trpc.chat.pinChat.mutationOptions().mutationFn
+      : async ({ chatId, isPinned }: { chatId: string; isPinned: boolean }) => {
+          // For anonymous users, we'd need to implement this in localStorage
+          // For now, throw an error since pins are only for authenticated users
+          throw new Error(
+            'Pin functionality not available for anonymous users',
+          );
+        },
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({
+        queryKey: getAllChatsQueryKey,
+      });
+
+      const previousChats = queryClient.getQueryData(getAllChatsQueryKey);
+
+      queryClient.setQueryData(
+        getAllChatsQueryKey,
+        (old: UIChat[] | undefined) => {
+          if (!old) return old;
+          return old.map((c) =>
+            c.id === variables.chatId
+              ? { ...c, isPinned: variables.isPinned }
+              : c,
+          );
+        },
+      );
+
+      return { previousChats };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousChats) {
+        queryClient.setQueryData(getAllChatsQueryKey, context.previousChats);
+      }
+      toast.error('Failed to update pin status');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: getAllChatsQueryKey,
+      });
+    },
+  });
 }
 
 // Custom hook for deleting trailing messages
@@ -700,6 +758,7 @@ export function useGetAllChats(limit?: number) {
             title: chat.title,
             visibility: chat.visibility,
             userId: '',
+            isPinned: chat.isPinned || false,
           }));
         },
       };
@@ -736,6 +795,7 @@ export function useGetChatById(chatId: string) {
             title: chat.title,
             visibility: chat.visibility,
             userId: '',
+            isPinned: chat.isPinned || false,
           } satisfies UIChat;
         },
         enabled: !!chatId,
