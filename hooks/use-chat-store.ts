@@ -58,6 +58,7 @@ export function useSaveChat() {
         title: 'Untitled',
         createdAt: new Date(),
         visibility: 'private' as const,
+        pinned: false,
       };
 
       await saveAnonymousChatToStorage(tempChat);
@@ -547,6 +548,38 @@ export function useSetVisibility() {
   });
 }
 
+export function usePinChat() {
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const getAllChatsQueryKey = useMemo(
+    () => trpc.chat.getAllChats.queryKey(),
+    [trpc.chat.getAllChats],
+  );
+
+  return useMutation({
+    mutationFn: isAuthenticated
+      ? trpc.chat.pinChat.mutationOptions().mutationFn
+      : async ({ chatId, pinned }: { chatId: string; pinned: boolean }) => {
+          throw new Error('Pin functionality not available for anonymous users');
+        },
+    onError: (err) => {
+      toast.error('Failed to update chat pin status');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: getAllChatsQueryKey,
+      });
+    },
+    onSuccess: (_, variables) => {
+      const message = variables.pinned ? 'Chat pinned' : 'Chat unpinned';
+      toast.success(message);
+    },
+  });
+}
+
 export function useSaveDocument(
   documentId: string,
   messageId: string,
@@ -700,6 +733,7 @@ export function useGetAllChats(limit?: number) {
             title: chat.title,
             visibility: chat.visibility,
             userId: '',
+            pinned: chat.pinned ?? false,
           }));
         },
       };
@@ -736,6 +770,7 @@ export function useGetChatById(chatId: string) {
             title: chat.title,
             visibility: chat.visibility,
             userId: '',
+            pinned: chat.pinned ?? false,
           } satisfies UIChat;
         },
         enabled: !!chatId,

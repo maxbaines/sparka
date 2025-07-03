@@ -8,6 +8,7 @@ export interface UIChat {
   title: string;
   visibility: 'private' | 'public';
   userId: string;
+  pinned: boolean;
 }
 
 

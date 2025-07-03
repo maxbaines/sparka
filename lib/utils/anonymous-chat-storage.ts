@@ -288,6 +288,7 @@ export async function cloneAnonymousChat(
       title: `Copy of ${originalChat.title}`,
       createdAt: new Date(),
       visibility: 'private' as const,
+      pinned: false,
     };
 
     await saveAnonymousChatToStorage(newChat);

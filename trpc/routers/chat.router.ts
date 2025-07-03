@@ -6,6 +6,7 @@ import {
   deleteMessagesByChatIdAfterMessageId,
   getAllMessagesByChatId,
   updateChatVisiblityById,
+  updateChatPinnedById,
   saveChat,
   saveMessages,
   getDocumentsByMessageIds,
@@ -147,6 +148,32 @@ export const chatRouter = createTRPCRouter({
       await updateChatVisiblityById({
         chatId: input.chatId,
         visibility: input.visibility,
+      });
+
+      return { success: true };
+    }),
+
+  pinChat: protectedProcedure
+    .input(
+      z.object({
+        chatId: z.string().uuid(),
+        pinned: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verify the chat belongs to the user
+      const chat = await getChatById({ id: input.chatId });
+      if (!chat || chat.userId !== ctx.user.id) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Chat not found or access denied',
+        });
+      }
+
+      // Update chat pinned status
+      await updateChatPinnedById({
+        chatId: input.chatId,
+        pinned: input.pinned,
       });
 
       return { success: true };
