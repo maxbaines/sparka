@@ -120,6 +120,7 @@ export async function saveAnonymousChatToStorage(
       createdAt: chat.createdAt.toISOString(),
       visibility: chat.visibility,
       userId: session.id,
+      pinned: chat.pinned || false,
     };
 
     const existingIndex = chats.findIndex(
@@ -137,6 +138,26 @@ export async function saveAnonymousChatToStorage(
     throw error;
   }
 }
+
+export async function toggleAnonymousChatPinned(
+  chatId: string,
+): Promise<void> {
+  try {
+    const session = getAnonymousSession();
+    if (!session) return;
+
+    const existingChats = JSON.parse(
+      localStorage.getItem(ANONYMOUS_CHATS_KEY) || '[]',
+    );
+    const updatedChats = existingChats.map((c: AnonymousChat) =>
+      c.id === chatId && c.userId === session.id ? { ...c, pinned: !c.pinned } : c,
+    );
+    localStorage.setItem(ANONYMOUS_CHATS_KEY, JSON.stringify(updatedChats));
+  } catch (error) {
+    console.error('Error toggling anonymous chat pinned status:', error);
+  }
+}
+
 export async function deleteAnonymousTrailingMessages(
   messageId: string,
 ): Promise<void> {
@@ -288,6 +309,7 @@ export async function cloneAnonymousChat(
       title: `Copy of ${originalChat.title}`,
       createdAt: new Date(),
       visibility: 'private' as const,
+      pinned: false,
     };
 
     await saveAnonymousChatToStorage(newChat);

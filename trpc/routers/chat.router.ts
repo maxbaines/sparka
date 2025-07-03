@@ -10,6 +10,7 @@ import {
   saveMessages,
   getDocumentsByMessageIds,
   saveDocuments,
+  toggleChatPinned,
 } from '@/lib/db/queries';
 import {
   createTRPCRouter,
@@ -90,6 +91,25 @@ export const chatRouter = createTRPCRouter({
       const res = await updateChatTitleById({
         chatId: input.chatId,
         title: input.title,
+      });
+      return;
+    }),
+
+  togglePinned: protectedProcedure
+    .input(
+      z.object({
+        chatId: z.string().uuid(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verify the chat belongs to the user
+      const chat = await getChatById({ id: input.chatId });
+      if (!chat || chat.userId !== ctx.user.id) {
+        throw new Error('Chat not found or access denied');
+      }
+
+      await toggleChatPinned({
+        chatId: input.chatId,
       });
       return;
     }),

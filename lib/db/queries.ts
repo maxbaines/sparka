@@ -603,6 +603,35 @@ export async function updateChatTitleById({
   }
 }
 
+export async function toggleChatPinned({
+  chatId,
+}: {
+  chatId: string;
+}) {
+  try {
+    // First get the current pinned status
+    const [currentChat] = await db
+      .select({ pinned: chat.pinned })
+      .from(chat)
+      .where(eq(chat.id, chatId));
+
+    if (!currentChat) {
+      throw new Error('Chat not found');
+    }
+
+    // Toggle the pinned status
+    return await db
+      .update(chat)
+      .set({
+        pinned: !currentChat.pinned,
+      })
+      .where(eq(chat.id, chatId));
+  } catch (error) {
+    console.error('Failed to toggle chat pinned status in database');
+    throw error;
+  }
+}
+
 export async function getUserById({
   userId,
 }: { userId: string }): Promise<User | undefined> {

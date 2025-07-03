@@ -10,6 +10,7 @@ export interface UIChat {
   title: string;
   visibility: 'private' | 'public';
   userId: string;
+  pinned: boolean;
 }
 
 // Helper functions for type conversion
@@ -19,6 +20,7 @@ export function dbChatToUIChat(chat: {
   title: string;
   visibility: 'private' | 'public';
   userId: string;
+  pinned: boolean;
 }): UIChat {
   return {
     id: chat.id,
@@ -26,6 +28,7 @@ export function dbChatToUIChat(chat: {
     title: chat.title,
     visibility: chat.visibility,
     userId: chat.userId,
+    pinned: chat.pinned,
   };
 }
 

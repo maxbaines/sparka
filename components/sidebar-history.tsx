@@ -42,12 +42,14 @@ import {
   useDeleteChat,
   useRenameChat,
   useGetAllChats,
+  useTogglePinned,
 } from '@/hooks/use-chat-store';
 import { useChatId } from '@/providers/chat-id-provider';
 import { ShareDialog } from '@/components/share-button';
 import { ShareMenuItem } from '@/components/upgrade-cta/share-menu-item';
 
 type GroupedChats = {
+  pinned: UIChat[];
   today: UIChat[];
   yesterday: UIChat[];
   lastWeek: UIChat[];
@@ -60,12 +62,14 @@ const PureChatItem = ({
   isActive,
   onDelete,
   onRename,
+  onTogglePin,
   setOpenMobile,
 }: {
   chat: UIChat;
   isActive: boolean;
   onDelete: (chatId: string) => void;
   onRename: (chatId: string, title: string) => void;
+  onTogglePin: (chatId: string) => void;
   setOpenMobile: (open: boolean) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -143,6 +147,14 @@ const PureChatItem = ({
             <span>Rename</span>
           </DropdownMenuItem>
 
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => onTogglePin(chat.id)}
+          >
+            <PinIcon />
+            <span>{chat.pinned ? 'Unpin' : 'Pin'}</span>
+          </DropdownMenuItem>
+
           <ShareMenuItem onShare={() => setShareDialogOpen(true)} />
 
           <DropdownMenuItem
@@ -173,6 +185,23 @@ export const ChatItem = memo(PureChatItem, (prevProps, nextProps) => {
   return true;
 });
 
+// Simple pin icon component
+const PinIcon = ({ size = 16 }: { size?: number }) => (
+  <svg
+    height={size}
+    viewBox="0 0 16 16"
+    width={size}
+    style={{ color: 'currentcolor' }}
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M9.5 2C9.5 1.17157 8.82843 0.5 8 0.5C7.17157 0.5 6.5 1.17157 6.5 2V3H5V4.5H6.5V8.5L4.5 10.5H3V12H7V15.5H8V12H12V10.5H10.5L8.5 8.5V4.5H10V3H8.5V2H9.5Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 export function SidebarHistory({ user }: { user: User | undefined }) {
   const { setOpenMobile } = useSidebar();
   const { chatId, refreshChatID } = useChatId();
@@ -180,6 +209,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
   const { mutate: renameChatMutation } = useRenameChat();
   const { deleteChat } = useDeleteChat();
+  const { mutate: togglePinnedMutation } = useTogglePinned();
 
   const { data: chats, isLoading } = useGetAllChats(100);
 
@@ -273,6 +303,11 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
     return chats.reduce(
       (groups, chat) => {
+        if (chat.pinned) {
+          groups.pinned.push(chat);
+          return groups;
+        }
+
         const chatDate = new Date(chat.createdAt);
 
         if (isToday(chatDate)) {
@@ -290,6 +325,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
         return groups;
       },
       {
+        pinned: [],
         today: [],
         yesterday: [],
         lastWeek: [],
@@ -310,6 +346,30 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                 return (
                   <>
+                    {groupedChats.pinned.length > 0 && (
+                      <>
+                        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">
+                          Pinned
+                        </div>
+                        {groupedChats.pinned.map((chat) => (
+                          <ChatItem
+                            key={chat.id}
+                            chat={chat}
+                            isActive={chat.id === chatId}
+                            onDelete={(chatId) => {
+                              setDeleteId(chatId);
+                              setShowDeleteDialog(true);
+                            }}
+                            onRename={renameChat}
+                            onTogglePin={(chatId) => {
+                              togglePinnedMutation({ chatId });
+                            }}
+                            setOpenMobile={setOpenMobile}
+                          />
+                        ))}
+                      </>
+                    )}
+
                     {groupedChats.today.length > 0 && (
                       <>
                         <div className="px-2 py-1 text-xs text-sidebar-foreground/50">
@@ -325,6 +385,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setShowDeleteDialog(true);
                             }}
                             onRename={renameChat}
+                            onTogglePin={(chatId) => {
+                              togglePinnedMutation({ chatId });
+                            }}
                             setOpenMobile={setOpenMobile}
                           />
                         ))}
@@ -346,6 +409,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setShowDeleteDialog(true);
                             }}
                             onRename={renameChat}
+                            onTogglePin={(chatId) => {
+                              togglePinnedMutation({ chatId });
+                            }}
                             setOpenMobile={setOpenMobile}
                           />
                         ))}
@@ -367,6 +433,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setShowDeleteDialog(true);
                             }}
                             onRename={renameChat}
+                            onTogglePin={(chatId) => {
+                              togglePinnedMutation({ chatId });
+                            }}
                             setOpenMobile={setOpenMobile}
                           />
                         ))}
@@ -388,6 +457,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setShowDeleteDialog(true);
                             }}
                             onRename={renameChat}
+                            onTogglePin={(chatId) => {
+                              togglePinnedMutation({ chatId });
+                            }}
                             setOpenMobile={setOpenMobile}
                           />
                         ))}
@@ -409,6 +481,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                               setShowDeleteDialog(true);
                             }}
                             onRename={renameChat}
+                            onTogglePin={(chatId) => {
+                              togglePinnedMutation({ chatId });
+                            }}
                             setOpenMobile={setOpenMobile}
                           />
                         ))}
