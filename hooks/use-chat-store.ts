@@ -548,6 +548,61 @@ export function useSetVisibility() {
   });
 }
 
+export function usePinChat() {
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const getAllChatsQueryKey = useMemo(
+    () => trpc.chat.getAllChats.queryKey(),
+    [trpc.chat.getAllChats],
+  );
+
+  return useMutation({
+    mutationFn: isAuthenticated
+      ? trpc.chat.togglePinned.mutationOptions().mutationFn
+      : async ({ chatId, isPinned }: { chatId: string; isPinned: boolean }) => {
+          throw new Error('Not implemented for anonymous users');
+        },
+    onMutate: async (variables) => {
+      await queryClient.cancelQueries({
+        queryKey: getAllChatsQueryKey,
+      });
+
+      const previousChats = queryClient.getQueryData(getAllChatsQueryKey);
+
+      queryClient.setQueryData(
+        getAllChatsQueryKey,
+        (old: UIChat[] | undefined) => {
+          if (!old) return old;
+          return old.map((c) =>
+            c.id === variables.chatId
+              ? { ...c, isPinned: variables.isPinned }
+              : c,
+          );
+        },
+      );
+
+      return { previousChats };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousChats) {
+        queryClient.setQueryData(getAllChatsQueryKey, context.previousChats);
+      }
+      toast.error('Failed to update chat pin status');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: getAllChatsQueryKey,
+      });
+    },
+    onSuccess: (_, variables) => {
+      toast.success(variables.isPinned ? 'Chat pinned' : 'Chat unpinned');
+    },
+  });
+}
+
 export function useSaveDocument(
   documentId: string,
   messageId: string,

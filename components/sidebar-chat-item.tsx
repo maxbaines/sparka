@@ -9,6 +9,7 @@ import {
   TrashIcon,
   PencilEditIcon,
 } from '@/components/icons';
+import { usePinChat } from '@/hooks/use-chat-store';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,7 +50,7 @@ const PureSidebarChatItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(chat.title);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
-  const [isPinned, setIsPinned] = useState(false);
+  const pinChatMutation = usePinChat();
 
   const handleRename = async () => {
     if (editTitle.trim() === '' || editTitle === chat.title) {
@@ -78,8 +79,10 @@ const PureSidebarChatItem = ({
   };
 
   const handlePin = () => {
-    setIsPinned(!isPinned);
-    toast.success(isPinned ? 'Chat unpinned' : 'Chat pinned');
+    pinChatMutation.mutate({
+      chatId: chat.id,
+      isPinned: !chat.isPinned,
+    });
   };
 
   return (
@@ -106,13 +109,13 @@ const PureSidebarChatItem = ({
 
       <SidebarMenuAction
         className={`data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mr-0.5 ${
-          isPinned ? 'text-primary' : ''
+          chat.isPinned ? 'text-primary' : ''
         }`}
         showOnHover={!isActive}
         onClick={handlePin}
       >
-        <Pin className={`h-4 w-4 ${isPinned ? 'fill-current' : ''}`} />
-        <span className="sr-only">{isPinned ? 'Unpin' : 'Pin'}</span>
+        <Pin className={`h-4 w-4 ${chat.isPinned ? 'fill-current' : ''}`} />
+        <span className="sr-only">{chat.isPinned ? 'Unpin' : 'Pin'}</span>
       </SidebarMenuAction>
 
       <DropdownMenu modal={true}>
@@ -167,6 +170,7 @@ export const SidebarChatItem = memo(
     if (prevProps.isActive !== nextProps.isActive) return false;
     if (prevProps.chat.id !== nextProps.chat.id) return false;
     if (prevProps.chat.title !== nextProps.chat.title) return false;
+    if (prevProps.chat.isPinned !== nextProps.chat.isPinned) return false;
     return true;
   },
 );
