@@ -222,6 +222,10 @@
 ## Backlog
 
 
+
+
+
+
 [ ] Migrate to Next.js Router for navigation (And get rid of react-router)
 [ ] The HomePage and ChatPage should be the same component. Should be less code and allow nicer transitions.
 [ ] Anonymous chats should not have the same page segment as authenticated chats. (they are trying to load an authenticated chat now)
@@ -309,6 +313,12 @@
 [ ] Assistant Message ++
     [ ] Retry message should offer you options for selecting a new model. Update the `RetryButton` and set a new model in the metadata of the parent message.
     [ ] Tools selected for the generation of a message should be saved as part of the metadata so that they are used again in the retry
+
+[ ] Bug: Search queries don't fit screen (mobile)
+
+[ ] Add to sparka backlog: A B test on lazy registration being useful or not
+
+[ ] User message text is not selectable (until it goes to edit mode)
 
 
 [ ] Save partial message on abort (stop) with AI SDK 5
