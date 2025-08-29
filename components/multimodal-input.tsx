@@ -1,5 +1,10 @@
 'use client';
-import type { Attachment, ChatMessage, UiToolName } from '@/lib/ai/types';
+import type {
+  Attachment,
+  ChatMessage,
+  UiToolName,
+  SelectedTool,
+} from '@/lib/ai/types';
 import type { ModelId } from '@/lib/ai/model-id';
 
 import type React from 'react';
@@ -79,6 +84,7 @@ function PureMultimodalInput({
     editorRef,
     selectedTool,
     setSelectedTool,
+    selectedImageStyle,
     attachments,
     setAttachments,
     selectedModelId,
@@ -211,6 +217,28 @@ function PureMultimodalInput({
       }
     }
 
+    const toSelectedTool = (
+      tool: UiToolName | null,
+    ): SelectedTool | undefined => {
+      switch (tool) {
+        case 'generateImage':
+          return {
+            name: 'generateImage',
+            config: selectedImageStyle
+              ? { style: selectedImageStyle }
+              : undefined,
+          };
+        case 'webSearch':
+          return { name: 'webSearch', config: {} };
+        case 'createDocument':
+          return { name: 'createDocument', config: {} };
+        case 'deepResearch':
+          return { name: 'deepResearch', config: {} };
+        default:
+          return undefined;
+      }
+    };
+
     const message: ChatMessage = {
       id: generateUUID(),
       parts: [
@@ -229,7 +257,7 @@ function PureMultimodalInput({
         createdAt: new Date(),
         parentMessageId: effectiveParentMessageId,
         selectedModel: selectedModelId,
-        selectedTool: selectedTool || undefined,
+        selectedTool: toSelectedTool(selectedTool),
       },
       role: 'user',
     };

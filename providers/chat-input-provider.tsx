@@ -11,6 +11,7 @@ import React, {
   useRef,
 } from 'react';
 import type { Attachment, UiToolName } from '@/lib/ai/types';
+import type { ImageStyle } from '@/lib/ai/types';
 import { useDefaultModel, useModelChange } from './default-model-provider';
 import { getModelDefinition } from '@/lib/ai/all-models';
 import type { LexicalChatInputRef } from '@/components/lexical-chat-input';
@@ -20,6 +21,8 @@ interface ChatInputContextType {
   editorRef: React.RefObject<LexicalChatInputRef>;
   selectedTool: UiToolName | null;
   setSelectedTool: Dispatch<SetStateAction<UiToolName | null>>;
+  selectedImageStyle: ImageStyle | null;
+  setSelectedImageStyle: Dispatch<SetStateAction<ImageStyle | null>>;
   attachments: Array<Attachment>;
   setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
   selectedModelId: ModelId;
@@ -85,6 +88,8 @@ export function ChatInputProvider({
   const [selectedTool, setSelectedTool] = useState<UiToolName | null>(
     initialTool,
   );
+  const [selectedImageStyle, setSelectedImageStyle] =
+    useState<ImageStyle | null>(null);
   const [attachments, setAttachments] =
     useState<Array<Attachment>>(initialAttachments);
 
@@ -135,6 +140,7 @@ export function ChatInputProvider({
 
   const resetData = useCallback(() => {
     setSelectedTool(null);
+    setSelectedImageStyle(null);
   }, []);
 
   const clearAttachments = useCallback(() => {
@@ -185,6 +191,8 @@ export function ChatInputProvider({
         editorRef,
         selectedTool,
         setSelectedTool,
+        selectedImageStyle,
+        setSelectedImageStyle,
         attachments,
         setAttachments,
         selectedModelId,

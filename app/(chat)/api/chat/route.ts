@@ -278,14 +278,14 @@ export async function POST(request: NextRequest) {
     }
 
     let explicitlyRequestedTools: ToolName[] | null = null;
-    if (selectedTool === 'deepResearch')
+    if (selectedTool?.name === 'deepResearch')
       explicitlyRequestedTools = ['deepResearch'];
-    // else if (selectedTool === 'reason') explicitlyRequestedTool = 'reasonSearch';
-    else if (selectedTool === 'webSearch')
+    // else if (selectedTool?.name === 'reason') explicitlyRequestedTool = 'reasonSearch';
+    else if (selectedTool?.name === 'webSearch')
       explicitlyRequestedTools = ['webSearch'];
-    else if (selectedTool === 'generateImage')
+    else if (selectedTool?.name === 'generateImage')
       explicitlyRequestedTools = ['generateImage'];
-    else if (selectedTool === 'createDocument')
+    else if (selectedTool?.name === 'createDocument')
       explicitlyRequestedTools = ['createDocument', 'updateDocument'];
 
     const baseModelCost = getBaseModelCostByModelId(selectedModelId);

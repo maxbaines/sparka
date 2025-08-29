@@ -19,7 +19,8 @@ import { Separator } from './ui/separator';
 import { getModelDefinition } from '@/lib/ai/all-models';
 import { LoginPrompt } from './upgrade-cta/login-prompt';
 import { toolDefinitions, enabledTools } from './chat-features-definitions';
-import type { UiToolName } from '@/lib/ai/types';
+import type { UiToolName, ImageStyle } from '@/lib/ai/types';
+import { useChatInput } from '@/providers/chat-input-provider';
 
 export function ResponsiveTools({
   tools,
@@ -33,6 +34,17 @@ export function ResponsiveTools({
   const { data: session } = useSession();
   const isAnonymous = !session?.user;
   const [showLoginPopover, setShowLoginPopover] = useState(false);
+  const { selectedImageStyle, setSelectedImageStyle } = useChatInput();
+
+  // Friendly labels for styles to match UI expectations
+  const styleLabels: Record<ImageStyle, string> = {
+    photorealistic: 'Photo Shoot',
+    anime: 'Anime',
+    dramaticHeadshot: 'Dramatic Headshot',
+    coloringBook: 'Coloring Book',
+    photoShoot: 'Photo Shoot',
+    retroCartoon: 'Retro Cartoon',
+  } as const;
 
   const { hasReasoningModel, hasUnspecifiedFeatures } = (() => {
     try {
@@ -174,6 +186,63 @@ export function ResponsiveTools({
             </span>
             <X size={12} className="opacity-70" />
           </Button>
+
+          {activeTool === 'generateImage' && (
+            <>
+              <Separator
+                orientation="vertical"
+                className="bg-muted-foreground/50 h-4"
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1 @[400px]:gap-2 rounded-full h-8 @[400px]:h-10"
+                  >
+                    <span className="hidden @[500px]:inline">Styles</span>
+                    {selectedImageStyle && (
+                      <span className="hidden @[600px]:inline opacity-80">
+                        : {styleLabels[selectedImageStyle]}
+                      </span>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="start"
+                  className="w-56"
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  {(
+                    [
+                      'photorealistic',
+                      'anime',
+                      'dramaticHeadshot',
+                      'coloringBook',
+                      'photoShoot',
+                      'retroCartoon',
+                    ] as ImageStyle[]
+                  ).map((style) => (
+                    <DropdownMenuItem
+                      key={style}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImageStyle(
+                          selectedImageStyle === style ? null : style,
+                        );
+                      }}
+                    >
+                      <span>{styleLabels[style]}</span>
+                      {selectedImageStyle === style && (
+                        <span className="ml-auto text-xs opacity-70">✓</span>
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
         </>
       )}
     </div>

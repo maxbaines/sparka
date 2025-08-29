@@ -45,12 +45,47 @@ export const frontendToolsSchema = z.enum([
 const __ = frontendToolsSchema.options satisfies ToolNameInternal[];
 
 export type UiToolName = z.infer<typeof frontendToolsSchema>;
+
+// Tool-specific UI config types (start with Style for generateImage)
+export const imageStyleSchema = z.enum([
+  'photorealistic',
+  'anime',
+  'dramaticHeadshot',
+  'coloringBook',
+  'photoShoot',
+  'retroCartoon',
+]);
+
+export type ImageStyle = z.infer<typeof imageStyleSchema>;
+
+export const selectedToolSchema = z.discriminatedUnion('name', [
+  z.object({
+    name: z.literal('generateImage'),
+    config: z
+      .object({
+        style: imageStyleSchema.optional(),
+      })
+      .optional(),
+  }),
+  z.object({ name: z.literal('webSearch'), config: z.object({}).optional() }),
+  z.object({
+    name: z.literal('createDocument'),
+    config: z.object({}).optional(),
+  }),
+  z.object({
+    name: z.literal('deepResearch'),
+    config: z.object({}).optional(),
+  }),
+]);
+
+export type SelectedTool = z.infer<typeof selectedToolSchema>;
+
 export const messageMetadataSchema = z.object({
   createdAt: z.date(),
   parentMessageId: z.string().nullable(),
   selectedModel: z.custom<ModelId>((val) => typeof val === 'string'),
   isPartial: z.boolean().optional(),
-  selectedTool: frontendToolsSchema.optional(),
+  selectedTool: selectedToolSchema.optional(),
 });
 
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
