@@ -40,6 +40,7 @@ import {
   getModelDefinition,
   DEFAULT_PDF_MODEL,
   DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL,
+  DEFAULT_CHAT_MODEL,
 } from '@/lib/ai/all-models';
 import { LimitDisplay } from './upgrade-cta/limit-display';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
@@ -133,7 +134,13 @@ function PureMultimodalInput({
   });
 
   // Centralized submission gating
-  const selectedModelDef = getModelDefinition(selectedModelId);
+
+  let selectedModelDef = null;
+  try {
+    selectedModelDef = getModelDefinition(selectedModelId);
+  } catch {
+    selectedModelDef = getModelDefinition(DEFAULT_CHAT_MODEL);
+  }
   const isImageOutputModel = Boolean(selectedModelDef?.features?.output?.image);
   const submission: { enabled: false; message: string } | { enabled: true } =
     (() => {

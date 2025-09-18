@@ -23,6 +23,8 @@ export type ImageModelDefinition = ImageModelData & {
 const DISABLED_MODELS: Partial<Record<ModelId, true>> = {
   // 'anthropic/claude-opus-4': true,
   // 'anthropic/claude-opus-4.1': true,
+  'cohere/command-r': true,
+  'cohere/command-r-plus': true,
   'morph/morph-v3-large': true,
   'morph/morph-v3-fast': true,
 };
@@ -118,7 +120,7 @@ export function getImageModelDefinition(
   return model;
 }
 
-export const DEFAULT_CHAT_MODEL: ModelId = 'openai/gpt-5-mini';
+export const DEFAULT_CHAT_MODEL: ModelId = 'cohere/command-a';
 export const DEFAULT_PDF_MODEL: ModelId = 'openai/gpt-5-mini';
 export const DEFAULT_TITLE_MODEL: ModelId = 'openai/gpt-5-nano';
 export const DEFAULT_ARTIFACT_MODEL: ModelId = 'openai/gpt-5-nano';

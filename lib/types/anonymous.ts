@@ -22,6 +22,7 @@ export const ANONYMOUS_LIMITS = {
     'openai/gpt-5-mini',
     'openai/gpt-5-nano',
     'openai/gpt-4o-mini',
+    'cohere/command-a',
   ] as const satisfies ModelId[],
   AVAILABLE_TOOLS: ['createDocument', 'updateDocument'] satisfies ToolName[],
   SESSION_DURATION: 2147483647, // Max session time
