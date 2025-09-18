@@ -17,8 +17,8 @@ import {
   ContextReasoningUsage,
   ContextCacheUsage,
 } from '@/components/ai-elements/context';
-
 import type { ModelId as TokenLensModelId } from 'tokenlens';
+
 import { getContextWindow } from 'tokenlens';
 import type { LanguageModelUsage } from 'ai';
 import { motion } from 'motion/react';
@@ -43,9 +43,12 @@ export function ContextBar({
   className?: string;
 }) {
   const usage = useLastUsageUntilMessageId(parentMessageId);
-
   const hasBarContent =
     attachments.length > 0 || uploadQueue.length > 0 || usage;
+
+  if (!hasBarContent) {
+    return null;
+  }
 
   return (
     <motion.div

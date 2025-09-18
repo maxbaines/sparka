@@ -144,7 +144,7 @@
         "swr": "^2.2.5",
         "tailwind-merge": "^3.3.1",
         "throttleit": "^2.1.0",
-        "tokenlens": "^1.1.2",
+        "tokenlens": "^1.2.1",
         "use-stick-to-bottom": "^1.1.1",
         "usehooks-ts": "^3.1.0",
         "uuid": "^11.1.0",
@@ -3505,7 +3505,7 @@
 
     "toidentifier": ["toidentifier@1.0.0", "", {}, "sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw=="],
 
-    "tokenlens": ["tokenlens@1.1.2", "", {}, "sha512-PICXahAiVS/2nyc30SijuYZj5wIm2G9+2U7fdvQbl5pa/hIUpQ8H+RdYOzOrSvva6GMqPM5+6cWd9Hqi81Yv3g=="],
+    "tokenlens": ["tokenlens@1.2.1", "", {}, "sha512-6FUYPQ3wrWZ6jPjEAnNRfGhel+zOI3YN5RIEUXs+wKZQoE48xxvZHkmFy/hh86m9p5e9gc52ALcFXNHAbXztuQ=="],
 
     "tr46": ["tr46@0.0.3", "", {}, "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="],
 
