@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { ChatMessage } from '@/lib/ai/types';
 import { useDataStream } from '@/components/data-stream-provider';
-import { useSetMessages } from '@/lib/stores/chat-store-context';
+import { useSetMessages } from '@/lib/stores/hooks';
 
 export interface UseAutoResumeProps {
   autoResume: boolean;

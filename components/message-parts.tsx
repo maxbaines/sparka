@@ -13,12 +13,12 @@ import { CodeInterpreterMessage } from './code-interpreter-message';
 import { GeneratedImage } from './generated-image';
 import { ResearchUpdates } from './message-annotations';
 import type { ChatMessage } from '@/lib/ai/types';
+import { useChatStoreApi } from '@/lib/stores/chat-store-context';
 import {
-  useChatStoreApi,
   useMessagePartTypesById,
   useMessagePartByPartIdx,
   useMessagePartsByPartRange,
-} from '@/lib/stores/chat-store-context';
+} from '@/lib/stores/hooks';
 
 type MessagePartsProps = {
   messageId: string;

@@ -2,7 +2,7 @@
 
 import type { Attachment } from '@/lib/ai/types';
 import type { ModelId } from '@/lib/models/model-id';
-import { useLastUsageUntilMessageId } from '@/lib/stores/chat-store-context';
+import { useLastUsageUntilMessageId } from '@/lib/stores/hooks';
 import { PromptInputContextBar } from '@/components/ai-elements/prompt-input';
 import { AttachmentList } from '@/components/attachment-list';
 import {

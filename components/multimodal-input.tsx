@@ -15,12 +15,12 @@ import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useDropzone } from 'react-dropzone';
 import { useSession } from 'next-auth/react';
+import { useChatStoreApi } from '@/lib/stores/chat-store-context';
 import {
   useChatHelperStop,
   useSetMessages,
-  useChatStoreApi,
   useMessageIds,
-} from '@/lib/stores/chat-store-context';
+} from '@/lib/stores/hooks';
 import { PlusIcon } from 'lucide-react';
 import { ImageModal } from './image-modal';
 import { ChatInputTextArea } from './chat-input';

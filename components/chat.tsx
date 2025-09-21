@@ -10,12 +10,8 @@ import { useSession } from 'next-auth/react';
 
 import { useSidebar } from '@/components/ui/sidebar';
 import type { ChatMessage } from '@/lib/ai/types';
-import {
-  useChatStatus,
-  useMessageIds,
-  useChatId,
-  useChatStoreApi,
-} from '@/lib/stores/chat-store-context';
+import { useChatStoreApi } from '@/lib/stores/chat-store-context';
+import { useChatStatus, useMessageIds, useChatId } from '@/lib/stores/hooks';
 import { useCallback } from 'react';
 import type { UseChatHelpers } from '@ai-sdk/react';
 

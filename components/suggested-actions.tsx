@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { memo } from 'react';
 import type { ModelId } from '@/lib/models/model-id';
-import { useSendMessage } from '@/lib/stores/chat-store-context';
+import { useSendMessage } from '@/lib/stores/hooks';
 import { cn } from '@/lib/utils';
 
 interface SuggestedActionsProps {

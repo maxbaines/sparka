@@ -9,11 +9,7 @@ import {
   ConversationContent,
   ConversationScrollButton,
 } from '@/components/ai-elements/conversation';
-import {
-  useChatId,
-  useChatStatus,
-  useMessageIds,
-} from '@/lib/stores/chat-store-context';
+import { useChatId, useChatStatus, useMessageIds } from '@/lib/stores/hooks';
 
 interface PureMessagesInternalProps {
   votes: Array<Vote> | undefined;

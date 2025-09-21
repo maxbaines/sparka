@@ -4,10 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Action } from '@/components/ai-elements/actions';
 import { useMessageTree } from '@/providers/message-tree-provider';
-import {
-  useMessageById,
-  useMessageRoleById,
-} from '@/lib/stores/chat-store-context';
+import { useMessageById, useMessageRoleById } from '@/lib/stores/hooks';
 
 export function PureMessageSiblings({
   messageId,

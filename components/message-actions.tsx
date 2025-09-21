@@ -12,11 +12,8 @@ import { Pencil, PencilOff } from 'lucide-react';
 import { RetryButton } from './retry-button';
 import { memo } from 'react';
 import equal from 'fast-deep-equal';
-import {
-  useMessageRoleById,
-  useChatStoreApi,
-  useMessageById,
-} from '@/lib/stores/chat-store-context';
+import { useChatStoreApi } from '@/lib/stores/chat-store-context';
+import { useMessageRoleById, useMessageById } from '@/lib/stores/hooks';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { MessageSiblings } from './message-siblings';
 import { Tag } from './tag';

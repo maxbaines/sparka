@@ -1,7 +1,7 @@
 'use client';
 import { memo } from 'react';
 import equal from 'fast-deep-equal';
-import { useMessageRoleById } from '@/lib/stores/chat-store-context';
+import { useMessageRoleById } from '@/lib/stores/hooks';
 import { AssistantMessage } from './assistant-message';
 import { UserMessage, type BaseMessageProps } from './user-message';
 

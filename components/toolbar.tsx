@@ -32,7 +32,7 @@ import type { ArtifactToolbarItem } from './create-artifact';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import { useChatInput } from '@/providers/chat-input-provider';
 import type { ChatMessage } from '@/lib/ai/types';
-import { useSendMessage } from '@/lib/stores/chat-store-context';
+import { useSendMessage } from '@/lib/stores/hooks';
 import type { useChatStoreApi } from '@/lib/stores/chat-store-context';
 
 type ToolProps = {

@@ -3,11 +3,11 @@ import { memo } from 'react';
 import { Messages } from './messages';
 import { MultimodalInput } from './multimodal-input';
 import { CloneChatButton } from '@/components/clone-chat-button';
-import { useChatStore } from '@/lib/stores/chat-store-context';
 import type { Vote } from '@/lib/db/schema';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { ChatMessage } from '@/lib/ai/types';
 import { cn } from '@/lib/utils';
+import { useLastMessageId } from '@/lib/stores/hooks-base';
 
 export interface MessagesPaneProps {
   chatId: string;
@@ -26,7 +26,7 @@ function PureMessagesPane({
   isVisible,
   className,
 }: MessagesPaneProps) {
-  const parentMessageId = useChatStore((state) => state.getLastMessageId());
+  const parentMessageId = useLastMessageId();
 
   return (
     <div

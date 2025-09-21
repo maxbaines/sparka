@@ -1,9 +1,7 @@
 import { Button } from './ui/button';
 import { RefreshCcwIcon } from 'lucide-react';
-import {
-  useChatStoreApi,
-  useSetMessages,
-} from '@/lib/stores/chat-store-context';
+import { useChatStoreApi } from '@/lib/stores/chat-store-context';
+import { useSetMessages } from '@/lib/stores/hooks';
 
 export function ResponseErrorMessage() {
   const setMessages = useSetMessages();
