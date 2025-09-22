@@ -10,6 +10,7 @@ import { MessageActions } from './message-actions';
 import { SourcesAnnotations } from './message-annotations';
 import { MessageParts } from './message-parts';
 import { PartialMessageLoading } from './partial-message-loading';
+import { FollowUpSuggestionsParts } from './followup-suggestions';
 
 const PureAssistantMessage = ({
   messageId,
@@ -46,6 +47,7 @@ const PureAssistantMessage = ({
           isLoading={isLoading}
           isReadOnly={isReadonly}
         />
+        <FollowUpSuggestionsParts messageId={messageId} />
       </div>
     </AIMessage>
   );

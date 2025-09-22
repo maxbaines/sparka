@@ -58,12 +58,13 @@ export function PureMessageActions({
 
   // Version selector and model tag handled by MessageVersionAndModel component
 
-  if (isLoading) return null;
+  if (isLoading) return <div className="h-7" />;
 
+  const showActionsWithoutHover = isMobile || isEditing || role === 'assistant';
   return (
     <Actions
       className={
-        isMobile
+        showActionsWithoutHover
           ? ''
           : 'opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-hover/message:opacity-100 focus-within:opacity-100 hover:opacity-100'
       }

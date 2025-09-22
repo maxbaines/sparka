@@ -4,6 +4,8 @@ import {
   JsonToSseTransformStream,
   streamText,
   stepCountIs,
+  streamObject,
+  type ModelMessage,
 } from 'ai';
 import { replaceFilePartUrlByBinaryDataInMessages } from '@/lib/utils/download-assets';
 import { auth } from '@/app/(auth)/auth';
@@ -20,7 +22,8 @@ import { generateUUID } from '@/lib/utils';
 import { generateTitleFromUserMessage } from '../../actions';
 import { getTools } from '@/lib/ai/tools/tools';
 import { toolsDefinitions, allTools } from '@/lib/ai/tools/tools-definitions';
-import type { ToolName, ChatMessage } from '@/lib/ai/types';
+import type { ToolName, ChatMessage, StreamWriter } from '@/lib/ai/types';
+import { z } from 'zod';
 import type { NextRequest } from 'next/server';
 import {
   filterAffordableTools,
@@ -28,7 +31,11 @@ import {
 } from '@/lib/credits/credits-utils';
 import { getLanguageModel, getModelProviderOptions } from '@/lib/ai/providers';
 import type { CreditReservation } from '@/lib/credits/credit-reservation';
-import { getModelDefinition, type ModelDefinition } from '@/lib/ai/all-models';
+import {
+  DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
+  getModelDefinition,
+  type ModelDefinition,
+} from '@/lib/ai/all-models';
 import {
   createResumableStreamContext,
   type ResumableStreamContext,
@@ -103,6 +110,51 @@ export function getRedisSubscriber() {
 
 export function getRedisPublisher() {
   return redisPublisher;
+}
+
+function generateFollowupSuggestions(modelMessages: ModelMessage[]) {
+  const maxQuestionCount = 5;
+  const minQuestionCount = 3;
+  const maxCharactersPerQuestion = 80;
+  return streamObject({
+    model: getLanguageModel(DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL),
+    messages: [
+      ...modelMessages,
+      {
+        role: 'user',
+        content: `What question should I ask next? Return an array of suggested questions (minimum ${minQuestionCount}, maximum ${maxQuestionCount}). Each question should be no more than ${maxCharactersPerQuestion} characters.`,
+      },
+    ],
+    schema: z.object({
+      suggestions: z
+        .array(z.string())
+        .min(minQuestionCount)
+        .max(maxQuestionCount),
+    }),
+  });
+}
+
+async function streamFollowupSuggestions({
+  followupSuggestionsResult,
+  writer,
+}: {
+  followupSuggestionsResult: ReturnType<typeof generateFollowupSuggestions>;
+  writer: StreamWriter;
+}) {
+  const dataPartId = generateUUID();
+
+  for await (const chunk of followupSuggestionsResult.partialObjectStream) {
+    writer.write({
+      id: dataPartId,
+      type: 'data-followupSuggestions',
+      data: {
+        suggestions:
+          chunk.suggestions?.filter(
+            (suggestion): suggestion is string => suggestion !== undefined,
+          ) ?? [],
+      },
+    });
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -457,7 +509,7 @@ export async function POST(request: NextRequest) {
 
       // Build the data stream that will emit tokens
       const stream = createUIMessageStream<ChatMessage>({
-        execute: ({ writer: dataStream }) => {
+        execute: async ({ writer: dataStream }) => {
           const result = streamText({
             model: getLanguageModel(selectedModelId),
             system: systemPrompt(),
@@ -513,8 +565,6 @@ export async function POST(request: NextRequest) {
             providerOptions: getModelProviderOptions(selectedModelId),
           });
 
-          result.consumeStream();
-
           const initialMetadata = {
             createdAt: new Date(),
             parentMessageId: userMessage.id,
@@ -542,6 +592,20 @@ export async function POST(request: NextRequest) {
               },
             }),
           );
+          result.consumeStream();
+
+          const response = await result.response;
+          const responseMessages = response.messages;
+
+          // Generate and stream follow-up suggestions
+          const followupSuggestionsResult = generateFollowupSuggestions([
+            ...contextForLLM,
+            ...responseMessages,
+          ]);
+          await streamFollowupSuggestions({
+            followupSuggestionsResult,
+            writer: dataStream,
+          });
         },
         generateId: () => messageId,
         onFinish: async ({ messages, isContinuation, responseMessage }) => {

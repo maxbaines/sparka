@@ -124,6 +124,8 @@ export const DEFAULT_CHAT_MODEL: ModelId = 'cohere/command-a';
 export const DEFAULT_PDF_MODEL: ModelId = 'openai/gpt-5-mini';
 export const DEFAULT_TITLE_MODEL: ModelId = 'openai/gpt-5-nano';
 export const DEFAULT_ARTIFACT_MODEL: ModelId = 'openai/gpt-5-nano';
+export const DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL: ModelId =
+  'google/gemini-2.5-flash-lite';
 export const DEFAULT_ARTIFACT_SUGGESTION_MODEL: ModelId = 'openai/gpt-5-mini';
 export const DEFAULT_IMAGE_MODEL: ImageModelId = 'openai/gpt-image-1';
 export const DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL: ModelId =

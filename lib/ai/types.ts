@@ -89,6 +89,10 @@ export type ChatTools = {
   retrieve: retrieveTool;
 };
 
+type FollowupSuggestions = {
+  suggestions: string[];
+};
+
 export type CustomUIDataTypes = {
   textDelta: string;
   imageDelta: string;
@@ -103,6 +107,7 @@ export type CustomUIDataTypes = {
   clear: null;
   finish: null;
   researchUpdate: ResearchUpdate;
+  followupSuggestions: FollowupSuggestions;
 };
 
 export type ChatMessage = Omit<
