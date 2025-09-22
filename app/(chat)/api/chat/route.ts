@@ -592,7 +592,7 @@ export async function POST(request: NextRequest) {
               },
             }),
           );
-          result.consumeStream();
+          await result.consumeStream();
 
           const response = await result.response;
           const responseMessages = response.messages;
