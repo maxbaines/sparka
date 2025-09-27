@@ -57,7 +57,6 @@ export const AssistantMessage = memo(
     if (prevProps.vote !== nextProps.vote) return false;
     if (prevProps.isLoading !== nextProps.isLoading) return false;
     if (prevProps.isReadonly !== nextProps.isReadonly) return false;
-    if (prevProps.style !== nextProps.style) return false;
     return true;
   },
 );
