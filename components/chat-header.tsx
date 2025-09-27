@@ -4,8 +4,6 @@ import { memo } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { ShareButton } from './share-button';
 import { Share } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import type { User } from 'next-auth';
 import { HeaderActions } from '@/components/header-actions';
 
@@ -20,12 +18,8 @@ function PureChatHeader({
   hasMessages: boolean;
   user: User | undefined;
 }) {
-  const router = useRouter();
-  const { data: session } = useSession();
-  const isAuthenticated = !!session?.user;
-
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2 justify-between">
+    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2 justify-between h-(--header-height)">
       <div className="flex items-center gap-2">
         <SidebarToggle />
 

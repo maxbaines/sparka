@@ -39,7 +39,13 @@ export default async function ChatLayout({
       <ChatProviders user={session?.user}>
         <SidebarProvider defaultOpen={!isCollapsed}>
           <AppSidebar />
-          <SidebarInset>
+          <SidebarInset
+            style={
+              {
+                '--header-height': 'calc(var(--spacing) * 13)',
+              } as React.CSSProperties
+            }
+          >
             <DefaultModelProvider defaultModel={defaultModel}>
               <KeyboardShortcuts />
 

@@ -28,10 +28,12 @@ const PureMessagesInternal = memo(function PureMessagesInternal({
     return null;
   }
 
+  if (messageIds.length === 0) {
+    return <Greeting />;
+  }
+
   return (
     <>
-      {messageIds.length === 0 && <Greeting />}
-
       {messageIds.map((messageId, index) => (
         <PreviewMessage
           key={messageId}
@@ -53,8 +55,6 @@ const PureMessagesInternal = memo(function PureMessagesInternal({
       )}
 
       {status === 'error' && <ResponseErrorMessage />}
-
-      <div className="shrink-0 min-w-[24px] min-h-[24px]" />
     </>
   );
 });
@@ -69,7 +69,7 @@ export interface MessagesProps {
 function PureMessages({ votes, isReadonly, isVisible }: MessagesProps) {
   return (
     <Conversation className="flex flex-col flex-1 w-full">
-      <ConversationContent className="flex flex-col min-w-0 sm:max-w-2xl md:max-w-3xl container mx-auto h-full">
+      <ConversationContent className="flex flex-col min-w-0 sm:max-w-2xl md:max-w-3xl container mx-auto h-full pb-10">
         <PureMessagesInternal votes={votes} isReadonly={isReadonly} />
       </ConversationContent>
       <ConversationScrollButton />

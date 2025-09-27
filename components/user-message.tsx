@@ -1,5 +1,6 @@
 'use client';
 import { memo, useState } from 'react';
+import type React from 'react';
 import type { Vote } from '@/lib/db/schema';
 import { MessageActions } from './message-actions';
 import equal from 'fast-deep-equal';
@@ -157,6 +158,5 @@ export const UserMessage = memo(PureUserMessage, (prevProps, nextProps) => {
   if (prevProps.parentMessageId !== nextProps.parentMessageId) return false;
   if (!equal(prevProps.vote, nextProps.vote)) return false;
   if (prevProps.isLoading !== nextProps.isLoading) return false;
-
   return true;
 });

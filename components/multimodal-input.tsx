@@ -556,7 +556,7 @@ function PureMultimodalInput({
           <ChatInputTextArea
             data-testid="multimodal-input"
             ref={editorRef}
-            className="min-h-[80px] overflow-y-scroll max-h-[max(35svh,5rem)]"
+            className="min-h-[60px] sm:min-h-[80px] overflow-y-scroll max-h-[max(35svh,5rem)]"
             placeholder={
               isMobile
                 ? 'Send a message... (Ctrl+Enter to send)'

@@ -23,16 +23,14 @@ const PureAssistantMessage = ({
   if (!chatId) return null;
 
   return (
-    <AIMessage from="assistant" className="w-full py-1 ">
-      <div className="flex flex-col gap-2 w-full">
-        <AIMessageContent className="text-left px-0 py-0">
-          <PartialMessageLoading messageId={messageId} />
-          <MessageParts
-            messageId={messageId}
-            isLoading={isLoading}
-            isReadonly={isReadonly}
-          />
-        </AIMessageContent>
+    <AIMessage from="assistant" className="w-full py-1 items-start">
+      <AIMessageContent className="text-left px-0 py-0">
+        <PartialMessageLoading messageId={messageId} />
+        <MessageParts
+          messageId={messageId}
+          isLoading={isLoading}
+          isReadonly={isReadonly}
+        />
 
         <SourcesAnnotations
           key={`sources-annotations-${messageId}`}
@@ -48,7 +46,7 @@ const PureAssistantMessage = ({
           isReadOnly={isReadonly}
         />
         <FollowUpSuggestionsParts messageId={messageId} />
-      </div>
+      </AIMessageContent>
     </AIMessage>
   );
 };
@@ -59,7 +57,7 @@ export const AssistantMessage = memo(
     if (prevProps.vote !== nextProps.vote) return false;
     if (prevProps.isLoading !== nextProps.isLoading) return false;
     if (prevProps.isReadonly !== nextProps.isReadonly) return false;
-
+    if (prevProps.style !== nextProps.style) return false;
     return true;
   },
 );
