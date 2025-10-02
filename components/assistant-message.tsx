@@ -24,7 +24,7 @@ const PureAssistantMessage = ({
 
   return (
     <AIMessage from="assistant" className="w-full py-1 items-start">
-      <AIMessageContent className="text-left px-0 py-0">
+      <AIMessageContent className="text-left px-0 py-0 w-full">
         <PartialMessageLoading messageId={messageId} />
         <MessageParts
           messageId={messageId}

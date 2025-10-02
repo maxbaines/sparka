@@ -406,7 +406,7 @@ function PureMessagePart({
 
     if (state === 'input-available') {
       return (
-        <div key={toolCallId} className="flex flex-col gap-3">
+        <div key={toolCallId} className="flex flex-col gap-3 w-full">
           <ResearchUpdates updates={researchUpdates} />
         </div>
       );

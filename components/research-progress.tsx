@@ -66,7 +66,7 @@ export const ResearchProgress = ({
   }, [updates, isComplete]);
 
   return (
-    <div className="border rounded-lg p-1 ">
+    <div className="border rounded-lg p-1 w-full">
       <div
         role="button"
         tabIndex={0}
