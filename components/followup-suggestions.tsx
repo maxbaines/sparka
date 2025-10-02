@@ -13,7 +13,6 @@ import {
   useMessagePartByPartIdx,
   useMessagePartTypesById,
 } from '@/lib/stores/hooks-message-parts';
-import { Separator } from './ui/separator';
 
 export function FollowUpSuggestions({
   suggestions,
@@ -57,22 +56,21 @@ export function FollowUpSuggestions({
   if (!suggestions || suggestions.length === 0) return null;
 
   return (
-    <div className={cn('flex flex-col gap-2 mt-3 mb-2', className)}>
-      <div className="text-base font-medium">Related</div>
-      <div className="flex flex-wrap items-center gap-y-1">
-        {suggestions.map((s, i) => (
-          <div key={s} className="flex flex-col w-full">
-            <Button
-              type="button"
-              variant="link"
-              onClick={() => handleClick(s)}
-              className="has-[>svg]:px-0 px-0 h-auto w-full justify-between text-foreground hover:text-primary hover:no-underline font-normal"
-            >
-              {s}
-              <PlusIcon />
-            </Button>
-            {i < suggestions.length - 1 && <Separator />}
-          </div>
+    <div className={cn('flex flex-col gap-2 mt-2 mb-2', className)}>
+      <div className="text-xs font-medium text-muted-foreground">Related</div>
+      <div className="flex flex-wrap items-center gap-1.5">
+        {suggestions.map((s) => (
+          <Button
+            key={s}
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => handleClick(s)}
+            className="rounded-full h-7 px-2.5 text-xs bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground shadow-none"
+          >
+            {s}
+            <PlusIcon className="size-3 opacity-70" />
+          </Button>
         ))}
       </div>
     </div>
