@@ -1,11 +1,5 @@
 'use client';
-import {
-  type Dispatch,
-  type SetStateAction,
-  useEffect,
-  useRef,
-  useCallback,
-} from 'react';
+import { type Dispatch, type SetStateAction, useCallback } from 'react';
 import { MultimodalInput } from './multimodal-input';
 import type { ChatMessage } from '@/lib/ai/types';
 import { ChatInputProvider } from '@/providers/chat-input-provider';
@@ -30,25 +24,6 @@ function MessageEditorContent({
 }: MessageEditorProps & { onModelChange?: (modelId: string) => void }) {
   const status = useChatStatus();
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      console.log('handleClickOutside', event);
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setMode('view');
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [setMode]);
-
   const handleOnSendMessage = useCallback(
     (_: ChatMessage) => {
       setMode('view');
@@ -57,7 +32,7 @@ function MessageEditorContent({
   );
 
   return (
-    <div ref={containerRef} className="w-full">
+    <div className="w-full">
       <MultimodalInput
         chatId={chatId}
         status={status}
