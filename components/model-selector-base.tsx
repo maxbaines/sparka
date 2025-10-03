@@ -52,11 +52,6 @@ function getFeatureIcons(modelDefinition: ModelDefinition) {
   const enabled = getEnabledFeatures();
   const featureIconMap = [
     {
-      key: 'reasoning',
-      condition: features.reasoning,
-      config: enabled.find((f) => f.key === 'reasoning'),
-    },
-    {
       key: 'functionCalling',
       condition: features.toolCall,
       config: enabled.find((f) => f.key === 'functionCalling'),
@@ -106,8 +101,13 @@ function PureCommandItem({
 }) {
   const provider = definition.owned_by as ProviderId;
   const featureIcons = useMemo(() => getFeatureIcons(definition), [definition]);
+  const hasReasoning = useMemo(
+    () => definition.features?.reasoning,
+    [definition],
+  );
   const searchValue = useMemo(
-    () => `${definition.name} ${definition.owned_by}`.toLowerCase(),
+    () =>
+      `${definition.name} ${hasReasoning ? 'reasoning' : ''} ${definition.owned_by} `.toLowerCase(),
     [definition],
   );
 
@@ -126,7 +126,26 @@ function PureCommandItem({
     >
       <div className="flex items-center gap-2.5 min-w-0 flex-1">
         <div className="shrink-0">{getProviderIcon(provider)}</div>
-        <span className="font-medium text-sm truncate">{definition.name}</span>
+        <span className="font-medium text-sm truncate flex items-center gap-1.5">
+          {definition.name}
+          {hasReasoning
+            ? (() => {
+                const cfg = getEnabledFeatures().find(
+                  (f) => f.key === 'reasoning',
+                );
+                if (!cfg) return null;
+                const IconComponent = cfg.icon;
+                return (
+                  <span
+                    title={cfg.description}
+                    className="inline-flex items-center gap-1 shrink-0"
+                  >
+                    <IconComponent className="w-3 h-3 text-muted-foreground" />
+                  </span>
+                );
+              })()
+            : null}
+        </span>
       </div>
       <div className="flex items-center gap-1.5">
         {featureIcons.length > 0 && (
@@ -374,6 +393,11 @@ export function PureModelSelectorBase({
     return getProviderIcon(provider);
   }, [selectedItem]);
 
+  const reasoningFeatureConfig = useMemo(
+    () => getEnabledFeatures().find((f) => f.key === 'reasoning'),
+    [],
+  );
+
   const activeFilterCount = useMemo(
     () => Object.values(featureFilters).filter(Boolean).length,
     [featureFilters],
@@ -406,8 +430,22 @@ export function PureModelSelectorBase({
             {selectedProviderIcon && (
               <div className="shrink-0">{selectedProviderIcon}</div>
             )}
-            <p className="truncate">
+            <p className="truncate inline-flex items-center gap-1.5">
               {selectedItem?.definition.name || placeholder || 'Select model'}
+              {selectedItem?.definition.features?.reasoning &&
+              reasoningFeatureConfig
+                ? (() => {
+                    const IconComponent = reasoningFeatureConfig.icon;
+                    return (
+                      <span
+                        title={reasoningFeatureConfig.description}
+                        className="inline-flex items-center gap-1 shrink-0"
+                      >
+                        <IconComponent className="w-3 h-3 text-muted-foreground" />
+                      </span>
+                    );
+                  })()
+                : null}
             </p>
           </div>
           <ChevronUpIcon

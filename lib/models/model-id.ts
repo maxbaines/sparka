@@ -24,7 +24,11 @@ type GatewayEmbeddingLiteralModelId = GatewayEmbeddingModelId extends infer T
   : never;
 
 // Adds models available in gateway but not yet in the gateway package
-export type ModelId = GatewayGeneratedModelId;
+export type ApiModelId = GatewayGeneratedModelId;
+
+export type ReasoningVariantId = `${ApiModelId}-reasoning`;
+
+export type ModelId = ApiModelId | ReasoningVariantId;
 
 type OpenAIimageModelId = Parameters<OpenAIProvider['imageModel']>[0];
 

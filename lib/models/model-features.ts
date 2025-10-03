@@ -1,5 +1,5 @@
 import type { ImageModelId } from '@/lib/models/model-id';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ApiModelId } from '@/lib/models/model-id';
 import { generatedModelFeatures } from './model-features.generated';
 
 export interface ModelFeatures {
@@ -28,7 +28,7 @@ export interface ModelFeatures {
 // All the literals in ModelId that are not keys of generatedModelFeatures
 type GeneratedModelFeaturesModelId = keyof typeof generatedModelFeatures;
 type CustomModelFeaturesModelId = Exclude<
-  ModelId,
+  ApiModelId,
   GeneratedModelFeaturesModelId
 >;
 

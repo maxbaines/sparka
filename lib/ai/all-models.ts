@@ -5,13 +5,15 @@ import {
   modelFeatures,
   type ModelFeatures,
 } from '../models/model-features';
-import type { ImageModelId, ModelId } from '../models/model-id';
+import type { ApiModelId, ImageModelId, ModelId } from '../models/model-id';
 import {
   imageModelsData,
   type ImageModelData,
 } from '@/lib/models/image-models';
 
-export type ModelDefinition = ModelData & {
+export type ModelDefinition = Omit<ModelData, 'id'> & {
+  id: ModelId;
+  apiModelId: ApiModelId;
   features: ModelFeatures;
   disabled?: true;
 };
@@ -30,17 +32,48 @@ const DISABLED_MODELS: Partial<Record<ModelId, true>> = {
 };
 
 export const allModels = modelsData
-  .map((model) => {
+  .flatMap((model) => {
     const features = modelFeatures[model.id];
     if (!features) {
       console.error('No features for', model.id);
     }
 
-    return {
-      ...model,
-      features,
-      disabled: DISABLED_MODELS[model.id],
-    };
+    // If the model supports reasoning, return two variants:
+    // - Non-reasoning (original id, reasoning=false)
+    // - Reasoning (id with -reasoning suffix, reasoning=true)
+    if (features?.reasoning === true) {
+      const nonReasoningFeatures: ModelFeatures = {
+        ...features,
+        reasoning: false,
+      };
+      const reasoningId = `${model.id}-reasoning` as ModelId;
+
+      return [
+        {
+          ...model,
+          apiModelId: model.id,
+          features: nonReasoningFeatures,
+          disabled: DISABLED_MODELS[model.id],
+        },
+        {
+          ...model,
+          id: reasoningId,
+          apiModelId: model.id,
+          features,
+          disabled: DISABLED_MODELS[model.id],
+        },
+      ];
+    }
+
+    // Models without reasoning stay as-is
+    return [
+      {
+        ...model,
+        apiModelId: model.id,
+        features,
+        disabled: DISABLED_MODELS[model.id],
+      },
+    ];
   })
   .filter((model) => model.type === 'language' && !model.disabled);
 
@@ -91,6 +124,7 @@ function getModelsByIdDict(): Map<string, ModelDefinition> {
 
 export function getModelDefinition(modelId: ModelId): ModelDefinition {
   const modelsByIdDict = getModelsByIdDict();
+
   const model = modelsByIdDict.get(modelId);
   if (!model) {
     throw new Error(`Model ${modelId} not found`);

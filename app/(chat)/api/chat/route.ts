@@ -511,7 +511,7 @@ export async function POST(request: NextRequest) {
       const stream = createUIMessageStream<ChatMessage>({
         execute: async ({ writer: dataStream }) => {
           const result = streamText({
-            model: getLanguageModel(selectedModelId),
+            model: getLanguageModel(modelDefinition.apiModelId),
             system: systemPrompt(),
             messages: contextForLLM,
             stopWhen: [
@@ -546,7 +546,7 @@ export async function POST(request: NextRequest) {
               },
               contextForLLM: contextForLLM,
               messageId,
-              selectedModel: selectedModelId,
+              selectedModel: modelDefinition.apiModelId,
               attachments: userMessage.parts.filter(
                 (part) => part.type === 'file',
               ),
