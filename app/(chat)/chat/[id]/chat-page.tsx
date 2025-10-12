@@ -7,8 +7,6 @@ import { useTRPC } from '@/trpc/react';
 import type { UiToolName } from '@/lib/ai/types';
 import { ChatSystem } from '@/components/chat-system';
 
-// moved to components/chat-system
-
 export function ChatPage({ id }: { id: string }) {
   const trpc = useTRPC();
 
