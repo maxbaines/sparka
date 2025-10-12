@@ -11,12 +11,12 @@ export function SharedChatPage({ id }: { id: string }) {
     data: chat,
     isLoading: isChatLoading,
     error: chatError,
-  } = usePublicChat(id as string);
+  } = usePublicChat(id);
   const {
     data: messages,
     isLoading: isMessagesLoading,
     error: messagesError,
-  } = usePublicChatMessages(id as string);
+  } = usePublicChatMessages(id);
 
   const initialThreadMessages = useMemo(() => {
     if (!messages) return [];

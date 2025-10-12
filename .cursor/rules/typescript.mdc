@@ -4,7 +4,8 @@ globs: *.tsx,*.ts
 alwaysApply: false
 ---
 ## Typing Guidelines
-- Avoid `any` at all cost. The types should work or they indicate a problem.
+- Avoid using `any` at all cost. The types should work or they indicate a problem.
+- Never use `as "any"` or `as unknown as` cost. The types should work or they indicate a problem.
 
 
 ## Exports / Imports
