@@ -1,28 +1,22 @@
-'use client';
-
 import Link from 'next/link';
 import { Cpu } from 'lucide-react';
-import { SidebarHistory } from '@/components/sidebar-history';
 import { SearchChatsButton } from '@/components/search-chats';
-import { SidebarCredits } from '@/components/sidebar-credits';
 import { NewChatButton } from '@/components/new-chat-button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-  useSidebar,
 } from '@/components/ui/sidebar';
 import { SidebarTopRow } from '@/components/sidebar-top-row';
+import { AppSidebarHistoryConditional } from './app-sidebar-history-conditional';
+import { AppSidebarFooterConditional } from './app-sidebar-footer-conditional';
 
 export function AppSidebar() {
-  const { open, openMobile, setOpenMobile } = useSidebar();
-
   return (
     <Sidebar
       collapsible="icon"
@@ -54,18 +48,11 @@ export function AppSidebar() {
       <SidebarSeparator />
       <ScrollArea className="relative flex-1 overflow-y-auto">
         <SidebarContent className="max-w-(--sidebar-width) pr-2">
-          {(open || openMobile) && <SidebarHistory />}
+          <AppSidebarHistoryConditional />
         </SidebarContent>
       </ScrollArea>
 
-      {(open || openMobile) && (
-        <>
-          <SidebarSeparator />
-          <SidebarFooter className="shrink-0">
-            <SidebarCredits />
-          </SidebarFooter>
-        </>
-      )}
+      <AppSidebarFooterConditional />
     </Sidebar>
   );
 }
