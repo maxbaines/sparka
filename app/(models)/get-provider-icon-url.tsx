@@ -1,4 +1,4 @@
-import type { ProviderId } from '@/lib/models/models.generated';
+import type { ProviderId } from '@/lib/models';
 
 function getProviderIconSlug(provider: ProviderId): string | null {
   // Best-effort mapping to Simple Icons slugs. Unknown providers fall back to null.

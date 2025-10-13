@@ -1,5 +1,5 @@
-import { type ModelData, modelsData } from '@/lib/models/models.generated';
-import { allModelsExtra, type ModelExtra } from '@/lib/models/model-extra';
+import { type ModelData, modelsData } from './models.generated';
+import { allModelsExtra, type ModelExtra } from './model-extra';
 
 export type ModelDefinition = ModelData & ModelExtra;
 

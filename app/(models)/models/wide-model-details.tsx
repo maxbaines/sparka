@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { ModelDefinition } from '@/lib/models/model-definition';
-import type { ProviderId } from '@/lib/models/models.generated';
+import type { ModelDefinition } from '@/lib/models';
+import type { ProviderId } from '@/lib/models';
 import {
   ChatModelButton,
   CompareModelButton,

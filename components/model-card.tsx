@@ -6,8 +6,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Calendar, Building, CheckCircle } from 'lucide-react';
-import type { ModelDefinition } from '@/lib/models/model-definition';
-import type { ProviderId } from '@/lib/models/models.generated';
+import type { ModelDefinition } from '@/lib/models';
+import type { ProviderId } from '@/lib/models';
 import { cn } from '@/lib/utils';
 import { getFeatureConfig, isFeatureEnabled } from '@/lib/features-config';
 import { getProviderIcon } from './get-provider-icon';

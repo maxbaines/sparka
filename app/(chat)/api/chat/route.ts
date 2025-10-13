@@ -35,7 +35,7 @@ import {
   DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
   getModelDefinition,
 } from '@/lib/ai/app-models';
-import type { ModelDefinition } from '@/lib/models/model-definition';
+import type { ModelDefinition } from '@/lib/models';
 import {
   createResumableStreamContext,
   type ResumableStreamContext,

@@ -1,4 +1,4 @@
-import type { ModelDefinition } from '@/lib/models/model-definition';
+import type { ModelDefinition } from '@/lib/models';
 import { getModelDefinition } from '../ai/app-models';
 import type { ModelId } from '../models';
 import { toolsDefinitions } from '../ai/tools/tools-definitions';

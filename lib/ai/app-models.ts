@@ -1,5 +1,5 @@
 import type { ImageModelId, ModelId } from '@/lib/models';
-import type { ModelDefinition } from '@/lib/models/model-definition';
+import type { ModelDefinition } from '@/lib/models';
 import { allModels } from '@/lib/models';
 import {
   imageModelsData,

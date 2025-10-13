@@ -5,7 +5,7 @@ import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { createStore } from 'zustand/vanilla';
 import type { FilterState } from '@/app/(models)/models/model-filters';
 import { chatModels as allChatModels } from '@/lib/ai/app-models';
-import type { ModelDefinition } from '@/lib/models/model-definition';
+import type { ModelDefinition } from '@/lib/models';
 
 // Derive dynamic ranges from available models
 const contextWindows = allChatModels

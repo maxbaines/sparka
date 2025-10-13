@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { allEnabledLanguageModels } from '@/lib/ai/app-models';
-import type { ModelDefinition } from '@/lib/models/model-definition';
+import type { ModelDefinition } from '@/lib/models';
 import { Container } from '@/components/container';
 import { ModelDetails } from '@/app/(models)/models/model-details';
 

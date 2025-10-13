@@ -5,7 +5,7 @@ import {
   allEnabledLanguageModels,
   getModelDefinition,
 } from '@/lib/ai/app-models';
-import type { ModelDefinition } from '@/lib/models/model-definition';
+import type { ModelDefinition } from '@/lib/models';
 import { ModelSelectorBase } from '@/components/model-selector-base';
 import type { ModelId } from '@/lib/models';
 import { ChatModelButton } from '@/components/model-action-buttons';
