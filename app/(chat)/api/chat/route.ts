@@ -376,12 +376,12 @@ export async function POST(request: NextRequest) {
     );
 
     // Disable all tools for models with unspecified features
-    if (!modelDefinition.features) {
+    if (!modelDefinition || !modelDefinition.input) {
       activeTools = [];
     } else {
       // Let's not allow deepResearch if the model support reasoning (it's expensive and slow)
       if (
-        modelDefinition.features.reasoning &&
+        modelDefinition.reasoning &&
         activeTools.some((tool: ToolName) => tool === 'deepResearch')
       ) {
         activeTools = activeTools.filter(
@@ -556,9 +556,9 @@ export async function POST(request: NextRequest) {
               log.error({ error }, 'streamText error');
             },
             abortSignal: abortController.signal, // Pass abort signal to streamText
-            ...(modelDefinition.features?.fixedTemperature
+            ...(modelDefinition.fixedTemperature
               ? {
-                  temperature: modelDefinition.features.fixedTemperature,
+                  temperature: modelDefinition.fixedTemperature,
                 }
               : {}),
 

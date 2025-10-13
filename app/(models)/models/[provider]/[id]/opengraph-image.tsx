@@ -68,7 +68,7 @@ export default async function OGImage(
   const maxOut = model?.max_tokens || null;
   const pricingIn = model?.pricing?.input || null;
   const pricingOut = model?.pricing?.output || null;
-  const releaseDate = model?.features?.releaseDate || null;
+  const releaseDate = model?.releaseDate || null;
   const releaseDateDisplay = releaseDate
     ? releaseDate.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -89,10 +89,10 @@ export default async function OGImage(
   const arrowRight = getArrowRightUrl(baseUrl);
 
   const enabledInputKeys = inputModalitiesOrder.filter(
-    (key) => (model?.features?.input as any)?.[key],
+    (key) => model?.input?.[key],
   );
   const enabledOutputKeys = outputModalitiesOrder.filter(
-    (key) => (model?.features?.output as any)?.[key],
+    (key) => model?.output?.[key],
   );
 
   const appIcon = getAppIconUrl(baseUrl);
@@ -158,7 +158,7 @@ export default async function OGImage(
                 >
               }
               outputKeys={
-                enabledOutputKeys as Array<'text' | 'image' | 'audio' | 'video'>
+                enabledOutputKeys as Array<'text' | 'image' | 'audio'>
               }
               capabilityIcons={capabilityIcons}
               arrowRightUrl={arrowRight}

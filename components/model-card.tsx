@@ -27,7 +27,7 @@ const getFeatureIconsForCard = (model: ModelDefinition) => {
   const icons: React.ReactNode[] = [];
 
   // Check for reasoning capability
-  if (model.features?.reasoning && isFeatureEnabled('reasoning')) {
+  if (model.reasoning && isFeatureEnabled('reasoning')) {
     const config = getFeatureConfig('reasoning');
     if (config?.icon) {
       const IconComponent = config.icon;
@@ -66,7 +66,7 @@ export function ModelCard({
   const description = model.description;
   const maxTokens = model.max_tokens;
   const contextLength = model.context_window;
-  const hasFeatures = model.features && Object.keys(model.features).length > 0;
+  const hasFeatures = Boolean(model);
 
   const featureIcons = getFeatureIconsForCard(model);
 
@@ -169,22 +169,22 @@ export function ModelCard({
 
         {hasFeatures && (
           <div className="flex flex-wrap gap-1 mt-3 w-full">
-            {model.features?.reasoning && (
+            {model.reasoning && (
               <Badge variant="outline" className="text-xs">
                 Reasoning
               </Badge>
             )}
-            {model.features?.toolCall && (
+            {model.toolCall && (
               <Badge variant="outline" className="text-xs">
                 Function Calling
               </Badge>
             )}
-            {model.features?.input?.image && (
+            {model.input?.image && (
               <Badge variant="outline" className="text-xs">
                 Vision
               </Badge>
             )}
-            {model.features?.input?.pdf && (
+            {model.input?.pdf && (
               <Badge variant="outline" className="text-xs">
                 PDF
               </Badge>

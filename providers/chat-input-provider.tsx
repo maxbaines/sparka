@@ -106,8 +106,8 @@ export function ChatInputProvider({
   const handleModelChange = useCallback(
     async (modelId: ModelId) => {
       const modelDef = getModelDefinition(modelId);
-      const hasReasoning = modelDef.features?.reasoning === true;
-      const hasUnspecifiedFeatures = !modelDef.features;
+      const hasReasoning = modelDef.reasoning === true;
+      const hasUnspecifiedFeatures = !modelDef.input;
 
       // If switching to a model with unspecified features, disable all tools
       if (hasUnspecifiedFeatures && selectedTool !== null) {

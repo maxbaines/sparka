@@ -38,8 +38,8 @@ export function ResponsiveTools({
     try {
       const modelDef = getModelDefinition(selectedModelId as any);
       return {
-        hasReasoningModel: modelDef.features?.reasoning === true,
-        hasUnspecifiedFeatures: !modelDef.features,
+        hasReasoningModel: modelDef.reasoning === true,
+        hasUnspecifiedFeatures: !modelDef.input,
       };
     } catch {
       return {

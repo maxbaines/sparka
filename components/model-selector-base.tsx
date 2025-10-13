@@ -44,8 +44,7 @@ const initialFilters = enabledFeatures.reduce<FeatureFilter>((acc, feature) => {
 }, {});
 
 function getFeatureIcons(modelDefinition: ModelDefinition) {
-  const features = modelDefinition.features;
-  if (!features) return [] as JSX.Element[];
+  const features = modelDefinition;
 
   const icons: JSX.Element[] = [];
 
@@ -337,7 +336,7 @@ export function PureModelSelectorBase({
       enableFilters && Object.values(featureFilters).some(Boolean);
     if (!hasActiveFilters) return models;
     return models.filter((item) => {
-      const features = item.definition?.features;
+      const features = item.definition;
       if (!features) return false;
       return Object.entries(featureFilters).every(([key, isActive]) => {
         if (!isActive) return true;

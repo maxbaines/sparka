@@ -53,7 +53,7 @@ export function buildBulletItems(
   const maxOut = model?.max_tokens || null;
   const pricingIn = model?.pricing?.input || null;
   const pricingOut = model?.pricing?.output || null;
-  const releaseDate = model?.features?.releaseDate || null;
+  const releaseDate = model?.releaseDate || null;
   const releaseDateDisplay = releaseDate
     ? releaseDate.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -90,9 +90,11 @@ export const inputModalitiesOrder: Array<
   'text' | 'image' | 'pdf' | 'audio' | 'video'
 > = ['text', 'image', 'pdf', 'audio', 'video'];
 
-export const outputModalitiesOrder: Array<
-  'text' | 'image' | 'audio' | 'video'
-> = ['text', 'image', 'audio', 'video'];
+export const outputModalitiesOrder: Array<'text' | 'image' | 'audio'> = [
+  'text',
+  'image',
+  'audio',
+];
 
 export function getCapabilityIcons(
   baseUrl: string = getBaseUrl(),

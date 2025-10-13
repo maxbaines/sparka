@@ -1,20 +1,16 @@
 import type { ModelData } from '@/lib/models/models.generated';
 import { modelsData } from '@/lib/models/models.generated';
-import {
-  imageModelsFeatures,
-  modelFeatures,
-  type ModelFeatures,
-} from '../models/model-features';
+import { modelFeatures, type ModelFeatures } from '../models/model-features';
 import type { ImageModelId, ModelId } from '../models/model-id';
 import {
   imageModelsData,
   type ImageModelData,
 } from '@/lib/models/image-models';
 
-export type ModelDefinition = ModelData & {
-  features: ModelFeatures;
-  disabled?: true;
-};
+export type ModelDefinition = ModelData &
+  ModelFeatures & {
+    disabled?: true;
+  };
 
 export type ImageModelDefinition = ImageModelData & {
   features?: ModelFeatures;
@@ -38,26 +34,18 @@ export const allModels = modelsData
 
     return {
       ...model,
-      features,
+      ...(features ?? {}),
       disabled: DISABLED_MODELS[model.id],
-    };
+    } as ModelDefinition;
   })
   .filter((model) => model.type === 'language' && !model.disabled);
 
-const allImageModels = imageModelsData.map((model) => {
-  const features = imageModelsFeatures[model.id];
-  return {
-    ...model,
-    features,
-  };
-});
+const allImageModels = imageModelsData;
 
 const PROVIDER_ORDER = ['openai', 'google', 'anthropic', 'xai'];
 
 export const chatModels = allModels
-  .filter(
-    (model) => model.features?.output?.text === true, // Let's show models even if we haven't created features yet
-  )
+  .filter((model) => model.output?.text === true)
   .sort((a, b) => {
     const aProviderIndex = PROVIDER_ORDER.indexOf(a.owned_by);
     const bProviderIndex = PROVIDER_ORDER.indexOf(b.owned_by);

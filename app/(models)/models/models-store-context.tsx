@@ -117,7 +117,7 @@ export const createModelsStore = (
       if (f.providers.length > 0 && !f.providers.includes(m.owned_by))
         return false;
       if (f.inputModalities.length > 0) {
-        const fi = m.features?.input;
+        const fi = m.input;
         const set = new Set<string>(
           [
             fi?.text ? 'text' : '',
@@ -130,7 +130,7 @@ export const createModelsStore = (
         if (!f.inputModalities.some((val) => set.has(val))) return false;
       }
       if (f.outputModalities.length > 0) {
-        const fo = m.features?.output;
+        const fo = m.output;
         const set = new Set<string>(
           [
             fo?.text ? 'text' : '',
@@ -154,12 +154,9 @@ export const createModelsStore = (
         return false;
       if (outputPrice < f.outputPricing[0] || outputPrice > f.outputPricing[1])
         return false;
-      if (f.features.reasoning && !m.features?.reasoning) return false;
-      if (f.features.toolCall && !m.features?.toolCall) return false;
-      if (
-        f.features.temperatureControl &&
-        m.features?.fixedTemperature !== undefined
-      )
+      if (f.features.reasoning && !m.reasoning) return false;
+      if (f.features.toolCall && !m.toolCall) return false;
+      if (f.features.temperatureControl && m.fixedTemperature !== undefined)
         return false;
       return true;
     });
@@ -168,10 +165,7 @@ export const createModelsStore = (
       (a: ModelDefinition, b: ModelDefinition) => {
         switch (sortBy) {
           case 'newest':
-            return (
-              b.features.releaseDate.getTime() -
-              a.features.releaseDate.getTime()
-            );
+            return b.releaseDate.getTime() - a.releaseDate.getTime();
           case 'pricing-low':
             return (
               (Number.parseFloat(a.pricing.input) +

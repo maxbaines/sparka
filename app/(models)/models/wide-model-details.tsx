@@ -81,7 +81,7 @@ export function WideModelDetails({
           <span className="text-xs text-muted-foreground">|</span>
           <span className="text-xs text-muted-foreground">
             Released{' '}
-            {model.features.releaseDate.toLocaleDateString('en-US', {
+            {model.releaseDate.toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
@@ -152,22 +152,22 @@ export function WideModelDetails({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <ModalityRow
             label={MODEL_CAPABILITIES.text.label}
-            enabled={!!model?.features?.input?.text}
+            enabled={!!model?.input?.text}
             Icon={MODEL_CAPABILITIES.text.Icon}
           />
           <ModalityRow
             label={MODEL_CAPABILITIES.image.label}
-            enabled={!!model?.features?.input?.image}
+            enabled={!!model?.input?.image}
             Icon={MODEL_CAPABILITIES.image.Icon}
           />
           <ModalityRow
             label={MODEL_CAPABILITIES.pdf.label}
-            enabled={!!model?.features?.input?.pdf}
+            enabled={!!model?.input?.pdf}
             Icon={MODEL_CAPABILITIES.pdf.Icon}
           />
           <ModalityRow
             label={MODEL_CAPABILITIES.audio.label}
-            enabled={!!model?.features?.input?.audio}
+            enabled={!!model?.input?.audio}
             Icon={MODEL_CAPABILITIES.audio.Icon}
           />
         </div>
@@ -181,17 +181,17 @@ export function WideModelDetails({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <ModalityRow
             label={MODEL_CAPABILITIES.text.label}
-            enabled={!!model?.features?.output?.text}
+            enabled={!!model?.output?.text}
             Icon={MODEL_CAPABILITIES.text.Icon}
           />
           <ModalityRow
             label={MODEL_CAPABILITIES.image.label}
-            enabled={!!model?.features?.output?.image}
+            enabled={!!model?.output?.image}
             Icon={MODEL_CAPABILITIES.image.Icon}
           />
           <ModalityRow
             label={MODEL_CAPABILITIES.audio.label}
-            enabled={!!model?.features?.output?.audio}
+            enabled={!!model?.output?.audio}
             Icon={MODEL_CAPABILITIES.audio.Icon}
           />
         </div>
@@ -205,17 +205,17 @@ export function WideModelDetails({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <ModalityRow
             label={MODEL_CAPABILITIES.reasoning.label}
-            enabled={!!model?.features?.reasoning}
+            enabled={!!model?.reasoning}
             Icon={MODEL_CAPABILITIES.reasoning.Icon}
           />
           <ModalityRow
             label={MODEL_CAPABILITIES.tools.label}
-            enabled={!!model?.features?.toolCall}
+            enabled={!!model?.toolCall}
             Icon={MODEL_CAPABILITIES.tools.Icon}
           />
           <ModalityRow
             label={MODEL_CAPABILITIES.temperature.label}
-            enabled={model?.features?.fixedTemperature === undefined}
+            enabled={model?.fixedTemperature === undefined}
             Icon={MODEL_CAPABILITIES.temperature.Icon}
           />
         </div>

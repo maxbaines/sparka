@@ -100,8 +100,7 @@ function PureMultimodalInput({
 
   const isAnonymous = !session?.user;
   const isModelDisallowedForAnonymous =
-    isAnonymous &&
-    !ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(selectedModelId as any);
+    isAnonymous && !ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(selectedModelId);
 
   // Helper function to auto-switch to PDF-compatible model
   const switchToPdfCompatibleModel = useCallback(() => {
@@ -141,7 +140,7 @@ function PureMultimodalInput({
   } catch {
     selectedModelDef = getModelDefinition(DEFAULT_CHAT_MODEL);
   }
-  const isImageOutputModel = Boolean(selectedModelDef?.features?.output?.image);
+  const isImageOutputModel = Boolean(selectedModelDef?.output?.image);
   const submission: { enabled: false; message: string } | { enabled: true } =
     (() => {
       if (isImageOutputModel) {
@@ -195,13 +194,10 @@ function PureMultimodalInput({
       if (pdfFiles.length > 0 || processedImages.length > 0) {
         let currentModelDef = getModelDefinition(selectedModelId);
 
-        if (pdfFiles.length > 0 && !currentModelDef.features?.input?.pdf) {
+        if (pdfFiles.length > 0 && !currentModelDef.input?.pdf) {
           currentModelDef = switchToPdfCompatibleModel();
         }
-        if (
-          processedImages.length > 0 &&
-          !currentModelDef.features?.input?.image
-        ) {
+        if (processedImages.length > 0 && !currentModelDef.input?.image) {
           currentModelDef = switchToImageCompatibleModel();
         }
       }

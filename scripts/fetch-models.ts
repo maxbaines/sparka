@@ -68,6 +68,32 @@ async function fetchAndConvertModels() {
       ...new Set(nonEmbeddingData.map((model: ModelItem) => model.id)),
     ].sort();
 
+    // Collect and deduplicate all tags across ALL models in the response
+    const allTags = [
+      ...new Set(jsonData.data.flatMap((model: ModelItem) => model.tags ?? [])),
+    ].sort();
+
+    // Derive basic features from tags and type
+    const modelsWithFeatures = nonEmbeddingData.map(({ created, ...model }) => {
+      const tags = new Set(model.tags ?? []);
+      const isLanguage = model.type === 'language';
+      const reasoning = tags.has('reasoning');
+      const toolCall = tags.has('tool-use');
+      const input = {
+        image: tags.has('vision'),
+        text: isLanguage,
+        pdf: tags.has('file-input'),
+        video: false,
+        audio: false,
+      };
+      const output = {
+        image: tags.has('image-generation'),
+        text: isLanguage,
+        audio: false,
+      };
+      return { ...model, reasoning, toolCall, input, output };
+    });
+
     // Generate TypeScript content
     const outputPath = join(__dirname, '../lib/models/models.generated.ts');
     const tsContent = `// List of unique providers extracted from models data
@@ -80,6 +106,11 @@ export const models = ${JSON.stringify(models, null, 2)} as const;
 
 export type ModelId = (typeof models)[number];
 
+// List of unique tags extracted from models data
+export const modelTags = ${JSON.stringify(allTags, null, 2)} as const;
+
+export type ModelTag = (typeof modelTags)[number];
+
 export interface ModelData {
   id: ModelId;
   object: string;
@@ -87,7 +118,7 @@ export interface ModelData {
   name: string;
   description: string;
   type: 'language' | 'embedding';
-  tags?: 'image-generation'[];
+  tags?: ModelTag[];
   context_window: number; // Max input tokens
   max_tokens: number; // Max output tokens
   pricing: {
@@ -96,11 +127,26 @@ export interface ModelData {
     input_cache_read?: string; // Input cache read price per token
     input_cache_write?: string; // Input cache write price per token
   };
+  // Derived features from tags and type
+  reasoning: boolean;
+  toolCall: boolean;
+  input: {
+    image: boolean;
+    text: boolean;
+    pdf: boolean;
+    video: boolean;
+    audio: boolean;
+  };
+  output: {
+    image: boolean;
+    text: boolean;
+    audio: boolean;
+  };
 }
 
 // Define the data with proper typing
 export const modelsData: ModelData[] = ${JSON.stringify(
-      nonEmbeddingData.map(({ created, ...model }) => model),
+      modelsWithFeatures,
       null,
       2,
     )};

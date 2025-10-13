@@ -5,7 +5,8 @@ alwaysApply: false
 ---
 ## Typing Guidelines
 - Avoid `any` at all cost. The types should work or they indicate a problem.
-
+- Never use `as "any"` or `as unknown as` cost. The types should work or they indicate a problem.
+- Avoid using `as` to cast to a specific type. The types should work or they indicate a problem.
 
 ## Exports / Imports
 

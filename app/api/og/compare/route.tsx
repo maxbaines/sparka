@@ -152,16 +152,12 @@ export async function GET(req: Request) {
 
             <div tw="" style={{ display: 'flex' }}>
               <ModalitiesRow
-                inputKeys={
-                  inputModalitiesOrder.filter(
-                    (key) => (left?.features?.input as any)?.[key],
-                  ) as Array<'text' | 'image' | 'pdf' | 'audio' | 'video'>
-                }
-                outputKeys={
-                  outputModalitiesOrder.filter(
-                    (key) => (left?.features?.output as any)?.[key],
-                  ) as Array<'text' | 'image' | 'audio' | 'video'>
-                }
+                inputKeys={inputModalitiesOrder.filter(
+                  (key) => left?.input?.[key],
+                )}
+                outputKeys={outputModalitiesOrder.filter(
+                  (key) => left?.output?.[key],
+                )}
                 capabilityIcons={capabilityIcons}
                 arrowRightUrl={arrowRight}
                 size="md"
@@ -269,16 +265,12 @@ export async function GET(req: Request) {
                 style={{ display: 'flex' }}
               >
                 <ModalitiesRow
-                  inputKeys={
-                    inputModalitiesOrder.filter(
-                      (key) => (right?.features?.input as any)?.[key],
-                    ) as Array<'text' | 'image' | 'pdf' | 'audio' | 'video'>
-                  }
-                  outputKeys={
-                    outputModalitiesOrder.filter(
-                      (key) => (right?.features?.output as any)?.[key],
-                    ) as Array<'text' | 'image' | 'audio' | 'video'>
-                  }
+                  inputKeys={inputModalitiesOrder.filter(
+                    (key) => right?.input?.[key],
+                  )}
+                  outputKeys={outputModalitiesOrder.filter(
+                    (key) => right?.output?.[key],
+                  )}
                   capabilityIcons={capabilityIcons}
                   arrowRightUrl={arrowRight}
                   size="md"

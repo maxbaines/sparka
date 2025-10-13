@@ -15,15 +15,17 @@ export interface AnonymousChat extends UIChat {}
 // Anonymous message structure matching the DB message structure
 export interface AnonymousMessage extends DBMessage {}
 
+const AVAILABLE_MODELS: ModelId[] = [
+  'google/gemini-2.0-flash',
+  'openai/gpt-5-mini',
+  'openai/gpt-5-nano',
+  'openai/gpt-4o-mini',
+  'cohere/command-a',
+];
+
 export const ANONYMOUS_LIMITS = {
   CREDITS: process.env.NODE_ENV === 'production' ? 10 : 1000,
-  AVAILABLE_MODELS: [
-    'google/gemini-2.0-flash',
-    'openai/gpt-5-mini',
-    'openai/gpt-5-nano',
-    'openai/gpt-4o-mini',
-    'cohere/command-a',
-  ] as const satisfies ModelId[],
+  AVAILABLE_MODELS: AVAILABLE_MODELS,
   AVAILABLE_TOOLS: ['createDocument', 'updateDocument'] satisfies ToolName[],
   SESSION_DURATION: 2147483647, // Max session time
   // Rate limiting for anonymous users based on IP

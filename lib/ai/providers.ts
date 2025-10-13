@@ -20,7 +20,7 @@ export const getLanguageModel = (modelId: ModelId) => {
   const languageProvider = gateway(model.id);
 
   // Wrap with reasoning middleware if the model supports reasoning
-  if (model.features?.reasoning && model.owned_by === 'xai') {
+  if (model.reasoning && model.owned_by === 'xai') {
     console.log('Wrapping reasoning middleware for', model.id);
     return wrapLanguageModel({
       model: languageProvider,
@@ -66,7 +66,7 @@ export const getModelProviderOptions = (
   | Record<string, never> => {
   const model = getModelDefinition(providerModelId);
   if (model.owned_by === 'openai') {
-    if (model.features?.reasoning) {
+    if (model.reasoning) {
       return {
         openai: {
           reasoningSummary: 'auto',
@@ -81,7 +81,7 @@ export const getModelProviderOptions = (
       return { openai: {} };
     }
   } else if (model.owned_by === 'anthropic') {
-    if (model.features?.reasoning) {
+    if (model.reasoning) {
       return {
         anthropic: {
           thinking: {
@@ -98,7 +98,7 @@ export const getModelProviderOptions = (
       xai: {},
     };
   } else if (model.owned_by === 'google') {
-    if (model.features?.reasoning) {
+    if (model.reasoning) {
       return {
         google: {
           thinkingConfig: {

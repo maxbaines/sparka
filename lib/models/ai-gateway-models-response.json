@@ -11,6 +11,10 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000006",
         "output": "0.00000024"
@@ -26,6 +30,9 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000013",
         "output": "0.0000006"
@@ -41,6 +48,10 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000008",
         "output": "0.00000029"
@@ -56,6 +67,10 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000003"
@@ -71,9 +86,153 @@
       "context_window": 262144,
       "max_tokens": 66536,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000004",
         "output": "0.0000016"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-coder-30b-a3b",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen 3 Coder 30B A3B Instruct",
+      "description": "Efficient coding specialist balancing performance with cost-effectiveness for daily development tasks while maintaining strong tool integration capabilities.",
+      "context_window": 262144,
+      "max_tokens": 8192,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.00000015",
+        "output": "0.0000006"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-coder-plus",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen3 Coder Plus",
+      "description": "Powered by Qwen3, this is a powerful Coding Agent that excels in tool calling and environment interaction to achieve autonomous programming. It combines outstanding coding proficiency with versatile general-purpose abilities.",
+      "context_window": 1000000,
+      "max_tokens": 1000000,
+      "type": "language",
+      "tags": [
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.000001",
+        "output": "0.000005"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-max",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen3 Max",
+      "description": "The Qwen 3 series Max model has undergone specialized upgrades in agent programming and tool invocation compared to the preview version. The officially released model this time has achieved state-of-the-art (SOTA) performance in its field and is better suited to meet the demands of agents operating in more complex scenarios.",
+      "context_window": 262144,
+      "max_tokens": 32768,
+      "type": "language",
+      "tags": [
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.0000012",
+        "output": "0.000006",
+        "input_cache_read": "0.00000024"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-max-preview",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen3 Max Preview",
+      "description": "Qwen3-Max-Preview shows substantial gains over the 2.5 series in overall capability, with significant enhancements in Chinese-English text understanding, complex instruction following, handling of subjective open-ended tasks, multilingual ability, and tool invocation; model knowledge hallucinations are reduced.",
+      "context_window": 262144,
+      "max_tokens": 32768,
+      "type": "language",
+      "tags": [
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.0000012",
+        "output": "0.000006",
+        "input_cache_read": "0.00000024"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-next-80b-a3b-instruct",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen3 Next 80B A3B Instruct",
+      "description": "Qwen3-Next uses a highly sparse MoE design: 80B total parameters, but only ~3B activated per inference step. Experiments show that, with global load balancing, increasing total expert parameters while keeping activated experts fixed steadily reduces training loss.Compared to Qwen3’s MoE (128 total experts, 8 routed), Qwen3-Next expands to 512 total experts, combining 10 routed experts + 1 shared expert — maximizing resource usage without hurting performance. The Qwen3-Next-80B-A3B-Instruct performs comparably to our flagship model Qwen3-235B-A22B-Instruct-2507, and shows clear advantages in tasks requiring ultra-long context (up to 256K tokens).",
+      "context_window": 65536,
+      "max_tokens": 65536,
+      "type": "language",
+      "pricing": {
+        "input": "0.00000015",
+        "output": "0.0000015"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-next-80b-a3b-thinking",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen3 Next 80B A3B Thinking",
+      "description": "Over the past few months, we have observed increasingly clear trends toward scaling both total parameters and context lengths in the pursuit of more powerful and agentic artificial intelligence (AI). We are excited to share our latest advancements in addressing these demands, centered on improving scaling efficiency through innovative model architecture. We call this next-generation foundation models Qwen3-Next.",
+      "context_window": 163840,
+      "max_tokens": 32768,
+      "type": "language",
+      "pricing": {
+        "input": "0.00000014",
+        "output": "0.0000014"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-vl-instruct",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen3 VL 235B A22B Instruct",
+      "description": "The Qwen3 series VL models has been comprehensively upgraded in areas such as visual coding and spatial perception. Its visual perception and recognition capabilities have significantly improved, supporting the understanding of ultra-long videos, and its OCR functionality has undergone a major enhancement.",
+      "context_window": 131072,
+      "max_tokens": 129024,
+      "type": "language",
+      "tags": [
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.0000007",
+        "output": "0.0000028"
+      }
+    },
+    {
+      "id": "alibaba/qwen3-vl-thinking",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "alibaba",
+      "name": "Qwen3 VL 235B A22B Thinking",
+      "description": "Qwen3 series VL models feature significantly enhanced multimodal reasoning capabilities, with a particular focus on optimizing the model for STEM and mathematical reasoning. Visual perception and recognition abilities have been comprehensively improved, and OCR capabilities have undergone a major upgrade.",
+      "context_window": 131072,
+      "max_tokens": 129024,
+      "type": "language",
+      "tags": [
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.0000007",
+        "output": "0.0000084"
       }
     },
     {
@@ -146,6 +305,10 @@
       "context_window": 200000,
       "max_tokens": 4096,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000025",
         "output": "0.00000125",
@@ -163,6 +326,10 @@
       "context_window": 200000,
       "max_tokens": 4096,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000015",
         "output": "0.000075",
@@ -180,6 +347,11 @@
       "context_window": 200000,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000008",
         "output": "0.000004",
@@ -197,11 +369,36 @@
       "context_window": 200000,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015",
         "input_cache_read": "0.0000003",
         "input_cache_write": "0.00000375"
+      }
+    },
+    {
+      "id": "anthropic/claude-3.5-sonnet-20240620",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "anthropic",
+      "name": "Claude 3.5 Sonnet (2024-06-20)",
+      "description": "Claude 3.5 Sonnet raises the industry bar for intelligence, outperforming competitor models and Claude 3 Opus on a wide range of evaluations, with the speed and cost of our mid-tier model, Claude 3 Sonnet.",
+      "context_window": 200000,
+      "max_tokens": 8192,
+      "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.000003",
+        "output": "0.000015"
       }
     },
     {
@@ -214,6 +411,12 @@
       "context_window": 200000,
       "max_tokens": 64000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015",
@@ -231,6 +434,12 @@
       "context_window": 200000,
       "max_tokens": 32000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000015",
         "output": "0.000075",
@@ -248,6 +457,12 @@
       "context_window": 200000,
       "max_tokens": 32000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000015",
         "output": "0.000075",
@@ -265,6 +480,35 @@
       "context_window": 200000,
       "max_tokens": 64000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.000003",
+        "output": "0.000015",
+        "input_cache_read": "0.0000003",
+        "input_cache_write": "0.00000375"
+      }
+    },
+    {
+      "id": "anthropic/claude-sonnet-4.5",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "anthropic",
+      "name": "Claude Sonnet 4.5",
+      "description": "Claude Sonnet 4.5 is the newest model in the Sonnet series, offering improvements and updates over Sonnet 4.",
+      "context_window": 200000,
+      "max_tokens": 64000,
+      "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015",
@@ -282,6 +526,9 @@
       "context_window": 256000,
       "max_tokens": 8000,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000025",
         "output": "0.00001"
@@ -297,6 +544,9 @@
       "context_window": 128000,
       "max_tokens": 4096,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006"
@@ -312,6 +562,9 @@
       "context_window": 128000,
       "max_tokens": 4096,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000025",
         "output": "0.00001"
@@ -337,11 +590,14 @@
       "object": "model",
       "created": 1755815280,
       "owned_by": "deepseek",
-      "name": "DeepSeek R1 0528",
+      "name": "DeepSeek-R1",
       "description": "The latest revision of DeepSeek's first-generation reasoning model",
       "context_window": 163840,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "reasoning"
+      ],
       "pricing": {
         "input": "0.00000079",
         "output": "0.000004"
@@ -357,6 +613,10 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000075",
         "output": "0.00000099"
@@ -372,6 +632,9 @@
       "context_window": 163840,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000077",
         "output": "0.00000077"
@@ -387,6 +650,10 @@
       "context_window": 163840,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000001999",
         "output": "0.0000008001"
@@ -402,25 +669,71 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000001999",
         "output": "0.0000008001"
       }
     },
     {
-      "id": "deepseek/deepseek-v3.1-thinking",
+      "id": "deepseek/deepseek-v3.1-terminus",
       "object": "model",
       "created": 1755815280,
       "owned_by": "deepseek",
-      "name": "DeepSeek V3.1 Thinking",
-      "description": "DeepSeek-V3.1 marks DeepSeek's first step toward the agent era with revolutionary hybrid inference capabilities. Operates in two modes: Think and Non-Think. The Think variant delivers faster reasoning compared to DeepSeek-R1-0528, reaching answers more efficiently while maintaining high-quality outputs. Enhanced through specialized post-training, the model excels at tool usage and complex multi-step agent tasks.",
-      "context_window": 128000,
+      "name": "DeepSeek V3.1 Terminus",
+      "description": "DeepSeek-V3.1-Terminus delivers more stable & reliable outputs across benchmarks compared to the previous version and addresses user feedback (i.e. language consistency and agent upgrades).",
+      "context_window": 131072,
+      "max_tokens": 65536,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.00000027",
+        "output": "0.000001"
+      }
+    },
+    {
+      "id": "deepseek/deepseek-v3.2-exp",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "deepseek",
+      "name": "DeepSeek V3.2 Exp",
+      "description": "DeepSeek-V3.2-Exp is an experimental model introducing the groundbreaking DeepSeek Sparse Attention (DSA) mechanism for enhanced long-context processing efficiency. Built on V3.1-Terminus, DSA achieves fine-grained sparse attention while maintaining identical output quality.",
+      "context_window": 163840,
+      "max_tokens": 65536,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.00000027",
+        "output": "0.00000041"
+      }
+    },
+    {
+      "id": "deepseek/deepseek-v3.2-exp-thinking",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "deepseek",
+      "name": "DeepSeek V3.2 Exp Thinking",
+      "description": "DeepSeek-V3.2-Exp is an experimental model introducing the groundbreaking DeepSeek Sparse Attention (DSA) mechanism for enhanced long-context processing efficiency. Built on V3.1-Terminus, DSA achieves fine-grained sparse attention while maintaining identical output quality.",
+      "context_window": 163840,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "implicit-caching",
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
-        "input": "0.00000056",
-        "output": "0.00000168",
-        "input_cache_read": "0.00000007"
+        "input": "0.00000028",
+        "output": "0.00000042",
+        "input_cache_read": "0.000000028"
       }
     },
     {
@@ -433,6 +746,11 @@
       "context_window": 1048576,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006"
@@ -448,6 +766,11 @@
       "context_window": 1048576,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000000075",
         "output": "0.0000003"
@@ -463,19 +786,25 @@
       "context_window": 1000000,
       "max_tokens": 65536,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000003",
         "output": "0.0000025"
       }
     },
     {
-      "id": "google/gemini-2.5-flash-image-preview",
+      "id": "google/gemini-2.5-flash-image",
       "object": "model",
       "created": 1755815280,
       "owned_by": "google",
-      "name": "Gemini 2.5 Flash Image Preview (Code name: Nano Banana)",
-      "description": "Gemini 2.5 Flash Image Preview is our first fully hybrid reasoning model, letting developers turn thinking on or off and set thinking budgets to balance quality, cost, and latency. Upgraded for rapid creative workflows, it can generate interleaved text and images and supports conversational, multi‑turn image editing in natural language. It’s also locale‑aware, enabling culturally and linguistically appropriate image generation for audiences worldwide.",
-      "context_window": 1048576,
+      "name": "Gemini 2.5 Flash Image (Code name: Nano Banana)",
+      "description": "Gemini 2.5 Flash Image is our first fully hybrid reasoning model, letting developers turn thinking on or off and set thinking budgets to balance quality, cost, and latency. Upgraded for rapid creative workflows, it can generate interleaved text and images and supports conversational, multi‑turn image editing in natural language. It’s also locale‑aware, enabling culturally and linguistically appropriate image generation for audiences worldwide.",
+      "context_window": 32768,
       "max_tokens": 32768,
       "type": "language",
       "tags": [
@@ -496,9 +825,58 @@
       "context_window": 1048576,
       "max_tokens": 65536,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000004"
+      }
+    },
+    {
+      "id": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "google",
+      "name": "Gemini 2.5 Flash Lite Preview 09-2025",
+      "description": "Gemini 2.5 Flash-Lite is a balanced, low-latency model with configurable thinking budgets and tool connectivity (e.g., Google Search grounding and code execution). It supports multimodal input and offers a 1M-token context window.",
+      "context_window": 1048576,
+      "max_tokens": 65536,
+      "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.0000001",
+        "output": "0.0000004"
+      }
+    },
+    {
+      "id": "google/gemini-2.5-flash-preview-09-2025",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "google",
+      "name": "Gemini 2.5 Flash Preview 09-2025",
+      "description": "Gemini 2.5 Flash is a thinking model that offers great, well-rounded capabilities. It is designed to offer a balance between price and performance with multimodal support and a 1M token context window.",
+      "context_window": 1000000,
+      "max_tokens": 65536,
+      "type": "language",
+      "tags": [
+        "file-input",
+        "implicit-caching",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.0000003",
+        "output": "0.0000025"
       }
     },
     {
@@ -511,6 +889,12 @@
       "context_window": 1048576,
       "max_tokens": 65536,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000025",
         "output": "0.00001"
@@ -586,9 +970,49 @@
       "context_window": 32000,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000025",
         "output": "0.000001"
+      }
+    },
+    {
+      "id": "meituan/longcat-flash-chat",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "meituan",
+      "name": "LongCat Flash Chat",
+      "description": "LongCat-Flash-Chat is a high-throughput MoE chat model (128k context) optimized for agentic tasks.",
+      "context_window": 128000,
+      "max_tokens": 8192,
+      "type": "language",
+      "tags": [
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0",
+        "output": "0"
+      }
+    },
+    {
+      "id": "meituan/longcat-flash-thinking",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "meituan",
+      "name": "LongCat Flash Thinking",
+      "description": "LongCat-Flash-Thinking is a high-throughput MoE reasoning model (128k context) optimized for agentic tasks.",
+      "context_window": 128000,
+      "max_tokens": 8192,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.00000015",
+        "output": "0.0000015"
       }
     },
     {
@@ -631,6 +1055,9 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000072",
         "output": "0.00000072"
@@ -661,6 +1088,10 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000016",
         "output": "0.00000016"
@@ -706,6 +1137,10 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000072",
         "output": "0.00000072"
@@ -721,6 +1156,9 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000072",
         "output": "0.00000072"
@@ -731,11 +1169,15 @@
       "object": "model",
       "created": 1755815280,
       "owned_by": "meta",
-      "name": "Llama 4 Maverick 17B 128E Instruct",
+      "name": "Llama 4 Maverick 17B Instruct",
       "description": "The Llama 4 collection of models are natively multimodal AI models that enable text and multimodal experiences. These models leverage a mixture-of-experts architecture to offer industry-leading performance in text and image understanding. Llama 4 Maverick, a 17 billion parameter model with 128 experts. Served by DeepInfra.",
       "context_window": 131072,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006"
@@ -746,11 +1188,15 @@
       "object": "model",
       "created": 1755815280,
       "owned_by": "meta",
-      "name": "Llama 4 Scout 17B 16E Instruct",
+      "name": "Llama 4 Scout 17B Instruct",
       "description": "The Llama 4 collection of models are natively multimodal AI models that enable text and multimodal experiences. These models leverage a mixture-of-experts architecture to offer industry-leading performance in text and image understanding. Llama 4 Scout, a 17 billion parameter model with 16 experts. Served by DeepInfra.",
       "context_window": 131072,
       "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000008",
         "output": "0.0000003"
@@ -766,6 +1212,9 @@
       "context_window": 256000,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000003",
         "output": "0.0000009"
@@ -792,17 +1241,39 @@
       "created": 1755815280,
       "owned_by": "mistral",
       "name": "Devstral Small",
-      "description": "Devstral is an agentic LLM for software engineering tasks, making it a great choice for software engineering agents.",
+      "description": "Devstral is an agentic LLM for software engineering tasks built under a collaboration between Mistral AI and All Hands AI 🙌. Devstral excels at using tools to explore codebases, editing multiple files and power software engineering agents.",
       "context_window": 128000,
-      "max_tokens": 128000,
+      "max_tokens": 64000,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
-        "input": "0.00000007",
-        "output": "0.00000028"
+        "input": "0.0000001",
+        "output": "0.0000003"
       }
     },
     {
       "id": "mistral/magistral-medium",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "mistral",
+      "name": "Magistral Medium 2509",
+      "description": "Complex thinking, backed by deep understanding, with transparent reasoning you can follow and verify. The model excels in maintaining high-fidelity reasoning across numerous languages, even when switching between languages mid-task.",
+      "context_window": 128000,
+      "max_tokens": 64000,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.000002",
+        "output": "0.000005"
+      }
+    },
+    {
+      "id": "mistral/magistral-medium-2506",
       "object": "model",
       "created": 1755815280,
       "owned_by": "mistral",
@@ -811,6 +1282,9 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
+      "tags": [
+        "reasoning"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.000005"
@@ -821,11 +1295,33 @@
       "object": "model",
       "created": 1755815280,
       "owned_by": "mistral",
+      "name": "Magistral Small 2509",
+      "description": "Complex thinking, backed by deep understanding, with transparent reasoning you can follow and verify. The model excels in maintaining high-fidelity reasoning across numerous languages, even when switching between languages mid-task.",
+      "context_window": 128000,
+      "max_tokens": 64000,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.0000005",
+        "output": "0.0000015"
+      }
+    },
+    {
+      "id": "mistral/magistral-small-2506",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "mistral",
       "name": "Magistral Small 2506",
       "description": "Complex thinking, backed by deep understanding, with transparent reasoning you can follow and verify. The model excels in maintaining high-fidelity reasoning across numerous languages, even when switching between languages mid-task.",
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
+      "tags": [
+        "reasoning"
+      ],
       "pricing": {
         "input": "0.0000005",
         "output": "0.0000015"
@@ -841,6 +1337,9 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000004",
         "output": "0.00000004"
@@ -856,6 +1355,9 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000001"
@@ -886,6 +1388,9 @@
       "context_window": 32000,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.000006"
@@ -901,6 +1406,10 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000004",
         "output": "0.000002"
@@ -916,6 +1425,10 @@
       "context_window": 32000,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000003"
@@ -946,6 +1459,10 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000015",
         "output": "0.00000015"
@@ -961,6 +1478,10 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.000006"
@@ -976,9 +1497,45 @@
       "context_window": 131072,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000005",
         "output": "0.000002"
+      }
+    },
+    {
+      "id": "moonshotai/kimi-k2-0905",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "moonshotai",
+      "name": "Kimi K2 0905",
+      "description": "Kimi K2 0905 has shown strong performance on agentic tasks thanks to its tool calling, reasoning abilities, and long context handling. But as a large parameter model (1T parameters), it’s also resource-intensive. Running it in production requires a highly optimized inference stack to avoid excessive latency.",
+      "context_window": 131072,
+      "max_tokens": 16384,
+      "type": "language",
+      "pricing": {
+        "input": "0.0000006",
+        "output": "0.0000025"
+      }
+    },
+    {
+      "id": "moonshotai/kimi-k2-turbo",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "moonshotai",
+      "name": "Kimi K2 Turbo",
+      "description": "Kimi K2 Turbo is the high-speed version of kimi-k2, with the same model parameters as kimi-k2, but the output speed is increased to 60 tokens per second, with a maximum of 100 tokens per second, the context length is 256k",
+      "context_window": 256000,
+      "max_tokens": 16384,
+      "type": "language",
+      "tags": [
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.0000024",
+        "output": "0.00001"
       }
     },
     {
@@ -988,7 +1545,7 @@
       "owned_by": "morph",
       "name": "Morph V3 Fast",
       "description": "Morph offers a specialized AI model that applies code changes suggested by frontier models (like Claude or GPT-4o) to your existing code files FAST - 4500+ tokens/second. It acts as the final step in the AI coding workflow. Supports 16k input tokens and 16k output tokens.",
-      "context_window": 32768,
+      "context_window": 81920,
       "max_tokens": 16384,
       "type": "language",
       "pricing": {
@@ -1003,7 +1560,7 @@
       "owned_by": "morph",
       "name": "Morph V3 Large",
       "description": "Morph offers a specialized AI model that applies code changes suggested by frontier models (like Claude or GPT-4o) to your existing code files FAST - 2500+ tokens/second. It acts as the final step in the AI coding workflow. Supports 16k input tokens and 16k output tokens.",
-      "context_window": 32768,
+      "context_window": 81920,
       "max_tokens": 16384,
       "type": "language",
       "pricing": {
@@ -1051,6 +1608,10 @@
       "context_window": 128000,
       "max_tokens": 4096,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00001",
         "output": "0.00003"
@@ -1066,6 +1627,11 @@
       "context_window": 1047576,
       "max_tokens": 32768,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.000008",
@@ -1083,6 +1649,11 @@
       "context_window": 1047576,
       "max_tokens": 32768,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000004",
         "output": "0.0000016",
@@ -1100,6 +1671,11 @@
       "context_window": 1047576,
       "max_tokens": 32768,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000004",
@@ -1117,6 +1693,11 @@
       "context_window": 128000,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000025",
         "output": "0.00001",
@@ -1134,6 +1715,11 @@
       "context_window": 128000,
       "max_tokens": 16384,
       "type": "language",
+      "tags": [
+        "file-input",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006",
@@ -1151,10 +1737,39 @@
       "context_window": 400000,
       "max_tokens": 128000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000125",
         "output": "0.00001",
-        "input_cache_read": "0.000000125",
+        "input_cache_read": "0.00000013",
+        "input_cache_write": "0"
+      }
+    },
+    {
+      "id": "openai/gpt-5-codex",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "openai",
+      "name": "GPT-5-Codex",
+      "description": "GPT-5-Codex is a version of GPT-5 optimized for agentic coding tasks in Codex or similar environments.",
+      "context_window": 400000,
+      "max_tokens": 128000,
+      "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.00000125",
+        "output": "0.00001",
+        "input_cache_read": "0.00000013",
         "input_cache_write": "0"
       }
     },
@@ -1168,10 +1783,16 @@
       "context_window": 400000,
       "max_tokens": 128000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000025",
         "output": "0.000002",
-        "input_cache_read": "0.000000025",
+        "input_cache_read": "0.00000003",
         "input_cache_write": "0"
       }
     },
@@ -1185,11 +1806,39 @@
       "context_window": 400000,
       "max_tokens": 128000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.00000005",
         "output": "0.0000004",
-        "input_cache_read": "0.000000005",
+        "input_cache_read": "0.00000001",
         "input_cache_write": "0"
+      }
+    },
+    {
+      "id": "openai/gpt-5-pro",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "openai",
+      "name": "GPT-5 pro",
+      "description": "GPT-5 pro uses more compute to think harder and provide consistently better answers. Since GPT-5 pro is designed to tackle tough problems, some requests may take several minutes to finish.",
+      "context_window": 400000,
+      "max_tokens": 272000,
+      "type": "language",
+      "tags": [
+        "file-input",
+        "implicit-caching",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.000015",
+        "output": "0.00012"
       }
     },
     {
@@ -1202,6 +1851,10 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000005"
@@ -1215,8 +1868,12 @@
       "name": "gpt-oss-20b",
       "description": "A compact, open-weight language model optimized for low-latency and resource-constrained environments, including local and edge deployments",
       "context_window": 128000,
-      "max_tokens": 128000,
+      "max_tokens": 8192,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.00000007",
         "output": "0.0000003"
@@ -1232,6 +1889,12 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000015",
         "output": "0.00006",
@@ -1249,6 +1912,12 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.000008",
@@ -1266,6 +1935,11 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000011",
         "output": "0.0000044",
@@ -1283,6 +1957,12 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
+      "tags": [
+        "file-input",
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000011",
         "output": "0.0000044",
@@ -1345,6 +2025,10 @@
       "context_window": 127000,
       "max_tokens": 8000,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000001",
         "output": "0.000001"
@@ -1360,6 +2044,10 @@
       "context_window": 200000,
       "max_tokens": 8000,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -1375,6 +2063,9 @@
       "context_window": 127000,
       "max_tokens": 8000,
       "type": "language",
+      "tags": [
+        "reasoning"
+      ],
       "pricing": {
         "input": "0.000001",
         "output": "0.000005"
@@ -1390,9 +2081,52 @@
       "context_window": 127000,
       "max_tokens": 8000,
       "type": "language",
+      "tags": [
+        "reasoning"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.000008"
+      }
+    },
+    {
+      "id": "stealth/sonoma-dusk-alpha",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "stealth",
+      "name": "Sonoma Dusk Alpha",
+      "description": "This model is no longer in stealth and gets responses from Grok 4 Fast Non-Reasoning–xAI's latest multimodal model with SOTA cost-efficiency and a 2M token context window.",
+      "context_window": 2000000,
+      "max_tokens": 131072,
+      "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.0000002",
+        "output": "0.0000005",
+        "input_cache_read": "0.00000005"
+      }
+    },
+    {
+      "id": "stealth/sonoma-sky-alpha",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "stealth",
+      "name": "Sonoma Sky Alpha",
+      "description": "This model is no longer in stealth and gets responses from Grok 4 Fast Reasoning–xAI's latest multimodal model with SOTA cost-efficiency and a 2M token context window.",
+      "context_window": 2000000,
+      "max_tokens": 131072,
+      "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
+      "pricing": {
+        "input": "0.0000002",
+        "output": "0.0000005",
+        "input_cache_read": "0.00000005"
       }
     },
     {
@@ -1405,6 +2139,10 @@
       "context_window": 128000,
       "max_tokens": 32000,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -1420,9 +2158,118 @@
       "context_window": 128000,
       "max_tokens": 32768,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
+      }
+    },
+    {
+      "id": "voyage/voyage-3-large",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "voyage",
+      "name": "voyage-3-large",
+      "description": "Voyage AI's embedding model with the best general-purpose and multilingual retrieval quality.",
+      "context_window": 0,
+      "max_tokens": 0,
+      "type": "embedding",
+      "pricing": {
+        "input": "0.00000018",
+        "output": "0"
+      }
+    },
+    {
+      "id": "voyage/voyage-3.5",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "voyage",
+      "name": "voyage-3.5",
+      "description": "Voyage AI's embedding model optimized for general-purpose and multilingual retrieval quality.",
+      "context_window": 0,
+      "max_tokens": 0,
+      "type": "embedding",
+      "pricing": {
+        "input": "0.00000006",
+        "output": "0"
+      }
+    },
+    {
+      "id": "voyage/voyage-3.5-lite",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "voyage",
+      "name": "voyage-3.5-lite",
+      "description": "Voyage AI's embedding model optimized for latency and cost.",
+      "context_window": 0,
+      "max_tokens": 0,
+      "type": "embedding",
+      "pricing": {
+        "input": "0.00000002",
+        "output": "0"
+      }
+    },
+    {
+      "id": "voyage/voyage-code-2",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "voyage",
+      "name": "voyage-code-2",
+      "description": "Voyage AI's embedding model optimized for code retrieval (17% better than alternatives). This is the previous generation of code embeddings models.",
+      "context_window": 0,
+      "max_tokens": 0,
+      "type": "embedding",
+      "pricing": {
+        "input": "0.00000012",
+        "output": "0"
+      }
+    },
+    {
+      "id": "voyage/voyage-code-3",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "voyage",
+      "name": "voyage-code-3",
+      "description": "Voyage AI's embedding model optimized for code retrieval.",
+      "context_window": 0,
+      "max_tokens": 0,
+      "type": "embedding",
+      "pricing": {
+        "input": "0.00000018",
+        "output": "0"
+      }
+    },
+    {
+      "id": "voyage/voyage-finance-2",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "voyage",
+      "name": "voyage-finance-2",
+      "description": "Voyage AI's embedding model optimized for finance retrieval and RAG.",
+      "context_window": 0,
+      "max_tokens": 0,
+      "type": "embedding",
+      "pricing": {
+        "input": "0.00000012",
+        "output": "0"
+      }
+    },
+    {
+      "id": "voyage/voyage-law-2",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "voyage",
+      "name": "voyage-law-2",
+      "description": "Voyage AI's embedding model optimized for legal retrieval and RAG.",
+      "context_window": 0,
+      "max_tokens": 0,
+      "type": "embedding",
+      "pricing": {
+        "input": "0.00000012",
+        "output": "0"
       }
     },
     {
@@ -1435,6 +2282,9 @@
       "context_window": 131072,
       "max_tokens": 4000,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.00001"
@@ -1450,6 +2300,10 @@
       "context_window": 32768,
       "max_tokens": 32768,
       "type": "language",
+      "tags": [
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000002",
         "output": "0.00001"
@@ -1465,6 +2319,9 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -1480,6 +2337,9 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.000005",
         "output": "0.000025"
@@ -1495,6 +2355,9 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000003",
         "output": "0.0000005"
@@ -1510,6 +2373,9 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
+      "tags": [
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000006",
         "output": "0.000004"
@@ -1525,9 +2391,53 @@
       "context_window": 256000,
       "max_tokens": 256000,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
+      }
+    },
+    {
+      "id": "xai/grok-4-fast-non-reasoning",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "xai",
+      "name": "Grok 4 Fast Non-Reasoning",
+      "description": "Grok 4 Fast is xAI's latest multimodal model with SOTA cost-efficiency and a 2M token context window. It comes in two flavors: non-reasoning and reasoning.",
+      "context_window": 2000000,
+      "max_tokens": 256000,
+      "type": "language",
+      "tags": [
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.0000002",
+        "output": "0.0000005",
+        "input_cache_read": "0.00000005"
+      }
+    },
+    {
+      "id": "xai/grok-4-fast-reasoning",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "xai",
+      "name": "Grok 4 Fast Reasoning",
+      "description": "Grok 4 Fast is xAI's latest multimodal model with SOTA cost-efficiency and a 2M token context window. It comes in two flavors: non-reasoning and reasoning.",
+      "context_window": 2000000,
+      "max_tokens": 256000,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.0000002",
+        "output": "0.0000005",
+        "input_cache_read": "0.00000005"
       }
     },
     {
@@ -1540,6 +2450,10 @@
       "context_window": 256000,
       "max_tokens": 256000,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000015"
@@ -1555,6 +2469,10 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000006",
         "output": "0.0000022"
@@ -1570,6 +2488,10 @@
       "context_window": 128000,
       "max_tokens": 96000,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000011"
@@ -1585,9 +2507,34 @@
       "context_window": 65536,
       "max_tokens": 66000,
       "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use",
+        "vision"
+      ],
       "pricing": {
         "input": "0.0000006",
         "output": "0.0000018"
+      }
+    },
+    {
+      "id": "zai/glm-4.6",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "zai",
+      "name": "GLM 4.6",
+      "description": "As the latest iteration in the GLM series, GLM-4.6 achieves comprehensive enhancements across multiple domains, including real-world coding, long-context processing, reasoning, searching, writing, and agentic applications.",
+      "context_window": 200000,
+      "max_tokens": 96000,
+      "type": "language",
+      "tags": [
+        "reasoning",
+        "tool-use"
+      ],
+      "pricing": {
+        "input": "0.0000006",
+        "output": "0.0000022",
+        "input_cache_read": "0.00000011"
       }
     }
   ]

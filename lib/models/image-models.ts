@@ -13,6 +13,20 @@ export interface ImageModelData {
     input: string; // Input price per token
     output: string; // Output price per token
   };
+  input: {
+    image: boolean;
+    text: boolean;
+    pdf: boolean;
+    video: boolean;
+    audio: boolean;
+  };
+  output: {
+    image: boolean;
+    text: boolean;
+    audio: boolean;
+  };
+  // Features
+  releaseDate: Date;
 }
 
 // Define the data with proper typing
@@ -30,5 +44,18 @@ export const imageModelsData: ImageModelData[] = [
       input: '0.000005', // Text input: $5.00 / 1M tokens, Image input: $10.00 / 1M tokens
       output: '0.0004', // Output image tokens: $40.00 / 1M tokens
     },
+    input: {
+      image: true,
+      text: true,
+      pdf: false,
+      video: false,
+      audio: false,
+    },
+    output: {
+      image: true,
+      text: false,
+      audio: false,
+    },
+    releaseDate: new Date('2025-03-01'),
   },
 ];

@@ -16,6 +16,13 @@ const MODELS_DEV_RESPONSE_JSON = join(
   'models-dev-response.json',
 );
 
+const MISSING_MODEL_FEATURES_JSON = join(
+  ROOT,
+  'lib',
+  'models',
+  'missing-model-features.json',
+);
+
 type ModelsDevModalities = {
   input?: string[];
   output?: string[];
@@ -118,7 +125,18 @@ function buildTS({
 }): string {
   const lines = [];
   lines.push("import type { ModelId } from '@/lib/models/model-id';");
-  lines.push("import type { ModelFeatures } from './model-features';");
+  lines.push('');
+  lines.push('type GeneratedFeatureDelta = {');
+  lines.push('  releaseDate: Date;');
+  lines.push('  knowledgeCutoff?: Date;');
+  lines.push('  input?: {');
+  lines.push('    audio?: boolean;');
+  lines.push('    video?: boolean;');
+  lines.push('  };');
+  lines.push('  output?: {');
+  lines.push('    audio?: boolean;');
+  lines.push('  };');
+  lines.push('};');
   lines.push('');
   lines.push('export const generatedModelFeatures = {');
 
@@ -129,40 +147,32 @@ function buildTS({
       continue;
     }
     const knowledgeExpr = formatKnowledgeDate(m.knowledge);
-    const reasoning = !!m.reasoning;
-    const toolCall = !!m.tool_call;
-    const imageIn = toBoolModal(m.modalities, 'input', 'image');
-    const textIn = toBoolModal(m.modalities, 'input', 'text');
-    const pdfIn = toBoolModal(m.modalities, 'input', 'pdf');
     const audioIn = toBoolModal(m.modalities, 'input', 'audio');
     const videoIn = toBoolModal(m.modalities, 'input', 'video');
-    const imageOut = toBoolModal(m.modalities, 'output', 'image');
-    const textOut = toBoolModal(m.modalities, 'output', 'text');
     const audioOut = toBoolModal(m.modalities, 'output', 'audio');
 
     const entry = [];
     entry.push(`  '${id}': {`);
-    entry.push(`    reasoning: ${reasoning},`);
-    entry.push(`    toolCall: ${toolCall},`);
     entry.push(`    releaseDate: new Date('${m.release_date}'),`);
     if (knowledgeExpr) entry.push(`    knowledgeCutoff: ${knowledgeExpr},`);
-    entry.push('    input: {');
-    entry.push(`      image: ${imageIn},`);
-    entry.push(`      text: ${textIn},`);
-    entry.push(`      pdf: ${pdfIn},`);
-    entry.push(`      audio: ${audioIn},`);
-    entry.push(`      video: ${videoIn},`);
-    entry.push('    },');
-    entry.push('    output: {');
-    entry.push(`      image: ${imageOut},`);
-    entry.push(`      text: ${textOut},`);
-    entry.push(`      audio: ${audioOut},`);
-    entry.push('    },');
+    if (audioIn || videoIn) {
+      const inputParts = [] as string[];
+      if (audioIn) inputParts.push('      audio: true,');
+      if (videoIn) inputParts.push('      video: true,');
+      entry.push('    input: {');
+      entry.push(...inputParts);
+      entry.push('    },');
+    }
+    if (audioOut) {
+      entry.push('    output: {');
+      entry.push('      audio: true,');
+      entry.push('    },');
+    }
     entry.push('  },');
     lines.push(entry.join('\n'));
   }
 
-  lines.push('} satisfies Partial<Record<ModelId, ModelFeatures>>;');
+  lines.push('} satisfies Partial<Record<ModelId, GeneratedFeatureDelta>>;');
   lines.push('');
 
   return lines.join('\n');
@@ -179,6 +189,14 @@ async function main() {
     console.log(
       `Fetched ${Object.keys(modelsById).length} entries from models.dev`,
     );
+
+    // Compute missing ids that we support but are not present in models.dev
+    const missing = supportedIds.filter((id) => !modelsById[id]);
+    writeFileSync(
+      MISSING_MODEL_FEATURES_JSON,
+      JSON.stringify(missing, null, 2),
+    );
+    console.log('Wrote missing models list:', MISSING_MODEL_FEATURES_JSON);
 
     // Save raw models.dev response for reference/debugging
     writeFileSync(MODELS_DEV_RESPONSE_JSON, JSON.stringify(raw, null, 2));
