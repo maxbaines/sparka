@@ -45,7 +45,7 @@ const allImageModels = imageModelsData;
 const PROVIDER_ORDER = ['openai', 'google', 'anthropic', 'xai'];
 
 export const chatModels = allModels
-  .filter((model) => model.output?.text === true)
+  .filter((model) => model.output.text === true)
   .sort((a, b) => {
     const aProviderIndex = PROVIDER_ORDER.indexOf(a.owned_by);
     const bProviderIndex = PROVIDER_ORDER.indexOf(b.owned_by);
@@ -64,7 +64,7 @@ export const chatModels = allModels
     // Within same provider, maintain original order from allModels array
     return 0;
   });
-
+console.log('chatModels', chatModels);
 // Memoized dictionary of models by ID for efficient lookups
 const _modelsByIdCache = new Map<string, ModelDefinition>();
 
