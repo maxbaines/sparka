@@ -7,7 +7,7 @@ import {
   GoToModelButton,
 } from '@/components/model-action-buttons';
 import { Check, X, Minus, ChevronDown, SquareDashed } from 'lucide-react';
-import type { ModelDefinition } from '@/lib/ai/all-models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
 import type { ProviderId } from '@/lib/models/models.generated';
 import { getProviderIcon } from '@/components/get-provider-icon';
 import { MODEL_CAPABILITIES } from '@/lib/models/model-capabilities';

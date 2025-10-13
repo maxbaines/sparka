@@ -3,7 +3,7 @@
 import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { memo } from 'react';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { useSendMessage } from '@/lib/stores/hooks';
 import { cn } from '@/lib/utils';
 

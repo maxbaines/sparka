@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { allModels } from '@/lib/ai/all-models';
-import type { ModelDefinition } from '@/lib/ai/all-models';
+import { allEnabledLanguageModels } from '@/lib/ai/app-models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
 import { Container } from '@/components/container';
 import { ModelDetails } from '@/app/(models)/models/model-details';
 
@@ -27,12 +27,12 @@ export default function ComparePage() {
 
   const leftModel: ModelDefinition | null = useMemo(() => {
     if (!leftModelId) return null;
-    return allModels.find((m) => m.id === leftModelId) || null;
+    return allEnabledLanguageModels.find((m) => m.id === leftModelId) || null;
   }, [leftModelId]);
 
   const rightModel: ModelDefinition | null = useMemo(() => {
     if (!rightModelId) return null;
-    return allModels.find((m) => m.id === rightModelId) || null;
+    return allEnabledLanguageModels.find((m) => m.id === rightModelId) || null;
   }, [rightModelId]);
 
   function pushCompareUrl(leftId: string | null, rightId: string | null) {

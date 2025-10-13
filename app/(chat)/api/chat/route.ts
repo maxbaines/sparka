@@ -34,8 +34,8 @@ import type { CreditReservation } from '@/lib/credits/credit-reservation';
 import {
   DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
   getModelDefinition,
-  type ModelDefinition,
-} from '@/lib/ai/all-models';
+} from '@/lib/ai/app-models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
 import {
   createResumableStreamContext,
   type ResumableStreamContext,
@@ -51,7 +51,7 @@ import type { AnonymousSession } from '@/lib/types/anonymous';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { markdownJoinerTransform } from '@/lib/ai/markdown-joiner-transform';
 import { checkAnonymousRateLimit, getClientIP } from '@/lib/utils/rate-limit';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { calculateMessagesTokens } from '@/lib/ai/token-utils';
 import { ChatSDKError } from '@/lib/ai/errors';
 import { addExplicitToolRequestToMessages } from './addExplicitToolRequestToMessages';

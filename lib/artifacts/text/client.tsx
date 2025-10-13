@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import {
   DEFAULT_POLISH_TEXT_MODEL,
   DEFAULT_SUGGESTIONS_MODEL,
-} from '@/lib/ai/all-models';
+} from '@/lib/ai/app-models';
 
 interface TextArtifactMetadata {
   suggestions: Array<Suggestion>;

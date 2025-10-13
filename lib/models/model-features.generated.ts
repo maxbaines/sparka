@@ -1,4 +1,4 @@
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 
 type GeneratedFeatureDelta = {
   releaseDate: Date;

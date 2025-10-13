@@ -3,8 +3,8 @@
 import { useMemo, memo } from 'react';
 import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/utils';
-import { chatModels, getModelDefinition } from '@/lib/ai/all-models';
-import type { ModelId } from '@/lib/models/model-id';
+import { chatModels, getModelDefinition } from '@/lib/ai/app-models';
+import type { ModelId } from '@/lib/models';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { LoginCtaBanner } from '@/components/upgrade-cta/login-cta-banner';
 import {

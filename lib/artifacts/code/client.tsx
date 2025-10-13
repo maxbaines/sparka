@@ -15,7 +15,7 @@ import {
   type ConsoleOutput,
   type ConsoleOutputContent,
 } from '@/components/console';
-import { DEFAULT_CODE_EDITS_MODEL } from '@/lib/ai/all-models';
+import { DEFAULT_CODE_EDITS_MODEL } from '@/lib/ai/app-models';
 
 const OUTPUT_HANDLERS = {
   matplotlib: `

@@ -4,10 +4,8 @@ import { createContext, useContext, useRef } from 'react';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { createStore } from 'zustand/vanilla';
 import type { FilterState } from '@/app/(models)/models/model-filters';
-import {
-  chatModels as allChatModels,
-  type ModelDefinition,
-} from '@/lib/ai/all-models';
+import { chatModels as allChatModels } from '@/lib/ai/app-models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
 
 // Derive dynamic ranges from available models
 const contextWindows = allChatModels

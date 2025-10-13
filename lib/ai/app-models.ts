@@ -1,19 +1,13 @@
-import type { ModelData } from '@/lib/models/models.generated';
-import { modelsData } from '@/lib/models/models.generated';
-import { modelFeatures, type ModelFeatures } from '../models/model-features';
-import type { ImageModelId, ModelId } from '../models/model-id';
+import type { ImageModelId, ModelId } from '@/lib/models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
+import { allModels } from '@/lib/models';
 import {
   imageModelsData,
   type ImageModelData,
 } from '@/lib/models/image-models';
 
-export type ModelDefinition = ModelData &
-  ModelFeatures & {
-    disabled?: true;
-  };
-
 export type ImageModelDefinition = ImageModelData & {
-  features?: ModelFeatures;
+  features?: never; // deprecated: use ModelExtra in base defs if needed later
 };
 
 const DISABLED_MODELS: Partial<Record<ModelId, true>> = {
@@ -25,52 +19,41 @@ const DISABLED_MODELS: Partial<Record<ModelId, true>> = {
   'morph/morph-v3-fast': true,
 };
 
-export const allModels = modelsData
-  .map((model) => {
-    const features = modelFeatures[model.id];
-    if (!features) {
-      console.error('No features for', model.id);
-    }
-
-    return {
-      ...model,
-      ...(features ?? {}),
-      disabled: DISABLED_MODELS[model.id],
-    } as ModelDefinition;
-  })
+export const allEnabledLanguageModels = allModels
+  .map((model) => ({
+    ...model,
+    disabled: DISABLED_MODELS[model.id],
+  }))
   .filter((model) => model.type === 'language' && !model.disabled);
 
 const allImageModels = imageModelsData;
 
 const PROVIDER_ORDER = ['openai', 'google', 'anthropic', 'xai'];
 
-export const chatModels = allModels
+export const chatModels = allEnabledLanguageModels
   .filter((model) => model.output.text === true)
   .sort((a, b) => {
     const aProviderIndex = PROVIDER_ORDER.indexOf(a.owned_by);
     const bProviderIndex = PROVIDER_ORDER.indexOf(b.owned_by);
 
-    // If provider is not in the preferred list, put it at the end
     const aIndex =
       aProviderIndex === -1 ? PROVIDER_ORDER.length : aProviderIndex;
     const bIndex =
       bProviderIndex === -1 ? PROVIDER_ORDER.length : bProviderIndex;
 
-    // Sort by provider order first
     if (aIndex !== bIndex) {
       return aIndex - bIndex;
     }
 
-    // Within same provider, maintain original order from allModels array
     return 0;
   });
-console.log('chatModels', chatModels);
+
 // Memoized dictionary of models by ID for efficient lookups
 const _modelsByIdCache = new Map<string, ModelDefinition>();
 
 function getModelsByIdDict(): Map<string, ModelDefinition> {
   if (_modelsByIdCache.size === 0) {
-    allModels.forEach((model) => {
+    allEnabledLanguageModels.forEach((model) => {
       _modelsByIdCache.set(model.id, model);
     });
   }

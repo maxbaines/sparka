@@ -1,7 +1,7 @@
-import type { ModelId } from '@/lib/models/model-id';
-import type { generatedModelFeatures } from './model-features.generated';
+import type { ModelId } from '@/lib/models';
+import type { generatedModelExtra } from './model-extra.generated';
 
-export interface ModelFeatures {
+export interface ModelExtra {
   knowledgeCutoff?: Date;
   releaseDate: Date;
   // temperature: boolean; // TODO: does it replace fixedTemperature?
@@ -10,17 +10,11 @@ export interface ModelFeatures {
   fixedTemperature?: number;
 }
 
-// All the literals in ModelId that are not keys of generatedModelFeatures
-type GeneratedModelFeaturesModelId = keyof typeof generatedModelFeatures;
-type CustomModelFeaturesModelId = Exclude<
-  ModelId,
-  GeneratedModelFeaturesModelId
->;
+// All the literals in ModelId that are not keys of generatedModelExtra
+type GeneratedModelExtraModelId = keyof typeof generatedModelExtra;
+type CustomModelExtraModelId = Exclude<ModelId, GeneratedModelExtraModelId>;
 
-export const manualModelFeatures: Record<
-  CustomModelFeaturesModelId,
-  ModelFeatures
-> = {
+export const manualModelExtra: Record<CustomModelExtraModelId, ModelExtra> = {
   // Google Gemini 2.5 Flash Lite
   'google/gemini-2.5-flash-lite': {
     releaseDate: new Date('2025-06-17'),

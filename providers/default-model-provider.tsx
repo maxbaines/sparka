@@ -8,7 +8,7 @@ import {
   useCallback,
   type ReactNode,
 } from 'react';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { toast } from 'sonner';
 
 interface DefaultModelContextType {

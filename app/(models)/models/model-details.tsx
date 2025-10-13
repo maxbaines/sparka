@@ -1,10 +1,13 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { ModelDetailsCard } from '@/app/(models)/compare/model-details-card';
-import { allModels, getModelDefinition } from '@/lib/ai/all-models';
-import type { ModelDefinition } from '@/lib/ai/all-models';
+import {
+  allEnabledLanguageModels,
+  getModelDefinition,
+} from '@/lib/ai/app-models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
 import { ModelSelectorBase } from '@/components/model-selector-base';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { ChatModelButton } from '@/components/model-action-buttons';
 
 export function ModelDetails({
@@ -32,7 +35,7 @@ export function ModelDetails({
       >
         <div className="flex items-center gap-2 ">
           <ModelSelectorBase
-            models={allModels.map((m) => ({
+            models={allEnabledLanguageModels.map((m) => ({
               id: m.id as ModelId,
               definition: getModelDefinition(m.id as ModelId),
             }))}

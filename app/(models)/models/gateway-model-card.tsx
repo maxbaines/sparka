@@ -9,7 +9,7 @@ import {
   ChatModelButton,
   CompareModelButton,
 } from '@/components/model-action-buttons';
-import type { ModelDefinition } from '@/lib/ai/all-models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
 import type { ProviderId } from '@/lib/models/models.generated';
 import { getProviderIcon } from '@/components/get-provider-icon';
 import { MODEL_CAPABILITIES } from '@/lib/models/model-capabilities';

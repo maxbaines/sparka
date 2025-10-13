@@ -7,7 +7,7 @@ import {
   getAttachmentsFromMessage,
   getTextContentFromMessage,
 } from '@/lib/utils';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { useChatStatus } from '@/lib/stores/hooks';
 
 export type MessageEditorProps = {

@@ -3,12 +3,12 @@ import { auth } from '../(auth)/auth';
 import { cookies } from 'next/headers';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { DefaultModelProvider } from '@/providers/default-model-provider';
-import { DEFAULT_CHAT_MODEL } from '@/lib/ai/all-models';
+import { DEFAULT_CHAT_MODEL } from '@/lib/ai/app-models';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { AppSidebar } from '@/components/app-sidebar';
 import { KeyboardShortcuts } from '@/components/keyboard-shortcuts';
 import { SessionProvider } from 'next-auth/react';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 
 export default async function ChatLayout({
   children,

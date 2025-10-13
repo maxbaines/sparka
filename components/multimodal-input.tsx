@@ -41,7 +41,7 @@ import {
   DEFAULT_PDF_MODEL,
   DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL,
   DEFAULT_CHAT_MODEL,
-} from '@/lib/ai/all-models';
+} from '@/lib/ai/app-models';
 import { LimitDisplay } from './upgrade-cta/limit-display';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
@@ -50,7 +50,7 @@ import { generateUUID } from '@/lib/utils';
 import { useSaveMessageMutation } from '@/hooks/chat-sync-hooks';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { processFilesForUpload } from '@/lib/files/upload-prep';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { ContextBar } from '@/components/context-bar';
 
 const IMAGE_UPLOAD_LIMITS = {

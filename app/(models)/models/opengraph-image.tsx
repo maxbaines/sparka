@@ -1,6 +1,6 @@
 import { ImageResponse } from '@vercel/og';
 
-import { allModels } from '@/lib/ai/all-models';
+import { allEnabledLanguageModels } from '@/lib/ai/app-models';
 import { formatNumberCompact } from '@/lib/utils/format-number-compact';
 import { getProviderIconUrl } from '../get-provider-icon-url';
 import type { ProviderId } from '@/lib/models/models.generated';
@@ -19,10 +19,10 @@ export const contentType = 'image/png';
 export const size = OG_SIZE;
 
 export default async function OGImage() {
-  const numModels = allModels.length;
+  const numModels = allEnabledLanguageModels.length;
   const providers = Array.from(
     new Set(
-      allModels
+      allEnabledLanguageModels
         .map((m) => (m.owned_by || '').trim())
         .filter((p): p is string => Boolean(p)),
     ),

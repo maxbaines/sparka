@@ -1,7 +1,7 @@
 'use client';
 
 import type { Attachment } from '@/lib/ai/types';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { useLastUsageUntilMessageId } from '@/lib/stores/hooks';
 import { PromptInputContextBar } from '@/components/ai-elements/prompt-input';
 import { AttachmentList } from '@/components/attachment-list';

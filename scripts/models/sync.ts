@@ -11,8 +11,8 @@ async function main() {
   // 1) Fetch base snapshot and lists
   run('tsx scripts/models/fetch-base.ts');
 
-  // 2) Fetch features and generate model-features.generated.ts
-  run('bun scripts/models/fetch-features.ts');
+  // 2) Fetch extras and generate model-extra.generated.ts
+  run('bun scripts/models/fetch-extra.ts');
 
   // 3) Fetch endpoints and build models.generated.ts
   run('tsx scripts/models/fetch-endpoints.ts');

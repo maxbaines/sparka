@@ -1,4 +1,4 @@
-import type { ImageModelId } from '@/lib/models/model-id';
+import type { ImageModelId } from '@/lib/models';
 import type { ProviderId } from './models.generated';
 
 export interface ImageModelData {

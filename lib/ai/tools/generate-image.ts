@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { tool, experimental_generateImage, type FileUIPart } from 'ai';
 import { getImageModel } from '@/lib/ai/providers';
-import { DEFAULT_IMAGE_MODEL } from '@/lib/ai/all-models';
+import { DEFAULT_IMAGE_MODEL } from '@/lib/ai/app-models';
 import OpenAI, { toFile } from 'openai';
 import { uploadFile } from '@/lib/blob';
 import { createModuleLogger } from '@/lib/logger';

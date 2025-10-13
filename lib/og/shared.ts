@@ -44,7 +44,7 @@ export function prettyUsdPerMTokens(value?: string | null): string | null {
 
 export function buildBulletItems(
   model:
-    | typeof import('@/lib/ai/all-models').allModels[number]
+    | typeof import('@/lib/ai/app-models').allEnabledLanguageModels[number]
     | null
     | undefined,
 ) {

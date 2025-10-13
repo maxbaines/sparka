@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Container } from '@/components/container';
 import { WideModelDetails } from '@/app/(models)/models/wide-model-details';
-import { allModels } from '@/lib/ai/all-models';
+import { allEnabledLanguageModels } from '@/lib/ai/app-models';
 
 // Toggle to include/exclude performance-related copy
 const ENABLE_PERFORMANCE_COPY = false;
@@ -12,7 +12,7 @@ export default async function SingleModelPage(
 ) {
   const { provider, id } = await props.params;
   const modelId = `${provider}/${id}`;
-  const model = allModels.find((m) => m.id === modelId);
+  const model = allEnabledLanguageModels.find((m) => m.id === modelId);
   if (!model) return notFound();
 
   return (
@@ -37,12 +37,14 @@ export async function generateMetadata(
   const id = resolved.id;
 
   const modelId = `${provider}/${id}`;
-  const model = allModels.find((m) => m.id === modelId) || null;
+  const model = allEnabledLanguageModels.find((m) => m.id === modelId) || null;
 
   const capProv = (p?: string) =>
     (p || '').slice(0, 1).toUpperCase() + (p || '').slice(1);
   const displayName = (mId: string | null) => {
-    const m = mId ? allModels.find((x) => x.id === mId) || null : null;
+    const m = mId
+      ? allEnabledLanguageModels.find((x) => x.id === mId) || null
+      : null;
     if (!m) return mId ?? '';
     const prov = capProv(m.owned_by);
     return `${prov} ${m.name}`.trim();
@@ -119,8 +121,8 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  const sortedIds = [...allModels.map((m) => m.id)].sort((a, b) =>
-    a.localeCompare(b),
+  const sortedIds = [...allEnabledLanguageModels.map((m) => m.id)].sort(
+    (a, b) => a.localeCompare(b),
   );
   return sortedIds.map((fullId) => {
     const [provider, model] = fullId.split('/');

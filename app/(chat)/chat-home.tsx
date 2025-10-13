@@ -2,7 +2,7 @@
 import { ChatSystem } from '@/components/chat-system';
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 
 export function ChatHome({ id }: { id: string }) {
   const searchParams = useSearchParams();

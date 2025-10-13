@@ -26,10 +26,10 @@ Generated data:
 - `lib/models/models.generated.ts` — structured models built from gateway + endpoints
 - `lib/models/outputs/models-list.json` — list of supported model ids (source for features step)
 - `lib/models/outputs/providers-list.json` — provider ids
-- `lib/models/model-features.generated.ts` — releaseDate from models.dev for delta
-- `lib/models/model-features.manual.ts` — hand-curated releaseDate for ids not in models.dev
-- `lib/models/model-features.ts` — aggregator of generated + manual
-- `lib/models/outputs/missing-model-features.json` — new delta ids still lacking releaseDate
+- `lib/models/model-extra.generated.ts` — releaseDate from models.dev for delta
+- `lib/models/model-extra.manual.ts` — hand-curated releaseDate for ids not in models.dev
+- `lib/models/model-extra.ts` — aggregator of generated + manual
+- `lib/models/outputs/missing-model-extra.json` — new delta ids still lacking releaseDate
 
 Notes:
 

@@ -31,7 +31,7 @@ import {
   cloneMessagesWithDocuments,
   cloneAttachmentsInMessages,
 } from '@/lib/clone-messages';
-import { DEFAULT_TITLE_MODEL } from '@/lib/ai/all-models';
+import { DEFAULT_TITLE_MODEL } from '@/lib/ai/app-models';
 import type { DBMessage } from '@/lib/db/schema';
 import type { ChatMessage } from '@/lib/ai/types';
 import { MAX_MESSAGE_CHARS } from '@/lib/limits/tokens';

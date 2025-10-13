@@ -30,9 +30,9 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { getEnabledFeatures } from '@/lib/features-config';
 import { ChevronUpIcon, FilterIcon } from 'lucide-react';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import type { ProviderId } from '@/lib/models/models.generated';
-import type { ModelDefinition } from '@/lib/ai/all-models';
+import type { ModelDefinition } from '@/lib/models/model-definition';
 import { getProviderIcon } from './get-provider-icon';
 
 type FeatureFilter = Record<string, boolean>;
