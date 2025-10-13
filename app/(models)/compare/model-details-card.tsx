@@ -10,7 +10,7 @@ import { Check, X, Minus, ChevronDown, SquareDashed } from 'lucide-react';
 import type { ModelDefinition } from '@/lib/models/model-definition';
 import type { ProviderId } from '@/lib/models/models.generated';
 import { getProviderIcon } from '@/components/get-provider-icon';
-import { MODEL_CAPABILITIES } from '@/lib/models/model-capabilities';
+import { MODEL_CAPABILITIES } from '@/lib/model-explorer/model-capabilities';
 import {
   Tooltip,
   TooltipContent,
@@ -25,7 +25,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { formatNumberCompact } from '../../../lib/utils/format-number-compact';
-import { MODEL_CATEGORIES } from '@/lib/models/model-categories';
+import { MODEL_CATEGORIES } from '@/lib/model-explorer/model-categories';
 
 interface ModelComparisonCardProps {
   model: ModelDefinition | null;

@@ -12,7 +12,7 @@ import {
 import type { ModelDefinition } from '@/lib/models/model-definition';
 import type { ProviderId } from '@/lib/models/models.generated';
 import { getProviderIcon } from '@/components/get-provider-icon';
-import { MODEL_CAPABILITIES } from '@/lib/models/model-capabilities';
+import { MODEL_CAPABILITIES } from '@/lib/model-explorer/model-capabilities';
 import {
   Tooltip,
   TooltipContent,

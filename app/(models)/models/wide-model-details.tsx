@@ -8,8 +8,8 @@ import {
   CompareModelButton,
 } from '@/components/model-action-buttons';
 import { getProviderIcon } from '@/components/get-provider-icon';
-import { MODEL_CATEGORIES } from '@/lib/models/model-categories';
-import { MODEL_CAPABILITIES } from '@/lib/models/model-capabilities';
+import { MODEL_CATEGORIES } from '@/lib/model-explorer/model-categories';
+import { MODEL_CAPABILITIES } from '@/lib/model-explorer/model-capabilities';
 import { formatNumberCompact } from '@/lib/utils/format-number-compact';
 import { Card, CardContent } from '@/components/ui/card';
 import { ButtonCopy } from '@/components/common/button-copy';
