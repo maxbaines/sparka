@@ -71,8 +71,6 @@ export function SharedChatPage({ id }: { id: string }) {
           isReadonly={true}
         />
       </WithSkeleton>
-      {/* Shared chats don't need data handler */}
-      {/* <DataStreamHandler id={id} /> */}
     </>
   );
 }

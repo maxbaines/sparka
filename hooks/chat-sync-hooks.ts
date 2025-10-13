@@ -106,7 +106,7 @@ export function useSaveChat() {
   };
 }
 
-export function useMessagesQuery() {
+export function useGetChatMessagesQueryOptions() {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
@@ -142,8 +142,13 @@ export function useMessagesQuery() {
     }
   }, [trpc.chat.getChatMessages, isAuthenticated, chatId, type]);
 
-  // Query for messages by chat ID (only when chatId is available)
-  return useQuery(getMessagesByChatIdQueryOptions);
+  return getMessagesByChatIdQueryOptions;
+}
+
+export function useMessagesQuery() {
+  const options = useGetChatMessagesQueryOptions();
+
+  return options;
 }
 
 interface ChatMutationOptions {
@@ -745,7 +750,7 @@ export function useGetAllChats(limit?: number) {
   return useQuery(getAllChatsQueryOptions);
 }
 
-export function useGetChatById(chatId: string) {
+export function useGetChatByIdQueryOptions(chatId: string) {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
@@ -780,7 +785,12 @@ export function useGetChatById(chatId: string) {
     }
   }, [trpc.chat.getChatById, isAuthenticated, chatId]);
 
-  return useQuery(getChatByIdQueryOptions);
+  return getChatByIdQueryOptions;
+}
+
+export function useGetChatById(chatId: string) {
+  const options = useGetChatByIdQueryOptions(chatId);
+  return useQuery(options);
 }
 
 export function useGetCredits() {
