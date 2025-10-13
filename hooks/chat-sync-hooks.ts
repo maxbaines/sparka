@@ -124,7 +124,7 @@ export function useGetChatMessagesQueryOptions() {
       };
     } else {
       return {
-        queryKey: options.queryKey, // Include chatId in query key for proper caching
+        ...options,
         queryFn: async () => {
           // Load from localStorage for anonymous users
           try {
