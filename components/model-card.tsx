@@ -66,9 +66,6 @@ export function ModelCard({
   const description = model.description;
   const maxTokens = model.max_tokens;
   const contextLength = model.context_window;
-  const hasFeatures = Boolean(model);
-
-  const featureIcons = getFeatureIconsForCard(model);
 
   // Show placeholder if disabled with reason
   if (isDisabled && disabledReason) {
@@ -167,30 +164,28 @@ export function ModelCard({
           )}
         </div>
 
-        {hasFeatures && (
-          <div className="flex flex-wrap gap-1 mt-3 w-full">
-            {model.reasoning && (
-              <Badge variant="outline" className="text-xs">
-                Reasoning
-              </Badge>
-            )}
-            {model.toolCall && (
-              <Badge variant="outline" className="text-xs">
-                Function Calling
-              </Badge>
-            )}
-            {model.input?.image && (
-              <Badge variant="outline" className="text-xs">
-                Vision
-              </Badge>
-            )}
-            {model.input?.pdf && (
-              <Badge variant="outline" className="text-xs">
-                PDF
-              </Badge>
-            )}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-1 mt-3 w-full">
+          {model.reasoning && (
+            <Badge variant="outline" className="text-xs">
+              Reasoning
+            </Badge>
+          )}
+          {model.toolCall && (
+            <Badge variant="outline" className="text-xs">
+              Function Calling
+            </Badge>
+          )}
+          {model.input?.image && (
+            <Badge variant="outline" className="text-xs">
+              Vision
+            </Badge>
+          )}
+          {model.input?.pdf && (
+            <Badge variant="outline" className="text-xs">
+              PDF
+            </Badge>
+          )}
+        </div>
       </CardContent>
 
       {model.pricing && (
