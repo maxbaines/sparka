@@ -50,7 +50,7 @@ import { generateUUID } from '@/lib/utils';
 import { useSaveMessageMutation } from '@/hooks/chat-sync-hooks';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { processFilesForUpload } from '@/lib/files/upload-prep';
-import type { ModelId } from '@/lib/models';
+import type { AppModelId } from '@/lib/ai/app-models';
 import { ContextBar } from '@/components/context-bar';
 
 const IMAGE_UPLOAD_LIMITS = {
@@ -667,8 +667,8 @@ function PureChatInputBottomControls({
   uploadQueue,
   submission,
 }: {
-  selectedModelId: ModelId;
-  onModelChange: (modelId: ModelId) => void;
+  selectedModelId: AppModelId;
+  onModelChange: (modelId: AppModelId) => void;
   selectedTool: UiToolName | null;
   setSelectedTool: Dispatch<SetStateAction<UiToolName | null>>;
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;

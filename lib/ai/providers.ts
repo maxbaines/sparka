@@ -6,6 +6,7 @@ import type { GoogleGenerativeAIProviderOptions } from '@ai-sdk/google';
 import { getImageModelDefinition, getModelDefinition } from './app-models';
 import { gateway } from '@ai-sdk/gateway';
 import type { ImageModelId, ModelId } from '../models';
+import type { AppModelId } from './app-models';
 import { getModelAndProvider } from '../models';
 
 const telemetryConfig = {
@@ -49,7 +50,7 @@ const MODEL_ALIASES = {
 };
 
 export const getModelProviderOptions = (
-  providerModelId: ModelId,
+  providerModelId: AppModelId,
 ):
   | {
       openai: OpenAIResponsesProviderOptions;

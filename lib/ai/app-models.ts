@@ -97,7 +97,7 @@ function getModelsByIdDict(): Map<string, AppModelDefinition> {
   return _modelsByIdCache;
 }
 
-export function getModelDefinition(modelId: ModelId): AppModelDefinition {
+export function getModelDefinition(modelId: AppModelId): AppModelDefinition {
   const modelsByIdDict = getModelsByIdDict();
 
   const model = modelsByIdDict.get(modelId);
@@ -129,7 +129,7 @@ export function getImageModelDefinition(
   return model;
 }
 
-export const DEFAULT_CHAT_MODEL: ModelId = 'cohere/command-a';
+export const DEFAULT_CHAT_MODEL: ModelId = 'openai/gpt-5-nano';
 export const DEFAULT_PDF_MODEL: ModelId = 'openai/gpt-5-mini';
 export const DEFAULT_TITLE_MODEL: ModelId = 'openai/gpt-5-nano';
 export const DEFAULT_ARTIFACT_MODEL: ModelId = 'openai/gpt-5-nano';

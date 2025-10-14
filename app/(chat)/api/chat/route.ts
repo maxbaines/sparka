@@ -35,6 +35,7 @@ import {
   DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
   getModelDefinition,
   type AppModelDefinition,
+  type AppModelId,
 } from '@/lib/ai/app-models';
 import {
   createResumableStreamContext,
@@ -51,7 +52,6 @@ import type { AnonymousSession } from '@/lib/types/anonymous';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { markdownJoinerTransform } from '@/lib/ai/markdown-joiner-transform';
 import { checkAnonymousRateLimit, getClientIP } from '@/lib/utils/rate-limit';
-import type { ModelId } from '@/lib/models';
 import { calculateMessagesTokens } from '@/lib/ai/token-utils';
 import { ChatSDKError } from '@/lib/ai/errors';
 import { addExplicitToolRequestToMessages } from './addExplicitToolRequestToMessages';
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Extract selectedModel from user message metadata
-    const selectedModelId = userMessage.metadata?.selectedModel as ModelId;
+    const selectedModelId = userMessage.metadata?.selectedModel as AppModelId;
 
     if (!selectedModelId) {
       log.warn('No selectedModel in user message metadata');

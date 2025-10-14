@@ -24,6 +24,7 @@ import type { LanguageModelUsage } from 'ai';
 import { motion } from 'motion/react';
 import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import { getModelDefinition, type AppModelId } from '@/lib/ai/app-models';
 
 export function ContextBar({
   attachments,
@@ -38,7 +39,7 @@ export function ContextBar({
   uploadQueue: string[];
   onRemove: (attachment: Attachment) => void;
   onImageClick: (url: string, name?: string) => void;
-  selectedModelId: ModelId;
+  selectedModelId: AppModelId;
   parentMessageId: string | null;
   className?: string;
 }) {
@@ -49,6 +50,8 @@ export function ContextBar({
   if (!hasBarContent) {
     return null;
   }
+
+  const modelDefinition = getModelDefinition(selectedModelId);
 
   return (
     <motion.div
@@ -73,7 +76,10 @@ export function ContextBar({
         )}
         {usage && (
           <div className="ml-auto">
-            <ContextUsage usage={usage} selectedModelId={selectedModelId} />
+            <ContextUsage
+              usage={usage}
+              selectedModelId={modelDefinition.apiModelId}
+            />
           </div>
         )}
       </PromptInputContextBar>

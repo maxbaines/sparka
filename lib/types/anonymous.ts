@@ -1,4 +1,4 @@
-import type { ModelId } from '../models';
+import type { AppModelId } from '../ai/app-models';
 import type { ToolName } from '../ai/types';
 import type { DBMessage } from '../db/schema';
 import type { UIChat } from './uiChat';
@@ -15,7 +15,7 @@ export interface AnonymousChat extends UIChat {}
 // Anonymous message structure matching the DB message structure
 export interface AnonymousMessage extends DBMessage {}
 
-const AVAILABLE_MODELS: ModelId[] = [
+const AVAILABLE_MODELS: AppModelId[] = [
   'google/gemini-2.0-flash',
   'openai/gpt-5-mini',
   'openai/gpt-5-nano',

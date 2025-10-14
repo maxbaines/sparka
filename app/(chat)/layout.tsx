@@ -3,12 +3,11 @@ import { auth } from '../(auth)/auth';
 import { cookies } from 'next/headers';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { DefaultModelProvider } from '@/providers/default-model-provider';
-import { DEFAULT_CHAT_MODEL } from '@/lib/ai/app-models';
+import { DEFAULT_CHAT_MODEL, type AppModelId } from '@/lib/ai/app-models';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { AppSidebar } from '@/components/app-sidebar';
 import { KeyboardShortcuts } from '@/components/keyboard-shortcuts';
 import { SessionProvider } from 'next-auth/react';
-import type { ModelId } from '@/lib/models';
 import { TRPCReactProvider } from '@/trpc/react';
 
 export default async function ChatLayout({
@@ -19,7 +18,7 @@ export default async function ChatLayout({
   const [session, cookieStore] = await Promise.all([auth(), cookies()]);
   const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
 
-  const cookieModel = cookieStore.get('chat-model')?.value as ModelId;
+  const cookieModel = cookieStore.get('chat-model')?.value as AppModelId;
   const isAnonymous = !session?.user;
 
   // Check if the model from cookie is available for anonymous users

@@ -113,22 +113,27 @@ export function useGetChatMessagesQueryOptions() {
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
   const { id: chatId, type } = useChatId();
-
-  const getMessagesByChatIdQueryOptions = useDualQueryOptions({
-    remote: trpc.chat.getChatMessages.queryOptions({ chatId: chatId || '' }),
-    local: async () => {
-      try {
-        const restored = await loadLocalAnonymousMessagesByChatId(chatId || '');
-        return restored.map(dbMessageToChatMessage);
-      } catch (error) {
-        console.error('Error loading anonymous messages:', error);
-        return [];
-      }
-    },
-    shouldUseLocalAction: () => !isAuthenticated,
-    enabled: !!chatId && (isAuthenticated ? type === 'chat' : true),
-    deps: [trpc.chat.getChatMessages, isAuthenticated, chatId, type],
+  const baseQueryOptions = trpc.chat.getChatMessages.queryOptions({
+    chatId: chatId || '',
   });
+
+  const getMessagesByChatIdQueryOptions = useMemo(
+    () => ({
+      ...baseQueryOptions,
+      ...(isAuthenticated
+        ? {}
+        : {
+            queryFn: async () => {
+              const messages = await loadLocalAnonymousMessagesByChatId(
+                chatId || '',
+              );
+              return messages.map(dbMessageToChatMessage);
+            },
+          }),
+      enabled: !!chatId && (isAuthenticated ? type === 'chat' : true),
+    }),
+    [baseQueryOptions, isAuthenticated, chatId, type],
+  );
 
   return getMessagesByChatIdQueryOptions;
 }
@@ -147,40 +152,44 @@ export function useDeleteChat() {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
+  const qc = useQueryClient();
 
   const getAllChatsQueryKey = useMemo(
     () => trpc.chat.getAllChats.queryKey(),
     [trpc.chat.getAllChats],
   );
 
+  const deleteChatMutationOptions = useMemo(
+    () => trpc.chat.deleteChat.mutationOptions(),
+    [trpc.chat.deleteChat],
+  );
+
   // Use dual mutation to unify local/API behavior and keep optimistic updates centralized
   const deleteMutation = useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: {
-      mutationFn: async ({ chatId }) => {
-        const m = trpc.chat.deleteChat.mutationOptions();
-        if (!m.mutationFn) throw new Error('Remote mutationFn missing');
-        await m.mutationFn({ chatId });
-      },
-    },
-    local: async ({ chatId }) => {
+    ...deleteChatMutationOptions,
+    shouldUseLocal: () => !isAuthenticated,
+    localMutationFn: async ({ chatId }: { chatId: string }) => {
       await deleteAnonymousChat(chatId);
+      return { success: true } as const;
     },
-    onMutateAction: async ({ chatId }, qc) => {
+    onMutate: async ({ chatId }: { chatId: string }) => {
       await qc.cancelQueries({ queryKey: getAllChatsQueryKey });
       const previousChats = qc.getQueryData<UIChat[]>(getAllChatsQueryKey);
       qc.setQueryData<UIChat[]>(
         getAllChatsQueryKey,
         (old) => old?.filter((c) => c.id !== chatId) ?? old,
       );
-      return { previousChats };
+      return { previousChats } as { previousChats?: UIChat[] };
     },
-    onErrorAction: (_err, _vars, ctx, qc) => {
-      if (ctx?.previousChats) {
-        qc.setQueryData(getAllChatsQueryKey, ctx.previousChats);
+    onError: (_err, _vars, ctx) => {
+      if ((ctx as { previousChats?: UIChat[] } | undefined)?.previousChats) {
+        qc.setQueryData(
+          getAllChatsQueryKey,
+          (ctx as { previousChats?: UIChat[] }).previousChats,
+        );
       }
     },
-    onSettledAction: async (_data, _err, _vars, _ctx, qc) => {
+    onSettled: async () => {
       await qc.invalidateQueries({ queryKey: getAllChatsQueryKey });
     },
   });
@@ -214,29 +223,39 @@ export function useRenameChat() {
     [trpc.chat.getAllChats],
   );
 
+  const renameChatMutationOptions = useMemo(
+    () => trpc.chat.renameChat.mutationOptions(),
+    [trpc.chat.renameChat],
+  );
+
   const renameMutation = useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: { mutationFn: trpc.chat.renameChat.mutationOptions().mutationFn },
-    local: async ({ chatId, title }) => {
+    ...renameChatMutationOptions,
+    shouldUseLocal: () => !isAuthenticated,
+    localMutationFn: async ({
+      chatId,
+      title,
+    }: { chatId: string; title: string }) => {
       await renameAnonymousChat(chatId, title);
     },
-    onMutateAction: async ({ chatId, title }, qc) => {
-      await qc.cancelQueries({ queryKey: getAllChatsQueryKey });
-      const previousChats = qc.getQueryData<UIChat[]>(getAllChatsQueryKey);
-      qc.setQueryData<UIChat[]>(getAllChatsQueryKey, (old) => {
+    onMutate: async ({ chatId, title }: { chatId: string; title: string }) => {
+      await queryClient.cancelQueries({ queryKey: getAllChatsQueryKey });
+      const previousChats =
+        queryClient.getQueryData<UIChat[]>(getAllChatsQueryKey);
+      queryClient.setQueryData<UIChat[]>(getAllChatsQueryKey, (old) => {
         if (!old) return old;
         return old.map((c) => (c.id === chatId ? { ...c, title } : c));
       });
-      return { previousChats };
+      return { previousChats } as { previousChats?: UIChat[] };
     },
-    onErrorAction: (_err, _vars, context, qc) => {
-      if (context?.previousChats) {
-        qc.setQueryData(getAllChatsQueryKey, context.previousChats);
+    onError: (_err, _vars, context) => {
+      const ctx = context as { previousChats?: UIChat[] } | undefined;
+      if (ctx?.previousChats) {
+        queryClient.setQueryData(getAllChatsQueryKey, ctx.previousChats);
       }
       toast.error('Failed to rename chat');
     },
-    onSettledAction: async (_data, _error, _vars, _ctx, qc) => {
-      await qc.invalidateQueries({ queryKey: getAllChatsQueryKey });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: getAllChatsQueryKey });
     },
   });
 
@@ -247,39 +266,50 @@ export function usePinChat() {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
   const getAllChatsQueryKey = useMemo(
     () => trpc.chat.getAllChats.queryKey(),
     [trpc.chat.getAllChats],
   );
 
+  const setIsPinnedMutationOptions = useMemo(
+    () => trpc.chat.setIsPinned.mutationOptions(),
+    [trpc.chat.setIsPinned],
+  );
+
   const pinMutation = useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: { mutationFn: trpc.chat.setIsPinned.mutationOptions().mutationFn },
-    local: async ({
+    ...setIsPinnedMutationOptions,
+    shouldUseLocal: () => !isAuthenticated,
+    localMutationFn: async ({
       chatId,
       isPinned,
     }: { chatId: string; isPinned: boolean }) => {
       await pinAnonymousChat(chatId, isPinned);
       return { success: true } as const;
     },
-    onMutateAction: async ({ chatId, isPinned }, qc) => {
-      await qc.cancelQueries({ queryKey: getAllChatsQueryKey });
-      const previousChats = qc.getQueryData<UIChat[]>(getAllChatsQueryKey);
-      qc.setQueryData<UIChat[]>(getAllChatsQueryKey, (old) => {
+    onMutate: async ({
+      chatId,
+      isPinned,
+    }: { chatId: string; isPinned: boolean }) => {
+      await queryClient.cancelQueries({ queryKey: getAllChatsQueryKey });
+      const previousChats =
+        queryClient.getQueryData<UIChat[]>(getAllChatsQueryKey);
+      queryClient.setQueryData<UIChat[]>(getAllChatsQueryKey, (old) => {
         if (!old) return old;
         return old.map((c) => (c.id === chatId ? { ...c, isPinned } : c));
       });
-      return { previousChats } as const;
+      return { previousChats } as { previousChats?: UIChat[] };
     },
-    onErrorAction: (_err, _vars, context, qc) => {
-      if (context?.previousChats) {
-        qc.setQueryData(getAllChatsQueryKey, context.previousChats);
+    onError: (_err, _vars, context) => {
+      const ctx = context as { previousChats?: UIChat[] } | undefined;
+      if (ctx?.previousChats) {
+        queryClient.setQueryData(getAllChatsQueryKey, ctx.previousChats);
       }
       toast.error('Failed to pin chat');
     },
-    onSettledAction: async (_data, _err, _vars, _ctx, qc) => {
-      await qc.invalidateQueries({ queryKey: getAllChatsQueryKey });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: getAllChatsQueryKey });
     },
   });
 
@@ -308,43 +338,49 @@ export function useDeleteTrailingMessages() {
 
   // Delete trailing messages mutation (dual: API vs anonymous local)
   const deleteTrailingMessagesMutation = useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: {
-      mutationFn: async ({
-        messageId,
-      }: {
-        messageId: string;
-        chatId: string; // accepted for local optimistic updates, ignored remotely
-      }) => {
-        return await deleteTrailingMutationOptions?.mutationFn?.({ messageId });
-      },
-    },
-    local: async ({ messageId }: { messageId: string; chatId: string }) => {
+    ...deleteTrailingMutationOptions,
+    shouldUseLocal: () => !isAuthenticated,
+    localMutationFn: async ({
+      messageId,
+    }: { messageId: string; chatId: string }) => {
       await deleteAnonymousTrailingMessages(messageId);
-      return { success: true } as const;
     },
-    onMutateAction: async (
-      { messageId, chatId }: { messageId: string; chatId: string },
-      qc,
-    ) => {
+    onMutate: async ({
+      messageId,
+      chatId,
+    }: { messageId: string; chatId: string }) => {
       const messagesQueryKey = trpc.chat.getChatMessages.queryKey({ chatId });
-      await qc.cancelQueries({ queryKey: messagesQueryKey });
-      const previousMessages = qc.getQueryData<ChatMessage[]>(messagesQueryKey);
-      qc.setQueryData<ChatMessage[] | undefined>(messagesQueryKey, (old) => {
-        if (!old) return old;
-        const messageIndex = old.findIndex((msg) => msg.id === messageId);
-        if (messageIndex === -1) return old;
-        return old.slice(0, messageIndex);
-      });
-      return { previousMessages, messagesQueryKey } as const;
+      await queryClient.cancelQueries({ queryKey: messagesQueryKey });
+      const previousMessages =
+        queryClient.getQueryData<ChatMessage[]>(messagesQueryKey);
+      queryClient.setQueryData<ChatMessage[] | undefined>(
+        messagesQueryKey,
+        (old) => {
+          if (!old) return old;
+          const messageIndex = old.findIndex((msg) => msg.id === messageId);
+          if (messageIndex === -1) return old;
+          return old.slice(0, messageIndex);
+        },
+      );
+      return { previousMessages, messagesQueryKey } as {
+        previousMessages?: ChatMessage[];
+        messagesQueryKey: unknown;
+      };
     },
-    onErrorAction: (_err, _vars, context, qc) => {
-      if (context?.previousMessages) {
-        qc.setQueryData(context.messagesQueryKey, context.previousMessages);
+    onError: (_err, _vars, context) => {
+      const ctx = context as {
+        previousMessages?: ChatMessage[];
+        messagesQueryKey: unknown;
+      } | null;
+      if (ctx?.previousMessages) {
+        queryClient.setQueryData(
+          ctx.messagesQueryKey as any,
+          ctx.previousMessages,
+        );
       }
       toast.error('Failed to delete messages');
     },
-    onSuccessAction: (_data, { chatId }) => {
+    onSuccess: (_data, { chatId }: { chatId: string }) => {
       invalidateMessagesByChatId(chatId);
       toast.success('Messages deleted');
     },
@@ -370,9 +406,9 @@ export function useCloneChat() {
   );
 
   return useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: { mutationFn: copyPublicChatMutationOptions?.mutationFn },
-    local: async ({ chatId }: { chatId: string }) => {
+    ...copyPublicChatMutationOptions,
+    shouldUseLocal: () => !isAuthenticated,
+    localMutationFn: async ({ chatId }: { chatId: string }) => {
       const originalChat = queryClient.getQueryData(
         trpc.chat.getPublicChat.queryKey({ chatId }),
       );
@@ -404,10 +440,10 @@ export function useCloneChat() {
       );
       return { chatId: newId } as const;
     },
-    onSettledAction: async (_data, _err, _vars, _ctx, qc) => {
-      await qc.refetchQueries({ queryKey: getAllChatsQueryKey });
+    onSettled: async () => {
+      await queryClient.refetchQueries({ queryKey: getAllChatsQueryKey });
     },
-    onErrorAction: (error) => {
+    onError: (error) => {
       console.error('Failed to copy chat:', error);
     },
   });
@@ -421,50 +457,53 @@ export function useSaveMessageMutation() {
   const { saveChat: saveChatWithTitle } = useSaveChat();
 
   return useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: {
-      mutationFn: async ({
-        message,
-        chatId,
-      }: { message: ChatMessage; chatId: string }) => {
-        // API persists via server side; local cache updates handled in onMutateAction
-        return { success: true } as const;
-      },
+    shouldUseLocal: () => !isAuthenticated,
+    mutationFn: async ({
+      message,
+      chatId,
+    }: { message: ChatMessage; chatId: string }) => {
+      // Posting chats persists via server side; local cache updates handled in onMutateAction
+      return { success: true } as const;
     },
-    local: async ({
+    localMutationFn: async ({
       message,
       chatId,
     }: { message: ChatMessage; chatId: string }) => {
       await saveAnonymousMessage(chatMessageToDbMessage(message, chatId));
       return { success: true } as const;
     },
-    onMutateAction: async ({ message, chatId }, qc) => {
+    onMutate: async ({ message, chatId }) => {
       const messagesQueryKey = trpc.chat.getChatMessages.queryKey({ chatId });
-      await qc.cancelQueries({ queryKey: messagesQueryKey });
-      const previousMessages = qc.getQueryData<ChatMessage[]>(messagesQueryKey);
-      qc.setQueryData<ChatMessage[]>(messagesQueryKey, (old) => {
+      await queryClient.cancelQueries({ queryKey: messagesQueryKey });
+      const previousMessages =
+        queryClient.getQueryData<ChatMessage[]>(messagesQueryKey);
+      queryClient.setQueryData<ChatMessage[]>(messagesQueryKey, (old) => {
         if (!old) return [message];
         return [...old, message];
       });
       return { previousMessages, messagesQueryKey } as const;
     },
-    onErrorAction: (err, _vars, context, qc) => {
+    onError: (err, _vars, context) => {
       if (context?.previousMessages) {
-        qc.setQueryData(context.messagesQueryKey, context.previousMessages);
+        queryClient.setQueryData(
+          context.messagesQueryKey,
+          context.previousMessages,
+        );
       }
       console.error('Failed to save message:', err);
       toast.error('Failed to save message');
     },
-    onSuccessAction: (_data, { message, chatId }, _ctx, qc) => {
+    onSuccess: (_data, { message, chatId }, _ctx) => {
       if (isAuthenticated) {
         if (message.role === 'assistant') {
-          qc.invalidateQueries({
+          queryClient.invalidateQueries({
             queryKey: trpc.credits.getAvailableCredits.queryKey(),
           });
         }
       } else {
         const messagesQueryKey = trpc.chat.getChatMessages.queryKey({ chatId });
-        const messages = qc.getQueryData<ChatMessage[]>(messagesQueryKey);
+        const messages =
+          queryClient.getQueryData<ChatMessage[]>(messagesQueryKey);
         if ((messages?.length ?? 0) === 1) {
           saveChatWithTitle(
             chatId,
@@ -474,7 +513,9 @@ export function useSaveMessageMutation() {
         }
       }
       if (message.role === 'assistant') {
-        qc.invalidateQueries({ queryKey: trpc.chat.getAllChats.queryKey() });
+        queryClient.invalidateQueries({
+          queryKey: trpc.chat.getAllChats.queryKey(),
+        });
       }
     },
   });
@@ -491,12 +532,15 @@ export function useSetVisibility() {
     [trpc.chat.getAllChats],
   );
 
+  const setVisibilityMutationOptions = useMemo(
+    () => trpc.chat.setVisibility.mutationOptions(),
+    [trpc.chat.setVisibility],
+  );
+
   return useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: {
-      mutationFn: trpc.chat.setVisibility.mutationOptions().mutationFn,
-    },
-    local: async ({
+    ...setVisibilityMutationOptions,
+    shouldUseLocal: () => !isAuthenticated,
+    localMutationFn: async ({
       chatId,
       visibility,
     }: {
@@ -508,13 +552,16 @@ export function useSetVisibility() {
       await saveAnonymousChatToStorage({ ...chat, visibility });
       return { success: true } as const;
     },
-    onErrorAction: () => {
+    onError: () => {
       toast.error('Failed to update chat visibility');
     },
-    onSettledAction: async (_data, _err, _vars, _ctx, qc) => {
-      await qc.invalidateQueries({ queryKey: getAllChatsQueryKey });
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: getAllChatsQueryKey });
     },
-    onSuccessAction: (_data, variables) => {
+    onSuccess: (
+      _data,
+      variables: { chatId: string; visibility: 'private' | 'public' },
+    ) => {
       const message =
         variables.visibility === 'public'
           ? 'Chat is now public - anyone with the link can access it'
@@ -538,12 +585,15 @@ export function useSaveDocument(
   const isAuthenticated = !!session?.user;
   const anonymousSession = getAnonymousSession();
 
+  const saveDocumentMutationOptions = useMemo(
+    () => trpc.document.saveDocument.mutationOptions(),
+    [trpc.document.saveDocument],
+  );
+
   return useDualMutation({
-    shouldUseLocalAction: () => !isAuthenticated,
-    remote: {
-      mutationFn: trpc.document.saveDocument.mutationOptions().mutationFn,
-    },
-    local: async (newDocument: {
+    ...saveDocumentMutationOptions,
+    shouldUseLocal: () => !isAuthenticated,
+    localMutationFn: async (newDocument: {
       id: string;
       title: string;
       content: string;
@@ -561,12 +611,18 @@ export function useSaveDocument(
       await saveAnonymousDocument(documentToSave);
       return { success: true } as const;
     },
-    onMutateAction: async (newDocument, qc) => {
+    onMutate: async (newDocument: {
+      id: string;
+      title: string;
+      content: string;
+      kind: Document['kind'];
+    }) => {
       const queryKey = trpc.document.getDocuments.queryKey({
         id: newDocument.id,
       });
-      await qc.cancelQueries({ queryKey });
-      const previousDocuments = qc.getQueryData<Document[]>(queryKey) ?? [];
+      await queryClient.cancelQueries({ queryKey });
+      const previousDocuments =
+        queryClient.getQueryData<Document[]>(queryKey) ?? [];
       const optimisticData: Document[] = [
         ...previousDocuments,
         {
@@ -579,20 +635,26 @@ export function useSaveDocument(
           messageId: messageId,
         } as Document,
       ];
-      qc.setQueryData(queryKey, optimisticData);
-      return { previousDocuments, newDocument } as const;
+      queryClient.setQueryData(queryKey, optimisticData);
+      return { previousDocuments, newDocument } as {
+        previousDocuments: Document[];
+        newDocument: { id: string };
+      };
     },
-    onErrorAction: (_err, newDocument, context, qc) => {
-      if (context?.previousDocuments) {
+    onError: (_err, newDocument, context) => {
+      const ctx = context as { previousDocuments?: Document[] } | undefined;
+      if (ctx?.previousDocuments) {
         const queryKey = trpc.document.getDocuments.queryKey({
-          id: newDocument.id,
+          id: (newDocument as { id: string }).id,
         });
-        qc.setQueryData(queryKey, context.previousDocuments);
+        queryClient.setQueryData(queryKey, ctx.previousDocuments);
       }
     },
-    onSettledAction: (result, error, params, _ctx, qc) => {
-      qc.invalidateQueries({
-        queryKey: trpc.document.getDocuments.queryKey({ id: params.id }),
+    onSettled: (result, error, params) => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.document.getDocuments.queryKey({
+          id: (params as any).id,
+        }),
       });
       options?.onSettled?.(result, error, params);
     },
@@ -606,27 +668,18 @@ export function useDocuments(id: string, disable: boolean) {
   const isAuthenticated = !!session?.user;
 
   const documentsQueryOptions = useDualQueryOptions({
-    remote:
-      type === 'shared'
-        ? trpc.document.getPublicDocuments.queryOptions({ id })
-        : trpc.document.getDocuments.queryOptions({ id }),
-    local:
+    ...(type === 'shared'
+      ? trpc.document.getPublicDocuments.queryOptions({ id })
+      : trpc.document.getDocuments.queryOptions({ id })),
+    localQueryFn:
       type !== 'shared'
         ? async () => await loadAnonymousDocumentsByDocumentId(id || '')
         : undefined,
-    shouldUseLocalAction: () => type !== 'shared' && !isAuthenticated,
+    shouldUseLocal: () => type !== 'shared' && !isAuthenticated,
     enabled: !disable && !!id,
-    deps: [
-      trpc.document.getDocuments,
-      trpc.document.getPublicDocuments,
-      id,
-      disable,
-      type,
-      isAuthenticated,
-    ],
   });
 
-  return useQuery(documentsQueryOptions as any);
+  return useQuery(documentsQueryOptions);
 }
 
 export function useGetAllChats(limit?: number) {
@@ -634,8 +687,8 @@ export function useGetAllChats(limit?: number) {
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
   const getAllChatsQueryOptions = useDualQueryOptions({
-    remote: trpc.chat.getAllChats.queryOptions(),
-    local: async () => {
+    ...trpc.chat.getAllChats.queryOptions(),
+    localQueryFn: async () => {
       const chats = await loadAnonymousChatsFromStorage();
       return chats.map(
         (chat) =>
@@ -650,41 +703,35 @@ export function useGetAllChats(limit?: number) {
           }) satisfies UIChat,
       );
     },
-    shouldUseLocalAction: () => !isAuthenticated,
-    // Narrowing hint for generic select typing in useDualQueryOptions
-    select: (limit
-      ? (data: unknown) => (data as UIChat[]).slice(0, limit)
-      : undefined) as ((input: unknown) => unknown) | undefined,
-    deps: [trpc.chat.getAllChats, isAuthenticated, limit],
+    shouldUseLocal: () => !isAuthenticated,
+    select: limit ? (data: UIChat[]) => data.slice(0, limit) : undefined,
   });
 
-  return useQuery(getAllChatsQueryOptions as any);
+  return useQuery(getAllChatsQueryOptions);
 }
 
 export function useGetChatByIdQueryOptions(chatId: string) {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
+  const baseQueryOptions = trpc.chat.getChatById.queryOptions({ chatId });
 
-  const getChatByIdQueryOptions = useDualQueryOptions({
-    remote: trpc.chat.getChatById.queryOptions({ chatId }),
-    local: async () => {
-      const chat = await loadAnonymousChatById(chatId);
-      if (!chat) throw new Error('Chat not found');
-      return {
-        id: chat.id,
-        createdAt: chat.createdAt,
-        updatedAt: chat.updatedAt || chat.createdAt,
-        title: chat.title,
-        visibility: chat.visibility,
-        userId: '',
-        isPinned: chat.isPinned || false,
-      } satisfies UIChat;
-    },
-    shouldUseLocalAction: () => !isAuthenticated,
-    enabled: !!chatId,
-    deps: [trpc.chat.getChatById, isAuthenticated, chatId],
-  });
+  const getChatByIdQueryOptions = useMemo(
+    () => ({
+      ...baseQueryOptions,
+      ...(isAuthenticated
+        ? {}
+        : {
+            queryFn: async () => {
+              const chat = await loadAnonymousChatById(chatId);
+              if (!chat) throw new Error('Chat not found');
+              return chat;
+            },
+          }),
+      enabled: !!chatId,
+    }),
+    [baseQueryOptions, isAuthenticated, chatId],
+  );
 
   return getChatByIdQueryOptions;
 }
@@ -700,8 +747,8 @@ export function useGetCredits() {
   const trpc = useTRPC();
 
   const queryOptions = useDualQueryOptions({
-    remote: trpc.credits.getAvailableCredits.queryOptions(),
-    local: async () => {
+    ...trpc.credits.getAvailableCredits.queryOptions(),
+    localQueryFn: async () => {
       const anonymousSession = getAnonymousSession();
       return {
         totalCredits: anonymousSession?.remainingCredits ?? 0,
@@ -709,13 +756,11 @@ export function useGetCredits() {
         reservedCredits: 0,
       };
     },
-    shouldUseLocalAction: () => !isAuthenticated,
-    deps: [isAuthenticated, trpc.credits.getAvailableCredits],
+    shouldUseLocal: () => !isAuthenticated,
   });
 
-  const { data: creditsData, isLoading: isLoadingCredits } = useQuery(
-    queryOptions as any,
-  );
+  const { data: creditsData, isLoading: isLoadingCredits } =
+    useQuery(queryOptions);
 
   return {
     credits: (creditsData as { totalCredits: number } | undefined)

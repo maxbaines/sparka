@@ -30,11 +30,9 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { getEnabledFeatures } from '@/lib/features-config';
 import { ChevronUpIcon, FilterIcon } from 'lucide-react';
-import type { ModelId } from '@/lib/models';
 import type { ProviderId } from '@/lib/models';
-import type { ModelDefinition } from '@/lib/models';
 import { getProviderIcon } from './get-provider-icon';
-import type { AppModelDefinition } from '@/lib/ai/app-models';
+import type { AppModelDefinition, AppModelId } from '@/lib/ai/app-models';
 
 type FeatureFilter = Record<string, boolean>;
 
@@ -44,7 +42,7 @@ const initialFilters = enabledFeatures.reduce<FeatureFilter>((acc, feature) => {
   return acc;
 }, {});
 
-function getFeatureIcons(modelDefinition: ModelDefinition) {
+function getFeatureIcons(modelDefinition: AppModelDefinition) {
   const features = modelDefinition;
 
   const icons: JSX.Element[] = [];
@@ -93,11 +91,11 @@ function PureCommandItem({
   isSelected,
   onSelectModel,
 }: {
-  id: ModelId;
-  definition: ModelDefinition;
+  id: AppModelId;
+  definition: AppModelDefinition;
   disabled?: boolean;
   isSelected: boolean;
-  onSelectModel: (id: ModelId) => void;
+  onSelectModel: (id: AppModelId) => void;
 }) {
   const provider = definition.owned_by as ProviderId;
   const featureIcons = useMemo(() => getFeatureIcons(definition), [definition]);
@@ -186,18 +184,18 @@ function PureModelSelectorPopoverContent({
   ) => void;
   topContent?: React.ReactNode;
   filteredModels: Array<{
-    id: ModelId;
-    definition: ModelDefinition;
+    id: AppModelId;
+    definition: AppModelDefinition;
     disabled?: boolean;
   }>;
-  optimisticModelId?: ModelId;
-  onSelectModel: (id: ModelId) => void;
+  optimisticModelId?: AppModelId;
+  onSelectModel: (id: AppModelId) => void;
   commandItemComponent: (props: {
-    id: ModelId;
-    definition: ModelDefinition;
+    id: AppModelId;
+    definition: AppModelDefinition;
     disabled?: boolean;
     isSelected: boolean;
-    onSelectModel: (id: ModelId) => void;
+    onSelectModel: (id: AppModelId) => void;
   }) => React.ReactNode;
 }) {
   const enabledFeatures = getEnabledFeatures();
@@ -317,7 +315,7 @@ export const ModelSelectorPopoverContent = memo(
 );
 
 export type ModelSelectorBaseItem = {
-  id: ModelId;
+  id: AppModelId;
   definition: AppModelDefinition;
   disabled?: boolean;
 };
@@ -333,8 +331,8 @@ export function PureModelSelectorBase({
   initialChevronDirection = 'up',
 }: {
   models: Array<ModelSelectorBaseItem>;
-  selectedModelId?: ModelId;
-  onModelChange?: (modelId: ModelId) => void;
+  selectedModelId?: AppModelId;
+  onModelChange?: (AppModelId: AppModelId) => void;
   placeholder?: string;
   topContent?: React.ReactNode;
   enableFilters?: boolean;
@@ -403,7 +401,7 @@ export function PureModelSelectorBase({
   const clearFilters = () => setFeatureFilters(initialFilters);
 
   const selectModel = useCallback(
-    (id: ModelId) => {
+    (id: AppModelId) => {
       startTransition(() => {
         setOptimisticModelId(id);
         onModelChange?.(id);
@@ -429,8 +427,7 @@ export function PureModelSelectorBase({
             )}
             <p className="truncate inline-flex items-center gap-1.5">
               {selectedItem?.definition.name || placeholder || 'Select model'}
-              {selectedItem?.definition.features?.reasoning &&
-              reasoningFeatureConfig
+              {selectedItem?.definition.reasoning && reasoningFeatureConfig
                 ? (() => {
                     const IconComponent = reasoningFeatureConfig.icon;
                     return (

@@ -3,8 +3,11 @@
 import { useMemo, memo } from 'react';
 import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/utils';
-import { chatModels, getModelDefinition } from '@/lib/ai/app-models';
-import type { ModelId } from '@/lib/models';
+import {
+  chatModels,
+  getModelDefinition,
+  type AppModelId,
+} from '@/lib/ai/app-models';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { LoginCtaBanner } from '@/components/upgrade-cta/login-cta-banner';
 import {
@@ -17,8 +20,8 @@ export function PureModelSelector({
   className,
   onModelChangeAction,
 }: {
-  selectedModelId: ModelId;
-  onModelChangeAction?: (modelId: ModelId) => void;
+  selectedModelId: AppModelId;
+  onModelChangeAction?: (modelId: AppModelId) => void;
   className?: string;
 }) {
   const { data: session } = useSession();
