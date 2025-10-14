@@ -1,6 +1,9 @@
-import type { ImageModelId, ModelId } from '@/lib/models';
-import type { ModelDefinition } from '@/lib/models';
-import { allModels } from '@/lib/models';
+import {
+  type ImageModelId,
+  type ModelDefinition,
+  type ModelId,
+  allModels as allModelsData,
+} from '@/lib/models';
 import {
   imageModelsData,
   type ImageModelData,
@@ -8,6 +11,12 @@ import {
 
 export type ImageModelDefinition = ImageModelData & {
   features?: never; // deprecated: use ModelExtra in base defs if needed later
+};
+
+export type AppModelId = ModelId | `${ModelId}-reasoning`;
+export type AppModelDefinition = Omit<ModelDefinition, 'id'> & {
+  id: AppModelId;
+  apiModelId: ModelId;
 };
 
 const DISABLED_MODELS: Partial<Record<ModelId, true>> = {
@@ -19,18 +28,46 @@ const DISABLED_MODELS: Partial<Record<ModelId, true>> = {
   'morph/morph-v3-fast': true,
 };
 
-export const allEnabledLanguageModels = allModels
-  .map((model) => ({
-    ...model,
-    disabled: DISABLED_MODELS[model.id],
-  }))
+export const allAppModels = allModelsData
+  .flatMap((model) => {
+    // If the model supports reasoning, return two variants:
+    // - Non-reasoning (original id, reasoning=false)
+    // - Reasoning (id with -reasoning suffix, reasoning=true)
+    if (model.reasoning === true) {
+      const reasoningId: AppModelId = `${model.id}-reasoning`;
+
+      return [
+        {
+          ...model,
+          apiModelId: model.id,
+          disabled: DISABLED_MODELS[model.id],
+        },
+        {
+          ...model,
+          reasoning: false,
+          id: reasoningId,
+          apiModelId: model.id,
+          disabled: DISABLED_MODELS[model.id],
+        },
+      ];
+    }
+
+    // Models without reasoning stay as-is
+    return [
+      {
+        ...model,
+        apiModelId: model.id,
+        disabled: DISABLED_MODELS[model.id],
+      },
+    ];
+  })
   .filter((model) => model.type === 'language' && !model.disabled);
 
 const allImageModels = imageModelsData;
 
 const PROVIDER_ORDER = ['openai', 'google', 'anthropic', 'xai'];
 
-export const chatModels = allEnabledLanguageModels
+export const chatModels = allAppModels
   .filter((model) => model.output.text === true)
   .sort((a, b) => {
     const aProviderIndex = PROVIDER_ORDER.indexOf(a.owned_by);
@@ -49,19 +86,20 @@ export const chatModels = allEnabledLanguageModels
   });
 
 // Memoized dictionary of models by ID for efficient lookups
-const _modelsByIdCache = new Map<string, ModelDefinition>();
+const _modelsByIdCache = new Map<string, AppModelDefinition>();
 
-function getModelsByIdDict(): Map<string, ModelDefinition> {
+function getModelsByIdDict(): Map<string, AppModelDefinition> {
   if (_modelsByIdCache.size === 0) {
-    allEnabledLanguageModels.forEach((model) => {
+    allAppModels.forEach((model) => {
       _modelsByIdCache.set(model.id, model);
     });
   }
   return _modelsByIdCache;
 }
 
-export function getModelDefinition(modelId: ModelId): ModelDefinition {
+export function getModelDefinition(modelId: ModelId): AppModelDefinition {
   const modelsByIdDict = getModelsByIdDict();
+
   const model = modelsByIdDict.get(modelId);
   if (!model) {
     throw new Error(`Model ${modelId} not found`);

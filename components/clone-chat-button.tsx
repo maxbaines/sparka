@@ -30,7 +30,7 @@ export function CloneChatButton({ chatId, className }: CloneChatButtonProps) {
   };
 
   return (
-    <div className="flex justify-center  py-10 px-4 items-center m-auto">
+    <div className="flex justify-center py-10 px-4 items-center m-auto w-fit">
       <Button
         type="button"
         onClick={handleCloneChat}

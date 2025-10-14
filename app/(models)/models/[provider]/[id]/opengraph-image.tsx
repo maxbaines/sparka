@@ -1,6 +1,6 @@
 import { ImageResponse } from '@vercel/og';
 
-import { allEnabledLanguageModels } from '@/lib/ai/app-models';
+import { allModels } from '@/lib/models';
 import { getProviderIconUrl } from '../../../get-provider-icon-url';
 import { ModalitiesRow } from '@/lib/og/ModalitiesRow';
 import {
@@ -35,7 +35,7 @@ export default async function OGImage(
 ) {
   const { provider, id } = await props.params;
   const modelId = `${provider}/${id}`;
-  const model = allEnabledLanguageModels.find((m) => m.id === modelId) || null;
+  const model = allModels.find((m) => m.id === modelId) || null;
 
   if (!model) {
     return new ImageResponse(

@@ -6,7 +6,6 @@ import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'sonner';
-import { TRPCReactProvider } from '@/trpc/react';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sparka.ai'),
@@ -99,7 +98,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Toaster position="top-center" />
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          {children}
         </ThemeProvider>
         <Analytics />
       </body>

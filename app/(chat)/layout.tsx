@@ -9,6 +9,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { KeyboardShortcuts } from '@/components/keyboard-shortcuts';
 import { SessionProvider } from 'next-auth/react';
 import type { ModelId } from '@/lib/models';
+import { TRPCReactProvider } from '@/trpc/react';
 
 export default async function ChatLayout({
   children,
@@ -36,24 +37,26 @@ export default async function ChatLayout({
 
   return (
     <SessionProvider session={session}>
-      <ChatProviders user={session?.user}>
-        <SidebarProvider defaultOpen={!isCollapsed}>
-          <AppSidebar />
-          <SidebarInset
-            style={
-              {
-                '--header-height': 'calc(var(--spacing) * 13)',
-              } as React.CSSProperties
-            }
-          >
-            <DefaultModelProvider defaultModel={defaultModel}>
-              <KeyboardShortcuts />
+      <TRPCReactProvider>
+        <ChatProviders user={session?.user}>
+          <SidebarProvider defaultOpen={!isCollapsed}>
+            <AppSidebar />
+            <SidebarInset
+              style={
+                {
+                  '--header-height': 'calc(var(--spacing) * 13)',
+                } as React.CSSProperties
+              }
+            >
+              <DefaultModelProvider defaultModel={defaultModel}>
+                <KeyboardShortcuts />
 
-              {children}
-            </DefaultModelProvider>
-          </SidebarInset>
-        </SidebarProvider>
-      </ChatProviders>
+                {children}
+              </DefaultModelProvider>
+            </SidebarInset>
+          </SidebarProvider>
+        </ChatProviders>
+      </TRPCReactProvider>
     </SessionProvider>
   );
 }

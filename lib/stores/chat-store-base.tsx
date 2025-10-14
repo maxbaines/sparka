@@ -38,6 +38,7 @@ export interface BaseChatStoreState<UI_MESSAGE extends UIMessage>
 
   // Effects
   registerThrottledMessagesEffect: (effect: () => void) => () => void;
+  triggerThrottledUpdate: () => void;
 }
 
 export function createBaseStateCreator<UI_MESSAGE extends UIMessage>(
@@ -47,24 +48,21 @@ export function createBaseStateCreator<UI_MESSAGE extends UIMessage>(
     const MESSAGES_THROTTLE_MS = 100;
     const throttledEffects = new Set<() => void>();
     let throttledMessagesUpdater: (() => void) | null = null;
-    const getOrCreateThrottledUpdater = () => {
-      if (!throttledMessagesUpdater) {
-        throttledMessagesUpdater = throttle(() => {
-          console.log('executing throttledMessagesUpdater');
-          const state = get();
-          set({ _throttledMessages: [...state.messages] });
-          throttledEffects.forEach((cb) => {
-            try {
-              cb();
-            } catch (err) {
-              // eslint-disable-next-line no-console
-              console.warn('[chat-store-base] throttled effect error', err);
-            }
-          });
-        }, MESSAGES_THROTTLE_MS);
-      }
-      return throttledMessagesUpdater;
-    };
+    if (!throttledMessagesUpdater) {
+      throttledMessagesUpdater = throttle(() => {
+        console.log('executing throttledMessagesUpdater');
+        const state = get();
+        set({ _throttledMessages: [...state.messages] });
+        throttledEffects.forEach((cb) => {
+          try {
+            cb();
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.warn('[chat-store-base] throttled effect error', err);
+          }
+        });
+      }, MESSAGES_THROTTLE_MS);
+    }
     return {
       id: undefined,
       messages: initialMessages,
@@ -79,7 +77,7 @@ export function createBaseStateCreator<UI_MESSAGE extends UIMessage>(
       setMessages: (messages) => {
         markLastAction('chat:setMessages');
         set({ messages: [...messages] });
-        getOrCreateThrottledUpdater()();
+        throttledMessagesUpdater();
       },
       setStatus: (status) => {
         markLastAction('chat:setStatus');
@@ -92,7 +90,7 @@ export function createBaseStateCreator<UI_MESSAGE extends UIMessage>(
       setNewChat: (id, messages) => {
         markLastAction('chat:setNewChat');
         set({ id, messages: [...messages], status: 'ready', error: undefined });
-        getOrCreateThrottledUpdater()();
+        throttledMessagesUpdater();
       },
       setCurrentChatHelpers: (helpers) => {
         markLastAction('chat:setCurrentChatHelpers');
@@ -115,15 +113,18 @@ export function createBaseStateCreator<UI_MESSAGE extends UIMessage>(
         throttledEffects.add(effect);
         return () => throttledEffects.delete(effect);
       },
+      triggerThrottledUpdate: () => {
+        throttledMessagesUpdater();
+      },
       pushMessage: (message) => {
         markLastAction('chat:pushMessage');
         set((state) => ({ messages: [...state.messages, message] }));
-        getOrCreateThrottledUpdater()();
+        throttledMessagesUpdater();
       },
       popMessage: () => {
         markLastAction('chat:popMessage');
         set((state) => ({ messages: state.messages.slice(0, -1) }));
-        getOrCreateThrottledUpdater()();
+        throttledMessagesUpdater();
       },
       snapshot: <T,>(value: T): T => structuredClone(value),
       replaceMessage: (index, message) => {
@@ -135,7 +136,7 @@ export function createBaseStateCreator<UI_MESSAGE extends UIMessage>(
             ...state.messages.slice(index + 1),
           ],
         }));
-        getOrCreateThrottledUpdater()();
+        throttledMessagesUpdater();
       },
     };
   };

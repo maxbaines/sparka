@@ -1,6 +1,7 @@
 // Shared utilities and constants for Open Graph image generation
 
 import { formatNumberCompact } from '@/lib/utils/format-number-compact';
+import type { ModelDefinition } from '@/lib/models';
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 export const OG_SITE_NAME = 'Sparka AI';
@@ -42,12 +43,7 @@ export function prettyUsdPerMTokens(value?: string | null): string | null {
   return `$${perMillion.toFixed(digits)}/M`;
 }
 
-export function buildBulletItems(
-  model:
-    | typeof import('@/lib/ai/app-models').allEnabledLanguageModels[number]
-    | null
-    | undefined,
-) {
+export function buildBulletItems(model: ModelDefinition | null | undefined) {
   if (!model) return [] as Array<{ label: string; value: string }>;
   const contextWindow = model?.context_window || null;
   const maxOut = model?.max_tokens || null;

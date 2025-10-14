@@ -1,7 +1,5 @@
 import { HydrateClient, prefetch, trpc } from '@/trpc/server';
-import { Suspense } from 'react';
-import { WithSkeleton } from '@/components/with-skeleton';
-import { DeferredChatPage } from './deferred-chat-page';
+import { ChatPageRouter } from '../../chat-page-router';
 
 export default async function ChatPageRoute({
   params,
@@ -16,15 +14,7 @@ export default async function ChatPageRoute({
 
   return (
     <HydrateClient>
-      <Suspense
-        fallback={
-          <WithSkeleton isLoading={true} className="w-full h-full">
-            <div className="flex h-dvh w-full" />
-          </WithSkeleton>
-        }
-      >
-        <DeferredChatPage />
-      </Suspense>
+      <ChatPageRouter />
     </HydrateClient>
   );
 }

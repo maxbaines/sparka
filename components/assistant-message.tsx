@@ -45,7 +45,7 @@ const PureAssistantMessage = ({
           isLoading={isLoading}
           isReadOnly={isReadonly}
         />
-        <FollowUpSuggestionsParts messageId={messageId} />
+        {isReadonly ? null : <FollowUpSuggestionsParts messageId={messageId} />}
       </AIMessageContent>
     </AIMessage>
   );

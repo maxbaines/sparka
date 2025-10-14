@@ -4,20 +4,19 @@ import { createContext, useContext, useRef } from 'react';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { createStore } from 'zustand/vanilla';
 import type { FilterState } from '@/app/(models)/models/model-filters';
-import { chatModels as allChatModels } from '@/lib/ai/app-models';
-import type { ModelDefinition } from '@/lib/models';
+import { type ModelDefinition, allModels } from '@/lib/models';
 
 // Derive dynamic ranges from available models
-const contextWindows = allChatModels
+const contextWindows = allModels
   .map((m) => m.context_window)
   .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
-const maxTokensValues = allChatModels
+const maxTokensValues = allModels
   .map((m) => m.max_tokens)
   .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
-const inputPrices = allChatModels
+const inputPrices = allModels
   .map((m) => Number.parseFloat(m.pricing.input) * 1_000_000)
   .filter((n) => Number.isFinite(n));
-const outputPrices = allChatModels
+const outputPrices = allModels
   .map((m) => Number.parseFloat(m.pricing.output) * 1_000_000)
   .filter((n) => Number.isFinite(n));
 
@@ -98,7 +97,7 @@ export const createModelsStore = (
     filters: FilterState,
     sortBy: SortOption,
   ): ModelDefinition[] => {
-    let workingList: ModelDefinition[] = allChatModels;
+    let workingList: ModelDefinition[] = allModels;
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();

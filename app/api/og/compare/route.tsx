@@ -1,6 +1,5 @@
 import { ImageResponse } from '@vercel/og';
-
-import { allEnabledLanguageModels } from '@/lib/ai/app-models';
+import { allModels } from '@/lib/models';
 import { getProviderIconUrl } from '../../../(models)/get-provider-icon-url';
 import { ModalitiesRow } from '@/lib/og/ModalitiesRow';
 import {
@@ -56,9 +55,9 @@ export async function GET(req: Request) {
     );
   }
 
-  const left = allEnabledLanguageModels.find((m) => m.id === modelId1) || null;
+  const left = allModels.find((m) => m.id === modelId1) || null;
   const right = modelId2
-    ? allEnabledLanguageModels.find((m) => m.id === modelId2) || null
+    ? allModels.find((m) => m.id === modelId2) || null
     : null;
 
   // modelId1 is required, so no ecosystem summary branch

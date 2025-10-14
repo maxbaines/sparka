@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ComparePage from '../compare-page';
-import { allEnabledLanguageModels } from '@/lib/ai/app-models';
+import { allModels } from '@/lib/models';
 
 // Toggle to include/exclude "Performance" related copy
 const ENABLE_PERFORMANCE_COPY = false;
@@ -26,7 +26,7 @@ export async function generateMetadata(
   const rightId = toId(segments.slice(2, 4));
 
   const findModel = (id: string | null) =>
-    id ? allEnabledLanguageModels.find((m) => m.id === id) || null : null;
+    id ? allModels.find((m) => m.id === id) || null : null;
 
   const left = findModel(leftId);
   const right = findModel(rightId);
@@ -142,8 +142,8 @@ export async function generateMetadata(
 
 export async function generateStaticParams() {
   // Sort deterministically to keep generated paths stable if in-memory order changes
-  const sortedIds = [...allEnabledLanguageModels.map((m) => m.id)].sort(
-    (a, b) => a.localeCompare(b),
+  const sortedIds = [...allModels.map((m) => m.id)].sort((a, b) =>
+    a.localeCompare(b),
   );
 
   // Singles: all ids

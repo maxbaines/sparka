@@ -1,5 +1,5 @@
-import { DeferredChatPage } from './chat/[id]/deferred-chat-page';
+import { ChatPageRouter } from './chat-page-router';
 
 export default function HomePage() {
-  return <DeferredChatPage />;
+  return <ChatPageRouter />;
 }

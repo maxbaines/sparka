@@ -1,6 +1,6 @@
 import type { OpenAIProvider } from '@ai-sdk/openai';
 import type { ModelId as GatewayGeneratedModelId } from './models.generated';
-// Adds models available in gateway but not yet in the gateway package
+
 export type ModelId = GatewayGeneratedModelId;
 
 type OpenAIimageModelId = Parameters<OpenAIProvider['imageModel']>[0];

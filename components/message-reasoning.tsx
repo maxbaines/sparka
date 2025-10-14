@@ -14,7 +14,7 @@ interface MessageReasoningProps {
 
 function PureMessageReasoning({ isLoading, reasoning }: MessageReasoningProps) {
   return (
-    <Reasoning isStreaming={isLoading} className="mb-0">
+    <Reasoning isStreaming={isLoading} className="mb-2">
       <ReasoningTrigger data-testid="message-reasoning-toggle " />
       <ReasoningContentContainer
         data-testid="message-reasoning"

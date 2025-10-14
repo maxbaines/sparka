@@ -34,8 +34,8 @@ import type { CreditReservation } from '@/lib/credits/credit-reservation';
 import {
   DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
   getModelDefinition,
+  type AppModelDefinition,
 } from '@/lib/ai/app-models';
-import type { ModelDefinition } from '@/lib/models';
 import {
   createResumableStreamContext,
   type ResumableStreamContext,
@@ -273,7 +273,7 @@ export async function POST(request: NextRequest) {
     // Extract selectedTool from user message metadata
     const selectedTool = userMessage.metadata.selectedTool || null;
     log.debug({ selectedTool }, 'selectedTool');
-    let modelDefinition: ModelDefinition;
+    let modelDefinition: AppModelDefinition;
     try {
       modelDefinition = getModelDefinition(selectedModelId);
     } catch (error) {
@@ -511,7 +511,7 @@ export async function POST(request: NextRequest) {
       const stream = createUIMessageStream<ChatMessage>({
         execute: async ({ writer: dataStream }) => {
           const result = streamText({
-            model: getLanguageModel(selectedModelId),
+            model: getLanguageModel(modelDefinition.apiModelId),
             system: systemPrompt(),
             messages: contextForLLM,
             stopWhen: [
@@ -546,7 +546,7 @@ export async function POST(request: NextRequest) {
               },
               contextForLLM: contextForLLM,
               messageId,
-              selectedModel: selectedModelId,
+              selectedModel: modelDefinition.apiModelId,
               attachments: userMessage.parts.filter(
                 (part) => part.type === 'file',
               ),
