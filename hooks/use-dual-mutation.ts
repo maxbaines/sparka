@@ -2,115 +2,89 @@
 
 import {
   useMutation,
+  type UseMutationOptions,
   type UseMutationResult,
-  useQueryClient,
   type QueryClient,
 } from '@tanstack/react-query';
+import type { DefaultError } from '@tanstack/query-core';
 
-type MutationFn<Vars, Data> = (vars: Vars) => Promise<Data>;
-type ExtractVars<F> = F extends (vars: infer V) => Promise<any> ? V : never;
-type ExtractData<F> = F extends (vars: any) => Promise<infer D> ? D : never;
-type InferRemoteFn<R> = R extends { mutationFn?: infer F }
-  ? NonNullable<F>
-  : never;
-type InferVars<R, L> = [InferRemoteFn<R>] extends [never]
-  ? ExtractVars<L>
-  : ExtractVars<InferRemoteFn<R>>;
-type InferData<R, L> = [InferRemoteFn<R>] extends [never]
-  ? ExtractData<L>
-  : ExtractData<InferRemoteFn<R>>;
+export type UseDualMutationOptions<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TContext = unknown,
+> = UseMutationOptions<TData, TError, TVariables, TContext> & {
+  localMutationFn?: (variables: TVariables) => Promise<TData> | TData;
+  shouldUseLocal: boolean | (() => boolean);
+};
 
 export function useDualMutation<
-  Remote extends { mutationFn?: MutationFn<any, any> } | undefined,
-  Local extends MutationFn<any, any>,
-  TContext = undefined,
->({
-  remote,
-  local,
-  shouldUseLocalAction,
-  onMutateAction,
-  onErrorAction,
-  onSuccessAction,
-  onSettledAction,
-}: {
-  remote?: Remote;
-  local: Local;
-  shouldUseLocalAction: () => boolean;
-  onMutateAction?: (
-    vars: InferVars<Remote, Local>,
-    queryClient: QueryClient,
-  ) => Promise<TContext> | TContext;
-  onErrorAction?: (
-    error: Error,
-    vars: InferVars<Remote, Local>,
-    context: TContext | undefined,
-    queryClient: QueryClient,
-  ) => void;
-  onSuccessAction?: (
-    data: InferData<Remote, Local>,
-    vars: InferVars<Remote, Local>,
-    context: TContext | undefined,
-    queryClient: QueryClient,
-  ) => void;
-  onSettledAction?: (
-    data: InferData<Remote, Local> | undefined,
-    error: Error | null,
-    vars: InferVars<Remote, Local>,
-    context: TContext | undefined,
-    queryClient: QueryClient,
-  ) => void;
-}): UseMutationResult<
-  InferData<Remote, Local>,
-  Error,
-  InferVars<Remote, Local>,
-  TContext | undefined
-> {
-  const queryClient = useQueryClient();
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TContext = unknown,
+>(
+  options: UseDualMutationOptions<TData, TError, TVariables, TContext>,
+  queryClient?: QueryClient,
+): UseMutationResult<TData, TError, TVariables, TContext> {
+  const {
+    mutationFn,
+    localMutationFn,
+    shouldUseLocal,
+    onMutate,
+    onError,
+    onSuccess,
+    onSettled,
+    ...rest
+  } = options;
 
-  return useMutation<
-    InferData<Remote, Local>,
-    Error,
-    InferVars<Remote, Local>,
-    TContext | undefined
-  >({
-    mutationFn: async (vars) => {
-      if (!shouldUseLocalAction()) {
-        const remoteFn = remote?.mutationFn as
-          | ((v: InferVars<Remote, Local>) => Promise<InferData<Remote, Local>>)
-          | undefined;
-        if (!remoteFn) throw new Error('Remote mutationFn missing');
-        return remoteFn(vars);
-      }
-      const localFn = local as (
-        v: InferVars<Remote, Local>,
-      ) => Promise<InferData<Remote, Local>>;
-      return localFn(vars);
-    },
-    onMutate: async (vars) =>
-      onMutateAction
-        ? onMutateAction(vars as InferVars<Remote, Local>, queryClient)
-        : undefined,
-    onError: (error, vars, context) =>
-      onErrorAction?.(
-        error,
-        vars as InferVars<Remote, Local>,
-        context as TContext | undefined,
-        queryClient,
-      ),
-    onSuccess: (data, vars, context) =>
-      onSuccessAction?.(
-        data as InferData<Remote, Local>,
-        vars as InferVars<Remote, Local>,
-        context as TContext | undefined,
-        queryClient,
-      ),
-    onSettled: (data, error, vars, context) =>
-      onSettledAction?.(
-        (data as InferData<Remote, Local>) ?? undefined,
-        error ?? null,
-        vars as InferVars<Remote, Local>,
-        context as TContext | undefined,
-        queryClient,
-      ),
-  });
+  const useLocal =
+    typeof shouldUseLocal === 'function' ? shouldUseLocal() : shouldUseLocal;
+
+  const mergedOptions: UseMutationOptions<TData, TError, TVariables, TContext> =
+    {
+      ...rest,
+      mutationFn: async (variables) => {
+        if (useLocal) {
+          if (!localMutationFn) {
+            throw new Error(
+              'localMutationFn is required when shouldUseLocal is true',
+            );
+          }
+          return await localMutationFn(variables);
+        }
+        if (!mutationFn) {
+          throw new Error(
+            'mutationFn is required when shouldUseLocal is false',
+          );
+        }
+        return await mutationFn(variables);
+      },
+      onMutate: async (variables) => {
+        if (onMutate) {
+          return await onMutate(variables);
+        }
+        return undefined;
+      },
+      onError: (error, variables, context) => {
+        if (onError) {
+          onError(error, variables, context);
+        }
+      },
+      onSuccess: (data, variables, context) => {
+        if (onSuccess) {
+          onSuccess(data, variables, context);
+        }
+      },
+      onSettled: (data, error, variables, context) => {
+        if (onSettled) {
+          onSettled(data, error, variables, context);
+        }
+      },
+    };
+
+  return useMutation<TData, TError, TVariables, TContext>(
+    mergedOptions,
+    queryClient,
+  );
 }

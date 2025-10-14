@@ -7,10 +7,10 @@ import {
   GoToModelButton,
 } from '@/components/model-action-buttons';
 import { Check, X, Minus, ChevronDown, SquareDashed } from 'lucide-react';
-import type { ModelDefinition } from '@/lib/ai/all-models';
-import type { ProviderId } from '@/lib/models/models.generated';
+import type { ModelDefinition } from '@/lib/models';
+import type { ProviderId } from '@/lib/models';
 import { getProviderIcon } from '@/components/get-provider-icon';
-import { MODEL_CAPABILITIES } from '@/lib/models/model-capabilities';
+import { MODEL_CAPABILITIES } from '@/lib/model-explorer/model-capabilities';
 import {
   Tooltip,
   TooltipContent,
@@ -25,7 +25,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { formatNumberCompact } from '../../../lib/utils/format-number-compact';
-import { MODEL_CATEGORIES } from '@/lib/models/model-categories';
+import { MODEL_CATEGORIES } from '@/lib/model-explorer/model-categories';
 
 interface ModelComparisonCardProps {
   model: ModelDefinition | null;
@@ -163,7 +163,7 @@ export function ModelDetailsCard({
         </div>
         <div className="mt-1 text-sm text-muted-foreground">
           Released{' '}
-          {model.features.releaseDate.toLocaleDateString('en-US', {
+          {model.releaseDate.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -276,7 +276,7 @@ export function ModelDetailsCard({
                 {MODEL_CAPABILITIES.text.label}
               </span>
               <div className="flex items-center gap-1.5">
-                {model.features?.input?.text ? (
+                {model.input?.text ? (
                   (() => {
                     const { Icon, label } = MODEL_CAPABILITIES.text;
                     return <CapabilityIcon label={`${label} in`} Icon={Icon} />;
@@ -291,7 +291,7 @@ export function ModelDetailsCard({
                 {MODEL_CAPABILITIES.image.label}
               </span>
               <div className="flex items-center gap-1.5">
-                {model.features?.input?.image ? (
+                {model.input?.image ? (
                   (() => {
                     const { Icon, label } = MODEL_CAPABILITIES.image;
                     return <CapabilityIcon label={`${label} in`} Icon={Icon} />;
@@ -306,7 +306,7 @@ export function ModelDetailsCard({
                 {MODEL_CAPABILITIES.pdf.label}
               </span>
               <div className="flex items-center gap-1.5">
-                {model.features?.input?.pdf ? (
+                {model.input?.pdf ? (
                   (() => {
                     const { Icon, label } = MODEL_CAPABILITIES.pdf;
                     return <CapabilityIcon label={`${label} in`} Icon={Icon} />;
@@ -321,7 +321,7 @@ export function ModelDetailsCard({
                 {MODEL_CAPABILITIES.audio.label}
               </span>
               <div className="flex items-center gap-1.5">
-                {model.features?.input?.audio ? (
+                {model.input?.audio ? (
                   (() => {
                     const { Icon, label } = MODEL_CAPABILITIES.audio;
                     return <CapabilityIcon label={`${label} in`} Icon={Icon} />;
@@ -343,7 +343,7 @@ export function ModelDetailsCard({
                 {MODEL_CAPABILITIES.text.label}
               </span>
               <div className="flex items-center gap-1.5">
-                {model.features?.output?.text ? (
+                {model.output?.text ? (
                   (() => {
                     const { Icon, label } = MODEL_CAPABILITIES.text;
                     return (
@@ -358,7 +358,7 @@ export function ModelDetailsCard({
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Image</span>
               <div className="flex items-center gap-1.5">
-                {model.features?.output?.image ? (
+                {model.output?.image ? (
                   (() => {
                     const { Icon, label } = MODEL_CAPABILITIES.image;
                     return (
@@ -375,7 +375,7 @@ export function ModelDetailsCard({
                 {MODEL_CAPABILITIES.audio.label}
               </span>
               <div className="flex items-center gap-1.5">
-                {model.features?.output?.audio ? (
+                {model.output?.audio ? (
                   (() => {
                     const { Icon, label } = MODEL_CAPABILITIES.audio;
                     return (
@@ -398,7 +398,7 @@ export function ModelDetailsCard({
               <span className="text-sm text-muted-foreground">
                 {MODEL_CAPABILITIES.reasoning.label}
               </span>
-              {model.features?.reasoning ? (
+              {model.reasoning ? (
                 (() => {
                   const { Icon, label } = MODEL_CAPABILITIES.reasoning;
                   return <CapabilityIcon label={label} Icon={Icon} />;
@@ -411,7 +411,7 @@ export function ModelDetailsCard({
               <span className="text-sm text-muted-foreground">
                 {MODEL_CAPABILITIES.tools.label}
               </span>
-              {model.features?.toolCall ? (
+              {model.toolCall ? (
                 (() => {
                   const { Icon, label } = MODEL_CAPABILITIES.tools;
                   return <CapabilityIcon label={label} Icon={Icon} />;
@@ -424,7 +424,7 @@ export function ModelDetailsCard({
               <span className="text-sm text-muted-foreground">
                 {MODEL_CAPABILITIES.temperature.label}
               </span>
-              {model.features?.fixedTemperature === undefined ? (
+              {model.fixedTemperature === undefined ? (
                 (() => {
                   const { Icon, label } = MODEL_CAPABILITIES.temperature;
                   return <CapabilityIcon label={label} Icon={Icon} />;

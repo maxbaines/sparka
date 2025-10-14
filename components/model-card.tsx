@@ -6,8 +6,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Calendar, Building, CheckCircle } from 'lucide-react';
-import type { ModelDefinition } from '@/lib/ai/all-models';
-import type { ProviderId } from '@/lib/models/models.generated';
+import type { ModelDefinition } from '@/lib/models';
+import type { ProviderId } from '@/lib/models';
 import { cn } from '@/lib/utils';
 import { getFeatureConfig, isFeatureEnabled } from '@/lib/features-config';
 import { getProviderIcon } from './get-provider-icon';
@@ -27,7 +27,7 @@ const getFeatureIconsForCard = (model: ModelDefinition) => {
   const icons: React.ReactNode[] = [];
 
   // Check for reasoning capability
-  if (model.features?.reasoning && isFeatureEnabled('reasoning')) {
+  if (model.reasoning && isFeatureEnabled('reasoning')) {
     const config = getFeatureConfig('reasoning');
     if (config?.icon) {
       const IconComponent = config.icon;
@@ -66,9 +66,6 @@ export function ModelCard({
   const description = model.description;
   const maxTokens = model.max_tokens;
   const contextLength = model.context_window;
-  const hasFeatures = model.features && Object.keys(model.features).length > 0;
-
-  const featureIcons = getFeatureIconsForCard(model);
 
   // Show placeholder if disabled with reason
   if (isDisabled && disabledReason) {
@@ -167,30 +164,28 @@ export function ModelCard({
           )}
         </div>
 
-        {hasFeatures && (
-          <div className="flex flex-wrap gap-1 mt-3 w-full">
-            {model.features?.reasoning && (
-              <Badge variant="outline" className="text-xs">
-                Reasoning
-              </Badge>
-            )}
-            {model.features?.toolCall && (
-              <Badge variant="outline" className="text-xs">
-                Function Calling
-              </Badge>
-            )}
-            {model.features?.input?.image && (
-              <Badge variant="outline" className="text-xs">
-                Vision
-              </Badge>
-            )}
-            {model.features?.input?.pdf && (
-              <Badge variant="outline" className="text-xs">
-                PDF
-              </Badge>
-            )}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-1 mt-3 w-full">
+          {model.reasoning && (
+            <Badge variant="outline" className="text-xs">
+              Reasoning
+            </Badge>
+          )}
+          {model.toolCall && (
+            <Badge variant="outline" className="text-xs">
+              Function Calling
+            </Badge>
+          )}
+          {model.input?.image && (
+            <Badge variant="outline" className="text-xs">
+              Vision
+            </Badge>
+          )}
+          {model.input?.pdf && (
+            <Badge variant="outline" className="text-xs">
+              PDF
+            </Badge>
+          )}
+        </div>
       </CardContent>
 
       {model.pricing && (

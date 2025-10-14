@@ -12,9 +12,9 @@ import React, {
 } from 'react';
 import type { Attachment, UiToolName } from '@/lib/ai/types';
 import { useDefaultModel, useModelChange } from './default-model-provider';
-import { getModelDefinition } from '@/lib/ai/all-models';
+import { getModelDefinition } from '@/lib/ai/app-models';
 import type { LexicalChatInputRef } from '@/components/lexical-chat-input';
-import type { ModelId } from '@/lib/models/model-id';
+import type { AppModelId } from '@/lib/ai/app-models';
 
 interface ChatInputContextType {
   editorRef: React.RefObject<LexicalChatInputRef>;
@@ -22,8 +22,8 @@ interface ChatInputContextType {
   setSelectedTool: Dispatch<SetStateAction<UiToolName | null>>;
   attachments: Array<Attachment>;
   setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
-  selectedModelId: ModelId;
-  handleModelChange: (modelId: ModelId) => Promise<void>;
+  selectedModelId: AppModelId;
+  handleModelChange: (modelId: AppModelId) => Promise<void>;
   getInputValue: () => string;
   handleInputChange: (value: string) => void;
   getInitialInput: () => string;
@@ -40,7 +40,7 @@ interface ChatInputProviderProps {
   initialInput?: string;
   initialTool?: UiToolName | null;
   initialAttachments?: Array<Attachment>;
-  overrideModelId?: ModelId; // For message editing where we want to use the original model
+  overrideModelId?: AppModelId; // For message editing where we want to use the original model
   localStorageEnabled?: boolean;
 }
 
@@ -78,7 +78,7 @@ export function ChatInputProvider({
   const changeModel = useModelChange();
 
   // Initialize selectedModelId from override or default model
-  const [selectedModelId, setSelectedModelId] = useState<ModelId>(
+  const [selectedModelId, setSelectedModelId] = useState<AppModelId>(
     overrideModelId || defaultModel,
   );
 
@@ -104,10 +104,10 @@ export function ChatInputProvider({
   }, [initialInput, getLocalStorageInput, localStorageEnabled]);
 
   const handleModelChange = useCallback(
-    async (modelId: ModelId) => {
+    async (modelId: AppModelId) => {
       const modelDef = getModelDefinition(modelId);
-      const hasReasoning = modelDef.features?.reasoning === true;
-      const hasUnspecifiedFeatures = !modelDef.features;
+      const hasReasoning = modelDef.reasoning === true;
+      const hasUnspecifiedFeatures = !modelDef.input;
 
       // If switching to a model with unspecified features, disable all tools
       if (hasUnspecifiedFeatures && selectedTool !== null) {

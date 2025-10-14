@@ -34,8 +34,9 @@ import type { CreditReservation } from '@/lib/credits/credit-reservation';
 import {
   DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
   getModelDefinition,
-  type ModelDefinition,
-} from '@/lib/ai/all-models';
+  type AppModelDefinition,
+  type AppModelId,
+} from '@/lib/ai/app-models';
 import {
   createResumableStreamContext,
   type ResumableStreamContext,
@@ -51,7 +52,6 @@ import type { AnonymousSession } from '@/lib/types/anonymous';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { markdownJoinerTransform } from '@/lib/ai/markdown-joiner-transform';
 import { checkAnonymousRateLimit, getClientIP } from '@/lib/utils/rate-limit';
-import type { ModelId } from '@/lib/models/model-id';
 import { calculateMessagesTokens } from '@/lib/ai/token-utils';
 import { ChatSDKError } from '@/lib/ai/errors';
 import { addExplicitToolRequestToMessages } from './addExplicitToolRequestToMessages';
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Extract selectedModel from user message metadata
-    const selectedModelId = userMessage.metadata?.selectedModel as ModelId;
+    const selectedModelId = userMessage.metadata?.selectedModel as AppModelId;
 
     if (!selectedModelId) {
       log.warn('No selectedModel in user message metadata');
@@ -273,7 +273,7 @@ export async function POST(request: NextRequest) {
     // Extract selectedTool from user message metadata
     const selectedTool = userMessage.metadata.selectedTool || null;
     log.debug({ selectedTool }, 'selectedTool');
-    let modelDefinition: ModelDefinition;
+    let modelDefinition: AppModelDefinition;
     try {
       modelDefinition = getModelDefinition(selectedModelId);
     } catch (error) {
@@ -376,12 +376,12 @@ export async function POST(request: NextRequest) {
     );
 
     // Disable all tools for models with unspecified features
-    if (!modelDefinition.features) {
+    if (!modelDefinition || !modelDefinition.input) {
       activeTools = [];
     } else {
       // Let's not allow deepResearch if the model support reasoning (it's expensive and slow)
       if (
-        modelDefinition.features.reasoning &&
+        modelDefinition.reasoning &&
         activeTools.some((tool: ToolName) => tool === 'deepResearch')
       ) {
         activeTools = activeTools.filter(
@@ -556,9 +556,9 @@ export async function POST(request: NextRequest) {
               log.error({ error }, 'streamText error');
             },
             abortSignal: abortController.signal, // Pass abort signal to streamText
-            ...(modelDefinition.features?.fixedTemperature
+            ...(modelDefinition.fixedTemperature
               ? {
-                  temperature: modelDefinition.features.fixedTemperature,
+                  temperature: modelDefinition.fixedTemperature,
                 }
               : {}),
 

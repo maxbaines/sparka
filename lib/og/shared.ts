@@ -1,6 +1,7 @@
 // Shared utilities and constants for Open Graph image generation
 
 import { formatNumberCompact } from '@/lib/utils/format-number-compact';
+import type { ModelDefinition } from '@/lib/models';
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 export const OG_SITE_NAME = 'Sparka AI';
@@ -42,18 +43,13 @@ export function prettyUsdPerMTokens(value?: string | null): string | null {
   return `$${perMillion.toFixed(digits)}/M`;
 }
 
-export function buildBulletItems(
-  model:
-    | typeof import('@/lib/ai/all-models').allModels[number]
-    | null
-    | undefined,
-) {
+export function buildBulletItems(model: ModelDefinition | null | undefined) {
   if (!model) return [] as Array<{ label: string; value: string }>;
   const contextWindow = model?.context_window || null;
   const maxOut = model?.max_tokens || null;
   const pricingIn = model?.pricing?.input || null;
   const pricingOut = model?.pricing?.output || null;
-  const releaseDate = model?.features?.releaseDate || null;
+  const releaseDate = model?.releaseDate || null;
   const releaseDateDisplay = releaseDate
     ? releaseDate.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -90,9 +86,11 @@ export const inputModalitiesOrder: Array<
   'text' | 'image' | 'pdf' | 'audio' | 'video'
 > = ['text', 'image', 'pdf', 'audio', 'video'];
 
-export const outputModalitiesOrder: Array<
-  'text' | 'image' | 'audio' | 'video'
-> = ['text', 'image', 'audio', 'video'];
+export const outputModalitiesOrder: Array<'text' | 'image' | 'audio'> = [
+  'text',
+  'image',
+  'audio',
+];
 
 export function getCapabilityIcons(
   baseUrl: string = getBaseUrl(),

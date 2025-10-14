@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ComparePage from '../compare-page';
-import { allModels } from '@/lib/ai/all-models';
+import { allModels } from '@/lib/models';
 
 // Toggle to include/exclude "Performance" related copy
 const ENABLE_PERFORMANCE_COPY = false;

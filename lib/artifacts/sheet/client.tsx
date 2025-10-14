@@ -10,7 +10,7 @@ import { SpreadsheetEditor } from '@/components/sheet-editor';
 import {
   DEFAULT_ANALYZE_AND_VISUALIZE_SHEET_MODEL,
   DEFAULT_FORMAT_AND_CLEAN_SHEET_MODEL,
-} from '@/lib/ai/all-models';
+} from '@/lib/ai/app-models';
 import { parse, unparse } from 'papaparse';
 import { toast } from 'sonner';
 

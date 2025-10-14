@@ -1,6 +1,5 @@
 import { ImageResponse } from '@vercel/og';
-
-import { allModels } from '@/lib/ai/all-models';
+import { allModels } from '@/lib/models';
 import { getProviderIconUrl } from '../../../(models)/get-provider-icon-url';
 import { ModalitiesRow } from '@/lib/og/ModalitiesRow';
 import {
@@ -24,7 +23,6 @@ import {
   OGIcon,
   OGTitle,
 } from '@/lib/og/components';
-// import type { ProviderId } from '@/lib/models/models.generated';
 
 export const runtime = 'edge';
 
@@ -152,16 +150,12 @@ export async function GET(req: Request) {
 
             <div tw="" style={{ display: 'flex' }}>
               <ModalitiesRow
-                inputKeys={
-                  inputModalitiesOrder.filter(
-                    (key) => (left?.features?.input as any)?.[key],
-                  ) as Array<'text' | 'image' | 'pdf' | 'audio' | 'video'>
-                }
-                outputKeys={
-                  outputModalitiesOrder.filter(
-                    (key) => (left?.features?.output as any)?.[key],
-                  ) as Array<'text' | 'image' | 'audio' | 'video'>
-                }
+                inputKeys={inputModalitiesOrder.filter(
+                  (key) => left?.input?.[key],
+                )}
+                outputKeys={outputModalitiesOrder.filter(
+                  (key) => left?.output?.[key],
+                )}
                 capabilityIcons={capabilityIcons}
                 arrowRightUrl={arrowRight}
                 size="md"
@@ -269,16 +263,12 @@ export async function GET(req: Request) {
                 style={{ display: 'flex' }}
               >
                 <ModalitiesRow
-                  inputKeys={
-                    inputModalitiesOrder.filter(
-                      (key) => (right?.features?.input as any)?.[key],
-                    ) as Array<'text' | 'image' | 'pdf' | 'audio' | 'video'>
-                  }
-                  outputKeys={
-                    outputModalitiesOrder.filter(
-                      (key) => (right?.features?.output as any)?.[key],
-                    ) as Array<'text' | 'image' | 'audio' | 'video'>
-                  }
+                  inputKeys={inputModalitiesOrder.filter(
+                    (key) => right?.input?.[key],
+                  )}
+                  outputKeys={outputModalitiesOrder.filter(
+                    (key) => right?.output?.[key],
+                  )}
                   capabilityIcons={capabilityIcons}
                   arrowRightUrl={arrowRight}
                   size="md"

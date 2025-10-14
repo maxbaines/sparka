@@ -1,5 +1,5 @@
 'use client';
-import type { ProviderId } from '@/lib/models/models.generated';
+import type { ProviderId } from '@/lib/models';
 import {
   OpenAI,
   Anthropic,

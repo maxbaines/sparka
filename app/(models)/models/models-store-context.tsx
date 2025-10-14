@@ -4,22 +4,19 @@ import { createContext, useContext, useRef } from 'react';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { createStore } from 'zustand/vanilla';
 import type { FilterState } from '@/app/(models)/models/model-filters';
-import {
-  chatModels as allChatModels,
-  type ModelDefinition,
-} from '@/lib/ai/all-models';
+import { type ModelDefinition, allModels } from '@/lib/models';
 
 // Derive dynamic ranges from available models
-const contextWindows = allChatModels
+const contextWindows = allModels
   .map((m) => m.context_window)
   .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
-const maxTokensValues = allChatModels
+const maxTokensValues = allModels
   .map((m) => m.max_tokens)
   .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
-const inputPrices = allChatModels
+const inputPrices = allModels
   .map((m) => Number.parseFloat(m.pricing.input) * 1_000_000)
   .filter((n) => Number.isFinite(n));
-const outputPrices = allChatModels
+const outputPrices = allModels
   .map((m) => Number.parseFloat(m.pricing.output) * 1_000_000)
   .filter((n) => Number.isFinite(n));
 
@@ -100,7 +97,7 @@ export const createModelsStore = (
     filters: FilterState,
     sortBy: SortOption,
   ): ModelDefinition[] => {
-    let workingList: ModelDefinition[] = allChatModels;
+    let workingList: ModelDefinition[] = allModels;
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -117,7 +114,7 @@ export const createModelsStore = (
       if (f.providers.length > 0 && !f.providers.includes(m.owned_by))
         return false;
       if (f.inputModalities.length > 0) {
-        const fi = m.features?.input;
+        const fi = m.input;
         const set = new Set<string>(
           [
             fi?.text ? 'text' : '',
@@ -130,7 +127,7 @@ export const createModelsStore = (
         if (!f.inputModalities.some((val) => set.has(val))) return false;
       }
       if (f.outputModalities.length > 0) {
-        const fo = m.features?.output;
+        const fo = m.output;
         const set = new Set<string>(
           [
             fo?.text ? 'text' : '',
@@ -154,12 +151,9 @@ export const createModelsStore = (
         return false;
       if (outputPrice < f.outputPricing[0] || outputPrice > f.outputPricing[1])
         return false;
-      if (f.features.reasoning && !m.features?.reasoning) return false;
-      if (f.features.toolCall && !m.features?.toolCall) return false;
-      if (
-        f.features.temperatureControl &&
-        m.features?.fixedTemperature !== undefined
-      )
+      if (f.features.reasoning && !m.reasoning) return false;
+      if (f.features.toolCall && !m.toolCall) return false;
+      if (f.features.temperatureControl && m.fixedTemperature !== undefined)
         return false;
       return true;
     });
@@ -168,10 +162,7 @@ export const createModelsStore = (
       (a: ModelDefinition, b: ModelDefinition) => {
         switch (sortBy) {
           case 'newest':
-            return (
-              b.features.releaseDate.getTime() -
-              a.features.releaseDate.getTime()
-            );
+            return b.releaseDate.getTime() - a.releaseDate.getTime();
           case 'pricing-low':
             return (
               (Number.parseFloat(a.pricing.input) +

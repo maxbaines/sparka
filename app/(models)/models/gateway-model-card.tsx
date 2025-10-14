@@ -9,10 +9,10 @@ import {
   ChatModelButton,
   CompareModelButton,
 } from '@/components/model-action-buttons';
-import type { ModelDefinition } from '@/lib/ai/all-models';
-import type { ProviderId } from '@/lib/models/models.generated';
+import type { ModelDefinition } from '@/lib/models';
+import type { ProviderId } from '@/lib/models';
 import { getProviderIcon } from '@/components/get-provider-icon';
-import { MODEL_CAPABILITIES } from '@/lib/models/model-capabilities';
+import { MODEL_CAPABILITIES } from '@/lib/model-explorer/model-capabilities';
 import {
   Tooltip,
   TooltipContent,
@@ -84,15 +84,13 @@ function PureModelCard({
 }) {
   const provider = model.owned_by as ProviderId;
   const hasInput = Boolean(
-    model.features?.input?.text ||
-      model.features?.input?.image ||
-      model.features?.input?.pdf ||
-      model.features?.input?.audio,
+    model.input?.text ||
+      model.input?.image ||
+      model.input?.pdf ||
+      model.input?.audio,
   );
   const hasOutput = Boolean(
-    model.features?.output?.text ||
-      model.features?.output?.image ||
-      model.features?.output?.audio,
+    model.output?.text || model.output?.image || model.output?.audio,
   );
 
   return (
@@ -170,7 +168,7 @@ function PureModelCard({
           <span>
             Released{' '}
             <span className="font-medium text-foreground">
-              {model.features.releaseDate.toLocaleDateString('en-US', {
+              {model.releaseDate.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric',
@@ -189,25 +187,25 @@ function PureModelCard({
               <div className="flex items-center gap-1.5">
                 <span className="text-xs text-muted-foreground">Input</span>
                 <div className="flex items-center gap-1.5">
-                  {model.features?.input?.text && (
+                  {model.input?.text && (
                     <CapabilityIcon
                       label={`${MODEL_CAPABILITIES.text.label} in`}
                       Icon={MODEL_CAPABILITIES.text.Icon}
                     />
                   )}
-                  {model.features?.input?.image && (
+                  {model.input?.image && (
                     <CapabilityIcon
                       label={`${MODEL_CAPABILITIES.image.label} in`}
                       Icon={MODEL_CAPABILITIES.image.Icon}
                     />
                   )}
-                  {model.features?.input?.pdf && (
+                  {model.input?.pdf && (
                     <CapabilityIcon
                       label={`${MODEL_CAPABILITIES.pdf.label} in`}
                       Icon={MODEL_CAPABILITIES.pdf.Icon}
                     />
                   )}
-                  {model.features?.input?.audio && (
+                  {model.input?.audio && (
                     <CapabilityIcon
                       label={`${MODEL_CAPABILITIES.audio.label} in`}
                       Icon={MODEL_CAPABILITIES.audio.Icon}
@@ -225,19 +223,19 @@ function PureModelCard({
               <div className="flex items-center gap-1.5">
                 <span className="text-xs text-muted-foreground">Output</span>
                 <div className="flex items-center gap-1.5">
-                  {model.features?.output?.text && (
+                  {model.output?.text && (
                     <CapabilityIcon
                       label={`${MODEL_CAPABILITIES.text.label} out`}
                       Icon={MODEL_CAPABILITIES.text.Icon}
                     />
                   )}
-                  {model.features?.output?.image && (
+                  {model.output?.image && (
                     <CapabilityIcon
                       label={`${MODEL_CAPABILITIES.image.label} out`}
                       Icon={MODEL_CAPABILITIES.image.Icon}
                     />
                   )}
-                  {model.features?.output?.audio && (
+                  {model.output?.audio && (
                     <CapabilityIcon
                       label={`${MODEL_CAPABILITIES.audio.label} out`}
                       Icon={MODEL_CAPABILITIES.audio.Icon}
@@ -248,9 +246,9 @@ function PureModelCard({
             )}
           </div>
 
-          {(model.features?.reasoning ||
-            model.features?.toolCall ||
-            model.features?.fixedTemperature === undefined) && (
+          {(model.reasoning ||
+            model.toolCall ||
+            model.fixedTemperature === undefined) && (
             <>
               <span className="hidden sm:inline text-muted-foreground/40">
                 /
@@ -258,19 +256,19 @@ function PureModelCard({
               <div className="flex items-center gap-1.5">
                 <span className="text-xs text-muted-foreground">Features</span>
                 <div className="flex items-center gap-1.5">
-                  {model.features?.reasoning && (
+                  {model.reasoning && (
                     <CapabilityIcon
                       label={MODEL_CAPABILITIES.reasoning.label}
                       Icon={MODEL_CAPABILITIES.reasoning.Icon}
                     />
                   )}
-                  {model.features?.toolCall && (
+                  {model.toolCall && (
                     <CapabilityIcon
                       label={MODEL_CAPABILITIES.tools.label}
                       Icon={MODEL_CAPABILITIES.tools.Icon}
                     />
                   )}
-                  {model.features?.fixedTemperature === undefined && (
+                  {model.fixedTemperature === undefined && (
                     <CapabilityIcon
                       label={MODEL_CAPABILITIES.temperature.label}
                       Icon={MODEL_CAPABILITIES.temperature.Icon}

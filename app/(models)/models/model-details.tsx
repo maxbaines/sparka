@@ -1,10 +1,11 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { ModelDetailsCard } from '@/app/(models)/compare/model-details-card';
-import { allModels, getModelDefinition } from '@/lib/ai/all-models';
-import type { ModelDefinition } from '@/lib/ai/all-models';
+import { getModelDefinition } from '@/lib/ai/app-models';
+import { allModels } from '@/lib/models';
+import type { ModelDefinition } from '@/lib/models';
 import { ModelSelectorBase } from '@/components/model-selector-base';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { ChatModelButton } from '@/components/model-action-buttons';
 
 export function ModelDetails({

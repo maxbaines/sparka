@@ -16,7 +16,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { Separator } from './ui/separator';
-import { getModelDefinition } from '@/lib/ai/all-models';
+import { getModelDefinition } from '@/lib/ai/app-models';
 import { LoginPrompt } from './upgrade-cta/login-prompt';
 import { toolDefinitions, enabledTools } from './chat-features-definitions';
 import type { UiToolName } from '@/lib/ai/types';
@@ -38,8 +38,8 @@ export function ResponsiveTools({
     try {
       const modelDef = getModelDefinition(selectedModelId as any);
       return {
-        hasReasoningModel: modelDef.features?.reasoning === true,
-        hasUnspecifiedFeatures: !modelDef.features,
+        hasReasoningModel: modelDef.reasoning === true,
+        hasUnspecifiedFeatures: !modelDef.input,
       };
     } catch {
       return {

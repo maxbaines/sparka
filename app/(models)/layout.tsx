@@ -2,9 +2,9 @@ import { ModelsHeader } from './models-header';
 import { auth } from '../(auth)/auth';
 import { SessionProvider } from 'next-auth/react';
 import type { Metadata } from 'next';
-import { modelsData, providers } from '@/lib/models/models.generated';
+import { allModels, providers } from '@/lib/models';
 
-const totalModels = modelsData.length;
+const totalModels = allModels.length;
 const totalProviders = providers.length;
 
 const pageTitle = `Models | Sparka AI`;

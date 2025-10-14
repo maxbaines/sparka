@@ -1,6 +1,8 @@
-import type { ModelDefinition } from '@/lib/ai/all-models';
-import { getModelDefinition } from '../ai/all-models';
-import type { ModelId } from '../models/model-id';
+import {
+  getModelDefinition,
+  type AppModelDefinition,
+  type AppModelId,
+} from '../ai/app-models';
 import { toolsDefinitions } from '../ai/tools/tools-definitions';
 import type { ToolName } from '../ai/types';
 
@@ -51,12 +53,12 @@ export function getMaxToolCost(tools: ToolName[]): number {
   }, 0);
 }
 
-export function getBaseModelCostByModelId(modelId: ModelId) {
+export function getBaseModelCostByModelId(modelId: AppModelId) {
   const model = getModelDefinition(modelId);
   return getBaseModelCost(model);
 }
 
-export function getBaseModelCost(model: ModelDefinition) {
+export function getBaseModelCost(model: AppModelDefinition) {
   if (!model.pricing) {
     return 10; // fallback for models without pricing
   }

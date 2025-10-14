@@ -2,7 +2,7 @@
 import { ExternalLink, MessageSquare, Scale } from 'lucide-react';
 import type React from 'react';
 import type { ComponentProps } from 'react';
-import type { ModelId } from '@/lib/models/model-id';
+import type { ModelId } from '@/lib/models';
 import { cn } from '@/lib/utils';
 import { LinkButton } from './link-button';
 import { useMemo } from 'react';

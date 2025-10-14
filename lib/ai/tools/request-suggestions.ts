@@ -5,7 +5,7 @@ import { getDocumentById, saveSuggestions } from '@/lib/db/queries';
 import type { Suggestion } from '@/lib/db/schema';
 import { generateUUID } from '@/lib/utils';
 import { getLanguageModel } from '../providers';
-import { DEFAULT_ARTIFACT_SUGGESTION_MODEL } from '../all-models';
+import { DEFAULT_ARTIFACT_SUGGESTION_MODEL } from '../app-models';
 import type { StreamWriter } from '../types';
 
 interface RequestSuggestionsProps {

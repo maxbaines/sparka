@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Container } from '@/components/container';
 import { WideModelDetails } from '@/app/(models)/models/wide-model-details';
-import { allModels } from '@/lib/ai/all-models';
+import { allModels } from '@/lib/models';
 
 // Toggle to include/exclude performance-related copy
 const ENABLE_PERFORMANCE_COPY = false;

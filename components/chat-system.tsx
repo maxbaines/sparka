@@ -5,12 +5,12 @@ import { Chat } from '@/components/chat';
 import { DataStreamHandler } from '@/components/data-stream-handler';
 import { ChatSync } from '@/components/chat-sync';
 import { ChatInputProvider } from '@/providers/chat-input-provider';
-import type { ModelId } from '@/lib/models/model-id';
 import { ArtifactProvider } from '@/hooks/use-artifact';
 import type { UiToolName, ChatMessage } from '@/lib/ai/types';
 import { ChatStoreProvider } from '@/lib/stores/chat-store-context';
 import { MessageTreeProvider } from '@/providers/message-tree-provider';
 import { DataStreamProvider } from '@/components/data-stream-provider';
+import type { AppModelId } from '@/lib/ai/app-models';
 
 export const ChatSystem = memo(function ChatSystem({
   id,
@@ -23,7 +23,7 @@ export const ChatSystem = memo(function ChatSystem({
   initialMessages: Array<ChatMessage>;
   isReadonly: boolean;
   initialTool?: UiToolName | null;
-  overrideModelId?: ModelId;
+  overrideModelId?: AppModelId;
 }) {
   return (
     <ArtifactProvider>

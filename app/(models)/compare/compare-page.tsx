@@ -2,8 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { allModels } from '@/lib/ai/all-models';
-import type { ModelDefinition } from '@/lib/ai/all-models';
+import { allModels, type ModelDefinition } from '@/lib/models';
 import { Container } from '@/components/container';
 import { ModelDetails } from '@/app/(models)/models/model-details';
 

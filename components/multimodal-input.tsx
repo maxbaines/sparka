@@ -41,7 +41,7 @@ import {
   DEFAULT_PDF_MODEL,
   DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL,
   DEFAULT_CHAT_MODEL,
-} from '@/lib/ai/all-models';
+} from '@/lib/ai/app-models';
 import { LimitDisplay } from './upgrade-cta/limit-display';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
@@ -50,7 +50,7 @@ import { generateUUID } from '@/lib/utils';
 import { useSaveMessageMutation } from '@/hooks/chat-sync-hooks';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { processFilesForUpload } from '@/lib/files/upload-prep';
-import type { ModelId } from '@/lib/models/model-id';
+import type { AppModelId } from '@/lib/ai/app-models';
 import { ContextBar } from '@/components/context-bar';
 
 const IMAGE_UPLOAD_LIMITS = {
@@ -100,8 +100,7 @@ function PureMultimodalInput({
 
   const isAnonymous = !session?.user;
   const isModelDisallowedForAnonymous =
-    isAnonymous &&
-    !ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(selectedModelId as any);
+    isAnonymous && !ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(selectedModelId);
 
   // Helper function to auto-switch to PDF-compatible model
   const switchToPdfCompatibleModel = useCallback(() => {
@@ -141,7 +140,7 @@ function PureMultimodalInput({
   } catch {
     selectedModelDef = getModelDefinition(DEFAULT_CHAT_MODEL);
   }
-  const isImageOutputModel = Boolean(selectedModelDef?.features?.output?.image);
+  const isImageOutputModel = Boolean(selectedModelDef?.output?.image);
   const submission: { enabled: false; message: string } | { enabled: true } =
     (() => {
       if (isImageOutputModel) {
@@ -195,13 +194,10 @@ function PureMultimodalInput({
       if (pdfFiles.length > 0 || processedImages.length > 0) {
         let currentModelDef = getModelDefinition(selectedModelId);
 
-        if (pdfFiles.length > 0 && !currentModelDef.features?.input?.pdf) {
+        if (pdfFiles.length > 0 && !currentModelDef.input?.pdf) {
           currentModelDef = switchToPdfCompatibleModel();
         }
-        if (
-          processedImages.length > 0 &&
-          !currentModelDef.features?.input?.image
-        ) {
+        if (processedImages.length > 0 && !currentModelDef.input?.image) {
           currentModelDef = switchToImageCompatibleModel();
         }
       }
@@ -671,8 +667,8 @@ function PureChatInputBottomControls({
   uploadQueue,
   submission,
 }: {
-  selectedModelId: ModelId;
-  onModelChange: (modelId: ModelId) => void;
+  selectedModelId: AppModelId;
+  onModelChange: (modelId: AppModelId) => void;
   selectedTool: UiToolName | null;
   setSelectedTool: Dispatch<SetStateAction<UiToolName | null>>;
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
