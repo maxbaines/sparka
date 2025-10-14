@@ -3,6 +3,7 @@ import { auth } from '../(auth)/auth';
 import { SessionProvider } from 'next-auth/react';
 import type { Metadata } from 'next';
 import { allModels, providers } from '@/lib/models';
+import { TRPCReactProvider } from '@/trpc/react';
 
 const totalModels = allModels.length;
 const totalProviders = providers.length;
@@ -51,17 +52,19 @@ export default async function ModelsLayout({
   const session = await auth();
   return (
     <SessionProvider session={session}>
-      <div
-        className="h-dvh max-h-dvh grid grid-rows-[auto_1fr]"
-        style={
-          {
-            '--header-height': HEADER_HEIGHT,
-          } as React.CSSProperties
-        }
-      >
-        <ModelsHeader />
-        <div className="relative flex-1 min-h-0 ">{children}</div>
-      </div>
+      <TRPCReactProvider>
+        <div
+          className="h-dvh max-h-dvh grid grid-rows-[auto_1fr]"
+          style={
+            {
+              '--header-height': HEADER_HEIGHT,
+            } as React.CSSProperties
+          }
+        >
+          <ModelsHeader />
+          <div className="relative flex-1 min-h-0 ">{children}</div>
+        </div>
+      </TRPCReactProvider>
     </SessionProvider>
   );
 }
