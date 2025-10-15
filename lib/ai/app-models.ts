@@ -97,7 +97,7 @@ function getModelsByIdDict(): Map<string, AppModelDefinition> {
   return _modelsByIdCache;
 }
 
-export function getModelDefinition(modelId: AppModelId): AppModelDefinition {
+export function getAppModelDefinition(modelId: AppModelId): AppModelDefinition {
   const modelsByIdDict = getModelsByIdDict();
 
   const model = modelsByIdDict.get(modelId);

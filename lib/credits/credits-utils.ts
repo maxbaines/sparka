@@ -1,5 +1,5 @@
 import {
-  getModelDefinition,
+  getAppModelDefinition,
   type AppModelDefinition,
   type AppModelId,
 } from '../ai/app-models';
@@ -54,7 +54,7 @@ export function getMaxToolCost(tools: ToolName[]): number {
 }
 
 export function getBaseModelCostByModelId(modelId: AppModelId) {
-  const model = getModelDefinition(modelId);
+  const model = getAppModelDefinition(modelId);
   return getBaseModelCost(model);
 }
 

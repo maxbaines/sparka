@@ -5,7 +5,7 @@ import { experimental_createMCPClient } from 'ai';
 import type { ModelId } from '@/lib/models';
 import type { StreamWriter } from '@/lib/ai/types';
 import { firecrawlWebSearch, tavilyWebSearch } from '../web-search';
-import { getModelDefinition } from '../../app-models';
+import { getAppModelDefinition } from '../../app-models';
 
 // MCP Utils
 
@@ -126,7 +126,7 @@ export function getNotesFromToolCalls(messages: ModelMessage[]): string[] {
 }
 
 export function getModelContextWindow(modelId: ModelId): number {
-  return getModelDefinition(modelId).context_window;
+  return getAppModelDefinition(modelId).context_window;
 }
 
 // Misc Utils

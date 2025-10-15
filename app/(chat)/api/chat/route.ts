@@ -33,7 +33,7 @@ import { getLanguageModel, getModelProviderOptions } from '@/lib/ai/providers';
 import type { CreditReservation } from '@/lib/credits/credit-reservation';
 import {
   DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
-  getModelDefinition,
+  getAppModelDefinition,
   type AppModelDefinition,
   type AppModelId,
 } from '@/lib/ai/app-models';
@@ -275,7 +275,7 @@ export async function POST(request: NextRequest) {
     log.debug({ selectedTool }, 'selectedTool');
     let modelDefinition: AppModelDefinition;
     try {
-      modelDefinition = getModelDefinition(selectedModelId);
+      modelDefinition = getAppModelDefinition(selectedModelId);
     } catch (error) {
       log.warn('Model not found');
       return new Response('Model not found', { status: 404 });

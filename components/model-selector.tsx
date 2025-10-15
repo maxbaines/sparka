@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/utils';
 import {
   chatModels,
-  getModelDefinition,
+  getAppModelDefinition,
   type AppModelId,
 } from '@/lib/ai/app-models';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
@@ -29,7 +29,7 @@ export function PureModelSelector({
 
   const models: Array<ModelSelectorBaseItem> = useMemo(() => {
     return chatModels.map((m) => {
-      const def = getModelDefinition(m.id);
+      const def = getAppModelDefinition(m.id);
       const disabled =
         isAnonymous && !ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(m.id as any);
       return { id: m.id, definition: def, disabled };

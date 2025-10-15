@@ -24,7 +24,7 @@ import type { LanguageModelUsage } from 'ai';
 import { motion } from 'motion/react';
 import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { getModelDefinition, type AppModelId } from '@/lib/ai/app-models';
+import { getAppModelDefinition, type AppModelId } from '@/lib/ai/app-models';
 
 export function ContextBar({
   attachments,
@@ -51,7 +51,7 @@ export function ContextBar({
     return null;
   }
 
-  const modelDefinition = getModelDefinition(selectedModelId);
+  const modelDefinition = getAppModelDefinition(selectedModelId);
 
   return (
     <motion.div

@@ -37,7 +37,7 @@ import { useChatInput } from '@/providers/chat-input-provider';
 import { ModelSelector } from './model-selector';
 import { ResponsiveTools } from './responsive-tools';
 import {
-  getModelDefinition,
+  getAppModelDefinition,
   DEFAULT_PDF_MODEL,
   DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL,
   DEFAULT_CHAT_MODEL,
@@ -104,7 +104,7 @@ function PureMultimodalInput({
 
   // Helper function to auto-switch to PDF-compatible model
   const switchToPdfCompatibleModel = useCallback(() => {
-    const defaultPdfModelDef = getModelDefinition(DEFAULT_PDF_MODEL);
+    const defaultPdfModelDef = getAppModelDefinition(DEFAULT_PDF_MODEL);
     toast.success(`Switched to ${defaultPdfModelDef.name} (supports PDF)`);
     handleModelChange(DEFAULT_PDF_MODEL);
     return defaultPdfModelDef;
@@ -112,7 +112,7 @@ function PureMultimodalInput({
 
   // Helper function to auto-switch to image-compatible model
   const switchToImageCompatibleModel = useCallback(() => {
-    const defaultImageModelDef = getModelDefinition(
+    const defaultImageModelDef = getAppModelDefinition(
       DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL,
     );
     toast.success(`Switched to ${defaultImageModelDef.name} (supports images)`);
@@ -136,9 +136,9 @@ function PureMultimodalInput({
 
   let selectedModelDef = null;
   try {
-    selectedModelDef = getModelDefinition(selectedModelId);
+    selectedModelDef = getAppModelDefinition(selectedModelId);
   } catch {
-    selectedModelDef = getModelDefinition(DEFAULT_CHAT_MODEL);
+    selectedModelDef = getAppModelDefinition(DEFAULT_CHAT_MODEL);
   }
   const isImageOutputModel = Boolean(selectedModelDef?.output?.image);
   const submission: { enabled: false; message: string } | { enabled: true } =
@@ -192,7 +192,7 @@ function PureMultimodalInput({
 
       // Auto-switch model based on file types
       if (pdfFiles.length > 0 || processedImages.length > 0) {
-        let currentModelDef = getModelDefinition(selectedModelId);
+        let currentModelDef = getAppModelDefinition(selectedModelId);
 
         if (pdfFiles.length > 0 && !currentModelDef.input?.pdf) {
           currentModelDef = switchToPdfCompatibleModel();

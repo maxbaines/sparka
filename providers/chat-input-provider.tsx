@@ -12,7 +12,7 @@ import React, {
 } from 'react';
 import type { Attachment, UiToolName } from '@/lib/ai/types';
 import { useDefaultModel, useModelChange } from './default-model-provider';
-import { getModelDefinition } from '@/lib/ai/app-models';
+import { getAppModelDefinition } from '@/lib/ai/app-models';
 import type { LexicalChatInputRef } from '@/components/lexical-chat-input';
 import type { AppModelId } from '@/lib/ai/app-models';
 
@@ -105,7 +105,7 @@ export function ChatInputProvider({
 
   const handleModelChange = useCallback(
     async (modelId: AppModelId) => {
-      const modelDef = getModelDefinition(modelId);
+      const modelDef = getAppModelDefinition(modelId);
       const hasReasoning = modelDef.reasoning === true;
       const hasUnspecifiedFeatures = !modelDef.input;
 

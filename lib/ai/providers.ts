@@ -3,7 +3,7 @@ import { extractReasoningMiddleware, wrapLanguageModel } from 'ai';
 import { openai, type OpenAIResponsesProviderOptions } from '@ai-sdk/openai';
 import type { AnthropicProviderOptions } from '@ai-sdk/anthropic';
 import type { GoogleGenerativeAIProviderOptions } from '@ai-sdk/google';
-import { getImageModelDefinition, getModelDefinition } from './app-models';
+import { getImageModelDefinition, getAppModelDefinition } from './app-models';
 import { gateway } from '@ai-sdk/gateway';
 import type { ImageModelId, ModelId } from '../models';
 import type { AppModelId } from './app-models';
@@ -17,7 +17,7 @@ const telemetryConfig = {
 };
 
 export const getLanguageModel = (modelId: ModelId) => {
-  const model = getModelDefinition(modelId);
+  const model = getAppModelDefinition(modelId);
   const languageProvider = gateway(model.id);
 
   // Wrap with reasoning middleware if the model supports reasoning
@@ -65,7 +65,7 @@ export const getModelProviderOptions = (
       google: GoogleGenerativeAIProviderOptions;
     }
   | Record<string, never> => {
-  const model = getModelDefinition(providerModelId);
+  const model = getAppModelDefinition(providerModelId);
   if (model.owned_by === 'openai') {
     if (model.reasoning) {
       return {

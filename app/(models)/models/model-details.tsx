@@ -1,11 +1,10 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { ModelDetailsCard } from '@/app/(models)/compare/model-details-card';
-import { getModelDefinition } from '@/lib/ai/app-models';
+import { getModelDefinition } from '@/lib/models';
 import { allModels } from '@/lib/models';
 import type { ModelDefinition } from '@/lib/models';
 import { ModelSelectorBase } from '@/components/model-selector-base';
-import type { ModelId } from '@/lib/models';
 import { ChatModelButton } from '@/components/model-action-buttons';
 
 export function ModelDetails({
@@ -34,8 +33,8 @@ export function ModelDetails({
         <div className="flex items-center gap-2 ">
           <ModelSelectorBase
             models={allModels.map((m) => ({
-              id: m.id as ModelId,
-              definition: getModelDefinition(m.id as ModelId),
+              id: m.id,
+              definition: getModelDefinition(m.id),
             }))}
             selectedModelId={modelDefinition?.id}
             onModelChange={onModelChangeAction}
