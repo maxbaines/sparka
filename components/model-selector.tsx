@@ -14,6 +14,7 @@ import {
   ModelSelectorBase,
   type ModelSelectorBaseItem,
 } from '@/components/model-selector-base';
+import type { AppModelDefinition } from '@/lib/ai/app-models';
 
 export function PureModelSelector({
   selectedModelId,
@@ -27,14 +28,15 @@ export function PureModelSelector({
   const { data: session } = useSession();
   const isAnonymous = !session?.user;
 
-  const models: Array<ModelSelectorBaseItem> = useMemo(() => {
-    return chatModels.map((m) => {
-      const def = getAppModelDefinition(m.id);
-      const disabled =
-        isAnonymous && !ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(m.id as any);
-      return { id: m.id, definition: def, disabled };
-    });
-  }, [isAnonymous]);
+  const models: Array<ModelSelectorBaseItem<AppModelId, AppModelDefinition>> =
+    useMemo(() => {
+      return chatModels.map((m) => {
+        const def = getAppModelDefinition(m.id);
+        const disabled =
+          isAnonymous && !ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(m.id);
+        return { id: m.id, definition: def, disabled };
+      });
+    }, [isAnonymous]);
 
   const hasDisabledModels = useMemo(
     () => models.some((m) => m.disabled),

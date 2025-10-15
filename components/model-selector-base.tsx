@@ -30,11 +30,29 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { getEnabledFeatures } from '@/lib/features-config';
 import { ChevronUpIcon, FilterIcon } from 'lucide-react';
-import type { ProviderId } from '@/lib/models';
+import type { ModelDefinition, ModelId, ProviderId } from '@/lib/models';
 import { getProviderIcon } from './get-provider-icon';
-import type { AppModelDefinition, AppModelId } from '@/lib/ai/app-models';
 
 type FeatureFilter = Record<string, boolean>;
+
+// Base interface that both ModelDefinition and AppModelDefinition satisfy
+export interface ModelDefinitionLike {
+  id: string;
+  name: string;
+  owned_by: string;
+  reasoning?: boolean;
+  toolCall?: boolean;
+  input?: {
+    image?: boolean;
+    pdf?: boolean;
+    audio?: boolean;
+  };
+  output?: {
+    image?: boolean;
+    audio?: boolean;
+    text?: boolean;
+  };
+}
 
 const enabledFeatures = getEnabledFeatures();
 const initialFilters = enabledFeatures.reduce<FeatureFilter>((acc, feature) => {
@@ -42,7 +60,7 @@ const initialFilters = enabledFeatures.reduce<FeatureFilter>((acc, feature) => {
   return acc;
 }, {});
 
-function getFeatureIcons(modelDefinition: AppModelDefinition) {
+function getFeatureIcons(modelDefinition: ModelDefinitionLike) {
   const features = modelDefinition;
 
   const icons: JSX.Element[] = [];
@@ -84,18 +102,21 @@ function getFeatureIcons(modelDefinition: AppModelDefinition) {
   return icons;
 }
 
-function PureCommandItem({
+function PureCommandItem<
+  TModelId extends string,
+  TModelDefinition extends ModelDefinitionLike,
+>({
   id,
   definition,
   disabled,
   isSelected,
   onSelectModel,
 }: {
-  id: AppModelId;
-  definition: AppModelDefinition;
+  id: TModelId;
+  definition: TModelDefinition;
   disabled?: boolean;
   isSelected: boolean;
-  onSelectModel: (id: AppModelId) => void;
+  onSelectModel: (id: TModelId) => void;
 }) {
   const provider = definition.owned_by as ProviderId;
   const featureIcons = useMemo(() => getFeatureIcons(definition), [definition]);
@@ -152,14 +173,17 @@ function PureCommandItem({
 }
 
 const CommandItem = memo(
-  PureCommandItem,
+  PureCommandItem as typeof PureCommandItem<string, ModelDefinitionLike>,
   (prevProps, nextProps) =>
     prevProps.id === nextProps.id &&
     prevProps.disabled === nextProps.disabled &&
     prevProps.isSelected === nextProps.isSelected &&
     prevProps.definition === nextProps.definition,
-);
-function PureModelSelectorPopoverContent({
+) as typeof PureCommandItem;
+function PureModelSelectorPopoverContent<
+  TModelId extends string,
+  TModelDefinition extends ModelDefinitionLike,
+>({
   enableFilters,
   filterOpen,
   onFilterOpenChange,
@@ -184,18 +208,18 @@ function PureModelSelectorPopoverContent({
   ) => void;
   topContent?: React.ReactNode;
   filteredModels: Array<{
-    id: AppModelId;
-    definition: AppModelDefinition;
+    id: TModelId;
+    definition: TModelDefinition;
     disabled?: boolean;
   }>;
-  optimisticModelId?: AppModelId;
-  onSelectModel: (id: AppModelId) => void;
+  optimisticModelId?: TModelId;
+  onSelectModel: (id: TModelId) => void;
   commandItemComponent: (props: {
-    id: AppModelId;
-    definition: AppModelDefinition;
+    id: TModelId;
+    definition: TModelDefinition;
     disabled?: boolean;
     isSelected: boolean;
-    onSelectModel: (id: AppModelId) => void;
+    onSelectModel: (id: TModelId) => void;
   }) => React.ReactNode;
 }) {
   const enabledFeatures = getEnabledFeatures();
@@ -311,16 +335,25 @@ function PureModelSelectorPopoverContent({
 }
 
 export const ModelSelectorPopoverContent = memo(
-  PureModelSelectorPopoverContent,
-);
+  PureModelSelectorPopoverContent as typeof PureModelSelectorPopoverContent<
+    string,
+    ModelDefinitionLike
+  >,
+) as typeof PureModelSelectorPopoverContent;
 
-export type ModelSelectorBaseItem = {
-  id: AppModelId;
-  definition: AppModelDefinition;
+export type ModelSelectorBaseItem<
+  TModelId extends string = ModelId,
+  TModelDefinition extends ModelDefinitionLike = ModelDefinition,
+> = {
+  id: TModelId;
+  definition: TModelDefinition;
   disabled?: boolean;
 };
 
-export function PureModelSelectorBase({
+export function PureModelSelectorBase<
+  TModelId extends string = ModelId,
+  TModelDefinition extends ModelDefinitionLike = ModelDefinition,
+>({
   models,
   selectedModelId,
   onModelChange,
@@ -330,9 +363,9 @@ export function PureModelSelectorBase({
   enableFilters = true,
   initialChevronDirection = 'up',
 }: {
-  models: Array<ModelSelectorBaseItem>;
-  selectedModelId?: AppModelId;
-  onModelChange?: (AppModelId: AppModelId) => void;
+  models: Array<ModelSelectorBaseItem<TModelId, TModelDefinition>>;
+  selectedModelId?: TModelId;
+  onModelChange?: (modelId: TModelId) => void;
   placeholder?: string;
   topContent?: React.ReactNode;
   enableFilters?: boolean;
@@ -361,15 +394,15 @@ export function PureModelSelectorBase({
           case 'functionCalling':
             return features.toolCall;
           case 'imageInput':
-            return features.input.image;
+            return features.input?.image;
           case 'pdfInput':
-            return features.input.pdf;
+            return features.input?.pdf;
           case 'audioInput':
-            return features.input.audio;
+            return features.input?.audio;
           case 'imageOutput':
-            return features.output.image;
+            return features.output?.image;
           case 'audioOutput':
-            return features.output.audio;
+            return features.output?.audio;
           default:
             return true;
         }
@@ -401,7 +434,7 @@ export function PureModelSelectorBase({
   const clearFilters = () => setFeatureFilters(initialFilters);
 
   const selectModel = useCallback(
-    (id: AppModelId) => {
+    (id: TModelId) => {
       startTransition(() => {
         setOptimisticModelId(id);
         onModelChange?.(id);
@@ -473,7 +506,10 @@ export function PureModelSelectorBase({
 }
 
 export const ModelSelectorBase = memo(
-  PureModelSelectorBase,
+  PureModelSelectorBase as typeof PureModelSelectorBase<
+    string,
+    ModelDefinitionLike
+  >,
   (prevProps, nextProps) => {
     return (
       prevProps.selectedModelId === nextProps.selectedModelId &&
@@ -484,4 +520,4 @@ export const ModelSelectorBase = memo(
       prevProps.enableFilters === nextProps.enableFilters
     );
   },
-);
+) as typeof PureModelSelectorBase;
