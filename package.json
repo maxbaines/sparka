@@ -29,6 +29,7 @@
     "test:types": "next typegen . && tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk-tools/devtools": "^0.8.4",
     "@ai-sdk/anthropic": "^2.0.3",
     "@ai-sdk/gateway": "1.0.23",
     "@ai-sdk/google": "^2.0.6",

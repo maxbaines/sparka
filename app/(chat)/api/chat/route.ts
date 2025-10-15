@@ -731,9 +731,25 @@ export async function POST(request: NextRequest) {
           await streamContext.resumableStream(streamId, () =>
             stream.pipeThrough(new JsonToSseTransformStream()),
           ),
+          {
+            headers: {
+              'Content-Type': 'text/event-stream',
+              'Cache-Control': 'no-cache',
+              Connection: 'keep-alive',
+            },
+          },
         );
       } else {
-        return new Response(stream.pipeThrough(new JsonToSseTransformStream()));
+        return new Response(
+          stream.pipeThrough(new JsonToSseTransformStream()),
+          {
+            headers: {
+              'Content-Type': 'text/event-stream',
+              'Cache-Control': 'no-cache',
+              Connection: 'keep-alive',
+            },
+          },
+        );
       }
     } catch (error) {
       clearTimeout(timeoutId);

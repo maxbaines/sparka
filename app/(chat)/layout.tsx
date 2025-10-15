@@ -9,6 +9,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { KeyboardShortcuts } from '@/components/keyboard-shortcuts';
 import { SessionProvider } from 'next-auth/react';
 import { TRPCReactProvider } from '@/trpc/react';
+import { AIDevtools } from '@ai-sdk-tools/devtools';
 
 export default async function ChatLayout({
   children,
@@ -55,6 +56,7 @@ export default async function ChatLayout({
             </SidebarInset>
           </SidebarProvider>
         </ChatProviders>
+        {process.env.NODE_ENV === 'development' && <AIDevtools />}
       </TRPCReactProvider>
     </SessionProvider>
   );
