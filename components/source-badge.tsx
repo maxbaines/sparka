@@ -31,7 +31,7 @@ export function WebSourceBadge({ result }: { result: SearchResultItem }) {
           </Badge>
         </Link>
       </TooltipTrigger>
-      <TooltipContent className="max-w-xs p-3 space-y-1">
+      <TooltipContent className="max-w-xs p-3 space-y-1" variant="base">
         <div className="flex items-center gap-2">
           <Favicon url={getFaviconUrl(result)} className="size-4" />
           <p className="font-semibold ">{result.title}</p>
