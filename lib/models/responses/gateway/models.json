@@ -119,7 +119,7 @@
       "created": 1755815280,
       "owned_by": "alibaba",
       "name": "Qwen3 Coder Plus",
-      "description": "Powered by Qwen3, this is a powerful Coding Agent that excels in tool calling and environment interaction to achieve autonomous programming. It combines outstanding coding proficiency with versatile general-purpose abilities.",
+      "description": "Powered by Qwen3 this is a powerful Coding Agent that excels in tool calling and environment interaction to achieve autonomous programming. It combines outstanding coding proficiency with versatile general-purpose abilities.",
       "context_window": 1000000,
       "max_tokens": 1000000,
       "type": "language",
@@ -422,6 +422,23 @@
         "output": "0.000015",
         "input_cache_read": "0.0000003",
         "input_cache_write": "0.00000375"
+      }
+    },
+    {
+      "id": "anthropic/claude-haiku-4.5",
+      "object": "model",
+      "created": 1755815280,
+      "owned_by": "anthropic",
+      "name": "Claude Haiku 4.5",
+      "description": "Claude Haiku 4.5 matches Sonnet 4's performance on coding, computer use, and agent tasks at substantially lower cost and faster speeds. It delivers near-frontier performance and Claude’s unique character at a price point that works for scaled sub-agent deployments, free tier products, and intelligence-sensitive applications with budget constraints.",
+      "context_window": 200000,
+      "max_tokens": 64000,
+      "type": "language",
+      "pricing": {
+        "input": "0.000001",
+        "output": "0.000005",
+        "input_cache_read": "0.0000001",
+        "input_cache_write": "0.00000125"
       }
     },
     {
@@ -744,8 +761,8 @@
       "created": 1755815280,
       "owned_by": "google",
       "name": "Gemini 2.0 Flash",
-      "description": "Gemini 2.0 Flash delivers next-gen features and improved capabilities, including superior speed, built-in tool use, multimodal generation, and a 1M token context window.",
-      "context_window": 1048576,
+      "description": "Gemini 2.0 Flash delivers next-gen features and improved capabilities, including superior speed, native tool use, multimodal generation, and a 1M token context window.",
+      "context_window": 1000000,
       "max_tokens": 8192,
       "type": "language",
       "tags": [
@@ -754,8 +771,8 @@
         "vision"
       ],
       "pricing": {
-        "input": "0.00000015",
-        "output": "0.0000006"
+        "input": "0.0000001",
+        "output": "0.0000004"
       }
     },
     {
@@ -786,7 +803,7 @@
       "name": "Gemini 2.5 Flash",
       "description": "Gemini 2.5 Flash is a thinking model that offers great, well-rounded capabilities. It is designed to offer a balance between price and performance with multimodal support and a 1M token context window.",
       "context_window": 1000000,
-      "max_tokens": 65536,
+      "max_tokens": 64000,
       "type": "language",
       "tags": [
         "file-input",
@@ -887,9 +904,9 @@
       "created": 1755815280,
       "owned_by": "google",
       "name": "Gemini 2.5 Pro",
-      "description": "Gemini 2.5 Pro is our most advanced reasoning Gemini model, capable of solving complex problems. It features a 2M token context window and supports multimodal inputs including text, images, audio, video, and PDF documents.",
+      "description": "Gemini 2.5 Pro is our most advanced reasoning Gemini model, capable of solving complex problems. Gemini 2.5 Pro can comprehend vast datasets and challenging problems from different information sources, including text, audio, images, video, and even entire code repositories.",
       "context_window": 1048576,
-      "max_tokens": 65536,
+      "max_tokens": 8192,
       "type": "language",
       "tags": [
         "file-input",
@@ -898,7 +915,7 @@
         "vision"
       ],
       "pricing": {
-        "input": "0.0000025",
+        "input": "0.00000125",
         "output": "0.00001"
       }
     },
@@ -986,7 +1003,7 @@
       "created": 1755815280,
       "owned_by": "meituan",
       "name": "LongCat Flash Chat",
-      "description": "LongCat-Flash-Chat is a high-throughput MoE chat model (128k context) optimized for agentic tasks.",
+      "description": "LongCat-Flash-Chat is a high-throughput MoE chat model (128k context) designed for agentic tasks.",
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",

@@ -214,6 +214,562 @@
   },
   "alibaba": {
     "models": {
+      "qwen3-livetranslate-flash-realtime": {
+        "id": "qwen3-livetranslate-flash-realtime",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-09-22"
+      },
+      "qwen3-asr-flash": {
+        "id": "qwen3-asr-flash",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-08"
+      },
+      "qwen-omni-turbo": {
+        "id": "qwen-omni-turbo",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-01-19"
+      },
+      "qwen-vl-max": {
+        "id": "qwen-vl-max",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-04-08"
+      },
+      "qwen3-next-80b-a3b-instruct": {
+        "id": "qwen3-next-80b-a3b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09"
+      },
+      "qwen-turbo": {
+        "id": "qwen-turbo",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-11-01"
+      },
+      "qwen3-vl-235b-a22b": {
+        "id": "qwen3-vl-235b-a22b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen3-coder-flash": {
+        "id": "qwen3-coder-flash",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-28"
+      },
+      "qwen3-vl-30b-a3b": {
+        "id": "qwen3-vl-30b-a3b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen3-14b": {
+        "id": "qwen3-14b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qvq-max": {
+        "id": "qvq-max",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-03-25"
+      },
+      "qwen-plus-character-ja": {
+        "id": "qwen-plus-character-ja",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01"
+      },
+      "qwen2-5-14b-instruct": {
+        "id": "qwen2-5-14b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwq-plus": {
+        "id": "qwq-plus",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-03-05"
+      },
+      "qwen3-coder-30b-a3b-instruct": {
+        "id": "qwen3-coder-30b-a3b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen-vl-ocr": {
+        "id": "qwen-vl-ocr",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-10-28"
+      },
+      "qwen2-5-72b-instruct": {
+        "id": "qwen2-5-72b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen3-omni-flash": {
+        "id": "qwen3-omni-flash",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-09-15"
+      },
+      "qwen-flash": {
+        "id": "qwen-flash",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-28"
+      },
+      "qwen3-8b": {
+        "id": "qwen3-8b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen3-omni-flash-realtime": {
+        "id": "qwen3-omni-flash-realtime",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-09-15"
+      },
+      "qwen2-5-vl-72b-instruct": {
+        "id": "qwen2-5-vl-72b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen3-vl-plus": {
+        "id": "qwen3-vl-plus",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-23"
+      },
+      "qwen-plus": {
+        "id": "qwen-plus",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01-25"
+      },
+      "qwen2-5-32b-instruct": {
+        "id": "qwen2-5-32b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen2-5-omni-7b": {
+        "id": "qwen2-5-omni-7b",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2024-12"
+      },
+      "qwen-max": {
+        "id": "qwen-max",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-04-03"
+      },
+      "qwen2-5-7b-instruct": {
+        "id": "qwen2-5-7b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen2-5-vl-7b-instruct": {
+        "id": "qwen2-5-vl-7b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen3-235b-a22b": {
+        "id": "qwen3-235b-a22b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen-omni-turbo-realtime": {
+        "id": "qwen-omni-turbo-realtime",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-05-08"
+      },
+      "qwen-mt-turbo": {
+        "id": "qwen-mt-turbo",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01"
+      },
+      "qwen3-coder-480b-a35b-instruct": {
+        "id": "qwen3-coder-480b-a35b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen-mt-plus": {
+        "id": "qwen-mt-plus",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01"
+      },
+      "qwen3-max": {
+        "id": "qwen3-max",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-23"
+      },
       "qwen3-coder-plus": {
         "id": "qwen3-coder-plus",
         "knowledge": "2025-04",
@@ -228,6 +784,52 @@
           ]
         },
         "release_date": "2025-07-23"
+      },
+      "qwen3-next-80b-a3b-thinking": {
+        "id": "qwen3-next-80b-a3b-thinking",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09"
+      },
+      "qwen3-32b": {
+        "id": "qwen3-32b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen-vl-plus": {
+        "id": "qwen-vl-plus",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01-25"
       }
     }
   },
@@ -543,6 +1145,21 @@
   },
   "nvidia": {
     "models": {
+      "moonshotai/kimi-k2-instruct-0905": {
+        "id": "moonshotai/kimi-k2-instruct-0905",
+        "knowledge": "2024-10",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-05"
+      },
       "moonshotai/kimi-k2-instruct": {
         "id": "moonshotai/kimi-k2-instruct",
         "knowledge": "2024-01",
@@ -1642,6 +2259,98 @@
         },
         "release_date": "2025-07-14"
       },
+      "alibaba/qwen3-next-80b-a3b-instruct": {
+        "id": "alibaba/qwen3-next-80b-a3b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-12"
+      },
+      "alibaba/qwen3-vl-instruct": {
+        "id": "alibaba/qwen3-vl-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-24"
+      },
+      "alibaba/qwen3-vl-thinking": {
+        "id": "alibaba/qwen3-vl-thinking",
+        "knowledge": "2025-09",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-24"
+      },
+      "alibaba/qwen3-max": {
+        "id": "alibaba/qwen3-max",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-23"
+      },
+      "alibaba/qwen3-coder-plus": {
+        "id": "alibaba/qwen3-coder-plus",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-23"
+      },
+      "alibaba/qwen3-next-80b-a3b-thinking": {
+        "id": "alibaba/qwen3-next-80b-a3b-thinking",
+        "knowledge": "2025-09",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-12"
+      },
       "xai/grok-3-mini-fast": {
         "id": "xai/grok-3-mini-fast",
         "knowledge": "2024-11",
@@ -1978,6 +2687,51 @@
         },
         "release_date": "2025-06-09"
       },
+      "deepseek/deepseek-v3.2-exp-thinking": {
+        "id": "deepseek/deepseek-v3.2-exp-thinking",
+        "knowledge": "2025-09",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-29"
+      },
+      "deepseek/deepseek-v3.1-terminus": {
+        "id": "deepseek/deepseek-v3.1-terminus",
+        "knowledge": "2025-07",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-22"
+      },
+      "deepseek/deepseek-v3.2-exp": {
+        "id": "deepseek/deepseek-v3.2-exp",
+        "knowledge": "2025-09",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-29"
+      },
       "deepseek/deepseek-r1-distill-llama-70b": {
         "id": "deepseek/deepseek-r1-distill-llama-70b",
         "knowledge": "2024-07",
@@ -2007,6 +2761,63 @@
           ]
         },
         "release_date": "2025-01-20"
+      },
+      "google/gemini-2.5-flash-lite": {
+        "id": "google/gemini-2.5-flash-lite",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-06-17"
+      },
+      "google/gemini-2.5-flash-preview-09-2025": {
+        "id": "google/gemini-2.5-flash-preview-09-2025",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
+      },
+      "google/gemini-2.5-flash-lite-preview-09-2025": {
+        "id": "google/gemini-2.5-flash-lite-preview-09-2025",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
       },
       "google/gemini-2.5-pro": {
         "id": "google/gemini-2.5-pro",
@@ -2335,6 +3146,129 @@
         },
         "release_date": "2025-04-14"
       },
+      "perplexity/sonar-reasoning": {
+        "id": "perplexity/sonar-reasoning",
+        "knowledge": "2025-09",
+        "reasoning": true,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-02-19"
+      },
+      "perplexity/sonar": {
+        "id": "perplexity/sonar",
+        "knowledge": "2025-02",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-02-19"
+      },
+      "perplexity/sonar-pro": {
+        "id": "perplexity/sonar-pro",
+        "knowledge": "2025-09",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-02-19"
+      },
+      "perplexity/sonar-reasoning-pro": {
+        "id": "perplexity/sonar-reasoning-pro",
+        "knowledge": "2025-09",
+        "reasoning": true,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-02-19"
+      },
+      "zai/glm-4.5": {
+        "id": "zai/glm-4.5",
+        "knowledge": "2025-07",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-28"
+      },
+      "zai/glm-4.5-air": {
+        "id": "zai/glm-4.5-air",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-28"
+      },
+      "zai/glm-4.5v": {
+        "id": "zai/glm-4.5v",
+        "knowledge": "2025-08",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-08-11"
+      },
+      "zai/glm-4.6": {
+        "id": "zai/glm-4.6",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-30"
+      },
       "amazon/nova-micro": {
         "id": "amazon/nova-micro",
         "knowledge": "2024-10",
@@ -2458,6 +3392,22 @@
           ]
         },
         "release_date": "2025-04-05"
+      },
+      "anthropic/claude-haiku-4.5": {
+        "id": "anthropic/claude-haiku-4.5",
+        "knowledge": "2025-02-31",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-10-15"
       },
       "anthropic/claude-3.7-sonnet": {
         "id": "anthropic/claude-3.7-sonnet",
@@ -2620,6 +3570,235 @@
       }
     }
   },
+  "nebius": {
+    "models": {
+      "NousResearch/hermes-4-70b": {
+        "id": "NousResearch/hermes-4-70b",
+        "knowledge": "2024-07",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-08-01"
+      },
+      "NousResearch/hermes-4-405b": {
+        "id": "NousResearch/hermes-4-405b",
+        "knowledge": "2024-07",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-08-01"
+      },
+      "moonshotai/kimi-k2-instruct": {
+        "id": "moonshotai/kimi-k2-instruct",
+        "knowledge": "2024-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "nvidia/llama-3_1-nemotron-ultra-253b-v1": {
+        "id": "nvidia/llama-3_1-nemotron-ultra-253b-v1",
+        "knowledge": "2024-07",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-07-01"
+      },
+      "openai/gpt-oss-20b": {
+        "id": "openai/gpt-oss-20b",
+        "knowledge": "2024-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01-01"
+      },
+      "openai/gpt-oss-120b": {
+        "id": "openai/gpt-oss-120b",
+        "knowledge": "2024-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01-01"
+      },
+      "qwen/qwen3-235b-a22b-instruct-2507": {
+        "id": "qwen/qwen3-235b-a22b-instruct-2507",
+        "knowledge": "2025-07",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-25"
+      },
+      "qwen/qwen3-235b-a22b-thinking-2507": {
+        "id": "qwen/qwen3-235b-a22b-thinking-2507",
+        "knowledge": "2025-07",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-25"
+      },
+      "qwen/qwen3-coder-480b-a35b-instruct": {
+        "id": "qwen/qwen3-coder-480b-a35b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-23"
+      },
+      "meta-llama/llama-3_1-405b-instruct": {
+        "id": "meta-llama/llama-3_1-405b-instruct",
+        "knowledge": "2024-03",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-07-23"
+      },
+      "meta-llama/llama-3.3-70b-instruct-fast": {
+        "id": "meta-llama/llama-3.3-70b-instruct-fast",
+        "knowledge": "2024-08",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-08-22"
+      },
+      "meta-llama/llama-3.3-70b-instruct-base": {
+        "id": "meta-llama/llama-3.3-70b-instruct-base",
+        "knowledge": "2024-08",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-08-22"
+      },
+      "zai-org/glm-4.5": {
+        "id": "zai-org/glm-4.5",
+        "knowledge": "2024-05",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-06-01"
+      },
+      "zai-org/glm-4.5-air": {
+        "id": "zai-org/glm-4.5-air",
+        "knowledge": "2024-05",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-06-01"
+      },
+      "deepseek-ai/deepseek-v3": {
+        "id": "deepseek-ai/deepseek-v3",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-05-07"
+      }
+    }
+  },
   "deepseek": {
     "models": {
       "deepseek-chat": {
@@ -2656,6 +3835,921 @@
   },
   "alibaba-cn": {
     "models": {
+      "deepseek-r1-distill-qwen-7b": {
+        "id": "deepseek-r1-distill-qwen-7b",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen3-asr-flash": {
+        "id": "qwen3-asr-flash",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-08"
+      },
+      "deepseek-r1-0528": {
+        "id": "deepseek-r1-0528",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-05-28"
+      },
+      "deepseek-v3": {
+        "id": "deepseek-v3",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-12-01"
+      },
+      "qwen-omni-turbo": {
+        "id": "qwen-omni-turbo",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-01-19"
+      },
+      "qwen-vl-max": {
+        "id": "qwen-vl-max",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-04-08"
+      },
+      "deepseek-v3-2-exp": {
+        "id": "deepseek-v3-2-exp",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen3-next-80b-a3b-instruct": {
+        "id": "qwen3-next-80b-a3b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09"
+      },
+      "deepseek-r1": {
+        "id": "deepseek-r1",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen-turbo": {
+        "id": "qwen-turbo",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-11-01"
+      },
+      "qwen3-vl-235b-a22b": {
+        "id": "qwen3-vl-235b-a22b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen3-coder-flash": {
+        "id": "qwen3-coder-flash",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-28"
+      },
+      "qwen3-vl-30b-a3b": {
+        "id": "qwen3-vl-30b-a3b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen3-14b": {
+        "id": "qwen3-14b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qvq-max": {
+        "id": "qvq-max",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-03-25"
+      },
+      "deepseek-r1-distill-qwen-32b": {
+        "id": "deepseek-r1-distill-qwen-32b",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen-plus-character": {
+        "id": "qwen-plus-character",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01"
+      },
+      "qwen2-5-14b-instruct": {
+        "id": "qwen2-5-14b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwq-plus": {
+        "id": "qwq-plus",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-03-05"
+      },
+      "qwen2-5-coder-32b-instruct": {
+        "id": "qwen2-5-coder-32b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-11"
+      },
+      "qwen3-coder-30b-a3b-instruct": {
+        "id": "qwen3-coder-30b-a3b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen-math-plus": {
+        "id": "qwen-math-plus",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-08-16"
+      },
+      "qwen-vl-ocr": {
+        "id": "qwen-vl-ocr",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-10-28"
+      },
+      "qwen-doc-turbo": {
+        "id": "qwen-doc-turbo",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01"
+      },
+      "qwen-deep-research": {
+        "id": "qwen-deep-research",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01"
+      },
+      "qwen2-5-72b-instruct": {
+        "id": "qwen2-5-72b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen3-omni-flash": {
+        "id": "qwen3-omni-flash",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-09-15"
+      },
+      "qwen-flash": {
+        "id": "qwen-flash",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-28"
+      },
+      "qwen3-8b": {
+        "id": "qwen3-8b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen3-omni-flash-realtime": {
+        "id": "qwen3-omni-flash-realtime",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-09-15"
+      },
+      "qwen2-5-vl-72b-instruct": {
+        "id": "qwen2-5-vl-72b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen3-vl-plus": {
+        "id": "qwen3-vl-plus",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-23"
+      },
+      "qwen-plus": {
+        "id": "qwen-plus",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01-25"
+      },
+      "qwen2-5-32b-instruct": {
+        "id": "qwen2-5-32b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen2-5-omni-7b": {
+        "id": "qwen2-5-omni-7b",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2024-12"
+      },
+      "qwen-max": {
+        "id": "qwen-max",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-04-03"
+      },
+      "qwen-long": {
+        "id": "qwen-long",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-25"
+      },
+      "qwen2-5-math-72b-instruct": {
+        "id": "qwen2-5-math-72b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "moonshot-kimi-k2-instruct": {
+        "id": "moonshot-kimi-k2-instruct",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "tongyi-intent-detect-v3": {
+        "id": "tongyi-intent-detect-v3",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01"
+      },
+      "qwen2-5-7b-instruct": {
+        "id": "qwen2-5-7b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen2-5-vl-7b-instruct": {
+        "id": "qwen2-5-vl-7b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "deepseek-v3-1": {
+        "id": "deepseek-v3-1",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "deepseek-r1-distill-llama-70b": {
+        "id": "deepseek-r1-distill-llama-70b",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen3-235b-a22b": {
+        "id": "qwen3-235b-a22b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen2-5-coder-7b-instruct": {
+        "id": "qwen2-5-coder-7b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-11"
+      },
+      "deepseek-r1-distill-qwen-14b": {
+        "id": "deepseek-r1-distill-qwen-14b",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen-omni-turbo-realtime": {
+        "id": "qwen-omni-turbo-realtime",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-05-08"
+      },
+      "qwen-math-turbo": {
+        "id": "qwen-math-turbo",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09-19"
+      },
+      "qwen-mt-turbo": {
+        "id": "qwen-mt-turbo",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01"
+      },
+      "deepseek-r1-distill-llama-8b": {
+        "id": "deepseek-r1-distill-llama-8b",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen3-coder-480b-a35b-instruct": {
+        "id": "qwen3-coder-480b-a35b-instruct",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen-mt-plus": {
+        "id": "qwen-mt-plus",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01"
+      },
+      "qwen3-max": {
+        "id": "qwen3-max",
+        "knowledge": "2025-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-23"
+      },
+      "qwq-32b": {
+        "id": "qwq-32b",
+        "knowledge": "2024-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-12"
+      },
+      "qwen2-5-math-7b-instruct": {
+        "id": "qwen2-5-math-7b-instruct",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-09"
+      },
+      "qwen3-next-80b-a3b-thinking": {
+        "id": "qwen3-next-80b-a3b-thinking",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09"
+      },
+      "deepseek-r1-distill-qwen-1-5b": {
+        "id": "deepseek-r1-distill-qwen-1-5b",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-01-01"
+      },
+      "qwen3-32b": {
+        "id": "qwen3-32b",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04"
+      },
+      "qwen-vl-plus": {
+        "id": "qwen-vl-plus",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-01-25"
+      },
       "qwen3-coder-plus": {
         "id": "qwen3-coder-plus",
         "knowledge": "2025-04",
@@ -3476,6 +5570,22 @@
           ]
         },
         "release_date": "2024-12-03"
+      },
+      "claude-4-5-sonnet": {
+        "id": "claude-4-5-sonnet",
+        "knowledge": "2025-07-31",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-29"
       },
       "deepseek-v3-0324": {
         "id": "deepseek-v3-0324",
@@ -5220,6 +7330,37 @@
         },
         "release_date": "2025-09-05"
       },
+      "claude-haiku-4-5": {
+        "id": "claude-haiku-4-5",
+        "knowledge": "2025-02-31",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-10-15"
+      },
+      "an-g8x": {
+        "id": "an-g8x",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-30"
+      },
       "claude-sonnet-4-5": {
         "id": "claude-sonnet-4-5",
         "knowledge": "2025-07-31",
@@ -5570,6 +7711,23 @@
   },
   "google": {
     "models": {
+      "gemini-2.5-flash-image": {
+        "id": "gemini-2.5-flash-image",
+        "knowledge": "2025-06",
+        "reasoning": true,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text",
+            "image"
+          ]
+        },
+        "release_date": "2025-08-26"
+      },
       "gemini-2.5-flash-preview-05-20": {
         "id": "gemini-2.5-flash-preview-05-20",
         "knowledge": "2025-01",
@@ -5665,6 +7823,21 @@
         },
         "release_date": "2025-05-06"
       },
+      "gemini-2.5-flash-preview-tts": {
+        "id": "gemini-2.5-flash-preview-tts",
+        "knowledge": "2025-01",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "audio"
+          ]
+        },
+        "release_date": "2025-05-01"
+      },
       "gemini-2.0-flash-lite": {
         "id": "gemini-2.0-flash-lite",
         "knowledge": "2024-06",
@@ -5701,6 +7874,381 @@
           ]
         },
         "release_date": "2025-06-17"
+      },
+      "gemini-2.0-flash": {
+        "id": "gemini-2.0-flash",
+        "knowledge": "2024-06",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-12-11"
+      },
+      "gemini-2.5-flash-lite": {
+        "id": "gemini-2.5-flash-lite",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-06-17"
+      },
+      "gemini-2.5-pro-preview-06-05": {
+        "id": "gemini-2.5-pro-preview-06-05",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-06-05"
+      },
+      "gemini-live-2.5-flash": {
+        "id": "gemini-live-2.5-flash",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text",
+            "audio"
+          ]
+        },
+        "release_date": "2025-09-01"
+      },
+      "gemini-2.5-flash-lite-preview-06-17": {
+        "id": "gemini-2.5-flash-lite-preview-06-17",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-06-17"
+      },
+      "gemini-2.5-flash-image-preview": {
+        "id": "gemini-2.5-flash-image-preview",
+        "knowledge": "2025-06",
+        "reasoning": true,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text",
+            "image"
+          ]
+        },
+        "release_date": "2025-08-26"
+      },
+      "gemini-2.5-flash-preview-09-2025": {
+        "id": "gemini-2.5-flash-preview-09-2025",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
+      },
+      "gemini-2.5-flash-preview-04-17": {
+        "id": "gemini-2.5-flash-preview-04-17",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-04-17"
+      },
+      "gemini-2.5-pro-preview-tts": {
+        "id": "gemini-2.5-pro-preview-tts",
+        "knowledge": "2025-01",
+        "reasoning": false,
+        "tool_call": false,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "audio"
+          ]
+        },
+        "release_date": "2025-05-01"
+      },
+      "gemini-2.5-pro": {
+        "id": "gemini-2.5-pro",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-03-20"
+      },
+      "gemini-1.5-flash": {
+        "id": "gemini-1.5-flash",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-05-14"
+      },
+      "gemini-1.5-flash-8b": {
+        "id": "gemini-1.5-flash-8b",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-10-03"
+      },
+      "gemini-2.5-flash-lite-preview-09-2025": {
+        "id": "gemini-2.5-flash-lite-preview-09-2025",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
+      },
+      "gemini-1.5-pro": {
+        "id": "gemini-1.5-pro",
+        "knowledge": "2024-04",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-02-15"
+      }
+    }
+  },
+  "google-vertex": {
+    "models": {
+      "gemini-2.5-flash-preview-05-20": {
+        "id": "gemini-2.5-flash-preview-05-20",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-05-20"
+      },
+      "gemini-flash-lite-latest": {
+        "id": "gemini-flash-lite-latest",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
+      },
+      "gemini-2.5-flash": {
+        "id": "gemini-2.5-flash",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-06-17"
+      },
+      "gemini-flash-latest": {
+        "id": "gemini-flash-latest",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
+      },
+      "gemini-2.5-pro-preview-05-06": {
+        "id": "gemini-2.5-pro-preview-05-06",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-05-06"
+      },
+      "gemini-2.0-flash-lite": {
+        "id": "gemini-2.0-flash-lite",
+        "knowledge": "2024-06",
+        "reasoning": false,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2024-12-11"
       },
       "gemini-2.0-flash": {
         "id": "gemini-2.0-flash",
@@ -5835,42 +8383,6 @@
         },
         "release_date": "2025-03-20"
       },
-      "gemini-1.5-flash": {
-        "id": "gemini-1.5-flash",
-        "knowledge": "2024-04",
-        "reasoning": false,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2024-05-14"
-      },
-      "gemini-1.5-flash-8b": {
-        "id": "gemini-1.5-flash-8b",
-        "knowledge": "2024-04",
-        "reasoning": false,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2024-10-03"
-      },
       "gemini-2.5-flash-lite-preview-09-2025": {
         "id": "gemini-2.5-flash-lite-preview-09-2025",
         "knowledge": "2025-01",
@@ -5889,199 +8401,6 @@
           ]
         },
         "release_date": "2025-09-25"
-      },
-      "gemini-1.5-pro": {
-        "id": "gemini-1.5-pro",
-        "knowledge": "2024-04",
-        "reasoning": false,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2024-02-15"
-      }
-    }
-  },
-  "google-vertex": {
-    "models": {
-      "gemini-2.5-flash-preview-05-20": {
-        "id": "gemini-2.5-flash-preview-05-20",
-        "knowledge": "2025-01",
-        "reasoning": true,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-05-20"
-      },
-      "gemini-2.5-flash": {
-        "id": "gemini-2.5-flash",
-        "knowledge": "2025-01",
-        "reasoning": true,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-06-17"
-      },
-      "gemini-2.5-pro-preview-05-06": {
-        "id": "gemini-2.5-pro-preview-05-06",
-        "knowledge": "2025-01",
-        "reasoning": true,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-05-06"
-      },
-      "gemini-2.0-flash-lite": {
-        "id": "gemini-2.0-flash-lite",
-        "knowledge": "2024-06",
-        "reasoning": false,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2024-12-11"
-      },
-      "gemini-2.0-flash": {
-        "id": "gemini-2.0-flash",
-        "knowledge": "2024-06",
-        "reasoning": false,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2024-12-11"
-      },
-      "gemini-2.5-pro-preview-06-05": {
-        "id": "gemini-2.5-pro-preview-06-05",
-        "knowledge": "2025-01",
-        "reasoning": true,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-06-05"
-      },
-      "gemini-2.5-flash-lite-preview-06-17": {
-        "id": "gemini-2.5-flash-lite-preview-06-17",
-        "knowledge": "2025-01",
-        "reasoning": true,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-06-17"
-      },
-      "gemini-2.5-flash-preview-04-17": {
-        "id": "gemini-2.5-flash-preview-04-17",
-        "knowledge": "2025-01",
-        "reasoning": true,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-04-17"
-      },
-      "gemini-2.5-pro": {
-        "id": "gemini-2.5-pro",
-        "knowledge": "2025-01",
-        "reasoning": true,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "audio",
-            "video",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-03-20"
       }
     }
   },
@@ -8365,6 +10684,25 @@
         },
         "release_date": "2025-05-20"
       },
+      "google/gemini-2.5-flash-lite": {
+        "id": "google/gemini-2.5-flash-lite",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-06-17"
+      },
       "google/gemini-2.5-pro-preview-06-05": {
         "id": "google/gemini-2.5-pro-preview-06-05",
         "knowledge": "2025-01",
@@ -8383,6 +10721,25 @@
           ]
         },
         "release_date": "2025-06-05"
+      },
+      "google/gemini-2.5-flash-preview-09-2025": {
+        "id": "google/gemini-2.5-flash-preview-09-2025",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
       },
       "google/gemini-2.5-pro": {
         "id": "google/gemini-2.5-pro",
@@ -8435,6 +10792,25 @@
           ]
         },
         "release_date": "2025-05-20"
+      },
+      "google/gemini-2.5-flash-lite-preview-09-2025": {
+        "id": "google/gemini-2.5-flash-lite-preview-09-2025",
+        "knowledge": "2025-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-25"
       },
       "google/gemini-2.0-flash-exp:free": {
         "id": "google/gemini-2.0-flash-exp:free",
@@ -8594,6 +10970,24 @@
           ]
         },
         "release_date": "2025-08-07"
+      },
+      "openai/gpt-5-image": {
+        "id": "openai/gpt-5-image",
+        "knowledge": "2024-10-01",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text",
+            "image"
+          ]
+        },
+        "release_date": "2025-10-14"
       },
       "openai/gpt-oss-20b": {
         "id": "openai/gpt-oss-20b",
@@ -8899,6 +11293,21 @@
         },
         "release_date": "2025-03-05"
       },
+      "qwen/qwen3-30b-a3b-thinking-2507": {
+        "id": "qwen/qwen3-30b-a3b-thinking-2507",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-07-29"
+      },
       "qwen/qwen3-30b-a3b:free": {
         "id": "qwen/qwen3-30b-a3b:free",
         "knowledge": "2025-04",
@@ -8949,7 +11358,7 @@
         "id": "qwen/qwen3-30b-a3b-instruct-2507",
         "knowledge": "2025-04",
         "reasoning": false,
-        "tool_call": false,
+        "tool_call": true,
         "modalities": {
           "input": [
             "text"
@@ -9081,6 +11490,21 @@
           ]
         },
         "release_date": "2025-09-05"
+      },
+      "qwen/qwen3-next-80b-a3b-thinking": {
+        "id": "qwen/qwen3-next-80b-a3b-thinking",
+        "knowledge": "2025-04",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-09-11"
       },
       "mistralai/devstral-medium-2507": {
         "id": "mistralai/devstral-medium-2507",
@@ -9344,6 +11768,22 @@
           ]
         },
         "release_date": "2025-05-22"
+      },
+      "anthropic/claude-4.5-haiku": {
+        "id": "anthropic/claude-4.5-haiku",
+        "knowledge": "2025-02-31",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-10-15"
       },
       "anthropic/claude-opus-4.1": {
         "id": "anthropic/claude-opus-4.1",
@@ -10797,6 +13237,22 @@
           ]
         },
         "release_date": "2024-03-04"
+      },
+      "claude-haiku-4-5-20251001": {
+        "id": "claude-haiku-4-5-20251001",
+        "knowledge": "2025-02-31",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-10-15"
       }
     }
   },
@@ -11012,21 +13468,6 @@
           ]
         },
         "release_date": "2025-07-31"
-      },
-      "Qwen/Qwen3-Coder-480B-A35B-Instruct": {
-        "id": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-        "knowledge": "2025-04",
-        "reasoning": false,
-        "tool_call": true,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "release_date": "2025-07-23"
       },
       "Qwen/Qwen3-30B-A3B-Instruct-2507": {
         "id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
@@ -11421,6 +13862,22 @@
           ]
         },
         "release_date": "2024-06-20"
+      },
+      "anthropic.claude-haiku-4-5-20251001-v1:0": {
+        "id": "anthropic.claude-haiku-4-5-20251001-v1:0",
+        "knowledge": "2025-02-28",
+        "reasoning": true,
+        "tool_call": true,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "release_date": "2025-10-15"
       },
       "cohere.command-r-v1:0": {
         "id": "cohere.command-r-v1:0",

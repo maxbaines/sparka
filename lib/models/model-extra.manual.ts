@@ -15,12 +15,6 @@ type GeneratedModelExtraModelId = keyof typeof generatedModelExtra;
 type CustomModelExtraModelId = Exclude<ModelId, GeneratedModelExtraModelId>;
 
 export const manualModelExtra: Record<CustomModelExtraModelId, ModelExtra> = {
-  // Google Gemini 2.5 Flash Lite
-  'google/gemini-2.5-flash-lite': {
-    releaseDate: new Date('2025-06-17'),
-    knowledgeCutoff: new Date('2025-01-01'),
-  },
-
   // OpenAI GPT-3.5 family
   'openai/gpt-3.5-turbo': {
     releaseDate: new Date('2023-03-01'),
@@ -29,19 +23,6 @@ export const manualModelExtra: Record<CustomModelExtraModelId, ModelExtra> = {
   'openai/gpt-3.5-turbo-instruct': {
     releaseDate: new Date('2023-08-22'),
     knowledgeCutoff: new Date('2021-09-01'),
-  },
-
-  // Zhipu AI (ZAI)
-  'zai/glm-4.5': {
-    releaseDate: new Date('2025-07-28'),
-    knowledgeCutoff: new Date('2024-04-01'),
-  },
-  'zai/glm-4.5-air': {
-    releaseDate: new Date('2025-07-28'),
-    knowledgeCutoff: new Date('2024-04-01'),
-  },
-  'zai/glm-4.5v': {
-    releaseDate: new Date('2025-08-11'),
   },
 
   // Cohere Command family (official: docs.cohere.com)
@@ -61,20 +42,6 @@ export const manualModelExtra: Record<CustomModelExtraModelId, ModelExtra> = {
   },
   'meta/llama-3.2-90b': {
     releaseDate: new Date('2024-09-25'),
-  },
-
-  // Perplexity Sonar (official: docs.perplexity.ai)
-  'perplexity/sonar': {
-    releaseDate: new Date('2023-12-15'),
-  },
-  'perplexity/sonar-pro': {
-    releaseDate: new Date('2024-03-12'),
-  },
-  'perplexity/sonar-reasoning': {
-    releaseDate: new Date('2024-03-12'),
-  },
-  'perplexity/sonar-reasoning-pro': {
-    releaseDate: new Date('2024-05-01'),
   },
 
   // DeepSeek (manual dates for variants not in models.dev)
@@ -145,25 +112,7 @@ export const manualModelExtra: Record<CustomModelExtraModelId, ModelExtra> = {
   'alibaba/qwen3-coder-30b-a3b': {
     releaseDate: new Date('2025-07-15'),
   },
-  'alibaba/qwen3-coder-plus': {
-    releaseDate: new Date('2025-07-15'),
-  },
-  'alibaba/qwen3-max': {
-    releaseDate: new Date('2025-07-15'),
-  },
   'alibaba/qwen3-max-preview': {
-    releaseDate: new Date('2025-07-15'),
-  },
-  'alibaba/qwen3-next-80b-a3b-instruct': {
-    releaseDate: new Date('2025-07-15'),
-  },
-  'alibaba/qwen3-next-80b-a3b-thinking': {
-    releaseDate: new Date('2025-07-15'),
-  },
-  'alibaba/qwen3-vl-instruct': {
-    releaseDate: new Date('2025-07-15'),
-  },
-  'alibaba/qwen3-vl-thinking': {
     releaseDate: new Date('2025-07-15'),
   },
 
@@ -177,23 +126,6 @@ export const manualModelExtra: Record<CustomModelExtraModelId, ModelExtra> = {
   'anthropic/claude-3.5-sonnet-20240620': {
     releaseDate: new Date('2024-06-20'),
   },
-
-  // DeepSeek experimental 3.2 variants (approximate preview dates)
-  'deepseek/deepseek-v3.2-exp': {
-    releaseDate: new Date('2025-09-10'),
-  },
-  'deepseek/deepseek-v3.2-exp-thinking': {
-    releaseDate: new Date('2025-09-10'),
-  },
-
-  // Google Gemini 2.5 Flash preview (September 2025 tags)
-  'google/gemini-2.5-flash-lite-preview-09-2025': {
-    releaseDate: new Date('2025-09-10'),
-  },
-  'google/gemini-2.5-flash-preview-09-2025': {
-    releaseDate: new Date('2025-09-10'),
-  },
-
   // Meituan LongCat Flash
   'meituan/longcat-flash-chat': {
     releaseDate: new Date('2025-08-20'),
@@ -231,10 +163,5 @@ export const manualModelExtra: Record<CustomModelExtraModelId, ModelExtra> = {
   // xAI Grok 4 fast reasoning
   'xai/grok-4-fast-reasoning': {
     releaseDate: new Date('2025-08-30'),
-  },
-
-  // Zhipu GLM
-  'zai/glm-4.6': {
-    releaseDate: new Date('2025-09-15'),
   },
 };
