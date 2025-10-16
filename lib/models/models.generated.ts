@@ -620,9 +620,9 @@ export const modelsData: ModelData[] = [
       input_cache_read: '0.0000001',
       input_cache_write: '0.00000125',
     },
-    reasoning: false,
-    toolCall: false,
-    input: { image: false, text: true, pdf: false, video: false, audio: false },
+    reasoning: true,
+    toolCall: true,
+    input: { image: true, text: true, pdf: true, video: false, audio: false },
     output: { image: false, text: true, audio: false },
   },
   {
