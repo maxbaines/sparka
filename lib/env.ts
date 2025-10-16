@@ -57,7 +57,7 @@ export const env = createEnv({
     FIRECRAWL_API_KEY: process.env.FIRECRAWL_API_KEY,
     SANDBOX_TEMPLATE_ID: process.env.SANDBOX_TEMPLATE_ID,
     LOG_LEVEL: process.env.LOG_LEVEL,
-    NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV,
+    NEXT_PUBLIC_NODE_ENV: process.env.NODE_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
     VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
     CONTEXT_SIZE: process.env.CONTEXT_SIZE,
