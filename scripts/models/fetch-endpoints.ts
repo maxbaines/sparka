@@ -184,7 +184,7 @@ async function main() {
     lines.push(`    name: ${JSON.stringify(m.name)},`);
     lines.push(`    description: ${JSON.stringify(m.description)},`);
     lines.push("    type: 'language',");
-    lines.push(`    tags: ${JSON.stringify(m.tags ?? [])} as ModelTag[],`);
+    lines.push(`    tags: ${JSON.stringify(m.tags ?? [])},`);
     lines.push(`    context_window: ${m.context_window},`);
     lines.push(`    max_tokens: ${m.max_tokens},`);
     lines.push(`    pricing: ${JSON.stringify(m.pricing)},`);
