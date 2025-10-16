@@ -93,7 +93,7 @@ function getFeatureIcons(modelDefinition: ModelDefinitionLike) {
           className="flex items-center"
           title={config.description}
         >
-          <IconComponent className="w-4 h-4 text-muted-foreground" />
+          <IconComponent className="w-3 h-3 text-muted-foreground" />
         </div>,
       );
     }
@@ -101,84 +101,6 @@ function getFeatureIcons(modelDefinition: ModelDefinitionLike) {
 
   return icons;
 }
-
-function PureModelCard<
-  TModelId extends string,
-  TModelDefinition extends ModelDefinitionLike,
->({
-  id,
-  definition,
-  disabled,
-  isSelected,
-  onSelectModel,
-}: {
-  id: TModelId;
-  definition: TModelDefinition;
-  disabled?: boolean;
-  isSelected: boolean;
-  onSelectModel: (id: TModelId) => void;
-}) {
-  const provider = definition.owned_by as ProviderId;
-  const featureIcons = useMemo(() => getFeatureIcons(definition), [definition]);
-  const hasReasoning = useMemo(() => definition.reasoning, [definition]);
-
-  // Extract main name and subtitle
-  const nameParts = definition.name.split(/\s+/);
-  const mainName = nameParts.slice(0, 2).join(' ');
-  const subtitle = nameParts.slice(2).join(' ');
-
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        if (disabled) return;
-        onSelectModel(id);
-      }}
-      disabled={disabled}
-      className={cn(
-        'relative flex flex-col p-4 rounded-lg border transition-all',
-        'hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20',
-        isSelected && 'bg-primary/10 border-primary',
-        !isSelected && 'bg-card border-border',
-        disabled && 'opacity-50 cursor-not-allowed',
-        !disabled && 'cursor-pointer',
-      )}
-    >
-      <div className="flex flex-col items-center gap-3 text-center min-h-[120px]">
-        <div className="text-3xl">{getProviderIcon(provider)}</div>
-        <div className="flex flex-col gap-0.5">
-          <div className="font-semibold text-sm leading-tight">{mainName}</div>
-          {subtitle && (
-            <div className="text-xs text-muted-foreground">{subtitle}</div>
-          )}
-        </div>
-      </div>
-      <div className="flex items-center justify-center gap-2 mt-auto pt-2">
-        {hasReasoning &&
-          (() => {
-            const cfg = getEnabledFeatures().find((f) => f.key === 'reasoning');
-            if (!cfg) return null;
-            const IconComponent = cfg.icon;
-            return (
-              <div title={cfg.description}>
-                <IconComponent className="w-4 h-4 text-muted-foreground" />
-              </div>
-            );
-          })()}
-        {featureIcons}
-      </div>
-    </button>
-  );
-}
-
-const ModelCard = memo(
-  PureModelCard as typeof PureModelCard<string, ModelDefinitionLike>,
-  (prevProps, nextProps) =>
-    prevProps.id === nextProps.id &&
-    prevProps.disabled === nextProps.disabled &&
-    prevProps.isSelected === nextProps.isSelected &&
-    prevProps.definition === nextProps.definition,
-) as typeof PureModelCard;
 
 function PureCommandItem<
   TModelId extends string,
@@ -390,23 +312,21 @@ function PureModelSelectorPopoverContent<
       >
         <CommandEmpty>No model found.</CommandEmpty>
         <CommandGroup>
-          <ScrollArea className="*:data-radix-scroll-area-viewport:max-h-[500px]">
-            <div className="grid grid-cols-3 gap-3 p-4">
-              {filteredModels.map((item) => {
-                const { id, definition, disabled } = item;
-                const isSelected = id === optimisticModelId;
-                return (
-                  <ModelCard
-                    key={id}
-                    id={id}
-                    definition={definition}
-                    disabled={disabled}
-                    isSelected={isSelected}
-                    onSelectModel={onSelectModel}
-                  />
-                );
-              })}
-            </div>
+          <ScrollArea className="*:data-radix-scroll-area-viewport:max-h-[350px]">
+            {filteredModels.map((item) => {
+              const { id, definition, disabled } = item;
+              const isSelected = id === optimisticModelId;
+              return (
+                <CommandItemComponent
+                  key={id}
+                  id={id}
+                  definition={definition}
+                  disabled={disabled}
+                  isSelected={isSelected}
+                  onSelectModel={onSelectModel}
+                />
+              );
+            })}
           </ScrollArea>
         </CommandGroup>
       </CommandList>
@@ -563,7 +483,7 @@ export function PureModelSelectorBase<
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[700px] p-0" align="start">
+      <PopoverContent className="w-[350px] p-0" align="start">
         {open ? (
           <ModelSelectorPopoverContent
             enableFilters={enableFilters}
