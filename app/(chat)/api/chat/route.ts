@@ -61,16 +61,17 @@ import { getCreditReservation } from './getCreditReservation';
 import { filterReasoningParts } from './filterReasoningParts';
 import { getThreadUpToMessageId } from './getThreadUpToMessageId';
 import { createModuleLogger } from '@/lib/logger';
+import { env } from '@/lib/env';
 
 // Create shared Redis clients for resumable stream and cleanup
 let redisPublisher: any = null;
 let redisSubscriber: any = null;
 
-if (process.env.REDIS_URL) {
+if (env.REDIS_URL) {
   (async () => {
     const redis = await import('redis');
-    redisPublisher = redis.createClient({ url: process.env.REDIS_URL });
-    redisSubscriber = redis.createClient({ url: process.env.REDIS_URL });
+    redisPublisher = redis.createClient({ url: env.REDIS_URL });
+    redisSubscriber = redis.createClient({ url: env.REDIS_URL });
     await Promise.all([redisPublisher.connect(), redisSubscriber.connect()]);
   })();
 }

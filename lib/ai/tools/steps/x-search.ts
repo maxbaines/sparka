@@ -1,5 +1,6 @@
 import Exa from 'exa-js';
 import type { StreamWriter } from '../../types';
+import { env } from '@/lib/env';
 
 export type XSearchResult = {
   source: 'x';
@@ -17,7 +18,7 @@ export type XSearchResponse = {
 };
 
 // Initialize Exa client
-const exa = new Exa(process.env.EXA_API_KEY as string);
+const exa = new Exa(env.EXA_API_KEY as string);
 
 // Extract tweet ID from URL
 const extractTweetId = (url: string): string | null => {

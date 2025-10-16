@@ -2,6 +2,7 @@ import { tavily, type TavilySearchOptions } from '@tavily/core';
 import FirecrawlApp, { type SearchParams } from '@mendable/firecrawl-js';
 import type { StreamWriter } from '../../types';
 import { createModuleLogger } from '../../../logger';
+import { env } from '@/lib/env';
 
 export type SearchProvider = 'tavily' | 'firecrawl';
 
@@ -26,9 +27,9 @@ export type WebSearchResponse = {
 };
 
 // Initialize search providers
-const tvly = tavily({ apiKey: process.env.TAVILY_API_KEY as string });
+const tvly = tavily({ apiKey: env.TAVILY_API_KEY as string });
 const firecrawl = new FirecrawlApp({
-  apiKey: process.env.FIRECRAWL_API_KEY ?? '',
+  apiKey: env.FIRECRAWL_API_KEY ?? '',
 });
 
 const log = createModuleLogger('tools/steps/web-search');

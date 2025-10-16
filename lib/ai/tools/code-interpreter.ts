@@ -1,6 +1,7 @@
 import z from 'zod';
 import { tool } from 'ai';
 import CodeInterpreter from '@e2b/code-interpreter';
+import { env } from '@/lib/env';
 
 export const codeInterpreter = tool({
   description: `Python-only sandbox for calculations, data analysis & simple visualisations.
@@ -37,7 +38,7 @@ Avoid:
     console.log('Icon:', icon);
 
     const sandbox = await CodeInterpreter.create(
-      process.env.SANDBOX_TEMPLATE_ID as string,
+      env.SANDBOX_TEMPLATE_ID as string,
     );
     const execution = await sandbox.runCode(code);
     let message = '';

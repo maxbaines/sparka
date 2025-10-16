@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { getAllAttachmentUrls } from '@/lib/db/queries';
 import { listFiles, deleteFilesByUrls } from '@/lib/blob';
+import { env } from '@/lib/env';
 
 const ORPHANED_ATTACHMENTS_RETENTION_TIME = 4 * 60 * 60 * 1000; // 4 hours
 
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
   try {
     // Verify this is being called by Vercel cron
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

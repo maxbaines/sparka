@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
+import { env } from '@/lib/env';
 
 // Route for updating selected-model cookie because setting in an action causes a refresh
 export async function POST(request: NextRequest) {
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
       path: '/',
       maxAge: 60 * 60 * 24 * 365, // 1 year
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
+      secure: env.NEXT_PUBLIC_NODE_ENV === 'production',
     });
 
     return NextResponse.json({ success: true });

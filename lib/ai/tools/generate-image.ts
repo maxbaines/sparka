@@ -5,6 +5,7 @@ import { DEFAULT_IMAGE_MODEL } from '@/lib/ai/app-models';
 import OpenAI, { toFile } from 'openai';
 import { uploadFile } from '@/lib/blob';
 import { createModuleLogger } from '@/lib/logger';
+import { env } from '@/lib/env';
 
 interface GenerateImageProps {
   attachments?: Array<FileUIPart>;
@@ -12,7 +13,7 @@ interface GenerateImageProps {
 }
 
 const openaiClient = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: env.OPENAI_API_KEY,
 });
 
 const log = createModuleLogger('ai.tools.generate-image');

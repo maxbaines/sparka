@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'sonner';
+import { env } from '@/lib/env';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sparka.ai'),
@@ -79,7 +80,7 @@ export default async function RootLayout({
             __html: THEME_COLOR_SCRIPT,
           }}
         />
-        {process.env.NODE_ENV !== 'production' ? (
+        {env.NEXT_PUBLIC_NODE_ENV !== 'production' ? (
           <Script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
             strategy="beforeInteractive"

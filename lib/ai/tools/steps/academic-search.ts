@@ -1,5 +1,6 @@
 import Exa from 'exa-js';
 import type { StreamWriter } from '../../types';
+import { env } from '@/lib/env';
 
 export type AcademicSearchResult = {
   source: 'academic';
@@ -13,7 +14,7 @@ export type AcademicSearchResponse = {
   error?: string;
 };
 
-const exa = new Exa(process.env.EXA_API_KEY as string);
+const exa = new Exa(env.EXA_API_KEY as string);
 
 export async function academicSearchStep({
   query,

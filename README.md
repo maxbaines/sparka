@@ -70,13 +70,19 @@ Sparka AI is built with modern technologies for scalability and performance:
 - **AI SDK v5**: Latest Vercel AI SDK for unified provider integration
 - **AI SDK Gateway**: Models from various AI providers with automatic fallbacks
 
+### **System**
+- t3-env-nextjs: Environment variables management
+- pino: Logging
 
 ## 🚀 Getting Started
 
 ### **Prerequisites**
 - Node.js 18+ or Bun
-- PostgreSQL database
-- Redis (optional, for scaling)
+- PostgreSQL database (required)
+- Vercel AI Gateway (required)
+- Google + GitHub OAuth (required)
+- Vercel Blob (required)
+- Redis (optional, for resumable streams)
 
 ### **Quick Start**
 
@@ -91,6 +97,9 @@ Sparka AI is built with modern technologies for scalability and performance:
    ```bash
    cp .env.example .env.local
    # Configure your environment variables
+   # Required: POSTGRES_URL, AI_GATEWAY_API_KEY, CRON_SECRET,
+   # AUTH_SECRET, AUTH_GOOGLE_ID/SECRET, AUTH_GITHUB_ID/SECRET
+   # Optional: REDIS_URL, OPENAI_API_KEY, TAVILY_API_KEY, EXA_API_KEY, FIRECRAWL_API_KEY, SANDBOX_TEMPLATE_ID
    ```
 
 3. **Database Setup**

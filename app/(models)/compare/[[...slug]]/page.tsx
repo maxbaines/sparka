@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import ComparePage from '../compare-page';
 import { allModels } from '@/lib/models';
+import { env } from '@/lib/env';
 
 // Toggle to include/exclude "Performance" related copy
 const ENABLE_PERFORMANCE_COPY = false;
 
-const SITE_URL = `http://${process.env.VERCEL_PROJECT_PRODUCTION_URL ?? 'localhost:3000'}`;
+const SITE_URL = `http://${env.VERCEL_PROJECT_PRODUCTION_URL ?? 'localhost:3000'}`;
 
 export default function Page(_props: PageProps<'/compare/[[...slug]]'>) {
   return <ComparePage />;

@@ -1,11 +1,12 @@
 import pino, { type Logger, stdTimeFunctions } from 'pino';
+import { env } from '@/lib/env';
 
 // Prefer JSON in production; pretty in development.
 // We also add base bindings so child loggers inherit app metadata.
 export const logger: Logger =
-  process.env.NODE_ENV === 'production'
+  env.NEXT_PUBLIC_NODE_ENV === 'production'
     ? pino({
-        level: process.env.LOG_LEVEL || 'info',
+        level: env.LOG_LEVEL || 'info',
         base: { app: 'sparka' },
         timestamp: stdTimeFunctions.isoTime,
         redact: {
@@ -20,7 +21,7 @@ export const logger: Logger =
         },
       })
     : pino({
-        level: process.env.LOG_LEVEL || 'debug',
+        level: env.LOG_LEVEL || 'debug',
         base: { app: 'sparka' },
         timestamp: stdTimeFunctions.isoTime,
         transport: {

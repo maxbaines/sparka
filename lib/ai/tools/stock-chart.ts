@@ -1,6 +1,7 @@
 import z from 'zod';
 import { tool } from 'ai';
 import CodeInterpreter from '@e2b/code-interpreter';
+import { env } from '@/lib/env';
 
 export const stockChart = tool({
   description: `Generate a line stock chart and fetch price data via Python (yfinance + matplotlib).
@@ -60,7 +61,7 @@ Avoid:
     console.log('Stock symbols:', stock_symbols);
     console.log('Interval:', interval);
     const sandbox = await CodeInterpreter.create(
-      process.env.SANDBOX_TEMPLATE_ID as string,
+      env.SANDBOX_TEMPLATE_ID as string,
     );
     const execution = await sandbox.runCode(code);
     let message = '';

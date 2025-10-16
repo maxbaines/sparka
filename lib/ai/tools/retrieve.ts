@@ -1,9 +1,10 @@
 import { tool } from 'ai';
 import { z } from 'zod';
 import FirecrawlApp from '@mendable/firecrawl-js';
+import { env } from '@/lib/env';
 
 const app = new FirecrawlApp({
-  apiKey: process.env.FIRECRAWL_API_KEY,
+  apiKey: env.FIRECRAWL_API_KEY,
 });
 
 export const retrieve = tool({

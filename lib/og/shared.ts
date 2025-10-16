@@ -2,12 +2,13 @@
 
 import { formatNumberCompact } from '@/lib/utils/format-number-compact';
 import type { ModelDefinition } from '@/lib/models';
+import { env } from '@/lib/env';
 
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 export const OG_SITE_NAME = 'Sparka AI';
 
 export function getBaseUrl(): string {
-  return `http://${process.env.VERCEL_PROJECT_PRODUCTION_URL ?? 'localhost:3000'}`;
+  return `http://${env.VERCEL_PROJECT_PRODUCTION_URL ?? 'localhost:3000'}`;
 }
 
 export function getAppIconUrl(baseUrl: string = getBaseUrl()): string {

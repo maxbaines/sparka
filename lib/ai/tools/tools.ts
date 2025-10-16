@@ -13,6 +13,7 @@ import { generateImage } from '@/lib/ai/tools/generate-image';
 import type { ModelId } from '@/lib/models';
 import type { StreamWriter } from '../types';
 import { deepResearch } from './deep-research/deep-research';
+import { env } from '@/lib/env';
 
 export function getTools({
   dataStream,
@@ -59,15 +60,29 @@ export function getTools({
     //   dataStream,
     // }),
     retrieve,
-    webSearch: tavilyWebSearch({ dataStream, writeTopLevelUpdates: true }),
-    stockChart,
-    codeInterpreter,
-    generateImage: generateImage({ attachments, lastGeneratedImage }),
-    deepResearch: deepResearch({
-      session,
-      dataStream,
-      messageId,
-      messages: contextForLLM,
-    }),
+    ...(env.NEXT_PUBLIC_TAVILY_AVAILABLE
+      ? {
+          webSearch: tavilyWebSearch({
+            dataStream,
+            writeTopLevelUpdates: true,
+          }),
+        }
+      : {}),
+
+    ...(env.NEXT_PUBLIC_SANDBOX_AVAILABLE ? { stockChart } : {}),
+    ...(env.NEXT_PUBLIC_SANDBOX_AVAILABLE ? { codeInterpreter } : {}),
+    ...(env.NEXT_PUBLIC_OPENAI_AVAILABLE
+      ? { generateImage: generateImage({ attachments, lastGeneratedImage }) }
+      : {}),
+    ...(env.NEXT_PUBLIC_TAVILY_AVAILABLE
+      ? {
+          deepResearch: deepResearch({
+            session,
+            dataStream,
+            messageId,
+            messages: contextForLLM,
+          }),
+        }
+      : {}),
   };
 }

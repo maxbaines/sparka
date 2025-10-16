@@ -5,6 +5,7 @@ import type { AnonymousSession } from '@/lib/types/anonymous';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { ANONYMOUS_SESSION_COOKIES_KEY } from './constants';
 import { generateUUID } from './utils';
+import { env } from '@/lib/env';
 
 export async function getAnonymousSession(): Promise<AnonymousSession | null> {
   try {
@@ -40,7 +41,7 @@ export async function setAnonymousSession(
     path: '/',
     maxAge: ANONYMOUS_LIMITS.SESSION_DURATION,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: env.NEXT_PUBLIC_NODE_ENV === 'production',
   });
 }
 

@@ -12,6 +12,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 import SuperJSON from 'superjson';
 import { makeQueryClient } from './query-client';
+import { env } from '@/lib/env';
 
 export const { TRPCProvider, useTRPC, useTRPCClient } =
   createTRPCContext<AppRouter>();
@@ -35,7 +36,7 @@ function getQueryClient() {
 function getUrl() {
   const base = (() => {
     if (typeof window !== 'undefined') return '';
-    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+    if (env.VERCEL_URL) return `https://${env.VERCEL_URL}`;
     return 'http://localhost:3000';
   })();
   return `${base}/api/trpc`;
@@ -48,7 +49,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
       links: [
         loggerLink({
           enabled: (op) =>
-            process.env.NODE_ENV === 'development' ||
+            env.NEXT_PUBLIC_NODE_ENV === 'development' ||
             (op.direction === 'down' && op.result instanceof Error),
         }),
         httpBatchLink({
