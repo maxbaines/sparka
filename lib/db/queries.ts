@@ -17,6 +17,12 @@ import type { ArtifactKind } from '../artifacts/artifact-kind';
 import type { Attachment } from '@/lib/ai/types';
 import { db } from './client';
 
+/**
+ * Retrieve users whose email address matches the provided value.
+ *
+ * @param email - The email address to match (exact match).
+ * @returns An array of `User` records with `email` equal to `email`; an empty array if no users match.
+ */
 export async function getUserByEmail(email: string): Promise<Array<User>> {
   try {
     return await db.select().from(user).where(eq(user.email, email));
@@ -26,6 +32,14 @@ export async function getUserByEmail(email: string): Promise<Array<User>> {
   }
 }
 
+/**
+ * Insert a new chat record into the database.
+ *
+ * @param id - Unique identifier for the chat
+ * @param userId - ID of the user who owns the chat
+ * @param title - Title of the chat
+ * @returns The database insert result for the new chat record
+ */
 export async function saveChat({
   id,
   userId,

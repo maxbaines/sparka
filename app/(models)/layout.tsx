@@ -45,6 +45,12 @@ export const metadata: Metadata = {
 
 const HEADER_HEIGHT = '2.75rem';
 
+/**
+ * Render the Models page layout, providing session and TRPC context and placing the Models header above the page content.
+ *
+ * @param children - Content to render below the Models header inside the layout
+ * @returns The React element tree for the Models page layout
+ */
 export default async function ModelsLayout({
   children,
 }: {

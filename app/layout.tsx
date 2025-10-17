@@ -59,6 +59,14 @@ const THEME_COLOR_SCRIPT = `\
   updateThemeColor();
 })();`;
 
+/**
+ * Renders the application's root HTML layout, providing global fonts, theme handling, scripts, and analytics while wrapping the app content.
+ *
+ * Renders a full HTML document with language, theme-color handling, optional development scripts, Pyodide, theme provider, global toaster, and analytics, and places `children` as the application content.
+ *
+ * @param children - The React nodes to render as the application's content inside the layout.
+ * @returns The root HTML layout element for the application.
+ */
 export default async function RootLayout({
   children,
 }: Readonly<{

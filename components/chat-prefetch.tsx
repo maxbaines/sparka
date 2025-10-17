@@ -10,6 +10,14 @@ interface ChatPrefetchProps {
   user: Session['user'];
 }
 
+/**
+ * Prefetches messages for the user's recent chats so they are available in the query cache.
+ *
+ * Initiates background prefetching of chat messages the first time the component observes an authenticated `user` with available `chats`; does not render any UI.
+ *
+ * @param user - The currently authenticated session user; prefetching runs only when this is present
+ * @returns `null` (renders nothing)
+ */
 export function ChatPrefetch({ user }: ChatPrefetchProps) {
   const { data: chats } = useGetAllChats(10);
   const queryClient = useQueryClient();

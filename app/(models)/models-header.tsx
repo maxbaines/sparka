@@ -16,6 +16,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Menu } from 'lucide-react';
 
+/**
+ * Renders the top navigation header with site branding, primary navigation links, user actions, and a mobile menu.
+ *
+ * @param className - Optional additional CSS class names applied to the header element
+ * @returns A header element containing the site logo (link to home), navigation links for Chat, Models, and Compare, user action controls, and a responsive mobile dropdown menu
+ */
 function PureModelsHeader({ className }: { className?: string }) {
   const pathname = usePathname();
   const router = useRouter();

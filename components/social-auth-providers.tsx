@@ -4,6 +4,11 @@ import { Button } from '@/components/ui/button';
 import authClient from '@/lib/auth-client';
 import { GoogleLogo, GithubLogo } from '@phosphor-icons/react';
 
+/**
+ * Renders two full-width outline buttons for social authentication.
+ *
+ * @returns A JSX element containing buttons that initiate social sign-in flows for Google and GitHub
+ */
 export function SocialAuthProviders() {
   return (
     <div className="space-y-2">

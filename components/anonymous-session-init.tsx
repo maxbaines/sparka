@@ -10,7 +10,12 @@ import {
   clearAnonymousSession,
 } from '@/lib/anonymous-session-client';
 
-// Schema validation function
+/**
+ * Type guard that verifies whether a value conforms to the AnonymousSession shape.
+ *
+ * @param obj - The value to validate as an AnonymousSession
+ * @returns `true` if `obj` has an `id` string, `remainingCredits` number, and `createdAt` as a `Date` or string, `false` otherwise.
+ */
 function isValidAnonymousSession(obj: any): obj is AnonymousSession {
   return (
     obj &&
@@ -21,6 +26,15 @@ function isValidAnonymousSession(obj: any): obj is AnonymousSession {
   );
 }
 
+/**
+ * Initializes and persists an anonymous session for users who are not authenticated.
+ *
+ * Runs on the client when session loading is complete: it loads any stored anonymous session,
+ * validates and migrates or replaces it if the schema is invalid, and creates and persists a new
+ * anonymous session when none exists. This component has no visual output.
+ *
+ * @returns `null` — the component does not render any UI
+ */
 export function AnonymousSessionInit() {
   const { data: session, isPending } = useSession();
 

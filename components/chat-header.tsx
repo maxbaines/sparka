@@ -7,6 +7,18 @@ import { Share } from 'lucide-react';
 import type { Session } from '@/lib/auth';
 import { HeaderActions } from '@/components/header-actions';
 
+/**
+ * Render the chat header with controls for toggling the sidebar, sharing status, and user actions.
+ *
+ * Renders a sticky horizontal header containing a left group (sidebar toggle, share button or shared indicator)
+ * and a right group with user-specific actions.
+ *
+ * @param chatId - Identifier for the current chat (used by the ShareButton when rendered)
+ * @param isReadonly - If `true`, show a non-interactive "Shared" indicator instead of the ShareButton
+ * @param hasMessages - Whether the chat contains messages; the ShareButton is only shown when `true` and not readonly
+ * @param user - Current session user passed through to header action controls
+ * @returns The header element containing the sidebar toggle, share UI or shared indicator, and header actions
+ */
 function PureChatHeader({
   chatId,
   isReadonly,

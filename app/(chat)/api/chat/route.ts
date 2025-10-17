@@ -159,6 +159,18 @@ async function streamFollowupSuggestions({
   }
 }
 
+/**
+ * Handle incoming chat requests and stream AI-generated assistant responses while managing sessions, tools, and billing.
+ *
+ * This endpoint validates the request and session (authenticated or anonymous), enforces rate limits and model/tool availability,
+ * reserves or adjusts credits, constructs a limited conversation context, and starts a streaming AI response that can execute
+ * configured tools. It persists placeholder and final assistant messages (for authenticated users), finalizes or cleans up
+ * credit reservations, and emits follow-up suggestions. Stream state is recorded in Redis to support resumable streams and
+ * cleaned up after completion.
+ *
+ * @param request - The Next.js request containing a JSON body with `id` (chatId), `message` (user message), and optional `prevMessages` for anonymous sessions.
+ * @returns An HTTP Response that streams server-sent events with incremental tokens, start/finish metadata, usage, and follow-up suggestions, or a non-streaming error response with an appropriate status.
+ */
 export async function POST(request: NextRequest) {
   const log = createModuleLogger('api:chat');
   try {

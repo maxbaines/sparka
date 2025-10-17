@@ -15,6 +15,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { useGetCredits } from '@/hooks/chat-sync-hooks';
 
+/**
+ * Render a user navigation dropdown that shows the avatar, email, credit balance, theme toggle, and sign-out control.
+ *
+ * @param user - Authenticated user's profile used to populate the avatar image, alt text, and email display
+ * @returns The React element representing the user menu dropdown
+ */
 export function HeaderUserNav({
   user,
 }: { user: NonNullable<Session['user']> }) {

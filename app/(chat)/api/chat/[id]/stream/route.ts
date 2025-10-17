@@ -8,6 +8,14 @@ import { createUIMessageStream, JsonToSseTransformStream } from 'ai';
 import { getRedisPublisher, getStreamContext } from '../../route';
 import { differenceInSeconds } from 'date-fns';
 
+/**
+ * Streams UI-compatible server-sent events for a chat's resumable AI generation or returns an appropriate fallback/error response.
+ *
+ * This handler attempts to resume a live generation stream for the chat identified by the route `id`. If a resumable stream is available it returns that stream as SSE; if not, it may return an ephemeral SSE containing the most recent assistant message when that message was created within the last 15 seconds, or an empty UI message stream. If streaming support is unavailable, it responds with 204 No Content. Authentication is checked for non-public chats and error responses are returned for missing or unauthorized chats and when no stream can be found.
+ *
+ * @param params - A promise that resolves to route parameters; expects `id` containing the chat identifier.
+ * @returns An HTTP Response containing either an SSE stream of UI messages, an ephemeral SSE with a single restored assistant message, an empty UI message SSE, a 204 No Content response when streaming is unsupported, or an error response for bad request / not found / forbidden conditions.
+ */
 export async function GET(
   _: Request,
   { params }: { params: Promise<{ id: string }> },

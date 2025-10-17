@@ -6,6 +6,14 @@ import { Button } from '@/components/ui/button';
 import { useGetCredits } from '@/hooks/chat-sync-hooks';
 import { useSession } from '@/providers/session-provider';
 
+/**
+ * Renders a sidebar block that displays the user's remaining credits and, when not authenticated, a sign-in prompt.
+ *
+ * Shows a compact loading placeholder while credits are being fetched. When unauthenticated, includes a "Sign in" button
+ * which navigates to `/login` and refreshes the route when clicked.
+ *
+ * @returns The sidebar UI element containing the credits display and an optional sign-in call-to-action.
+ */
 export function SidebarCredits() {
   const { credits, isLoadingCredits } = useGetCredits();
   const { data: session } = useSession();

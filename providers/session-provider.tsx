@@ -13,6 +13,18 @@ const SessionContext = createContext<SessionContextValue | undefined>(
   undefined,
 );
 
+/**
+ * Provides session context to descendant components.
+ *
+ * The provider reads session state from the auth client, normalizes it into the app's
+ * Session shape, and exposes an object with `data` (the effective session or `undefined`)
+ * and `isPending` via context. While the client session is pending, `initialSession`
+ * (if provided) will be used as the effective session.
+ *
+ * @param initialSession - Optional session to use while the client session is pending
+ * @param children - Child nodes that will receive the session context
+ * @returns A React provider element that supplies `SessionContextValue` to descendants
+ */
 export function SessionProvider({
   initialSession,
   children,
@@ -54,6 +66,12 @@ export function SessionProvider({
   );
 }
 
+/**
+ * Accesses the current session context for the calling component.
+ *
+ * @returns The current session context value containing `data` (the Session or `undefined`) and `isPending` (`boolean`).
+ * @throws Error if invoked outside of a `SessionProvider`.
+ */
 export function useSession(): SessionContextValue {
   const ctx = useContext(SessionContext);
   if (!ctx) {

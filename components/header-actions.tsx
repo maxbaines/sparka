@@ -14,6 +14,12 @@ import { GitIcon } from '@/components/icons';
 import { LogIn } from 'lucide-react';
 import { HeaderUserNav } from '@/components/sidebar-user-nav';
 
+/**
+ * Render header action controls: a GitHub link button plus either user navigation when authenticated or a sign-in button with tooltip.
+ *
+ * @param user - Optional user object to override the current session user for deciding which authentication UI to show
+ * @returns A React element containing the GitHub icon button and either the authenticated user's navigation or a sign-in button with tooltip
+ */
 function PureHeaderActions({ user }: { user?: Session['user'] }) {
   const router = useRouter();
   const { data: session } = useSession();

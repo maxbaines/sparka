@@ -21,6 +21,12 @@ const FileSchema = z.object({
     ),
 });
 
+/**
+ * Handles authenticated file uploads from a multipart/form-data request.
+ *
+ * @param request - Incoming HTTP request containing multipart/form-data with a `file` field
+ * @returns On success, a JSON Response containing upload metadata with `pathname` replaced by the cleaned filename; on failure, a JSON or plain Response with an error message and an appropriate HTTP status (401 for unauthorized, 400 for bad requests, 500 for server errors)
+ */
 export async function POST(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
 

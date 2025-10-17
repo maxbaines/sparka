@@ -12,6 +12,12 @@ import { TRPCReactProvider } from '@/trpc/react';
 import { SessionProvider } from '@/providers/session-provider';
 import { AIDevtools } from '@ai-sdk-tools/devtools';
 
+/**
+ * Renders the chat application layout with session, TRPC, model, and sidebar providers.
+ *
+ * @param children - The content to render inside the chat layout (wrapped by providers, sidebar, and keyboard shortcuts).
+ * @returns A React element that composes the chat UI, provider context, and development tools (in development mode).
+ */
 export default async function ChatLayout({
   children,
 }: {

@@ -3,6 +3,16 @@ import { auth } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 
+/**
+ * Apply route-based authentication checks and issue conditional redirects for incoming requests.
+ *
+ * Bypasses API auth, metadata, tRPC, and chat API routes; allows public pages (share, models, compare, login, register)
+ * to proceed; redirects authenticated users away from login/register to the root; requires authentication for
+ * protected chat subpaths and redirects unauthenticated users to `/login`.
+ *
+ * @param req - The incoming NextRequest to evaluate
+ * @returns A Response that performs an HTTP redirect when a redirect is required, `undefined` otherwise
+ */
 export default async function middleware(req: NextRequest) {
   // Mirror previous authorized() logic using Better Auth session
   const url = req.nextUrl;

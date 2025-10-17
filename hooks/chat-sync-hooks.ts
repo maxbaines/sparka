@@ -682,6 +682,12 @@ export function useDocuments(id: string, disable: boolean) {
   return useQuery(documentsQueryOptions);
 }
 
+/**
+ * Fetches the list of chats, using local anonymous storage when the user is not authenticated and the server API when authenticated.
+ *
+ * @param limit - Optional maximum number of chats to return; when provided the result is truncated to the first `limit` items
+ * @returns A React Query result containing an array of `UIChat` objects; if `limit` is provided the array is truncated to the first `limit` entries
+ */
 export function useGetAllChats(limit?: number) {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
