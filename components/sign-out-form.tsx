@@ -2,6 +2,7 @@ import Form from 'next/form';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
 
+import { redirect } from 'next/navigation';
 export const SignOutForm = () => {
   return (
     <Form
@@ -11,7 +12,7 @@ export const SignOutForm = () => {
 
         await auth.api.signOut({ headers: await headers() });
         // Redirect manually after server sign-out
-        return { redirect: '/' } as any;
+        redirect('/');
       }}
     >
       <button
