@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { ShareButton } from './share-button';
 import { Share } from 'lucide-react';
-import type { User } from 'next-auth';
+import type { Session } from '@/lib/auth';
 import { HeaderActions } from '@/components/header-actions';
 
 function PureChatHeader({
@@ -16,7 +16,7 @@ function PureChatHeader({
   chatId: string;
   isReadonly: boolean;
   hasMessages: boolean;
-  user: User | undefined;
+  user: Session['user'];
 }) {
   return (
     <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2 justify-between h-(--header-height)">

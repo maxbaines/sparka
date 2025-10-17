@@ -1,10 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { LogIn, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useGetCredits } from '@/hooks/chat-sync-hooks';
+import { useSession } from '@/providers/session-provider';
 
 export function SidebarCredits() {
   const { credits, isLoadingCredits } = useGetCredits();

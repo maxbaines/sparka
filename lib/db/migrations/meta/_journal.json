@@ -162,6 +162,34 @@
       "when": 1757443178603,
       "tag": "0022_modern_mole_man",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1760704877967,
+      "tag": "0023_lucky_omega_flight",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1760705433579,
+      "tag": "0024_unknown_zeigeist",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1760707791625,
+      "tag": "0025_keen_blackheart",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1760708083514,
+      "tag": "0026_slippery_aaron_stack",
+      "breakpoints": true
     }
   ]
 }

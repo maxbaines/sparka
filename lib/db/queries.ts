@@ -26,27 +26,6 @@ export async function getUserByEmail(email: string): Promise<Array<User>> {
   }
 }
 
-export async function createUser({
-  email,
-  name,
-  image,
-}: {
-  email: string;
-  name: string | null;
-  image: string | null;
-}) {
-  try {
-    return await db.insert(user).values({
-      email,
-      name,
-      image,
-    });
-  } catch (error) {
-    console.error('Failed to create user in database');
-    throw error;
-  }
-}
-
 export async function saveChat({
   id,
   userId,

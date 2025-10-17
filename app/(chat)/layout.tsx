@@ -1,14 +1,15 @@
 import { ChatProviders } from './chat-providers';
-import { auth } from '../(auth)/auth';
-import { cookies } from 'next/headers';
+import { auth } from '../../lib/auth';
+import { cookies, headers } from 'next/headers';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { DefaultModelProvider } from '@/providers/default-model-provider';
 import { DEFAULT_CHAT_MODEL, type AppModelId } from '@/lib/ai/app-models';
 import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { AppSidebar } from '@/components/app-sidebar';
 import { KeyboardShortcuts } from '@/components/keyboard-shortcuts';
-import { SessionProvider } from 'next-auth/react';
+
 import { TRPCReactProvider } from '@/trpc/react';
+import { SessionProvider } from '@/providers/session-provider';
 import { AIDevtools } from '@ai-sdk-tools/devtools';
 
 export default async function ChatLayout({
@@ -16,7 +17,23 @@ export default async function ChatLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [session, cookieStore] = await Promise.all([auth(), cookies()]);
+  const cookieStore = await cookies();
+  const raw = await auth.api.getSession({ headers: await headers() });
+  const session = raw
+    ? {
+        user: raw.user
+          ? {
+              id: raw.user.id,
+              name: raw.user.name ?? null,
+              email: raw.user.email ?? null,
+              image: raw.user.image ?? null,
+            }
+          : undefined,
+        expires: raw.session?.expiresAt
+          ? new Date(raw.session.expiresAt).toISOString()
+          : undefined,
+      }
+    : undefined;
   const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
 
   const cookieModel = cookieStore.get('chat-model')?.value as AppModelId;
@@ -36,8 +53,8 @@ export default async function ChatLayout({
   }
 
   return (
-    <SessionProvider session={session}>
-      <TRPCReactProvider>
+    <TRPCReactProvider>
+      <SessionProvider initialSession={session}>
         <ChatProviders user={session?.user}>
           <SidebarProvider defaultOpen={!isCollapsed}>
             <AppSidebar />
@@ -56,8 +73,8 @@ export default async function ChatLayout({
             </SidebarInset>
           </SidebarProvider>
         </ChatProviders>
-        {process.env.NODE_ENV === 'development' && <AIDevtools />}
-      </TRPCReactProvider>
-    </SessionProvider>
+      </SessionProvider>
+      {process.env.NODE_ENV === 'development' && <AIDevtools />}
+    </TRPCReactProvider>
   );
 }

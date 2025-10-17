@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/providers/session-provider';
 import type { AnonymousSession } from '@/lib/types/anonymous';
 import {
   getAnonymousSession,
@@ -22,11 +22,11 @@ function isValidAnonymousSession(obj: any): obj is AnonymousSession {
 }
 
 export function AnonymousSessionInit() {
-  const { data: session, status } = useSession();
+  const { data: session, isPending } = useSession();
 
   useEffect(() => {
     // Only initialize for non-authenticated users after session is loaded
-    if (status === 'loading') return;
+    if (isPending) return;
     if (session?.user) return;
 
     // Get raw session data and validate/migrate
@@ -51,7 +51,7 @@ export function AnonymousSessionInit() {
       const newSession = createAnonymousSession();
       setAnonymousSession(newSession);
     }
-  }, [session, status]);
+  }, [session, isPending]);
 
   return null; // This component doesn't render anything
 }

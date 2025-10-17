@@ -14,7 +14,7 @@ import {
 import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useDropzone } from 'react-dropzone';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/providers/session-provider';
 import { useChatStoreApi } from '@/lib/stores/chat-store-context';
 import {
   useChatHelperStop,

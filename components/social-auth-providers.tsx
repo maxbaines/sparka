@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { signIn } from 'next-auth/react';
+import authClient from '@/lib/auth-client';
 import { GoogleLogo, GithubLogo } from '@phosphor-icons/react';
 
 export function SocialAuthProviders() {
@@ -10,7 +10,7 @@ export function SocialAuthProviders() {
       <Button
         variant="outline"
         type="button"
-        onClick={(e) => signIn('google')}
+        onClick={() => authClient.signIn.social({ provider: 'google' })}
         className="w-full"
       >
         <GoogleLogo className="mr-2 h-4 w-4" />
@@ -19,7 +19,7 @@ export function SocialAuthProviders() {
       <Button
         variant="outline"
         type="button"
-        onClick={(e) => signIn('github')}
+        onClick={() => authClient.signIn.social({ provider: 'github' })}
         className="w-full"
       >
         <GithubLogo className="mr-2 h-4 w-4" />
