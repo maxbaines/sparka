@@ -22,25 +22,7 @@ export function SessionProvider({
 }) {
   const { data: clientSessionRaw, isPending } = authClient.useSession();
 
-  function toAppSession(input: any): Session | undefined {
-    if (!input) return undefined;
-    // better-auth client returns { user, session } or null
-    const u = input.user ?? input?.user;
-    if (!u) return undefined;
-    const expiresAt =
-      input.session?.expiresAt ?? input.session?.expires ?? input.expiresAt;
-    return {
-      user: {
-        id: u.id,
-        name: u.name ?? null,
-        email: u.email ?? null,
-        image: u.image ?? null,
-      },
-      expires: expiresAt ? new Date(expiresAt).toISOString() : undefined,
-    } satisfies Session;
-  }
-
-  const clientSession = toAppSession(clientSessionRaw);
+  const clientSession = clientSessionRaw ? clientSessionRaw : undefined;
 
   const value = useMemo<SessionContextValue>(() => {
     const effective = isPending

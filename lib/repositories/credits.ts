@@ -134,5 +134,10 @@ export async function releaseReservedCredits({
     .set({
       reservedCredits: sql`${userCredit.reservedCredits} - ${amount}`,
     })
-    .where(eq(userCredit.userId, userId));
+    .where(
+      and(
+        eq(userCredit.userId, userId),
+        gte(userCredit.reservedCredits, amount),
+      ),
+    );
 }

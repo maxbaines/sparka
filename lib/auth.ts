@@ -3,7 +3,7 @@ import { env } from '@/lib/env';
 import { nextCookies } from 'better-auth/next-js';
 import { db } from './db/client';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { schema } from '@/auth-schema';
+import { schema } from './db/schema';
 
 export type Session = {
   user?: {

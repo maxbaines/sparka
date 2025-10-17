@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 
 export const runtime = 'nodejs';
@@ -32,7 +33,7 @@ export default async function middleware(req: NextRequest) {
   const isOnSharePage = url.pathname.startsWith('/share/');
 
   if (isLoggedIn && (isOnLoginPage || isOnRegisterPage)) {
-    return Response.redirect(new URL('/', url));
+    return NextResponse.redirect(new URL('/', url));
   }
   if (isOnRegisterPage || isOnLoginPage) return;
   if (isOnSharePage) return;
@@ -41,11 +42,11 @@ export default async function middleware(req: NextRequest) {
   if (isOnChat) {
     if (url.pathname === '/') return;
     if (isLoggedIn) return;
-    return Response.redirect(new URL('/login', url));
+    return NextResponse.redirect(new URL('/login', url));
   }
 
   if (isLoggedIn) {
-    return Response.redirect(new URL('/', url));
+    return NextResponse.redirect(new URL('/', url));
   }
 }
 
