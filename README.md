@@ -49,7 +49,7 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - 💻 **Syntax Highlighting** - Code formatting for all languages
 - 🔄 **Resumable Streams** - Continue after interruptions
 - 🌳 **Chat Branching** - Alternative conversation paths
-- 🔗 **Chat Sharing** - Collaborate on conversations
+- 🔗 **Chat Sharing** - Share conversations with others
 - 🔭 **Deep Research** - Real-time web search with citations
 - ⚡ **Code Execution** - Secure Python/JavaScript sandboxes
 - 📄 **Document Creation** - Generate docs, spreadsheets, presentations
