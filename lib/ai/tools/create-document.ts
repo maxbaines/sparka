@@ -1,7 +1,7 @@
 import { generateUUID } from '@/lib/utils';
 import { tool } from 'ai';
 import { z } from 'zod';
-import type { Session } from 'next-auth';
+import type { Session } from '@/lib/auth';
 import {
   documentHandlersByArtifactKind,
   type DocumentHandler,

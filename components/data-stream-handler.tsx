@@ -4,7 +4,7 @@ import { artifactDefinitions } from './artifact';
 import type { Suggestion } from '@/lib/db/schema';
 import { useArtifact } from '@/hooks/use-artifact';
 import { useSaveDocument } from '@/hooks/chat-sync-hooks';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/providers/session-provider';
 import { useDataStream } from './data-stream-provider';
 import { useChatInput } from '@/providers/chat-input-provider';
 

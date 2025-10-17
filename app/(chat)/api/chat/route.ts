@@ -8,7 +8,8 @@ import {
   type ModelMessage,
 } from 'ai';
 import { replaceFilePartUrlByBinaryDataInMessages } from '@/lib/utils/download-assets';
-import { auth } from '@/app/(auth)/auth';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 import { systemPrompt } from '@/lib/ai/prompts';
 import {
   getChatById,
@@ -186,7 +187,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const session = await auth();
+    const session = await auth.api.getSession({ headers: await headers() });
 
     const userId = session?.user?.id || null;
     const isAnonymous = userId === null;

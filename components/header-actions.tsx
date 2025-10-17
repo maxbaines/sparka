@@ -1,8 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { useSession } from 'next-auth/react';
-import type { User } from 'next-auth';
+import { useSession } from '@/providers/session-provider';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,14 +9,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import type { Session } from '@/lib/auth';
 import { GitIcon } from '@/components/icons';
 import { LogIn } from 'lucide-react';
 import { HeaderUserNav } from '@/components/sidebar-user-nav';
 
-function PureHeaderActions({ user }: { user?: User }) {
+function PureHeaderActions({ user }: { user?: Session['user'] }) {
   const router = useRouter();
   const { data: session } = useSession();
-  const effectiveUser = (user ?? session?.user) as User | undefined;
+  const effectiveUser = user ?? session?.user;
   const isAuthenticated = !!effectiveUser;
 
   return (

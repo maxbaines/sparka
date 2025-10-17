@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/providers/session-provider';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import {
   Popover,

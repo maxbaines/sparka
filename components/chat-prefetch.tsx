@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import type { User } from 'next-auth';
+import type { Session } from '@/lib/auth';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTRPC } from '@/trpc/react';
 import { useGetAllChats } from '@/hooks/chat-sync-hooks';
 
 interface ChatPrefetchProps {
-  user: User | undefined;
+  user: Session['user'];
 }
 
 export function ChatPrefetch({ user }: ChatPrefetchProps) {

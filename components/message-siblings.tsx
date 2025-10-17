@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/providers/session-provider';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { Action } from '@/components/ai-elements/actions';

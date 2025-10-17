@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/providers/session-provider';
 import {
   Popover,
   PopoverContent,

@@ -11,25 +11,29 @@ import {
   boolean,
   integer,
 } from 'drizzle-orm/pg-core';
+import { user } from '@/auth-schema';
 
-export const user = pgTable('User', {
-  id: uuid('id').primaryKey().notNull().defaultRandom(),
-  createdAt: timestamp('createdAt').notNull().defaultNow(),
-  email: varchar('email', { length: 64 }).notNull(),
-  name: varchar('name', { length: 64 }),
-  image: varchar('image', { length: 256 }),
+export { user, session, account, verification } from '@/auth-schema';
+
+export type User = InferSelectModel<typeof user>;
+
+export const userCredit = pgTable('UserCredit', {
+  userId: text('userId')
+    .primaryKey()
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
   credits: integer('credits').notNull().default(100),
   reservedCredits: integer('reservedCredits').notNull().default(0),
 });
 
-export type User = InferSelectModel<typeof user>;
+export type UserCredit = InferSelectModel<typeof userCredit>;
 
 export const chat = pgTable('Chat', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   createdAt: timestamp('createdAt').notNull(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
   title: text('title').notNull(),
-  userId: uuid('userId')
+  userId: text('userId')
     .notNull()
     .references(() => user.id),
   visibility: varchar('visibility', { enum: ['public', 'private'] })
@@ -95,7 +99,7 @@ export const document = pgTable(
     kind: varchar('text', { enum: ['text', 'code', 'sheet'] })
       .notNull()
       .default('text'),
-    userId: uuid('userId')
+    userId: text('userId')
       .notNull()
       .references(() => user.id),
     messageId: uuid('messageId')
@@ -123,7 +127,7 @@ export const suggestion = pgTable(
     suggestedText: text('suggestedText').notNull(),
     description: text('description'),
     isResolved: boolean('isResolved').notNull().default(false),
-    userId: uuid('userId')
+    userId: text('userId')
       .notNull()
       .references(() => user.id),
     createdAt: timestamp('createdAt').notNull(),

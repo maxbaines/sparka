@@ -1,8 +1,8 @@
 'use client';
 import { Coins } from 'lucide-react';
 import Image from 'next/image';
-import type { User } from 'next-auth';
-import { signOut } from 'next-auth/react';
+import type { Session } from '@/lib/auth';
+import authClient from '@/lib/auth-client';
 import { useTheme } from 'next-themes';
 
 import {
@@ -15,7 +15,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { useGetCredits } from '@/hooks/chat-sync-hooks';
 
-export function HeaderUserNav({ user }: { user: User }) {
+export function HeaderUserNav({
+  user,
+}: { user: NonNullable<Session['user']> }) {
   const { setTheme, theme } = useTheme();
   const { credits } = useGetCredits();
 
@@ -60,10 +62,9 @@ export function HeaderUserNav({ user }: { user: User }) {
           <button
             type="button"
             className="w-full cursor-pointer"
-            onClick={() => {
-              signOut({
-                redirectTo: '/',
-              });
+            onClick={async () => {
+              await authClient.signOut();
+              window.location.href = '/';
             }}
           >
             Sign out

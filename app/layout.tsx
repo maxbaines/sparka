@@ -64,7 +64,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log('NEXT_PUBLIC_NODE_ENV', env.NEXT_PUBLIC_NODE_ENV);
   return (
     <html
       lang="en"

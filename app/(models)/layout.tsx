@@ -1,9 +1,10 @@
 import { ModelsHeader } from './models-header';
-import { auth } from '../(auth)/auth';
-import { SessionProvider } from 'next-auth/react';
+import { auth } from '../../lib/auth';
+import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 import { allModels, providers } from '@/lib/models';
 import { TRPCReactProvider } from '@/trpc/react';
+import { SessionProvider } from '@/providers/session-provider';
 
 const totalModels = allModels.length;
 const totalProviders = providers.length;
@@ -49,10 +50,25 @@ export default async function ModelsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const raw = await auth.api.getSession({ headers: await headers() });
+  const session = raw
+    ? {
+        user: raw.user
+          ? {
+              id: raw.user.id,
+              name: raw.user.name ?? null,
+              email: raw.user.email ?? null,
+              image: raw.user.image ?? null,
+            }
+          : undefined,
+        expires: raw.session?.expiresAt
+          ? new Date(raw.session.expiresAt).toISOString()
+          : undefined,
+      }
+    : undefined;
   return (
-    <SessionProvider session={session}>
-      <TRPCReactProvider>
+    <TRPCReactProvider>
+      <SessionProvider initialSession={session}>
         <div
           className="h-dvh max-h-dvh grid grid-rows-[auto_1fr]"
           style={
@@ -64,7 +80,7 @@ export default async function ModelsLayout({
           <ModelsHeader />
           <div className="relative flex-1 min-h-0 ">{children}</div>
         </div>
-      </TRPCReactProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </TRPCReactProvider>
   );
 }

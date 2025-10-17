@@ -4,7 +4,7 @@
 // They use local storage functions from '@/lib/utils/anonymous-chat-storage' for anonymous users
 // They use tRPC mutations for authenticated users
 
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/providers/session-provider';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useCallback, useMemo } from 'react';
@@ -686,6 +686,7 @@ export function useGetAllChats(limit?: number) {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
+  console.log('useGetAllChats isAuthenticated', isAuthenticated);
   const getAllChatsQueryOptions = useDualQueryOptions({
     ...trpc.chat.getAllChats.queryOptions(),
     localQueryFn: async () => {

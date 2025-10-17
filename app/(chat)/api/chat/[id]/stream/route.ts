@@ -1,4 +1,5 @@
-import { auth } from '@/app/(auth)/auth';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 import { getChatById, getAllMessagesByChatId } from '@/lib/db/queries';
 import type { Chat } from '@/lib/db/schema';
 import { ChatSDKError } from '@/lib/ai/errors';
@@ -24,7 +25,7 @@ export async function GET(
     return new ChatSDKError('bad_request:api').toResponse();
   }
 
-  const session = await auth();
+  const session = await auth.api.getSession({ headers: await headers() });
   const userId = session?.user?.id || null;
   const isAuthenticated = userId !== null;
 

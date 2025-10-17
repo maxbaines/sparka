@@ -5,8 +5,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { memo } from 'react';
-import { useSession } from 'next-auth/react';
-import type { User } from 'next-auth';
+import { useSession } from '@/providers/session-provider';
 import { HeaderActions } from '@/components/header-actions';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,7 +20,7 @@ function PureModelsHeader({ className }: { className?: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
-  const user = session?.user as User | undefined;
+  const user = session?.user;
   const isAuthenticated = !!user;
 
   const isActive = (path: string) => {

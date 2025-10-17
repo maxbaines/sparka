@@ -1,6 +1,6 @@
 import Form from 'next/form';
-
-import { signOut } from '@/app/(auth)/auth';
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth';
 
 export const SignOutForm = () => {
   return (
@@ -9,9 +9,9 @@ export const SignOutForm = () => {
       action={async () => {
         'use server';
 
-        await signOut({
-          redirectTo: '/',
-        });
+        await auth.api.signOut({ headers: await headers() });
+        // Redirect manually after server sign-out
+        return { redirect: '/' } as any;
       }}
     >
       <button

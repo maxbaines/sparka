@@ -1,21 +1,37 @@
 import 'server-only';
 import { and, eq, gte, sql } from 'drizzle-orm';
 
-import { user } from '../db/schema';
+import { userCredit } from '../db/schema';
 import { db } from '../db/client';
 
+async function ensureUserCreditRow(userId: string) {
+  await db.insert(userCredit).values({ userId }).onConflictDoNothing();
+}
+
 export async function getUserCreditsInfo({ userId }: { userId: string }) {
-  const users = await db
+  let creditsRows = await db
     .select({
-      credits: user.credits,
-      reservedCredits: user.reservedCredits,
+      credits: userCredit.credits,
+      reservedCredits: userCredit.reservedCredits,
     })
-    .from(user)
-    .where(eq(user.id, userId))
+    .from(userCredit)
+    .where(eq(userCredit.userId, userId))
     .limit(1);
 
-  const userInfo = users[0];
-  if (!userInfo) return null;
+  let userInfo = creditsRows[0];
+  if (!userInfo) {
+    await ensureUserCreditRow(userId);
+    creditsRows = await db
+      .select({
+        credits: userCredit.credits,
+        reservedCredits: userCredit.reservedCredits,
+      })
+      .from(userCredit)
+      .where(eq(userCredit.userId, userId))
+      .limit(1);
+    userInfo = creditsRows[0];
+    if (!userInfo) return null;
+  }
 
   return {
     totalCredits: userInfo.credits,
@@ -45,7 +61,7 @@ export async function reserveAvailableCredits({
   try {
     const userInfo = await getUserCreditsInfo({ userId });
     if (!userInfo) {
-      return { success: false, error: 'User not found' };
+      return { success: false, error: 'User credits not initialized' };
     }
 
     const availableCredits = userInfo.availableCredits;
@@ -56,19 +72,22 @@ export async function reserveAvailableCredits({
     }
 
     const result = await db
-      .update(user)
+      .update(userCredit)
       .set({
-        reservedCredits: sql`${user.reservedCredits} + ${amountToReserve}`,
+        reservedCredits: sql`${userCredit.reservedCredits} + ${amountToReserve}`,
       })
       .where(
         and(
-          eq(user.id, userId),
-          gte(sql`${user.credits} - ${user.reservedCredits}`, amountToReserve),
+          eq(userCredit.userId, userId),
+          gte(
+            sql`${userCredit.credits} - ${userCredit.reservedCredits}`,
+            amountToReserve,
+          ),
         ),
       )
       .returning({
-        credits: user.credits,
-        reservedCredits: user.reservedCredits,
+        credits: userCredit.credits,
+        reservedCredits: userCredit.reservedCredits,
       });
 
     if (result.length === 0) {
@@ -95,12 +114,12 @@ export async function finalizeCreditsUsage({
   actualAmount: number;
 }): Promise<void> {
   await db
-    .update(user)
+    .update(userCredit)
     .set({
-      credits: sql`${user.credits} - ${actualAmount}`,
-      reservedCredits: sql`${user.reservedCredits} - ${reservedAmount}`,
+      credits: sql`${userCredit.credits} - ${actualAmount}`,
+      reservedCredits: sql`${userCredit.reservedCredits} - ${reservedAmount}`,
     })
-    .where(eq(user.id, userId));
+    .where(eq(userCredit.userId, userId));
 }
 
 export async function releaseReservedCredits({
@@ -111,9 +130,9 @@ export async function releaseReservedCredits({
   amount: number;
 }): Promise<void> {
   await db
-    .update(user)
+    .update(userCredit)
     .set({
-      reservedCredits: sql`${user.reservedCredits} - ${amount}`,
+      reservedCredits: sql`${userCredit.reservedCredits} - ${amount}`,
     })
-    .where(eq(user.id, userId));
+    .where(eq(userCredit.userId, userId));
 }

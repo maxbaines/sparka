@@ -38,6 +38,7 @@ import { MAX_MESSAGE_CHARS } from '@/lib/limits/tokens';
 
 export const chatRouter = createTRPCRouter({
   getAllChats: protectedProcedure.query(async ({ ctx }) => {
+    console.log('ctx.user', ctx.user);
     const chats = await getChatsByUserId({ id: ctx.user.id });
 
     // Sort chats by pinned status, then by last updated date
