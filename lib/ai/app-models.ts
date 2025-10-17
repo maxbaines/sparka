@@ -39,13 +39,13 @@ export const allAppModels = allModelsData
       return [
         {
           ...model,
+          id: reasoningId,
           apiModelId: model.id,
           disabled: DISABLED_MODELS[model.id],
         },
         {
           ...model,
           reasoning: false,
-          id: reasoningId,
           apiModelId: model.id,
           disabled: DISABLED_MODELS[model.id],
         },
