@@ -82,6 +82,7 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    **Required:**
    - `POSTGRES_URL` - Database connection
    - `AI_GATEWAY_API_KEY` - Vercel AI Gateway
+   - `BLOB_READ_WRITE_TOKEN` - Vercel Blob read/write token
    - `CRON_SECRET` - Cron job authentication
    - `AUTH_SECRET` - Better Auth secret
    - `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` - Google OAuth
