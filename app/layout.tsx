@@ -10,15 +10,15 @@ import { env } from '@/lib/env';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sparka.ai'),
-  title: 'Sparka AI - AI for everyone, from everyone',
+  title: 'Sparka AI - Production-Ready AI Chat Template',
   description:
-    'Multi-provider AI Chat - access Claude, ChatGPT, Gemini, and Grok with advanced features, open-source and production-ready.',
+    'Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.',
   openGraph: {
     siteName: 'Sparka AI',
     url: 'https://sparka.ai',
-    title: 'Sparka AI - AI for everyone, from everyone',
+    title: 'Sparka AI - Production-Ready AI Chat Template',
     description:
-      'Multi-provider AI Chat - access Claude, ChatGPT, Gemini, and Grok with advanced features, open-source and production-ready.',
+      'Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.',
   },
 };
 
