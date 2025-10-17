@@ -2,81 +2,62 @@
 
 <img src="public/icon.svg" alt="Sparka AI" width="64" height="64">
 
-# Sparka AI
+# Production-Ready AI Chat Template
 
-**AI for everyone, from everyone**
+Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.
 
-*Multi-provider AI Chat - access Claude, ChatGPT, Gemini, and Grok with advanced features, open-source and production-ready.*
+**Next.js 15 • Vercel AI SDK • Shadcn/UI • Better Auth • Drizzle ORM**
 
-[**Try Sparka AI**](https://sparka.ai)
-
+[**Live Demo**](https://sparka.ai)
 
 </div>
 
 ![sparka_gif_demo](https://github.com/user-attachments/assets/34a03eed-58fa-4b1e-b453-384351b1c08c)
 
-Access every major AI assistant Claude, GPT-4, Gemini, Grok, and 20+ models through one interface. Get capabilities like document analysis, image generation, code execution, and research tools without managing multiple subscriptions. Try instantly, no signup required.
+Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 120+ models through Vercel AI Gateway.
 
+## Stack
 
-## ✨ Features
+- **Next.js 15** - App Router, React Server Components
+- **TypeScript** - Full type safety
+- **Vercel AI SDK v5** - Unified AI provider integration with 120+ models
+- **Better Auth** - Authentication & authorization
+- **Drizzle ORM** - Type-safe database queries
+- **PostgreSQL** - Primary database
+- **Redis** - Caching & resumable streams
+- **Vercel Blob** - Blob storage
+- **Shadcn/UI** - Beautiful, accessible components
+- **Tailwind CSS 4** - Styling
+- **tRPC** - End-to-end type-safe APIs
+- **Zod 4** - Schema validation
+- **Zustand** - State management
+- **Motion** - Animations
+- **t3-env** - Environment variables
+- **Pino** - Structured Logging
+- **Biome** - Code linting and formatting
+- **Streamdown** - Markdown for AI streaming
+- **AI Elements** - AI-native Components
+- **AI SDK Tools** - Developer tools for AI SDK
 
-- **🤖 Multi-Model Chat** - Access 90+ AI models including Claude, GPT-5, Gemini, and Grok in one interface.
+## Features
 
-- **🔐 Authentication & Sync** - Secure authentication with chat history sync across all devices.
+- 🤖 **120+ AI Models** - Claude, GPT-5, Gemini, Grok via Vercel AI Gateway
+- 🔐 **Auth & Sync** - Secure authentication with cross-device chat history
+- 🎯 **Try Without Signup** - Guest access for instant demos
+- 📎 **Attachments** - Images, PDFs, documents in conversations
+- 🎨 **Image Generation** - AI-powered image creation and editing
+- 💻 **Syntax Highlighting** - Code formatting for all languages
+- 🔄 **Resumable Streams** - Continue after interruptions
+- 🌳 **Chat Branching** - Alternative conversation paths
+- 🔗 **Chat Sharing** - Collaborate on conversations
+- 🔭 **Deep Research** - Real-time web search with citations
+- ⚡ **Code Execution** - Secure Python/JavaScript sandboxes
+- 📄 **Document Creation** - Generate docs, spreadsheets, presentations
+- 📊 **Analytics** - Vercel Web Analytics ready
 
-- **🎯 Easy to Try** - Try the interface and some features without creating an account.
+## Quick Start
 
-- **📎 Attachment Support** - Upload and analyze images, PDFs, and documents in conversations.
-
-- **🎨 AI-Powered Image Generation** - Generate and edit images with advanced AI models.
-
-- **💻 Syntax Highlighting** - Beautiful code formatting and highlighting for all programming languages.
-
-- **🔄 Resumable Streams** - Continue AI generations after page refreshes or interruptions.
-
-- **🌳 Chat Branching** - Create alternative conversation paths without losing your original thread.
-
-- **🔗 Chat Sharing** - Share conversations with others and collaborate on AI-assisted projects.
-
-- **🔭 Deep Research** - Comprehensive research with real-time web search, source analysis, and cited findings.
-
-- **⚡ Code Execution** - Run Python, JavaScript, and more in secure sandboxes.
-
-- **📄 Document Creation** - Generate and edit documents, spreadsheets, and presentations.
-
-- **📊 Web Analytics** - Built-in Vercel Web Analytics (enable in Vercel dashboard).
-
-
-## 🛠️ Tech Stack
-
-Sparka AI is built with modern technologies for scalability and performance:
-
-### **Frontend**
-- **Next.js 15**: App Router with React Server Components
-- **TypeScript**: Full type safety and developer experience
-- **Tailwind CSS**: Responsive, utility-first styling
-- **Radix UI**: Accessible component primitives
-- **Framer Motion**: Smooth animations and transitions
-- **Zustand**: Lightweight state management
-
-### **Backend**
-- **Vercel AI SDK**: Unified AI provider integration
-- **tRPC**: End-to-end typesafe APIs
-- **Drizzle ORM**: Type-safe database operations
-- **PostgreSQL**: Robust data persistence
-- **Redis**: Caching and real-time features
-
-### **AI Integration**
-- **AI SDK v5**: Latest Vercel AI SDK for unified provider integration
-- **AI SDK Gateway**: Models from various AI providers with automatic fallbacks
-
-### **System**
-- t3-env-nextjs: Environment variables management
-- pino: Logging
-
-## 🚀 Getting Started
-
-### **Prerequisites**
+### Prerequisites
 - Node.js 18+ or Bun
 - PostgreSQL database (required)
 - Vercel AI Gateway (required)
@@ -84,7 +65,7 @@ Sparka AI is built with modern technologies for scalability and performance:
 - Vercel Blob (required)
 - Redis (optional, for resumable streams)
 
-### **Quick Start**
+### Setup
 
 1. **Clone and Install**
    ```bash
@@ -96,11 +77,23 @@ Sparka AI is built with modern technologies for scalability and performance:
 2. **Environment Setup**
    ```bash
    cp .env.example .env.local
-   # Configure your environment variables
-   # Required: POSTGRES_URL, AI_GATEWAY_API_KEY, CRON_SECRET,
-   # AUTH_SECRET, AUTH_GOOGLE_ID/SECRET, AUTH_GITHUB_ID/SECRET
-   # Optional: REDIS_URL, OPENAI_API_KEY, TAVILY_API_KEY, EXA_API_KEY, FIRECRAWL_API_KEY, SANDBOX_TEMPLATE_ID
    ```
+   
+   **Required:**
+   - `POSTGRES_URL` - Database connection
+   - `AI_GATEWAY_API_KEY` - Vercel AI Gateway
+   - `CRON_SECRET` - Cron job authentication
+   - `AUTH_SECRET` - Better Auth secret
+   - `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` - Google OAuth
+   - `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` - GitHub OAuth
+   
+   **Optional:**
+   - `REDIS_URL` - For resumable streams
+   - `OPENAI_API_KEY` - Direct OpenAI access
+   - `TAVILY_API_KEY` - Web search
+   - `EXA_API_KEY` - Web search
+   - `FIRECRAWL_API_KEY` - Web scraping
+   - `SANDBOX_TEMPLATE_ID` - Code execution
 
 3. **Database Setup**
    ```bash
@@ -112,13 +105,6 @@ Sparka AI is built with modern technologies for scalability and performance:
    bun dev
    ```
 
-Visit [http://localhost:3000](http://localhost:3000) to start using Sparka AI locally.
+Visit [http://localhost:3000](http://localhost:3000) to start building.
 
-
-## 🙏 Acknowledgements
-
-Sparka AI was built on the shoulders of giants. We're deeply grateful to these outstanding open source projects:
-
-- **[Vercel AI Chatbot](https://github.com/vercel/ai-chatbot)** - Core architecture and AI SDK integration patterns
-- **[Scira](https://github.com/zaidmukaddam/scira)** - AI-powered search engine
 
