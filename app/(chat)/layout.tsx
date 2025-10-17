@@ -38,7 +38,6 @@ export default async function ChatLayout({
 
   const cookieModel = cookieStore.get('chat-model')?.value as AppModelId;
   const isAnonymous = !session?.user;
-  console.log('Chat Layout user', session?.user);
 
   // Check if the model from cookie is available for anonymous users
   let defaultModel = cookieModel ?? DEFAULT_CHAT_MODEL;

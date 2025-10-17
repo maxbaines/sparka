@@ -686,7 +686,6 @@ export function useGetAllChats(limit?: number) {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
   const trpc = useTRPC();
-  console.log('useGetAllChats isAuthenticated', isAuthenticated);
   const getAllChatsQueryOptions = useDualQueryOptions({
     ...trpc.chat.getAllChats.queryOptions(),
     localQueryFn: async () => {
