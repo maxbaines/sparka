@@ -20,6 +20,9 @@ export const auth = betterAuth({
     provider: 'pg',
     schema,
   }),
+  trustedOrigins: [
+    env.VERCEL_URL ? `https://${env.VERCEL_URL}` : 'http://localhost:3000',
+  ],
   baseURL: env.VERCEL_URL
     ? `https://${env.VERCEL_URL}`
     : 'http://localhost:3000',
