@@ -21,17 +21,31 @@ export const auth = betterAuth({
     schema,
   }),
   trustedOrigins: env.VERCEL_URL ? [env.VERCEL_URL] : undefined,
-
   secret: env.AUTH_SECRET,
-  socialProviders: {
-    google: {
-      clientId: env.AUTH_GOOGLE_ID,
-      clientSecret: env.AUTH_GOOGLE_SECRET,
-    },
-    github: {
-      clientId: env.AUTH_GITHUB_ID,
-      clientSecret: env.AUTH_GITHUB_SECRET,
-    },
-  },
+
+  socialProviders: (() => {
+    const googleId = env.AUTH_GOOGLE_ID;
+    const googleSecret = env.AUTH_GOOGLE_SECRET;
+    const githubId = env.AUTH_GITHUB_ID;
+    const githubSecret = env.AUTH_GITHUB_SECRET;
+
+    const google =
+      typeof googleId === 'string' &&
+      googleId.length > 0 &&
+      typeof googleSecret === 'string' &&
+      googleSecret.length > 0
+        ? { clientId: googleId, clientSecret: googleSecret }
+        : undefined;
+
+    const github =
+      typeof githubId === 'string' &&
+      githubId.length > 0 &&
+      typeof githubSecret === 'string' &&
+      githubSecret.length > 0
+        ? { clientId: githubId, clientSecret: githubSecret }
+        : undefined;
+
+    return { google, github } as const;
+  })(),
   plugins: [nextCookies()],
 });

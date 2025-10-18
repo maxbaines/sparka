@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { SocialAuthProviders } from '@/components/social-auth-providers';
 import { ChevronLeft } from 'lucide-react';
+import { LoginForm } from '@/components/login-form';
 
 export const metadata: Metadata = {
   title: 'Login',
@@ -26,26 +26,8 @@ export default function LoginPage() {
           Back
         </>
       </Link>
-      <div className="mx-auto flex w-full flex-col justify-center items-center space-y-6 sm:w-[350px]">
-        <div className="flex flex-col space-y-2 text-center">
-          {/* Assuming Icons.logo exists */}
-          {/* <Icons.logo className="mx-auto h-6 w-6" /> */}
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Sign in using your Google account
-          </p>
-        </div>
-        <SocialAuthProviders />
-        <p className="px-8 text-center text-sm text-muted-foreground">
-          <Link
-            href="/register"
-            className="hover:text-brand underline underline-offset-4"
-          >
-            Don&apos;t have an account? Sign Up
-          </Link>
-        </p>
+      <div className="mx-auto flex w-full flex-col justify-center items-center sm:w-[420px]">
+        <LoginForm className="w-full" />
       </div>
     </div>
   );

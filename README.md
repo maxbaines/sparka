@@ -56,6 +56,10 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - ⚡ **Code Execution** - Secure Python/JavaScript sandboxes
 - 📄 **Document Creation** - Generate docs, spreadsheets, presentations
 
+## Deploy Your Own
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffranciscomoretti%2Fsparka&project-name=Sparka&repository-name=sparka&products=postgres,blob&env=AI_GATEWAY_API_KEY&envDescription=Optional%3A%20AUTH_GOOGLE_ID%2C%20AUTH_GOOGLE_SECRET%2C%20AUTH_GITHUB_ID%2C%20AUTH_GITHUB_SECRET%2C%20REDIS_URL%2C%20OPENAI_API_KEY%2C%20TAVILY_API_KEY%2C%20EXA_API_KEY%2C%20FIRECRAWL_API_KEY%2C%20SANDBOX_TEMPLATE_ID.%20AUTH_SECRET%20and%20CRON_SECRET%20are%20auto-generated%20or%20set%20by%20Vercel.&envLink=https%3A%2F%2Fgithub.com%2Ffranciscomoretti%2Fsparka%23quick-start&demo-title=Sparka%20AI%20Chat&demo-description=Production-ready%20AI%20chat%20with%20120%2B%20models.&demo-url=https%3A%2F%2Fsparka.ai&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Ffranciscomoretti%2Fsparka%2Fmain%2Fpublic%2Ficon.svg&install-command=bun%20install)
+
 ## Quick Start
 
 1. **Clone and Install**

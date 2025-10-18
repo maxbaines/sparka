@@ -93,10 +93,12 @@ export default function TermsPage() {
       <ul>
         <li>Hosting: {siteConfig.services.hosting}</li>
         <li>AI providers: {siteConfig.services.aiProviders.join(', ')}</li>
-        <li>
-          Payments: {siteConfig.services.paymentProcessors.join(', ')} for
-          billing and subscription management
-        </li>
+        {siteConfig.services.paymentProcessors.length > 0 ? (
+          <li>
+            Payments: {siteConfig.services.paymentProcessors.join(', ')} for
+            billing and subscription management
+          </li>
+        ) : null}
       </ul>
       <p>
         These third-party services have their own terms and privacy policies and
@@ -210,7 +212,7 @@ export default function TermsPage() {
 
       <h2>14. Contact Us</h2>
       <p>
-        If you have any questions about these Terms of Service, contact us at
+        If you have any questions about these Terms of Service, contact us at{' '}
         {siteConfig.organization.contact.legalEmail}
       </p>
 
