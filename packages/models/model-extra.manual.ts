@@ -1,4 +1,4 @@
-import type { ModelId } from '@ai-models/vercel-gateway';
+import type { ModelId } from './model-id';
 import type { generatedModelExtra } from './model-extra.generated';
 
 export interface ModelExtra {

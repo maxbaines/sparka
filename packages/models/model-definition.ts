@@ -3,9 +3,13 @@ import { allModelsExtra, type ModelExtra } from './model-extra';
 
 export type ModelDefinition = ModelData & ModelExtra;
 
+const DEFAULT_MODEL_EXTRA: ModelExtra = {
+  releaseDate: new Date(0),
+};
+
 export const modelDefinitions: ModelDefinition[] = modelsData.map((model) => ({
   ...model,
-  ...allModelsExtra[model.id],
+  ...(allModelsExtra[model.id] ?? DEFAULT_MODEL_EXTRA),
 }));
 
 export const modelDefinitionMap = new Map<ModelId, ModelDefinition>(

@@ -1,4 +1,4 @@
-import type { ImageModelId, ModelId } from '@ai-models/vercel-gateway';
+import type { ImageModelId, ModelId } from './model-id';
 
 export function getModelAndProvider(modelId: ModelId | ImageModelId) {
   const [provider, model] = modelId.split('/');
