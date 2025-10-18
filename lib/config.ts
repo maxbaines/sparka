@@ -1,5 +1,6 @@
 export type PricingConfig = {
   currency?: string;
+  appPrefix: string;
   free?: {
     name: string;
     summary: string;
@@ -46,6 +47,8 @@ export type SiteConfig = {
 
 export const siteConfig: SiteConfig = {
   githubUrl: 'https://github.com/franciscomoretti/sparka',
+  appPrefix: 'sparka-ai',
+
   appName: 'Sparka AI',
   organization: {
     name: 'Sparka AI Ltd',
@@ -78,7 +81,7 @@ export const siteConfig: SiteConfig = {
   },
   legal: {
     minimumAge: 13,
-    governingLaw: 'England and Wales',
+    governingLaw: 'United States',
     refundPolicy: 'no-refunds',
   },
   policies: {
