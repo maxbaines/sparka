@@ -4,8 +4,9 @@
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
+    "prebuild": "",
     "dev": "next dev --turbo",
-    "build": "tsx lib/db/migrate && next build",
+    "build": "(cd packages/models && bun run build) && tsx lib/db/migrate && next build",
     "start": "next start",
     "lint": "next lint && biome lint --write --unsafe",
     "lint:fix": "next lint --fix && biome lint --write --unsafe",

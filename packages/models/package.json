@@ -21,6 +21,7 @@
   ],
   "scripts": {
     "build": "bunx tsup",
+    "prepare": "bunx tsup",
     "clean": "rimraf dist"
   },
   "peerDependencies": {
