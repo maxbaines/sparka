@@ -32,6 +32,7 @@ import {
   pinAnonymousChat,
 } from '@/lib/utils/anonymous-chat-storage';
 import { getAnonymousSession } from '@/lib/anonymous-session-client';
+import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
 import { generateUUID, getTextContentFromMessage } from '@/lib/utils';
 import type { ChatMessage } from '@/lib/ai/types';
 import { useDualMutation } from '@/hooks/use-dual-mutation';
@@ -751,8 +752,10 @@ export function useGetCredits() {
     localQueryFn: async () => {
       const anonymousSession = getAnonymousSession();
       return {
-        totalCredits: anonymousSession?.remainingCredits ?? 0,
-        availableCredits: anonymousSession?.remainingCredits ?? 0,
+        totalCredits:
+          anonymousSession?.remainingCredits ?? ANONYMOUS_LIMITS.CREDITS,
+        availableCredits:
+          anonymousSession?.remainingCredits ?? ANONYMOUS_LIMITS.CREDITS,
         reservedCredits: 0,
       };
     },

@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 import { useSession } from '@/providers/session-provider';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTRPC } from '@/trpc/react';
 import type { AnonymousSession } from '@/lib/types/anonymous';
 import {
   getAnonymousSession,
@@ -23,6 +25,8 @@ function isValidAnonymousSession(obj: any): obj is AnonymousSession {
 
 export function AnonymousSessionInit() {
   const { data: session, isPending } = useSession();
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
 
   useEffect(() => {
     // Only initialize for non-authenticated users after session is loaded
@@ -41,6 +45,10 @@ export function AnonymousSessionInit() {
         clearAnonymousSession();
         const newSession = createAnonymousSession();
         setAnonymousSession(newSession);
+        // Ensure UI refetches credits after creating a valid anonymous session
+        queryClient.invalidateQueries({
+          queryKey: trpc.credits.getAvailableCredits.queryKey(),
+        });
         return;
       }
 
@@ -50,8 +58,12 @@ export function AnonymousSessionInit() {
       console.log('No anonymous session found, creating new one');
       const newSession = createAnonymousSession();
       setAnonymousSession(newSession);
+      // Ensure UI refetches credits after first-time session creation
+      queryClient.invalidateQueries({
+        queryKey: trpc.credits.getAvailableCredits.queryKey(),
+      });
     }
-  }, [session, isPending]);
+  }, [session, isPending, queryClient, trpc.credits.getAvailableCredits]);
 
   return null; // This component doesn't render anything
 }
