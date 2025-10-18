@@ -34,6 +34,8 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - **Motion** - Animations
 - **t3-env** - Environment variables
 - **Pino** - Structured Logging
+- **Langfuse** - LLM observability & analytics
+- **Vercel Analytics** - Web analytics
 - **Biome** - Code linting and formatting
 - **Streamdown** - Markdown for AI streaming
 - **AI Elements** - AI-native Components
@@ -53,17 +55,9 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - 🔭 **Deep Research** - Real-time web search with citations
 - ⚡ **Code Execution** - Secure Python/JavaScript sandboxes
 - 📄 **Document Creation** - Generate docs, spreadsheets, presentations
-- 📊 **Analytics** - Vercel Web Analytics ready
 
 ## Quick Start
 
-### Prerequisites
-- Node.js 18+ or Bun
-- PostgreSQL database (required)
-- Vercel AI Gateway (required)
-- Google + GitHub OAuth (required)
-- Vercel Blob (required)
-- Redis (optional, for resumable streams)
 
 ### Setup
 
