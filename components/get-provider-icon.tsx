@@ -1,5 +1,5 @@
 'use client';
-import type { ProviderId } from '@/lib/models';
+import type { ProviderId } from '@ai-models/vercel-gateway';
 import {
   OpenAI,
   Anthropic,

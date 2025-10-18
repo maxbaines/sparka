@@ -8,11 +8,11 @@ import { execSync } from 'node:child_process';
 import type {
   AiGatewayEndpointsResponse,
   AiGatewayModelsResponse,
-} from '../../lib/models/ai-sdk-models-schemas';
+} from '../../packages/models/ai-sdk-models-schemas';
 import {
   AiGatewayEndpointsResponseSchema,
   AiGatewayModelsResponseSchema,
-} from '../../lib/models/ai-sdk-models-schemas';
+} from '../../packages/models/ai-sdk-models-schemas';
 
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url);

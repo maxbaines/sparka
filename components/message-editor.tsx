@@ -7,7 +7,7 @@ import {
   getAttachmentsFromMessage,
   getTextContentFromMessage,
 } from '@/lib/utils';
-import type { ModelId } from '@/lib/models';
+import type { ModelId } from '@ai-models/vercel-gateway';
 import { useChatStatus } from '@/lib/stores/hooks';
 
 export type MessageEditorProps = {

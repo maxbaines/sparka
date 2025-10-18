@@ -7,7 +7,7 @@ import {
   ModelsDevResponseSchema,
   type ModelsDevResponse,
   type ModelsDevModel,
-} from '@/lib/models/models-dev-schemas';
+} from '../../packages/models/models-dev-schemas';
 
 const MODELS_DEV_URL = 'https://models.dev/api.json';
 
@@ -58,7 +58,7 @@ async function main() {
   writeFileSync(MODELS_DEV_RESPONSE_JSON, JSON.stringify(raw, null, 2));
 
   const lines: string[] = [];
-  lines.push("import type { ModelId } from '@/lib/models';");
+  lines.push("import type { ModelId } from '@ai-models/vercel-gateway';");
   lines.push('');
   lines.push('type GeneratedExtraDelta = {');
   lines.push('  releaseDate: Date;');

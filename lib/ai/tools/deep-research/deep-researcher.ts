@@ -1,7 +1,7 @@
 import { generateObject, generateText, type ModelMessage } from 'ai';
 import { getLanguageModel } from '@/lib/ai/providers';
 import { truncateMessages } from '@/lib/ai/token-utils';
-import type { ModelId } from '@/lib/models';
+import type { ModelId } from '@ai-models/vercel-gateway';
 import { z } from 'zod';
 import type { DeepResearchConfig } from './configuration';
 import {

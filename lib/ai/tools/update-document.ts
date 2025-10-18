@@ -3,7 +3,7 @@ import type { Session } from '@/lib/auth';
 import { z } from 'zod';
 import { getDocumentById } from '@/lib/db/queries';
 import { documentHandlersByArtifactKind } from '@/lib/artifacts/server';
-import type { ModelId } from '@/lib/models';
+import type { ModelId } from '@ai-models/vercel-gateway';
 import type { StreamWriter } from '../types';
 
 interface UpdateDocumentProps {

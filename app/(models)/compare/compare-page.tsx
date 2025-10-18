@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { allModels, type ModelDefinition } from '@/lib/models';
+import { allModels, type ModelDefinition } from '@ai-models/vercel-gateway';
 import { Container } from '@/components/container';
 import { ModelDetails } from '@/app/(models)/models/model-details';
 

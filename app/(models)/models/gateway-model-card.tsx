@@ -9,8 +9,8 @@ import {
   ChatModelButton,
   CompareModelButton,
 } from '@/components/model-action-buttons';
-import type { ModelDefinition } from '@/lib/models';
-import type { ProviderId } from '@/lib/models';
+import type { ModelDefinition } from '@ai-models/vercel-gateway';
+import type { ProviderId } from '@ai-models/vercel-gateway';
 import { getProviderIcon } from '@/components/get-provider-icon';
 import { MODEL_CAPABILITIES } from '@/lib/model-explorer/model-capabilities';
 import {

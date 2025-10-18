@@ -4,7 +4,7 @@ import { createContext, useContext, useRef } from 'react';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { createStore } from 'zustand/vanilla';
 import type { FilterState } from '@/app/(models)/models/model-filters';
-import { type ModelDefinition, allModels } from '@/lib/models';
+import { type ModelDefinition, allModels } from '@ai-models/vercel-gateway';
 
 // Derive dynamic ranges from available models
 const contextWindows = allModels

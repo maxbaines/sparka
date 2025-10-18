@@ -2,7 +2,7 @@ import { ModelsHeader } from './models-header';
 import { auth } from '../../lib/auth';
 import { headers } from 'next/headers';
 import type { Metadata } from 'next';
-import { allModels, providers } from '@/lib/models';
+import { allModels, providers } from '@ai-models/vercel-gateway';
 import { TRPCReactProvider } from '@/trpc/react';
 import { SessionProvider } from '@/providers/session-provider';
 

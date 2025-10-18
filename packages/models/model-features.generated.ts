@@ -1,4 +1,4 @@
-import type { ModelId } from '@/lib/models';
+import type { ModelId } from '@ai-models/vercel-gateway';
 
 type GeneratedFeatureDelta = {
   releaseDate: Date;

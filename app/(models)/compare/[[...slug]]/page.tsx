@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ComparePage from '../compare-page';
-import { allModels } from '@/lib/models';
+import { allModels } from '@ai-models/vercel-gateway';
 import { env } from '@/lib/env';
 
 // Toggle to include/exclude "Performance" related copy

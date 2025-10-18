@@ -1,4 +1,4 @@
-import type { ProviderId } from '@/lib/models';
+import type { ProviderId } from '@ai-models/vercel-gateway';
 
 function getProviderIconSlug(provider: ProviderId): string | null {
   // Best-effort mapping to Simple Icons slugs. Unknown providers fall back to null.

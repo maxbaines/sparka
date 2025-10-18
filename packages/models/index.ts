@@ -9,3 +9,8 @@ export { type ProviderId, providers } from './models.generated';
 export { getModelAndProvider } from './utils';
 export const allModels = modelDefinitions;
 export { modelDefinitionMap, getModelDefinition };
+
+export {
+  type ImageModelData,
+  imageModelsData,
+} from '../../lib/models/image-models';

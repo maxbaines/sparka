@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og';
-import { allModels } from '@/lib/models';
+import { allModels } from '@ai-models/vercel-gateway';
 import { getProviderIconUrl } from '../../../(models)/get-provider-icon-url';
 import { ModalitiesRow } from '@/lib/og/ModalitiesRow';
 import {

@@ -3,7 +3,7 @@ import {
   type ModelDefinition,
   type ModelId,
   allModels as allModelsData,
-} from '@/lib/models';
+} from '@ai-models/vercel-gateway';
 import {
   imageModelsData,
   type ImageModelData,

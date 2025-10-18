@@ -2,8 +2,8 @@
 import { join } from 'node:path';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import type { AiGatewayModelsResponse } from '../../lib/models/ai-sdk-models-schemas';
-import { AiGatewayModelsResponseSchema } from '../../lib/models/ai-sdk-models-schemas';
+import type { AiGatewayModelsResponse } from '../../packages/models/ai-sdk-models-schemas';
+import { AiGatewayModelsResponseSchema } from '../../packages/models/ai-sdk-models-schemas';
 
 function ensureDir(filePath: string) {
   mkdirSync(dirname(filePath), { recursive: true });

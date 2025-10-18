@@ -1,9 +1,9 @@
 import { ImageResponse } from '@vercel/og';
 
-import { allModels } from '@/lib/models';
+import { allModels } from '@ai-models/vercel-gateway';
 import { formatNumberCompact } from '@/lib/utils/format-number-compact';
 import { getProviderIconUrl } from '../get-provider-icon-url';
-import type { ProviderId } from '@/lib/models';
+import type { ProviderId } from '@ai-models/vercel-gateway';
 import {
   OG_SIZE,
   OG_SITE_NAME,

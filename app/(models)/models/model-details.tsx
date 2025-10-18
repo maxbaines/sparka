@@ -1,9 +1,9 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { ModelDetailsCard } from '@/app/(models)/compare/model-details-card';
-import { getModelDefinition } from '@/lib/models';
-import { allModels } from '@/lib/models';
-import type { ModelDefinition } from '@/lib/models';
+import { getModelDefinition } from '@ai-models/vercel-gateway';
+import { allModels } from '@ai-models/vercel-gateway';
+import type { ModelDefinition } from '@ai-models/vercel-gateway';
 import { ModelSelectorBase } from '@/components/model-selector-base';
 import { ChatModelButton } from '@/components/model-action-buttons';
 

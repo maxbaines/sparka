@@ -6,8 +6,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Calendar, Building, CheckCircle } from 'lucide-react';
-import type { ModelDefinition } from '@/lib/models';
-import type { ProviderId } from '@/lib/models';
+import type { ModelDefinition } from '@ai-models/vercel-gateway';
+import type { ProviderId } from '@ai-models/vercel-gateway';
 import { cn } from '@/lib/utils';
 import { getFeatureConfig, isFeatureEnabled } from '@/lib/features-config';
 import { getProviderIcon } from './get-provider-icon';

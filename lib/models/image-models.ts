@@ -1,10 +1,11 @@
-import type { ImageModelId } from '@/lib/models';
-import type { ProviderId } from './models.generated';
+import type { ImageModelId } from './image-model-id';
+
+// TODO: Image models need to be moved to a separate package
 
 export interface ImageModelData {
   id: ImageModelId;
   object: string;
-  owned_by: ProviderId;
+  owned_by: 'openai';
   name: string;
   description: string;
   context_window: number; // Max input tokens

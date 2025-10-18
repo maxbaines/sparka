@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { ModelDefinition } from '@/lib/models';
-import type { ProviderId } from '@/lib/models';
+import type { ModelDefinition } from '@ai-models/vercel-gateway';
+import type { ProviderId } from '@ai-models/vercel-gateway';
 import {
   ChatModelButton,
   CompareModelButton,

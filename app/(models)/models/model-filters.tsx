@@ -9,7 +9,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
-import { providers } from '@/lib/models';
+import { providers } from '@ai-models/vercel-gateway';
 import { cn } from '@/lib/utils';
 import { MODEL_CATEGORIES } from '@/lib/model-explorer/model-categories';
 import { formatNumberCompact } from '@/lib/utils/format-number-compact';

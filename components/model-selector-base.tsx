@@ -30,7 +30,11 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { getEnabledFeatures } from '@/lib/features-config';
 import { ChevronUpIcon, FilterIcon } from 'lucide-react';
-import type { ModelDefinition, ModelId, ProviderId } from '@/lib/models';
+import type {
+  ModelDefinition,
+  ModelId,
+  ProviderId,
+} from '@ai-models/vercel-gateway';
 import { getProviderIcon } from './get-provider-icon';
 
 type FeatureFilter = Record<string, boolean>;
