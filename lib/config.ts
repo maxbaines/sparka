@@ -1,6 +1,5 @@
 export type PricingConfig = {
   currency?: string;
-  appPrefix: string;
   free?: {
     name: string;
     summary: string;
@@ -14,6 +13,7 @@ export type PricingConfig = {
 
 export type SiteConfig = {
   githubUrl: string;
+  appPrefix: string;
   appName: string;
   organization: {
     name: string;
