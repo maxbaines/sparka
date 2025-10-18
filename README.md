@@ -37,8 +37,8 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - [Langfuse](https://langfuse.com) - LLM observability & analytics
 - [Vercel Analytics](https://vercel.com/analytics) - Web analytics
 - [Biome](https://biomejs.dev) - Code linting and formatting
-- [Streamdown](https://streamdown.vercel.app) - Markdown for AI streaming
-- [AI Elements](https://sdk.vercel.ai/docs/ai-elements) - AI-native Components
+- [Streamdown](https://streamdown.ai/) - Markdown for AI streaming
+- [AI Elements](https://ai-sdk.dev/elements/overview) - AI-native Components
 - [AI SDK Tools](https://ai-sdk-tools.dev/) - Developer tools for AI SDK
 
 ## Features
