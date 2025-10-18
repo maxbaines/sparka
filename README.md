@@ -18,28 +18,28 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 
 ## Stack
 
-- **Next.js 15** - App Router, React Server Components
-- **TypeScript** - Full type safety
-- **Vercel AI SDK v5** - Unified AI provider integration with 120+ models
-- **Better Auth** - Authentication & authorization
-- **Drizzle ORM** - Type-safe database queries
-- **PostgreSQL** - Primary database
-- **Redis** - Caching & resumable streams
-- **Vercel Blob** - Blob storage
-- **Shadcn/UI** - Beautiful, accessible components
-- **Tailwind CSS 4** - Styling
-- **tRPC** - End-to-end type-safe APIs
-- **Zod 4** - Schema validation
-- **Zustand** - State management
-- **Motion** - Animations
-- **t3-env** - Environment variables
-- **Pino** - Structured Logging
-- **Langfuse** - LLM observability & analytics
-- **Vercel Analytics** - Web analytics
-- **Biome** - Code linting and formatting
-- **Streamdown** - Markdown for AI streaming
-- **AI Elements** - AI-native Components
-- **AI SDK Tools** - Developer tools for AI SDK
+- [Next.js 15](https://nextjs.org) - App Router, React Server Components
+- [TypeScript](https://www.typescriptlang.org) - Full type safety
+- [Vercel AI SDK v5](https://sdk.vercel.ai) - Unified AI provider integration with 120+ models
+- [Better Auth](https://www.better-auth.com) - Authentication & authorization
+- [Drizzle ORM](https://orm.drizzle.team) - Type-safe database queries
+- [PostgreSQL](https://www.postgresql.org) - Primary database
+- [Redis](https://redis.io) - Caching & resumable streams
+- [Vercel Blob](https://vercel.com/storage/blob) - Blob storage
+- [Shadcn/UI](https://ui.shadcn.com) - Beautiful, accessible components
+- [Tailwind CSS 4](https://tailwindcss.com) - Styling
+- [tRPC](https://trpc.io) - End-to-end type-safe APIs
+- [Zod 4](https://zod.dev) - Schema validation
+- [Zustand](https://docs.pmnd.rs/zustand) - State management
+- [Motion](https://motion.dev) - Animations
+- [t3-env](https://env.t3.gg) - Environment variables
+- [Pino](https://getpino.io) - Structured Logging
+- [Langfuse](https://langfuse.com) - LLM observability & analytics
+- [Vercel Analytics](https://vercel.com/analytics) - Web analytics
+- [Biome](https://biomejs.dev) - Code linting and formatting
+- [Streamdown](https://streamdown.vercel.app) - Markdown for AI streaming
+- [AI Elements](https://sdk.vercel.ai/docs/ai-elements) - AI-native Components
+- [AI SDK Tools](https://ai-sdk-tools.dev/) - Developer tools for AI SDK
 
 ## Features
 
@@ -57,9 +57,6 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - 📄 **Document Creation** - Generate docs, spreadsheets, presentations
 
 ## Quick Start
-
-
-### Setup
 
 1. **Clone and Install**
    ```bash
