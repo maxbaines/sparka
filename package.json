@@ -187,7 +187,7 @@
     "@storybook/addon-links": "9.1.2",
     "@storybook/nextjs": "9.1.2",
     "@tailwindcss/postcss": "^4.1.12",
-    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/d3-scale": "^4.0.8",
     "@types/diff": "^8.0.0",
     "@types/node": "^22.8.6",

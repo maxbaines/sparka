@@ -31,6 +31,8 @@ export default async function middleware(req: NextRequest) {
   const isOnLoginPage = url.pathname.startsWith('/login');
   const isOnRegisterPage = url.pathname.startsWith('/register');
   const isOnSharePage = url.pathname.startsWith('/share/');
+  const isOnPrivacyPage = url.pathname.startsWith('/privacy');
+  const isOnTermsPage = url.pathname.startsWith('/terms');
 
   if (isLoggedIn && (isOnLoginPage || isOnRegisterPage)) {
     return NextResponse.redirect(new URL('/', url));
@@ -38,6 +40,7 @@ export default async function middleware(req: NextRequest) {
   if (isOnRegisterPage || isOnLoginPage) return;
   if (isOnSharePage) return;
   if (isOnModels || isOnCompare) return;
+  if (isOnPrivacyPage || isOnTermsPage) return;
 
   if (isOnChat) {
     if (url.pathname === '/') return;
@@ -63,6 +66,6 @@ export const config = {
      * - models
      * - compare
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|opengraph-image|manifest|models|compare|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|webmanifest)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|opengraph-image|manifest|models|compare|privacy|terms|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|webmanifest)$).*)',
   ],
 };
