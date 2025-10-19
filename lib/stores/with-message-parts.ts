@@ -1,7 +1,7 @@
-'use client';
-import type { StateCreator } from 'zustand';
-import type { UIMessage } from 'ai';
-import type { BaseChatStoreState } from './chat-store-base';
+"use client";
+import type { UIMessage } from "ai";
+import type { StateCreator } from "zustand";
+import type { BaseChatStoreState } from "./chat-store-base";
 
 // Helper types to safely derive the message part and part.type types from UI_MESSAGE
 type UIMessageParts<UI_MSG> = UI_MSG extends { parts: infer P } ? P : never;
@@ -13,38 +13,36 @@ type UIMessagePartType<UI_MSG> = UIMessagePart<UI_MSG> extends { type: infer T }
   : never;
 
 function extractPartTypes<UI_MESSAGE extends UIMessage>(
-  message: UI_MESSAGE,
+  message: UI_MESSAGE
 ): {
   partsRef: UIMessageParts<UI_MESSAGE>;
-  types: Array<UIMessagePartType<UI_MESSAGE>>;
+  types: UIMessagePartType<UI_MESSAGE>[];
 } {
   const partsRef = (message as unknown as { parts: unknown[] })
     .parts as UIMessageParts<UI_MESSAGE>;
-  const types = (partsRef as Array<UIMessagePart<UI_MESSAGE>>).map(
+  const types = (partsRef as UIMessagePart<UI_MESSAGE>[]).map(
     (part) =>
       (
         part as UIMessagePart<UI_MESSAGE> & {
           type: UIMessagePartType<UI_MESSAGE>;
         }
-      ).type,
-  ) as Array<UIMessagePartType<UI_MESSAGE>>;
+      ).type
+  ) as UIMessagePartType<UI_MESSAGE>[];
   return { partsRef, types };
 }
 
 export type PartsAugmentedState<UM extends UIMessage> =
   BaseChatStoreState<UM> & {
-    getMessagePartTypesById: (
-      messageId: string,
-    ) => Array<UIMessagePartType<UM>>;
+    getMessagePartTypesById: (messageId: string) => UIMessagePartType<UM>[];
     getMessagePartsRangeCached: (
       messageId: string,
       startIdx: number,
       endIdx: number,
-      type?: string,
+      type?: string
     ) => UIMessageParts<UM>;
     getMessagePartByIdxCached: (
       messageId: string,
-      partIdx: number,
+      partIdx: number
     ) => UIMessageParts<UM>[number];
   };
 
@@ -56,7 +54,7 @@ export type PartsSC<UM extends UIMessage> = StateCreator<
 
 export const withMessageParts =
   <UI_MESSAGE extends UIMessage, T extends BaseChatStoreState<UI_MESSAGE>>(
-    creator: StateCreator<T, [], []>,
+    creator: StateCreator<T, [], []>
   ): StateCreator<T & PartsAugmentedState<UI_MESSAGE>, [], []> =>
   (set, get, api) => {
     const base = creator(set, get, api);
@@ -66,23 +64,27 @@ export const withMessageParts =
       getMessagePartTypesById: (messageId: string) => {
         const state = get();
         const message = (state._throttledMessages || state.messages).find(
-          (msg) => msg.id === messageId,
+          (msg) => msg.id === messageId
         ) as UI_MESSAGE | undefined;
-        if (!message) throw new Error(`Message not found for id: ${messageId}`);
+        if (!message) {
+          throw new Error(`Message not found for id: ${messageId}`);
+        }
         const { types } = extractPartTypes<UI_MESSAGE>(message);
-        return types as Array<UIMessagePartType<UI_MESSAGE>>;
+        return types as UIMessagePartType<UI_MESSAGE>[];
       },
       getMessagePartsRangeCached: (
         messageId: string,
         startIdx: number,
         endIdx: number,
-        type?: string,
+        type?: string
       ) => {
         const state = get();
         const message = (state._throttledMessages || state.messages).find(
-          (msg) => msg.id === messageId,
+          (msg) => msg.id === messageId
         ) as unknown as { parts: Array<{ type: string }> } | undefined;
-        if (!message) throw new Error(`Message not found for id: ${messageId}`);
+        if (!message) {
+          throw new Error(`Message not found for id: ${messageId}`);
+        }
         const start = Math.max(0, Math.floor(startIdx));
         const end = Math.min(message.parts.length - 1, Math.floor(endIdx));
         if (Number.isNaN(start) || Number.isNaN(end) || end < start) {
@@ -94,7 +96,7 @@ export const withMessageParts =
           type === undefined
             ? baseSlice
             : (baseSlice.filter(
-                (p) => p.type === type,
+                (p) => p.type === type
               ) as unknown as UIMessageParts<UI_MESSAGE>)
         ) as UIMessageParts<UI_MESSAGE>;
         return result as UIMessageParts<UI_MESSAGE>;
@@ -102,14 +104,17 @@ export const withMessageParts =
       getMessagePartByIdxCached: (messageId: string, partIdx: number) => {
         const state = get();
         const message = (state._throttledMessages || state.messages).find(
-          (msg) => msg.id === messageId,
-        ) as unknown as { parts: Array<unknown> } | undefined;
-        if (!message) throw new Error(`Message not found for id: ${messageId}`);
+          (msg) => msg.id === messageId
+        ) as unknown as { parts: unknown[] } | undefined;
+        if (!message) {
+          throw new Error(`Message not found for id: ${messageId}`);
+        }
         const selected = message.parts[partIdx];
-        if (selected === undefined)
+        if (selected === undefined) {
           throw new Error(
-            `Part not found for id: ${messageId} at partIdx: ${partIdx}`,
+            `Part not found for id: ${messageId} at partIdx: ${partIdx}`
           );
+        }
         return selected as UIMessageParts<UI_MESSAGE>[number];
       },
     };

@@ -32,11 +32,12 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - [Zod 4](https://zod.dev) - Schema validation
 - [Zustand](https://docs.pmnd.rs/zustand) - State management
 - [Motion](https://motion.dev) - Animations
-- [t3-env](https://env.t3.gg) - Environment variables
+- [t3-env](https://env.t3.gg) - Environment varia[](https://www.ultracite.ai/)bles
 - [Pino](https://getpino.io) - Structured Logging
 - [Langfuse](https://langfuse.com) - LLM observability & analytics
 - [Vercel Analytics](https://vercel.com/analytics) - Web analytics
 - [Biome](https://biomejs.dev) - Code linting and formatting
+- [Ultracite](https://ultracite.ai) - Biome preset for humans and AI
 - [Streamdown](https://streamdown.ai/) - Markdown for AI streaming
 - [AI Elements](https://ai-sdk.dev/elements/overview) - AI-native Components
 - [AI SDK Tools](https://ai-sdk-tools.dev/) - Developer tools for AI SDK
@@ -56,13 +57,10 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - ⚡ **Code Execution** - Secure Python/JavaScript sandboxes
 - 📄 **Document Creation** - Generate docs, spreadsheets, presentations
 
-## Deploy Your Own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffranciscomoretti%2Fsparka&project-name=Sparka&repository-name=sparka&products=postgres,blob&env=AI_GATEWAY_API_KEY&envDescription=Optional%3A%20AUTH_GOOGLE_ID%2C%20AUTH_GOOGLE_SECRET%2C%20AUTH_GITHUB_ID%2C%20AUTH_GITHUB_SECRET%2C%20REDIS_URL%2C%20OPENAI_API_KEY%2C%20TAVILY_API_KEY%2C%20EXA_API_KEY%2C%20FIRECRAWL_API_KEY%2C%20SANDBOX_TEMPLATE_ID.%20AUTH_SECRET%20and%20CRON_SECRET%20are%20auto-generated%20or%20set%20by%20Vercel.&envLink=https%3A%2F%2Fgithub.com%2Ffranciscomoretti%2Fsparka%23quick-start&demo-title=Sparka%20AI%20Chat&demo-description=Production-ready%20AI%20chat%20with%20120%2B%20models.&demo-url=https%3A%2F%2Fsparka.ai&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Ffranciscomoretti%2Fsparka%2Fmain%2Fpublic%2Ficon.svg&install-command=bun%20install)
-
 ## Quick Start
 
 1. **Clone and Install**
+
    ```bash
    git clone https://github.com/franciscomoretti/sparka.git
    cd sparka
@@ -70,11 +68,13 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    ```
 
 2. **Environment Setup**
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    **Required:**
+
    - `POSTGRES_URL` - Database connection
    - `AI_GATEWAY_API_KEY` - Vercel AI Gateway
    - `BLOB_READ_WRITE_TOKEN` - Vercel Blob read/write token
@@ -82,8 +82,9 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    - `AUTH_SECRET` - Better Auth secret
    - `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` - Google OAuth
    - `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` - GitHub OAuth
-   
+
    **Optional:**
+
    - `REDIS_URL` - For resumable streams
    - `OPENAI_API_KEY` - Direct OpenAI access
    - `TAVILY_API_KEY` - Web search
@@ -92,6 +93,7 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    - `SANDBOX_TEMPLATE_ID` - Code execution
 
 3. **Database Setup**
+
    ```bash
    bun run db:migrate
    ```
@@ -102,5 +104,3 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    ```
 
 Visit [http://localhost:3000](http://localhost:3000) to start building.
-
-

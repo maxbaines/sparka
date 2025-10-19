@@ -1,6 +1,6 @@
-import { allTools } from '../ai/tools/tools-definitions';
-import { reserveAvailableCredits } from '../repositories/credits';
-import { getMaxToolCost } from './credits-utils';
+import { allTools } from "../ai/tools/tools-definitions";
+import { reserveAvailableCredits } from "../repositories/credits";
+import { getMaxToolCost } from "./credits-utils";
 
 export async function reserveCredits({
   userId,
@@ -39,7 +39,7 @@ export async function reserveCredits({
   if (reservation.reservedAmount < baseModelCost) {
     return {
       success: false,
-      error: 'Insufficient credits for the selected model',
+      error: "Insufficient credits for the selected model",
     };
   }
   return {

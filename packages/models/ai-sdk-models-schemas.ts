@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // Common helpers
 const PricingValueSchema = z.union([z.string(), z.number()]);
@@ -47,18 +47,18 @@ export type AiGatewayEndpointsResponse = z.infer<
 
 // Models response schema
 export const AiGatewayModelsResponseSchema = z.object({
-  object: z.literal('list'),
+  object: z.literal("list"),
   data: z.array(
     z.object({
       id: z.string(),
-      object: z.literal('model'),
+      object: z.literal("model"),
       created: z.number(),
       owned_by: z.string(),
       name: z.string(),
       description: z.string(),
       context_window: z.number(),
       max_tokens: z.number(),
-      type: z.union([z.literal('language'), z.literal('embedding')]),
+      type: z.union([z.literal("language"), z.literal("embedding")]),
       tags: z.array(z.string()).optional(),
       pricing: z.object({
         input: z.string(),
@@ -66,7 +66,7 @@ export const AiGatewayModelsResponseSchema = z.object({
         input_cache_read: z.string().optional(),
         input_cache_write: z.string().optional(),
       }),
-    }),
+    })
   ),
 });
 

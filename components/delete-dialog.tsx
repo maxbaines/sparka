@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
-import { toast } from 'sonner';
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,15 +12,15 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { useDeleteChat } from '@/hooks/chat-sync-hooks';
-import { useChatId } from '@/providers/chat-id-provider';
+} from "@/components/ui/alert-dialog";
+import { useDeleteChat } from "@/hooks/chat-sync-hooks";
+import { useChatId } from "@/providers/chat-id-provider";
 
-interface DeleteDialogProps {
+type DeleteDialogProps = {
   deleteId: string | null;
   showDeleteDialog: boolean;
   setShowDeleteDialog: (show: boolean) => void;
-}
+};
 
 export function DeleteDialog({
   deleteId,
@@ -32,12 +32,14 @@ export function DeleteDialog({
   const { deleteChat } = useDeleteChat();
 
   const handleDelete = useCallback(async () => {
-    if (!deleteId) return;
+    if (!deleteId) {
+      return;
+    }
 
     try {
       await deleteChat(deleteId, {
-        onSuccess: () => toast.success('Chat deleted successfully'),
-        onError: () => toast.error('Failed to delete chat'),
+        onSuccess: () => toast.success("Chat deleted successfully"),
+        onError: () => toast.error("Failed to delete chat"),
       });
     } catch (_error) {
       // Error already handled by onError callback
@@ -45,9 +47,9 @@ export function DeleteDialog({
 
     setShowDeleteDialog(false);
 
-    if (deleteId === chatId && type === 'chat') {
+    if (deleteId === chatId && type === "chat") {
       refreshChatID();
-      router.push('/');
+      router.push("/");
     }
   }, [
     type,
@@ -60,7 +62,7 @@ export function DeleteDialog({
   ]);
 
   return (
-    <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+    <AlertDialog onOpenChange={setShowDeleteDialog} open={showDeleteDialog}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

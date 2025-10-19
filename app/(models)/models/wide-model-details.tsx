@@ -1,18 +1,17 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import type { ModelDefinition } from '@ai-models/vercel-gateway';
-import type { ProviderId } from '@ai-models/vercel-gateway';
+import type { ModelDefinition, ProviderId } from "@ai-models/vercel-gateway";
+import { useMemo } from "react";
+import { ButtonCopy } from "@/components/common/button-copy";
+import { getProviderIcon } from "@/components/get-provider-icon";
 import {
   ChatModelButton,
   CompareModelButton,
-} from '@/components/model-action-buttons';
-import { getProviderIcon } from '@/components/get-provider-icon';
-import { MODEL_CATEGORIES } from '@/lib/model-explorer/model-categories';
-import { MODEL_CAPABILITIES } from '@/lib/model-explorer/model-capabilities';
-import { formatNumberCompact } from '@/lib/utils/format-number-compact';
-import { Card, CardContent } from '@/components/ui/card';
-import { ButtonCopy } from '@/components/common/button-copy';
+} from "@/components/model-action-buttons";
+import { Card, CardContent } from "@/components/ui/card";
+import { MODEL_CAPABILITIES } from "@/lib/model-explorer/model-capabilities";
+import { MODEL_CATEGORIES } from "@/lib/model-explorer/model-categories";
+import { formatNumberCompact } from "@/lib/utils/format-number-compact";
 
 export function WideModelDetails({
   model,
@@ -27,8 +26,8 @@ export function WideModelDetails({
 }) {
   const provider = model?.owned_by as ProviderId | undefined;
   const contextCompact = useMemo(
-    () => (model ? formatNumberCompact(model.context_window) : '--'),
-    [model?.id, model?.context_window],
+    () => (model ? formatNumberCompact(model.context_window) : "--"),
+    [model?.id, model?.context_window, model]
   );
 
   const actions = {
@@ -38,18 +37,18 @@ export function WideModelDetails({
   };
 
   return (
-    <div className="space-y-6 w-full">
+    <div className="w-full space-y-6">
       {/* Header: title + provider + primary actions */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-4">
             {provider ? getProviderIcon(provider, 48) : null}
             <div className="min-w-0">
-              <div className="sm:text-3xl text-2xl font-semibold tracking-tight mb-0.5">
-                {model?.name ?? 'Model'}
+              <div className="mb-0.5 font-semibold text-2xl tracking-tight sm:text-3xl">
+                {model?.name ?? "Model"}
               </div>
-              <div className="text-sm text-muted-foreground font-medium capitalize">
-                {`By ${provider || 'Unknown Provider'}`}
+              <div className="font-medium text-muted-foreground text-sm capitalize">
+                {`By ${provider || "Unknown Provider"}`}
               </div>
             </div>
           </div>
@@ -57,14 +56,14 @@ export function WideModelDetails({
         <div className="flex items-center gap-2">
           {actions.compare && model ? (
             <CompareModelButton
-              modelId={model.id}
-              variant="outline"
-              size="lg"
               className="h-9 px-3"
+              modelId={model.id}
+              size="lg"
+              variant="outline"
             />
           ) : null}
           {actions.chat && model ? (
-            <ChatModelButton modelId={model.id} className="h-9 px-3" size="lg">
+            <ChatModelButton className="h-9 px-3" modelId={model.id} size="lg">
               Chat
             </ChatModelButton>
           ) : null}
@@ -73,36 +72,36 @@ export function WideModelDetails({
 
       {/* Release date + description */}
       <div className="space-y-1">
-        <div className="flex gap-2 items-center">
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <code className="font-mono truncate">{model.id}</code>
-            <ButtonCopy code={model.id} className="h-6 w-6" />
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1 text-muted-foreground text-xs">
+            <code className="truncate font-mono">{model.id}</code>
+            <ButtonCopy className="h-6 w-6" code={model.id} />
           </span>
-          <span className="text-xs text-muted-foreground">|</span>
-          <span className="text-xs text-muted-foreground">
-            Released{' '}
-            {model.releaseDate.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
+          <span className="text-muted-foreground text-xs">|</span>
+          <span className="text-muted-foreground text-xs">
+            Released{" "}
+            {model.releaseDate.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
             })}
           </span>
         </div>
-        <p className="text-sm leading-6 text-foreground">{model.description}</p>
+        <p className="text-foreground text-sm leading-6">{model.description}</p>
       </div>
 
       {/* Pricing */}
       <ResponsiveSection
-        title={MODEL_CATEGORIES.pricing.label}
         Icon={MODEL_CATEGORIES.pricing.Icon}
+        title={MODEL_CATEGORIES.pricing.label}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
           <KeyValue
             label="Pricing (Input)"
             value={
               model
                 ? `$${(Number.parseFloat(model.pricing.input) * 1_000_000).toFixed(2)}/M tokens`
-                : '--'
+                : "--"
             }
           />
           <KeyValue
@@ -110,7 +109,7 @@ export function WideModelDetails({
             value={
               model
                 ? `$${(Number.parseFloat(model.pricing.output) * 1_000_000).toFixed(2)}/M tokens`
-                : '--'
+                : "--"
             }
           />
           <KeyValue
@@ -119,8 +118,8 @@ export function WideModelDetails({
               model &&
               (model.pricing.input_cache_read ||
                 model.pricing.input_cache_write)
-                ? 'Yes'
-                : 'No'
+                ? "Yes"
+                : "No"
             }
           />
         </div>
@@ -128,17 +127,17 @@ export function WideModelDetails({
 
       {/* Limits */}
       <ResponsiveSection
-        title={MODEL_CATEGORIES.limits.label}
         Icon={MODEL_CATEGORIES.limits.Icon}
+        title={MODEL_CATEGORIES.limits.label}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
           <KeyValue label="Context Length" value={contextCompact} />
           <KeyValue
             label="Max Output Tokens"
             value={
               model?.max_tokens
                 ? formatNumberCompact(Number(model.max_tokens))
-                : '--'
+                : "--"
             }
           />
         </div>
@@ -146,77 +145,77 @@ export function WideModelDetails({
 
       {/* Input Modalities */}
       <ResponsiveSection
-        title={MODEL_CATEGORIES.inputModalities.label}
         Icon={MODEL_CATEGORIES.inputModalities.Icon}
+        title={MODEL_CATEGORIES.inputModalities.label}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <ModalityRow
-            label={MODEL_CAPABILITIES.text.label}
             enabled={!!model?.input?.text}
             Icon={MODEL_CAPABILITIES.text.Icon}
+            label={MODEL_CAPABILITIES.text.label}
           />
           <ModalityRow
-            label={MODEL_CAPABILITIES.image.label}
             enabled={!!model?.input?.image}
             Icon={MODEL_CAPABILITIES.image.Icon}
+            label={MODEL_CAPABILITIES.image.label}
           />
           <ModalityRow
-            label={MODEL_CAPABILITIES.pdf.label}
             enabled={!!model?.input?.pdf}
             Icon={MODEL_CAPABILITIES.pdf.Icon}
+            label={MODEL_CAPABILITIES.pdf.label}
           />
           <ModalityRow
-            label={MODEL_CAPABILITIES.audio.label}
             enabled={!!model?.input?.audio}
             Icon={MODEL_CAPABILITIES.audio.Icon}
+            label={MODEL_CAPABILITIES.audio.label}
           />
         </div>
       </ResponsiveSection>
 
       {/* Output Modalities */}
       <ResponsiveSection
-        title={MODEL_CATEGORIES.outputModalities.label}
         Icon={MODEL_CATEGORIES.outputModalities.Icon}
+        title={MODEL_CATEGORIES.outputModalities.label}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <ModalityRow
-            label={MODEL_CAPABILITIES.text.label}
             enabled={!!model?.output?.text}
             Icon={MODEL_CAPABILITIES.text.Icon}
+            label={MODEL_CAPABILITIES.text.label}
           />
           <ModalityRow
-            label={MODEL_CAPABILITIES.image.label}
             enabled={!!model?.output?.image}
             Icon={MODEL_CAPABILITIES.image.Icon}
+            label={MODEL_CAPABILITIES.image.label}
           />
           <ModalityRow
-            label={MODEL_CAPABILITIES.audio.label}
             enabled={!!model?.output?.audio}
             Icon={MODEL_CAPABILITIES.audio.Icon}
+            label={MODEL_CAPABILITIES.audio.label}
           />
         </div>
       </ResponsiveSection>
 
       {/* Features */}
       <ResponsiveSection
-        title={MODEL_CATEGORIES.features.label}
         Icon={MODEL_CATEGORIES.features.Icon}
+        title={MODEL_CATEGORIES.features.label}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <ModalityRow
-            label={MODEL_CAPABILITIES.reasoning.label}
             enabled={!!model?.reasoning}
             Icon={MODEL_CAPABILITIES.reasoning.Icon}
+            label={MODEL_CAPABILITIES.reasoning.label}
           />
           <ModalityRow
-            label={MODEL_CAPABILITIES.tools.label}
             enabled={!!model?.toolCall}
             Icon={MODEL_CAPABILITIES.tools.Icon}
+            label={MODEL_CAPABILITIES.tools.label}
           />
           <ModalityRow
-            label={MODEL_CAPABILITIES.temperature.label}
             enabled={model?.fixedTemperature === undefined}
             Icon={MODEL_CAPABILITIES.temperature.Icon}
+            label={MODEL_CAPABILITIES.temperature.label}
           />
         </div>
       </ResponsiveSection>
@@ -234,10 +233,10 @@ function ResponsiveSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-4 pt-3 pb-4 border-b border-border/50 last:border-b-0">
+    <div className="grid grid-cols-1 gap-4 border-border/50 border-b pt-3 pb-4 last:border-b-0 sm:grid-cols-[180px_1fr]">
       {/* Category title - left side on sm+, top on mobile */}
-      <div className="flex items-start gap-2 text-base font-semibold">
-        <div className="flex gap-2 items-center">
+      <div className="flex items-start gap-2 font-semibold text-base">
+        <div className="flex items-center gap-2">
           <Icon className="h-4 w-4" />
           <span>{title}</span>
         </div>
@@ -254,8 +253,8 @@ function KeyValue({ label, value }: { label: string; value: string }) {
     <Card className="py-3">
       <CardContent className="px-4">
         <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium">{label}</span>
-          <span className="text-base font-semibold tabular-nums">{value}</span>
+          <span className="font-medium text-xs">{label}</span>
+          <span className="font-semibold text-base tabular-nums">{value}</span>
         </div>
       </CardContent>
     </Card>
@@ -274,22 +273,22 @@ function ModalityRow({
   return (
     <div className="flex items-center gap-3 py-1">
       <div
-        className={`flex items-center justify-center w-8 h-8 rounded-md ${
-          enabled ? 'bg-muted' : 'bg-muted/40'
+        className={`flex h-8 w-8 items-center justify-center rounded-md ${
+          enabled ? "bg-muted" : "bg-muted/40"
         }`}
       >
         <Icon
-          className={`h-4 w-4 ${enabled ? '' : 'text-muted-foreground/50'}`}
+          className={`h-4 w-4 ${enabled ? "" : "text-muted-foreground/50"}`}
         />
       </div>
       <div className="flex flex-col">
         <span
-          className={`text-sm ${enabled ? 'text-foreground' : 'text-muted-foreground'}`}
+          className={`text-sm ${enabled ? "text-foreground" : "text-muted-foreground"}`}
         >
           {label}
         </span>
-        <span className={`text-xs text-muted-foreground`}>
-          {enabled ? 'Supported' : 'Not supported'}
+        <span className={"text-muted-foreground text-xs"}>
+          {enabled ? "Supported" : "Not supported"}
         </span>
       </div>
     </div>

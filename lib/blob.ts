@@ -1,27 +1,27 @@
 import {
-  put,
-  list,
   del,
-  type PutBlobResult,
   type ListBlobResult,
-} from '@vercel/blob';
-import { BLOB_FILE_PREFIX } from './constants';
+  list,
+  type PutBlobResult,
+  put,
+} from "@vercel/blob";
+import { BLOB_FILE_PREFIX } from "./constants";
 
 /**
  * Upload a file to blob storage with consistent prefixing and access settings
  */
 export async function uploadFile(
   filename: string,
-  buffer: Parameters<typeof put>[1],
+  buffer: Parameters<typeof put>[1]
 ): Promise<PutBlobResult> {
   try {
     return await put(`${BLOB_FILE_PREFIX}${filename}`, buffer, {
-      access: 'public',
+      access: "public",
       addRandomSuffix: true,
     });
   } catch (error) {
     throw new Error(
-      `Failed to upload file ${filename}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      `Failed to upload file ${filename}: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 }
@@ -36,7 +36,7 @@ export async function listFiles(): Promise<ListBlobResult> {
     });
   } catch (error) {
     throw new Error(
-      `Failed to list files: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      `Failed to list files: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 }
@@ -49,7 +49,7 @@ export async function deleteFilesByUrls(urls: string[]): Promise<void> {
     await del(urls);
   } catch (error) {
     throw new Error(
-      `Failed to delete ${urls.length} files: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      `Failed to delete ${urls.length} files: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 }
@@ -59,11 +59,11 @@ export async function deleteFilesByUrls(urls: string[]): Promise<void> {
  */
 export function extractFilenameFromUrl(url: string): string | null {
   try {
-    const parts = url.split('/');
-    const lastPart = parts[parts.length - 1];
+    const parts = url.split("/");
+    const lastPart = parts.at(-1);
 
     // Remove query parameters if any
-    const filename = lastPart.split('?')[0];
+    const filename = lastPart?.split("?")[0] ?? "";
 
     // Remove the prefix if it exists in the URL
     if (filename.startsWith(BLOB_FILE_PREFIX)) {

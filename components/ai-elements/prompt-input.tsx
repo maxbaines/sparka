@@ -1,31 +1,31 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import type { ChatStatus } from "ai";
+import { SendIcon, SquareIcon, XIcon } from "lucide-react";
+import type {
+  ComponentProps,
+  HTMLAttributes,
+  KeyboardEventHandler,
+} from "react";
+import { Children } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
-import type { ChatStatus } from 'ai';
-import { SendIcon, SquareIcon, XIcon } from 'lucide-react';
-import type {
-  ComponentProps,
-  HTMLAttributes,
-  KeyboardEventHandler,
-} from 'react';
-import { Children } from 'react';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 export type PromptInputProps = HTMLAttributes<HTMLFormElement>;
 
 export const PromptInput = ({ className, ...props }: PromptInputProps) => (
   <form
     className={cn(
-      'w-full overflow-hidden rounded-xl border bg-muted shadow-xs',
-      className,
+      "w-full overflow-hidden rounded-xl border bg-muted shadow-xs",
+      className
     )}
     {...props}
   />
@@ -39,13 +39,13 @@ export type PromptInputTextareaProps = ComponentProps<typeof Textarea> & {
 export const PromptInputTextarea = ({
   onChange,
   className,
-  placeholder = 'What would you like to know?',
+  placeholder = "What would you like to know?",
   minHeight = 48,
   maxHeight = 164,
   ...props
 }: PromptInputTextareaProps) => {
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       // Don't submit if IME composition is in progress
       if (e.nativeEvent.isComposing) {
         return;
@@ -68,10 +68,10 @@ export const PromptInputTextarea = ({
   return (
     <Textarea
       className={cn(
-        'w-full resize-none rounded-none border-none p-3 shadow-none outline-hidden ring-0',
-        'field-sizing-content max-h-[6lh] bg-transparent dark:bg-transparent',
-        'focus-visible:ring-0',
-        className,
+        "w-full resize-none rounded-none border-none p-3 shadow-none outline-hidden ring-0",
+        "field-sizing-content max-h-[6lh] bg-transparent dark:bg-transparent",
+        "focus-visible:ring-0",
+        className
       )}
       name="message"
       onChange={(e) => {
@@ -91,7 +91,7 @@ export const PromptInputToolbar = ({
   ...props
 }: PromptInputToolbarProps) => (
   <div
-    className={cn('flex items-center justify-between p-1', className)}
+    className={cn("flex items-center justify-between p-1", className)}
     {...props}
   />
 );
@@ -103,7 +103,7 @@ export const PromptInputContextBar = ({
   ...props
 }: PromptInputContextBarProps) => (
   <div
-    className={cn('flex items-center justify-between p-1', className)}
+    className={cn("flex items-center justify-between p-1", className)}
     {...props}
   />
 );
@@ -116,9 +116,9 @@ export const PromptInputTools = ({
 }: PromptInputToolsProps) => (
   <div
     className={cn(
-      'flex items-center gap-1',
+      "flex items-center gap-1",
       // '[&_button:first-child]:rounded-bl-xl',
-      className,
+      className
     )}
     {...props}
   />
@@ -127,21 +127,21 @@ export const PromptInputTools = ({
 export type PromptInputButtonProps = ComponentProps<typeof Button>;
 
 export const PromptInputButton = ({
-  variant = 'ghost',
+  variant = "ghost",
   className,
   size,
   ...props
 }: PromptInputButtonProps) => {
   const newSize =
-    (size ?? Children.count(props.children) > 1) ? 'default' : 'icon';
+    (size ?? Children.count(props.children) > 1) ? "default" : "icon";
 
   return (
     <Button
       className={cn(
-        'shrink-0 gap-1.5 rounded-lg',
-        variant === 'ghost' && 'text-muted-foreground',
-        newSize === 'default' && 'px-3',
-        className,
+        "shrink-0 gap-1.5 rounded-lg",
+        variant === "ghost" && "text-muted-foreground",
+        newSize === "default" && "px-3",
+        className
       )}
       size={newSize}
       type="button"
@@ -157,29 +157,33 @@ export type PromptInputSubmitProps = ComponentProps<typeof Button> & {
 
 export const PromptInputSubmit = ({
   className,
-  variant = 'default',
-  size = 'icon',
+  variant = "default",
+  size = "icon",
   status,
   children,
   ...props
 }: PromptInputSubmitProps) => {
   const isStoppable =
-    status !== undefined && status !== 'ready' && status !== 'error';
+    status !== undefined && status !== "ready" && status !== "error";
 
   const Icon = (() => {
-    if (status === 'error') return <XIcon className="size-4" />;
-    if (isStoppable) return <SquareIcon className="size-4" />;
+    if (status === "error") {
+      return <XIcon className="size-4" />;
+    }
+    if (isStoppable) {
+      return <SquareIcon className="size-4" />;
+    }
     return <SendIcon className="size-4" />;
   })();
 
   return (
     <Button
-      className={cn('gap-1.5 rounded-lg', className)}
+      className={cn("gap-1.5 rounded-lg", className)}
+      data-testid={isStoppable ? "stop-button" : undefined}
+      disabled={props.disabled}
       size={size}
       type="button"
       variant={variant}
-      disabled={props.disabled}
-      data-testid={isStoppable ? 'stop-button' : undefined}
       {...props}
     >
       {children ?? Icon}
@@ -203,9 +207,9 @@ export const PromptInputModelSelectTrigger = ({
 }: PromptInputModelSelectTriggerProps) => (
   <SelectTrigger
     className={cn(
-      'border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors',
-      'hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground',
-      className,
+      "border-none bg-transparent font-medium text-muted-foreground shadow-none transition-colors",
+      "hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
+      className
     )}
     {...props}
   />

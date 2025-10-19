@@ -1,11 +1,11 @@
-import type { AnonymousChat, AnonymousMessage } from '@/lib/types/anonymous';
-import { getAnonymousSession } from '@/lib/anonymous-session-client';
-import { cloneMessagesWithDocuments } from '../clone-messages';
-import type { Document } from '../db/schema';
+import { getAnonymousSession } from "@/lib/anonymous-session-client";
+import type { AnonymousChat, AnonymousMessage } from "@/lib/types/anonymous";
+import { cloneMessagesWithDocuments } from "../clone-messages";
+import type { Document } from "../db/schema";
 
-const ANONYMOUS_CHATS_KEY = 'anonymous-chats';
-const ANONYMOUS_MESSAGES_KEY = 'anonymous-messages';
-const ANONYMOUS_DOCUMENTS_KEY = 'anonymous-documents';
+const ANONYMOUS_CHATS_KEY = "anonymous-chats";
+const ANONYMOUS_MESSAGES_KEY = "anonymous-messages";
+const ANONYMOUS_DOCUMENTS_KEY = "anonymous-documents";
 
 export async function loadAnonymousMessagesFromStorage(): Promise<
   AnonymousMessage[]
@@ -30,7 +30,7 @@ export async function loadAnonymousMessagesFromStorage(): Promise<
 
     return messagesWithDates;
   } catch (error) {
-    console.error('Error loading anonymous messages:', error);
+    console.error("Error loading anonymous messages:", error);
     return [];
   }
 }
@@ -38,11 +38,13 @@ export async function loadAnonymousMessagesFromStorage(): Promise<
 export async function deleteAnonymousChat(chatId: string): Promise<boolean> {
   try {
     const session = getAnonymousSession();
-    if (!session) return false;
+    if (!session) {
+      return false;
+    }
 
     // Get messages for this chat BEFORE removing them
     const existingMessages = JSON.parse(
-      localStorage.getItem(ANONYMOUS_MESSAGES_KEY) || '[]',
+      localStorage.getItem(ANONYMOUS_MESSAGES_KEY) || "[]"
     );
     const messageIdsInChat = existingMessages
       .filter((m: AnonymousMessage) => m.chatId === chatId)
@@ -50,92 +52,98 @@ export async function deleteAnonymousChat(chatId: string): Promise<boolean> {
 
     // Remove chat from localStorage
     const existingChats = JSON.parse(
-      localStorage.getItem(ANONYMOUS_CHATS_KEY) || '[]',
+      localStorage.getItem(ANONYMOUS_CHATS_KEY) || "[]"
     );
     const filteredChats = existingChats.filter(
-      (c: AnonymousChat) => !(c.id === chatId && c.userId === session.id),
+      (c: AnonymousChat) => !(c.id === chatId && c.userId === session.id)
     );
     localStorage.setItem(ANONYMOUS_CHATS_KEY, JSON.stringify(filteredChats));
 
     // Remove messages for this chat
     const filteredMessages = existingMessages.filter(
-      (m: AnonymousMessage) => m.chatId !== chatId,
+      (m: AnonymousMessage) => m.chatId !== chatId
     );
     localStorage.setItem(
       ANONYMOUS_MESSAGES_KEY,
-      JSON.stringify(filteredMessages),
+      JSON.stringify(filteredMessages)
     );
 
     // Remove documents for messages in this chat
     const existingDocuments = JSON.parse(
-      localStorage.getItem(ANONYMOUS_DOCUMENTS_KEY) || '[]',
+      localStorage.getItem(ANONYMOUS_DOCUMENTS_KEY) || "[]"
     );
     const filteredDocuments = existingDocuments.filter(
-      (d: any) => !messageIdsInChat.includes(d.messageId),
+      (d: any) => !messageIdsInChat.includes(d.messageId)
     );
     localStorage.setItem(
       ANONYMOUS_DOCUMENTS_KEY,
-      JSON.stringify(filteredDocuments),
+      JSON.stringify(filteredDocuments)
     );
 
     return true;
   } catch (error) {
-    console.error('Error deleting anonymous chat:', error);
+    console.error("Error deleting anonymous chat:", error);
     return false;
   }
 }
 
 export async function renameAnonymousChat(
   chatId: string,
-  title: string,
+  title: string
 ): Promise<void> {
   try {
     const session = getAnonymousSession();
-    if (!session) return;
+    if (!session) {
+      return;
+    }
 
     // Update chat in localStorage
     const existingChats = JSON.parse(
-      localStorage.getItem(ANONYMOUS_CHATS_KEY) || '[]',
+      localStorage.getItem(ANONYMOUS_CHATS_KEY) || "[]"
     );
     const updatedChats = existingChats.map((c: AnonymousChat) =>
-      c.id === chatId && c.userId === session.id ? { ...c, title } : c,
+      c.id === chatId && c.userId === session.id ? { ...c, title } : c
     );
     localStorage.setItem(ANONYMOUS_CHATS_KEY, JSON.stringify(updatedChats));
   } catch (error) {
-    console.error('Error renaming anonymous chat:', error);
+    console.error("Error renaming anonymous chat:", error);
   }
 }
 
 export async function pinAnonymousChat(
   chatId: string,
-  isPinned: boolean,
+  isPinned: boolean
 ): Promise<void> {
   try {
     const session = getAnonymousSession();
-    if (!session) return;
+    if (!session) {
+      return;
+    }
 
     // Update chat in localStorage
     const existingChats = JSON.parse(
-      localStorage.getItem(ANONYMOUS_CHATS_KEY) || '[]',
+      localStorage.getItem(ANONYMOUS_CHATS_KEY) || "[]"
     );
     const updatedChats = existingChats.map((c: AnonymousChat) =>
-      c.id === chatId && c.userId === session.id ? { ...c, isPinned } : c,
+      c.id === chatId && c.userId === session.id ? { ...c, isPinned } : c
     );
     localStorage.setItem(ANONYMOUS_CHATS_KEY, JSON.stringify(updatedChats));
   } catch (error) {
-    console.error('Error pinning anonymous chat:', error);
+    console.error("Error pinning anonymous chat:", error);
   }
 }
 
 // Module-level functions for chat operations
 export async function saveAnonymousChatToStorage(
-  chat: Omit<AnonymousChat, 'userId'>,
+  chat: Omit<AnonymousChat, "userId">
 ): Promise<void> {
   try {
     const session = getAnonymousSession();
-    if (!session) throw new Error('No anonymous session');
+    if (!session) {
+      throw new Error("No anonymous session");
+    }
 
-    const savedChats = localStorage.getItem('anonymous-chats');
+    const savedChats = localStorage.getItem("anonymous-chats");
     const chats = savedChats ? JSON.parse(savedChats) : [];
 
     const chatToSave = {
@@ -144,12 +152,12 @@ export async function saveAnonymousChatToStorage(
       createdAt: chat.createdAt.toISOString(),
       updatedAt: chat.updatedAt.toISOString(),
       visibility: chat.visibility,
-      isPinned: chat.isPinned || false,
+      isPinned: chat.isPinned,
       userId: session.id,
     };
 
     const existingIndex = chats.findIndex(
-      (c: AnonymousChat) => c.id === chat.id,
+      (c: AnonymousChat) => c.id === chat.id
     );
     if (existingIndex >= 0) {
       chats[existingIndex] = chatToSave;
@@ -157,31 +165,31 @@ export async function saveAnonymousChatToStorage(
       chats.push(chatToSave);
     }
 
-    localStorage.setItem('anonymous-chats', JSON.stringify(chats));
+    localStorage.setItem("anonymous-chats", JSON.stringify(chats));
   } catch (error) {
-    console.error('Error saving anonymous chat:', error);
+    console.error("Error saving anonymous chat:", error);
     throw error;
   }
 }
 export async function deleteAnonymousTrailingMessages(
-  messageId: string,
+  messageId: string
 ): Promise<void> {
   try {
     const session = getAnonymousSession();
     if (!session) {
-      throw new Error('No anonymous session found');
+      throw new Error("No anonymous session found");
     }
 
     const allMessages = await loadAnonymousMessagesFromStorage();
 
-    console.log('Found ', allMessages);
+    console.log("Found ", allMessages);
     // Find the message with the given ID
     const targetMessage = allMessages.find(
-      (m: AnonymousMessage) => m.id === messageId,
+      (m: AnonymousMessage) => m.id === messageId
     );
     if (!targetMessage) {
       console.warn(
-        'Target message not found for deleteAnonymousTrailingMessages',
+        "Target message not found for deleteAnonymousTrailingMessages"
       );
       return;
     }
@@ -195,7 +203,7 @@ export async function deleteAnonymousTrailingMessages(
     const targetIndex = chatMessages.findIndex((m) => m.id === messageId);
 
     if (targetIndex === -1) {
-      console.warn('Target message not found in chat messages');
+      console.warn("Target message not found in chat messages");
       return;
     }
 
@@ -218,30 +226,30 @@ export async function deleteAnonymousTrailingMessages(
     // Remove documents associated with deleted messages
     const allDocuments = await loadAnonymousDocumentsFromStorage();
     const updatedDocuments = allDocuments.filter(
-      (d: any) => !messageIdsToDelete.includes(d.messageId),
+      (d: any) => !messageIdsToDelete.includes(d.messageId)
     );
 
     // Update cache and save to localStorage
     localStorage.setItem(
       ANONYMOUS_MESSAGES_KEY,
-      JSON.stringify(updatedMessages),
+      JSON.stringify(updatedMessages)
     );
     localStorage.setItem(
       ANONYMOUS_DOCUMENTS_KEY,
-      JSON.stringify(updatedDocuments),
+      JSON.stringify(updatedDocuments)
     );
   } catch (error) {
-    console.error('Error deleting anonymous trailing messages:', error);
+    console.error("Error deleting anonymous trailing messages:", error);
     throw error;
   }
 }
 export async function saveAnonymousMessage(
-  message: AnonymousMessage,
+  message: AnonymousMessage
 ): Promise<void> {
   try {
     const session = getAnonymousSession();
     if (!session) {
-      throw new Error('No anonymous session found');
+      throw new Error("No anonymous session found");
     }
 
     const allMessages = await loadAnonymousMessagesFromStorage();
@@ -251,7 +259,7 @@ export async function saveAnonymousMessage(
 
     // Update the chat's updatedAt timestamp
     const existingChats = JSON.parse(
-      localStorage.getItem(ANONYMOUS_CHATS_KEY) || '[]',
+      localStorage.getItem(ANONYMOUS_CHATS_KEY) || "[]"
     );
     const updatedChats = existingChats.map((c: AnonymousChat) => {
       if (c.id === message.chatId && c.userId === session.id) {
@@ -261,12 +269,12 @@ export async function saveAnonymousMessage(
     });
     localStorage.setItem(ANONYMOUS_CHATS_KEY, JSON.stringify(updatedChats));
   } catch (error) {
-    console.error('Error saving anonymous message:', error);
+    console.error("Error saving anonymous message:", error);
     throw error;
   }
 }
 export async function loadLocalAnonymousMessagesByChatId(
-  chatId: string,
+  chatId: string
 ): Promise<AnonymousMessage[]> {
   const messages = await loadAnonymousMessagesFromStorage();
   return messages
@@ -278,16 +286,16 @@ export async function cloneAnonymousChat(
   originalMessages: AnonymousMessage[],
   originalChat: AnonymousChat,
   originalDocuments: Document[],
-  newChatId: string,
+  newChatId: string
 ): Promise<void> {
   try {
     const session = getAnonymousSession();
     if (!session) {
-      throw new Error('No anonymous session found');
+      throw new Error("No anonymous session found");
     }
 
     if (originalMessages.length === 0) {
-      throw new Error('Source chat has no messages to copy');
+      throw new Error("Source chat has no messages to copy");
     }
 
     // Clone messages and documents with updated IDs
@@ -295,7 +303,7 @@ export async function cloneAnonymousChat(
       originalMessages,
       originalDocuments,
       newChatId,
-      session.id, // Use anonymous session ID as user ID
+      session.id // Use anonymous session ID as user ID
     );
 
     // Note: Attachments are not cloned for anonymous/local users
@@ -307,7 +315,7 @@ export async function cloneAnonymousChat(
     const updatedMessages = [...allMessages, ...clonedMessages];
     localStorage.setItem(
       ANONYMOUS_MESSAGES_KEY,
-      JSON.stringify(updatedMessages),
+      JSON.stringify(updatedMessages)
     );
 
     // Save all cloned documents if any exist
@@ -316,7 +324,7 @@ export async function cloneAnonymousChat(
       const updatedDocuments = [...allDocuments, ...clonedDocuments];
       localStorage.setItem(
         ANONYMOUS_DOCUMENTS_KEY,
-        JSON.stringify(updatedDocuments),
+        JSON.stringify(updatedDocuments)
       );
     }
 
@@ -326,13 +334,13 @@ export async function cloneAnonymousChat(
       title: `Copy of ${originalChat.title}`,
       createdAt: new Date(),
       updatedAt: new Date(),
-      visibility: 'private' as const,
+      visibility: "private" as const,
       isPinned: false, // New cloned chats are not pinned by default
     };
 
     await saveAnonymousChatToStorage(newChat);
   } catch (error) {
-    console.error('Error copying anonymous chat:', error);
+    console.error("Error copying anonymous chat:", error);
     throw error;
   }
 }
@@ -356,7 +364,7 @@ export async function loadAnonymousDocumentsFromStorage(): Promise<any[]> {
       createdAt: new Date(document.createdAt),
     }));
   } catch (error) {
-    console.error('Error loading anonymous documents:', error);
+    console.error("Error loading anonymous documents:", error);
     return [];
   }
 }
@@ -365,7 +373,7 @@ export async function saveAnonymousDocument(document: any): Promise<void> {
   try {
     const session = getAnonymousSession();
     if (!session) {
-      throw new Error('No anonymous session found');
+      throw new Error("No anonymous session found");
     }
 
     const allDocuments = await loadAnonymousDocumentsFromStorage();
@@ -373,13 +381,13 @@ export async function saveAnonymousDocument(document: any): Promise<void> {
 
     localStorage.setItem(ANONYMOUS_DOCUMENTS_KEY, JSON.stringify(allDocuments));
   } catch (error) {
-    console.error('Error saving anonymous document:', error);
+    console.error("Error saving anonymous document:", error);
     throw error;
   }
 }
 
 export async function loadAnonymousDocumentsByDocumentId(
-  documentId: string,
+  documentId: string
 ): Promise<any[]> {
   const documents = await loadAnonymousDocumentsFromStorage();
   return documents.filter((document) => document.id === documentId);
@@ -406,17 +414,17 @@ export async function loadAnonymousChatsFromStorage(): Promise<
         ...chat,
         createdAt: new Date(chat.createdAt),
         updatedAt: new Date(chat.updatedAt || chat.createdAt),
-        isPinned: chat.isPinned || false,
+        isPinned: chat.isPinned,
       }))
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
   } catch (error) {
-    console.error('Error loading anonymous chats:', error);
+    console.error("Error loading anonymous chats:", error);
     return [];
   }
 }
 
 export async function loadAnonymousChatById(
-  chatId: string,
+  chatId: string
 ): Promise<AnonymousChat | null> {
   try {
     const session = getAnonymousSession();
@@ -431,7 +439,7 @@ export async function loadAnonymousChatById(
 
     const parsedChats = JSON.parse(savedChats) as AnonymousChat[];
     const chat = parsedChats.find(
-      (chat: AnonymousChat) => chat.id === chatId && chat.userId === session.id,
+      (chat: AnonymousChat) => chat.id === chatId && chat.userId === session.id
     );
 
     if (!chat) {
@@ -442,10 +450,10 @@ export async function loadAnonymousChatById(
       ...chat,
       createdAt: new Date(chat.createdAt),
       updatedAt: new Date(chat.updatedAt || chat.createdAt),
-      isPinned: chat.isPinned || false,
+      isPinned: chat.isPinned,
     };
   } catch (error) {
-    console.error('Error loading anonymous chat by ID:', error);
+    console.error("Error loading anonymous chat by ID:", error);
     return null;
   }
 }

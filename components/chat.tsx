@@ -1,18 +1,18 @@
-'use client';
-import type { UseChatHelpers } from '@ai-sdk/react';
-import { useQuery } from '@tanstack/react-query';
-import { useCallback } from 'react';
-import { ChatHeader } from '@/components/chat-header';
-import { useSidebar } from '@/components/ui/sidebar';
-import { useArtifactSelector } from '@/hooks/use-artifact';
-import type { ChatMessage } from '@/lib/ai/types';
-import { useChatStoreApi } from '@/lib/stores/chat-store-context';
-import { useChatId, useChatStatus, useMessageIds } from '@/lib/stores/hooks';
-import { cn } from '@/lib/utils';
-import { useSession } from '@/providers/session-provider';
-import { useTRPC } from '@/trpc/react';
-import { Artifact } from './artifact';
-import { MessagesPane } from './messages-pane';
+"use client";
+import type { UseChatHelpers } from "@ai-sdk/react";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
+import { ChatHeader } from "@/components/chat-header";
+import { useSidebar } from "@/components/ui/sidebar";
+import { useArtifactSelector } from "@/hooks/use-artifact";
+import type { ChatMessage } from "@/lib/ai/types";
+import { useChatStoreApi } from "@/lib/stores/chat-store-context";
+import { useChatId, useChatStatus, useMessageIds } from "@/lib/stores/hooks";
+import { cn } from "@/lib/utils";
+import { useSession } from "@/providers/session-provider";
+import { useTRPC } from "@/trpc/react";
+import { Artifact } from "./artifact";
+import { MessagesPane } from "./messages-pane";
 
 export function Chat({
   id,
@@ -20,7 +20,7 @@ export function Chat({
   isReadonly,
 }: {
   id: string;
-  initialMessages: Array<ChatMessage>;
+  initialMessages: ChatMessage[];
   isReadonly: boolean;
 }) {
   const chatStore = useChatStoreApi();
@@ -30,10 +30,12 @@ export function Chat({
 
   const messageIds = useMessageIds() as string[];
   const status = useChatStatus();
-  const stopAsync: UseChatHelpers<ChatMessage>['stop'] =
+  const stopAsync: UseChatHelpers<ChatMessage>["stop"] =
     useCallback(async () => {
       const helpers = chatStore.getState().currentChatHelpers;
-      if (!helpers?.stop) return;
+      if (!helpers?.stop) {
+        return;
+      }
       return helpers.stop();
     }, [chatStore]);
   // regenerate no longer needs to be drilled; components call the store directly
@@ -51,34 +53,34 @@ export function Chat({
     <>
       <div
         className={cn(
-          '@container flex flex-col min-w-0 h-dvh bg-background md:max-w-[calc(100vw-var(--sidebar-width))] max-w-screen',
-          state === 'collapsed' && 'md:max-w-screen',
+          "@container flex h-dvh min-w-0 max-w-screen flex-col bg-background md:max-w-[calc(100vw-var(--sidebar-width))]",
+          state === "collapsed" && "md:max-w-screen"
         )}
       >
         <ChatHeader
           chatId={id}
-          isReadonly={isReadonly}
           hasMessages={messageIds.length > 0}
+          isReadonly={isReadonly}
           user={session?.user}
         />
 
         <MessagesPane
           chatId={id}
-          status={status}
-          votes={votes}
+          className="bg-background"
           isReadonly={isReadonly}
           isVisible={!isArtifactVisible}
-          className="bg-background"
+          status={status}
+          votes={votes}
         />
       </div>
 
       <Artifact
         chatId={id}
+        isAuthenticated={!!session?.user}
+        isReadonly={isReadonly}
         status={status}
         stop={stopAsync}
         votes={votes}
-        isReadonly={isReadonly}
-        isAuthenticated={!!session?.user}
       />
     </>
   );

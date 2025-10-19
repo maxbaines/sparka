@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
-import { Response } from './ai-elements/memo-response';
+import { memo } from "react";
+import { Response } from "./ai-elements/memo-response";
 
 export const TextMessagePart = memo(function TextMessagePart({
   messageId,

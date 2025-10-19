@@ -1,18 +1,18 @@
-import { z } from 'zod';
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from '@/trpc/init';
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import type { ArtifactKind } from "@/lib/artifacts/artifact-kind";
 import {
   getDocumentById,
   getDocumentsById,
   getPublicDocumentsById,
-  saveDocument,
   getSuggestionsByDocumentId,
-} from '@/lib/db/queries';
-import type { ArtifactKind } from '@/lib/artifacts/artifact-kind';
-import { TRPCError } from '@trpc/server';
+  saveDocument,
+} from "@/lib/db/queries";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/trpc/init";
 
 export const documentRouter = createTRPCRouter({
   getDocuments: protectedProcedure
@@ -25,8 +25,8 @@ export const documentRouter = createTRPCRouter({
 
       if (documents.length === 0) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Document not found',
+          code: "NOT_FOUND",
+          message: "Document not found",
         });
       }
 
@@ -40,8 +40,8 @@ export const documentRouter = createTRPCRouter({
 
       if (documents.length === 0) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Public document not found',
+          code: "NOT_FOUND",
+          message: "Public document not found",
         });
       }
 
@@ -59,8 +59,8 @@ export const documentRouter = createTRPCRouter({
 
       if (documents.length === 0) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Document not found',
+          code: "NOT_FOUND",
+          message: "Document not found",
         });
       }
 
@@ -77,13 +77,13 @@ export const documentRouter = createTRPCRouter({
         content: z.string(),
         title: z.string(),
         kind: z.custom<ArtifactKind>(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const lastDocument = await getDocumentById({ id: input.id });
 
       if (!lastDocument) {
-        throw new Error('Document not found');
+        throw new Error("Document not found");
       }
 
       const _document = await saveDocument({

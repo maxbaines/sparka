@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { CheckIcon, CopyIcon } from 'lucide-react';
+import { CheckIcon, CopyIcon } from "lucide-react";
 import {
   type ComponentProps,
   createContext,
@@ -9,9 +9,9 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import { type BundledLanguage, codeToHtml } from 'shiki';
-import { cn } from '@/lib/utils';
+} from "react";
+import { type BundledLanguage, codeToHtml } from "shiki";
+import { cn } from "@/lib/utils";
 
 type CodeBlockProps = HTMLAttributes<HTMLDivElement> & {
   code: string;
@@ -23,18 +23,18 @@ type CodeBlockContextType = {
 };
 
 const CodeBlockContext = createContext<CodeBlockContextType>({
-  code: '',
+  code: "",
 });
 
 export async function highlightCode(code: string, language: BundledLanguage) {
   return Promise.all([
     await codeToHtml(code, {
       lang: language,
-      theme: 'github-light',
+      theme: "github-light",
     }),
     await codeToHtml(code, {
       lang: language,
-      theme: 'github-dark',
+      theme: "github-dark",
     }),
   ]);
 }
@@ -46,8 +46,8 @@ export const CodeBlock = ({
   children,
   ...props
 }: CodeBlockProps) => {
-  const [html, setHtml] = useState<string>('');
-  const [darkHtml, setDarkHtml] = useState<string>('');
+  const [html, setHtml] = useState<string>("");
+  const [darkHtml, setDarkHtml] = useState<string>("");
   const mounted = useRef(false);
 
   useEffect(() => {
@@ -69,16 +69,16 @@ export const CodeBlock = ({
       <div className="group relative">
         <div
           className={cn(
-            'overflow-x-auto dark:hidden [&>pre]:bg-transparent!',
-            className,
+            "overflow-x-auto dark:hidden [&>pre]:bg-transparent!",
+            className
           )}
           dangerouslySetInnerHTML={{ __html: html }}
           {...props}
         />
         <div
           className={cn(
-            'hidden overflow-x-auto dark:block [&>pre]:bg-transparent!',
-            className,
+            "hidden overflow-x-auto dark:block [&>pre]:bg-transparent!",
+            className
           )}
           dangerouslySetInnerHTML={{ __html: darkHtml }}
           {...props}
@@ -89,7 +89,7 @@ export const CodeBlock = ({
   );
 };
 
-export type CodeBlockCopyButtonProps = ComponentProps<'button'> & {
+export type CodeBlockCopyButtonProps = ComponentProps<"button"> & {
   onCopy?: () => void;
   onError?: (error: Error) => void;
   timeout?: number;
@@ -107,8 +107,8 @@ export const CodeBlockCopyButton = ({
   const { code } = useContext(CodeBlockContext);
 
   const copyToClipboard = async () => {
-    if (typeof window === 'undefined' || !navigator?.clipboard?.writeText) {
-      onError?.(new Error('Clipboard API not available'));
+    if (typeof window === "undefined" || !navigator?.clipboard?.writeText) {
+      onError?.(new Error("Clipboard API not available"));
       return;
     }
 
@@ -127,9 +127,9 @@ export const CodeBlockCopyButton = ({
   return (
     <button
       className={cn(
-        'absolute top-2 right-2 shrink-0 rounded-md p-3 opacity-0 transition-all',
-        'hover:bg-secondary group-hover:opacity-100',
-        className,
+        "absolute top-2 right-2 shrink-0 rounded-md p-3 opacity-0 transition-all",
+        "hover:bg-secondary group-hover:opacity-100",
+        className
       )}
       onClick={copyToClipboard}
       type="button"

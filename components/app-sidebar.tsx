@@ -1,8 +1,9 @@
-import Link from 'next/link';
-import { Cpu } from 'lucide-react';
-import { SearchChatsButton } from '@/components/search-chats';
-import { NewChatButton } from '@/components/new-chat-button';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Cpu } from "lucide-react";
+import Link from "next/link";
+import { NewChatButton } from "@/components/new-chat-button";
+import { SearchChatsButton } from "@/components/search-chats";
+import { SidebarTopRow } from "@/components/sidebar-top-row";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sidebar,
   SidebarContent,
@@ -11,20 +12,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-} from '@/components/ui/sidebar';
-import { SidebarTopRow } from '@/components/sidebar-top-row';
-import { AppSidebarHistoryConditional } from './app-sidebar-history-conditional';
-import { AppSidebarFooterConditional } from './app-sidebar-footer-conditional';
+} from "@/components/ui/sidebar";
+import { AppSidebarFooterConditional } from "./app-sidebar-footer-conditional";
+import { AppSidebarHistoryConditional } from "./app-sidebar-history-conditional";
 
 export function AppSidebar() {
   return (
     <Sidebar
+      className="grid max-h-dvh grid-rows-[auto_1fr_auto] group-data-[side=left]:border-r-0"
       collapsible="icon"
-      className="group-data-[side=left]:border-r-0 grid grid-rows-[auto_1fr_auto] max-h-dvh"
     >
       <SidebarHeader className="shrink-0">
         <SidebarMenu>
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center justify-between">
             <SidebarTopRow />
           </div>
 
@@ -34,7 +34,7 @@ export function AppSidebar() {
             <SearchChatsButton />
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Models" asChild>
+            <SidebarMenuButton asChild tooltip="Models">
               <Link href="/models">
                 <Cpu className="size-4" />
                 <span className="group-data-[collapsible=icon]:hidden">

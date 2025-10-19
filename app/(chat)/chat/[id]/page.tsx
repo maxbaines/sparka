@@ -1,5 +1,5 @@
-import { HydrateClient, prefetch, trpc } from '@/trpc/server';
-import { ChatPageRouter } from '../../chat-page-router';
+import { HydrateClient, prefetch, trpc } from "@/trpc/server";
+import { ChatPageRouter } from "../../chat-page-router";
 
 export default async function ChatPageRoute({
   params,

@@ -1,14 +1,18 @@
-'use client';
+"use client";
 
-import { SidebarFooter } from '@/components/ui/sidebar';
-import { SidebarSeparator } from '@/components/ui/sidebar';
-import { SidebarCredits } from '@/components/sidebar-credits';
-import { useSidebar } from '@/components/ui/sidebar';
+import { SidebarCredits } from "@/components/sidebar-credits";
+import {
+  SidebarFooter,
+  SidebarSeparator,
+  useSidebar,
+} from "@/components/ui/sidebar";
 
 export function AppSidebarFooterConditional() {
   const { open, openMobile } = useSidebar();
 
-  if (!(open || openMobile)) return null;
+  if (!(open || openMobile)) {
+    return null;
+  }
 
   return (
     <>

@@ -1,14 +1,13 @@
-'use client';
+"use client";
 import {
   AbstractChat,
   type ChatInit,
   type ChatState,
   type ChatStatus,
   type UIMessage,
-} from 'ai';
-import { throttle } from '@/lib/stores/throttle';
-import type { createBaseStore } from './chat-store-base';
-import type { BaseChatStoreState } from './chat-store-base';
+} from "ai";
+import { throttle } from "@/lib/stores/throttle";
+import type { BaseChatStoreState, createBaseStore } from "./chat-store-base";
 
 function subscribeToSlice<S, T>(
   store: {
@@ -17,7 +16,7 @@ function subscribeToSlice<S, T>(
   },
   selector: (s: S) => T,
   onChange: (next: T, prev: T) => void,
-  isEqual: (a: T, b: T) => boolean = Object.is,
+  isEqual: (a: T, b: T) => boolean = Object.is
 ) {
   let prevSelected = selector(store.getState());
   return store.subscribe((state) => {
@@ -34,10 +33,10 @@ function subscribeToSlice<S, T>(
 export class ZustandChatState<UI_MESSAGE extends UIMessage>
   implements ChatState<UI_MESSAGE>
 {
-  private store: ReturnType<typeof createBaseStore<UI_MESSAGE>>;
-  private messagesCallbacks = new Set<() => void>();
-  private statusCallbacks = new Set<() => void>();
-  private errorCallbacks = new Set<() => void>();
+  private readonly store: ReturnType<typeof createBaseStore<UI_MESSAGE>>;
+  private readonly messagesCallbacks = new Set<() => void>();
+  private readonly statusCallbacks = new Set<() => void>();
+  private readonly errorCallbacks = new Set<() => void>();
 
   constructor(store: ReturnType<typeof createBaseStore<UI_MESSAGE>>) {
     this.store = store;
@@ -45,17 +44,17 @@ export class ZustandChatState<UI_MESSAGE extends UIMessage>
     subscribeToSlice<BaseChatStoreState<UI_MESSAGE>, UI_MESSAGE[]>(
       this.store,
       (s) => s._throttledMessages || s.messages,
-      () => this.messagesCallbacks.forEach((cb) => cb()),
+      () => this.messagesCallbacks.forEach((cb) => cb())
     );
     subscribeToSlice<BaseChatStoreState<UI_MESSAGE>, ChatStatus>(
       this.store,
       (s) => s.status,
-      () => this.statusCallbacks.forEach((cb) => cb()),
+      () => this.statusCallbacks.forEach((cb) => cb())
     );
     subscribeToSlice<BaseChatStoreState<UI_MESSAGE>, Error | undefined>(
       this.store,
       (s) => s.error,
-      () => this.errorCallbacks.forEach((cb) => cb()),
+      () => this.errorCallbacks.forEach((cb) => cb())
     );
   }
 
@@ -88,9 +87,9 @@ export class ZustandChatState<UI_MESSAGE extends UIMessage>
   };
   snapshot = <T,>(value: T): T => structuredClone(value);
 
-  '~registerMessagesCallback' = (
+  "~registerMessagesCallback" = (
     onChange: () => void,
-    throttleWaitMs?: number,
+    throttleWaitMs?: number
   ): (() => void) => {
     const callback = throttleWaitMs
       ? throttle(onChange, throttleWaitMs)
@@ -100,13 +99,13 @@ export class ZustandChatState<UI_MESSAGE extends UIMessage>
       this.messagesCallbacks.delete(callback);
     };
   };
-  '~registerStatusCallback' = (onChange: () => void): (() => void) => {
+  "~registerStatusCallback" = (onChange: () => void): (() => void) => {
     this.statusCallbacks.add(onChange);
     return () => {
       this.statusCallbacks.delete(onChange);
     };
   };
-  '~registerErrorCallback' = (onChange: () => void): (() => void) => {
+  "~registerErrorCallback" = (onChange: () => void): (() => void) => {
     this.errorCallbacks.add(onChange);
     return () => {
       this.errorCallbacks.delete(onChange);
@@ -120,7 +119,7 @@ export class ZustandChatState<UI_MESSAGE extends UIMessage>
 export class ZustandChat<
   UI_MESSAGE extends UIMessage,
 > extends AbstractChat<UI_MESSAGE> {
-  private zustandState: ZustandChatState<UI_MESSAGE>;
+  private readonly zustandState: ZustandChatState<UI_MESSAGE>;
   public store: ReturnType<typeof createBaseStore<UI_MESSAGE>>;
 
   constructor({
@@ -137,13 +136,13 @@ export class ZustandChat<
     this.store = state.storeInstance;
   }
 
-  '~registerMessagesCallback' = (
+  "~registerMessagesCallback" = (
     onChange: () => void,
-    throttleWaitMs?: number,
+    throttleWaitMs?: number
   ): (() => void) =>
-    this.zustandState['~registerMessagesCallback'](onChange, throttleWaitMs);
-  '~registerStatusCallback' = (onChange: () => void): (() => void) =>
-    this.zustandState['~registerStatusCallback'](onChange);
-  '~registerErrorCallback' = (onChange: () => void): (() => void) =>
-    this.zustandState['~registerErrorCallback'](onChange);
+    this.zustandState["~registerMessagesCallback"](onChange, throttleWaitMs);
+  "~registerStatusCallback" = (onChange: () => void): (() => void) =>
+    this.zustandState["~registerStatusCallback"](onChange);
+  "~registerErrorCallback" = (onChange: () => void): (() => void) =>
+    this.zustandState["~registerErrorCallback"](onChange);
 }

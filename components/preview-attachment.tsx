@@ -1,8 +1,8 @@
-import { Download, ExternalLink, FileText } from 'lucide-react';
-import Image from 'next/image';
-import type { Attachment } from '@/lib/ai/types';
-import { CrossIcon, LoaderIcon } from './icons';
-import { Button } from './ui/button';
+import { Download, ExternalLink, FileText } from "lucide-react";
+import Image from "next/image";
+import type { Attachment } from "@/lib/ai/types";
+import { CrossIcon, LoaderIcon } from "./icons";
+import { Button } from "./ui/button";
 
 export const PreviewAttachment = ({
   attachment,
@@ -17,62 +17,62 @@ export const PreviewAttachment = ({
 }) => {
   const { name, url, contentType } = attachment;
 
-  const isPdf = contentType === 'application/pdf';
+  const isPdf = contentType === "application/pdf";
 
   return (
     <div
+      className="group relative flex flex-col gap-2"
       data-testid="input-attachment-preview"
-      className="flex flex-col gap-2 relative group"
     >
       {onRemove && !isUploading && (
         <Button
+          className="-top-2 -right-2 absolute z-10 size-5 rounded-full border border-border bg-muted/90 p-0 text-muted-foreground shadow-xs hover:bg-muted"
           onClick={onRemove}
-          variant="ghost"
           size="sm"
-          className="absolute -top-2 -right-2 size-5 p-0 rounded-full bg-muted/90 hover:bg-muted text-muted-foreground shadow-xs border border-border z-10"
+          variant="ghost"
         >
           <CrossIcon size={10} />
         </Button>
       )}
-      <div className="w-20 h-16 aspect-video bg-muted rounded-md relative flex flex-col items-center justify-center">
+      <div className="relative flex aspect-video h-16 w-20 flex-col items-center justify-center rounded-md bg-muted">
         {contentType ? (
-          contentType.startsWith('image') ? (
+          contentType.startsWith("image") ? (
             <Image
-              key={url}
-              src={url}
-              alt={name ?? 'An image attachment'}
+              alt={name ?? "An image attachment"}
+              className="cursor-pointer rounded-md object-cover"
               fill
-              className="rounded-md object-cover cursor-pointer"
-              sizes="80px"
+              key={url}
               onClick={() => onImageClick?.(url, name)}
+              sizes="80px"
+              src={url}
             />
           ) : isPdf ? (
-            <div className="flex flex-col items-center justify-center h-full">
+            <div className="flex h-full flex-col items-center justify-center">
               <FileText className="size-8 text-red-500" />
               {/* Show action buttons for PDFs in message view (when not uploading and no remove button) */}
-              {!isUploading && !onRemove && url && (
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-md flex items-center justify-center">
+              {!(isUploading || onRemove) && url && (
+                <div className="absolute inset-0 flex items-center justify-center rounded-md bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
                   <div className="flex gap-1">
                     <Button
-                      variant="ghost"
+                      className="h-auto p-1 text-white hover:bg-white/20"
+                      onClick={() => window.open(url, "_blank")}
                       size="sm"
-                      className="text-white hover:bg-white/20 p-1 h-auto"
-                      onClick={() => window.open(url, '_blank')}
                       title="Open PDF"
+                      variant="ghost"
                     >
                       <ExternalLink className="size-3" />
                     </Button>
                     <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:bg-white/20 p-1 h-auto"
+                      className="h-auto p-1 text-white hover:bg-white/20"
                       onClick={() => {
-                        const link = document.createElement('a');
+                        const link = document.createElement("a");
                         link.href = url;
-                        link.download = name || 'document.pdf';
+                        link.download = name || "document.pdf";
                         link.click();
                       }}
+                      size="sm"
                       title="Download PDF"
+                      variant="ghost"
                     >
                       <Download className="size-3" />
                     </Button>
@@ -89,14 +89,14 @@ export const PreviewAttachment = ({
 
         {isUploading && (
           <div
+            className="absolute animate-spin text-zinc-500"
             data-testid="input-attachment-loader"
-            className="animate-spin absolute text-zinc-500"
           >
             <LoaderIcon />
           </div>
         )}
       </div>
-      <div className="text-xs text-muted-foreground max-w-16 truncate">
+      <div className="max-w-16 truncate text-muted-foreground text-xs">
         {name}
       </div>
     </div>

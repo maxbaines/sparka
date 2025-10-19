@@ -1,9 +1,9 @@
 export function getDomainFromUrl(url: string) {
-  return new URL(url).hostname.replace('www.', '');
+  return new URL(url).hostname.replace("www.", "");
 }
 export function getFaviconUrl(result: {
   title: string;
-  source: 'web' | 'academic' | 'x';
+  source: "web" | "academic" | "x";
   url: string;
   content: string;
   tweetId?: string | undefined;

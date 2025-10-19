@@ -1,8 +1,8 @@
-import { createCallerFactory, createTRPCRouter } from '@/trpc/init';
-import { chatRouter } from './chat.router';
-import { creditsRouter } from './credits.router';
-import { voteRouter } from './vote.router';
-import { documentRouter } from './document.router';
+import { createCallerFactory, createTRPCRouter } from "@/trpc/init";
+import { chatRouter } from "./chat.router";
+import { creditsRouter } from "./credits.router";
+import { documentRouter } from "./document.router";
+import { voteRouter } from "./vote.router";
 
 /**
  * This is the primary router for your server.

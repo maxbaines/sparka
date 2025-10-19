@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
+import type { SortOption } from "@/app/(models)/models/models-store-context";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import type { SortOption } from '@/app/(models)/models/models-store-context';
+} from "@/components/ui/select";
 
 export function SortSelect({
   value,
@@ -19,8 +19,8 @@ export function SortSelect({
   className?: string;
 }) {
   return (
-    <Select value={value} onValueChange={(v: SortOption) => onChangeAction(v)}>
-      <SelectTrigger className={`max-w-40 ${className ?? ''}`}>
+    <Select onValueChange={(v: SortOption) => onChangeAction(v)} value={value}>
+      <SelectTrigger className={`max-w-40 ${className ?? ""}`}>
         <SelectValue placeholder="Sort" />
       </SelectTrigger>
       <SelectContent className="text-sm">

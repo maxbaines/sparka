@@ -45,16 +45,15 @@ export function findLastArtifact(
   messages.forEach((msg, messageIndex) => {
     msg.parts?.forEach((part) => {
       if (
-        part.type === 'tool-createDocument' ||
-        part.type === 'tool-updateDocument' ||
-        part.type === 'tool-deepResearch'
+        (part.type === 'tool-createDocument' ||
+          part.type === 'tool-updateDocument' ||
+          part.type === 'tool-deepResearch') &&
+        part.state === 'output-available'
       ) {
-        if (part.state === 'output-available') {
-          allArtifacts.push({
-            messageIndex,
-            toolCallId: part.toolCallId,
-          });
-        }
+        allArtifacts.push({
+          messageIndex,
+          toolCallId: part.toolCallId,
+        });
       }
     });
   });

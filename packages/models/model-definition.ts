@@ -1,5 +1,5 @@
-import { type ModelData, type ModelId, modelsData } from './models.generated';
-import { allModelsExtra, type ModelExtra } from './model-extra';
+import { allModelsExtra, type ModelExtra } from "./model-extra";
+import { type ModelData, type ModelId, modelsData } from "./models.generated";
 
 export type ModelDefinition = ModelData & ModelExtra;
 
@@ -13,7 +13,7 @@ export const modelDefinitions: ModelDefinition[] = modelsData.map((model) => ({
 }));
 
 export const modelDefinitionMap = new Map<ModelId, ModelDefinition>(
-  modelDefinitions.map((definition) => [definition.id, definition]),
+  modelDefinitions.map((definition) => [definition.id, definition])
 );
 
 export function getModelDefinition(modelId: ModelId): ModelDefinition {

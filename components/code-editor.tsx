@@ -1,36 +1,35 @@
-'use client';
+"use client";
 
-import { EditorView } from '@codemirror/view';
-import { EditorState, Transaction } from '@codemirror/state';
-import { python } from '@codemirror/lang-python';
-import { javascript } from '@codemirror/lang-javascript';
-import { oneDark } from '@codemirror/theme-one-dark';
-import { basicSetup } from 'codemirror';
-import React, { memo, useEffect, useRef } from 'react';
-import type { Suggestion } from '@/lib/db/schema';
+import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { EditorState, Transaction } from "@codemirror/state";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { EditorView } from "@codemirror/view";
+import { basicSetup } from "codemirror";
+import { memo, useEffect, useRef } from "react";
+import type { Suggestion } from "@/lib/db/schema";
 
 type EditorProps = {
   content: string;
   onSaveContent: (updatedContent: string, debounce: boolean) => void;
-  status: 'streaming' | 'idle';
+  status: "streaming" | "idle";
   isCurrentVersion: boolean;
   currentVersionIndex: number;
-  suggestions: Array<Suggestion>;
+  suggestions: Suggestion[];
   isReadonly?: boolean;
   language?: string;
 };
 
 function getLanguageExtension(language: string) {
   switch (language) {
-    case 'typescript':
+    case "typescript":
       return javascript({ jsx: false, typescript: true });
-    case 'javascript':
+    case "javascript":
       return javascript({ jsx: false, typescript: false });
-    case 'jsx':
+    case "jsx":
       return javascript({ jsx: true, typescript: false });
-    case 'tsx':
+    case "tsx":
       return javascript({ jsx: true, typescript: true });
-    case 'python':
     default:
       return python();
   }
@@ -41,7 +40,7 @@ function PureCodeEditor({
   onSaveContent,
   status,
   isReadonly,
-  language = 'python',
+  language = "python",
 }: EditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<EditorView | null>(null);
@@ -72,14 +71,14 @@ function PureCodeEditor({
     };
     // NOTE: we only want to run this effect once
     // eslint-disable-next-line
-  }, []);
+  }, [content, isReadonly, language]);
 
   useEffect(() => {
     if (editorRef.current) {
       const updateListener = EditorView.updateListener.of((update) => {
         if (update.docChanged && !isReadonly) {
           const transaction = update.transactions.find(
-            (tr) => !tr.annotation(Transaction.remote),
+            (tr) => !tr.annotation(Transaction.remote)
           );
 
           if (transaction) {
@@ -111,7 +110,7 @@ function PureCodeEditor({
     if (editorRef.current && content) {
       const currentContent = editorRef.current.state.doc.toString();
 
-      if (status === 'streaming' || currentContent !== content) {
+      if (status === "streaming" || currentContent !== content) {
         const transaction = editorRef.current.state.update({
           changes: {
             from: 0,
@@ -128,22 +127,34 @@ function PureCodeEditor({
 
   return (
     <div
-      className="relative not-prose w-full pb-[calc(80dvh)] text-sm"
+      className="not-prose relative w-full pb-[calc(80dvh)] text-sm"
       ref={containerRef}
     />
   );
 }
 
 function areEqual(prevProps: EditorProps, nextProps: EditorProps) {
-  if (prevProps.suggestions !== nextProps.suggestions) return false;
-  if (prevProps.currentVersionIndex !== nextProps.currentVersionIndex)
+  if (prevProps.suggestions !== nextProps.suggestions) {
     return false;
-  if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) return false;
-  if (prevProps.status === 'streaming' && nextProps.status === 'streaming')
+  }
+  if (prevProps.currentVersionIndex !== nextProps.currentVersionIndex) {
     return false;
-  if (prevProps.content !== nextProps.content) return false;
-  if (prevProps.isReadonly !== nextProps.isReadonly) return false;
-  if (prevProps.language !== nextProps.language) return false;
+  }
+  if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) {
+    return false;
+  }
+  if (prevProps.status === "streaming" && nextProps.status === "streaming") {
+    return false;
+  }
+  if (prevProps.content !== nextProps.content) {
+    return false;
+  }
+  if (prevProps.isReadonly !== nextProps.isReadonly) {
+    return false;
+  }
+  if (prevProps.language !== nextProps.language) {
+    return false;
+  }
 
   return true;
 }

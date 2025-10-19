@@ -1,8 +1,8 @@
-import { generateUUID } from '@/lib/utils';
-import type { StreamWriter } from '../../types';
-import type { SearchProviderOptions } from './web-search';
-import { webSearchStep } from './web-search';
-import { deduplicateByDomainAndUrl } from './search-utils';
+import { generateUUID } from "@/lib/utils";
+import type { StreamWriter } from "../../types";
+import { deduplicateByDomainAndUrl } from "./search-utils";
+import type { SearchProviderOptions } from "./web-search";
+import { webSearchStep } from "./web-search";
 
 export type SearchQuery = {
   query: string;
@@ -44,12 +44,12 @@ export async function multiQueryWebSearchStep({
 
     // Send initial annotation showing all queries being executed
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       id: updateId,
       data: {
         title: `Executing ${queries.length} searches`,
-        type: 'web',
-        status: 'running',
+        type: "web",
+        status: "running",
         queries: queries.map((q) => q.query),
       },
     });
@@ -59,14 +59,14 @@ export async function multiQueryWebSearchStep({
       // Build provider options for this specific query
       let queryProviderOptions: SearchProviderOptions;
 
-      if (baseProviderOptions.provider === 'tavily') {
+      if (baseProviderOptions.provider === "tavily") {
         queryProviderOptions = {
           ...baseProviderOptions,
-          topic: topics[index] || topics[0] || 'general',
-          days: topics[index] === 'news' ? 7 : undefined,
+          topic: topics[index] || topics[0] || "general",
+          days: topics[index] === "news" ? 7 : undefined,
           excludeDomains,
         };
-      } else if (baseProviderOptions.provider === 'firecrawl') {
+      } else if (baseProviderOptions.provider === "firecrawl") {
         queryProviderOptions = {
           ...baseProviderOptions,
         };
@@ -95,19 +95,19 @@ export async function multiQueryWebSearchStep({
 
     // Send completion annotation with all results
     const allResults = deduplicateByDomainAndUrl(
-      searchResults.flatMap((search) => search.results),
+      searchResults.flatMap((search) => search.results)
     );
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       id: updateId,
       data: {
         title: `Executing ${queries.length} searches`,
-        type: 'web',
-        status: 'completed',
+        type: "web",
+        status: "completed",
         queries: queries.map((q) => q.query),
         results: allResults.map((result) => ({
           ...result,
-          source: 'web',
+          source: "web",
         })),
       },
     });
@@ -116,16 +116,16 @@ export async function multiQueryWebSearchStep({
       searches: searchResults,
     };
   } catch (error: any) {
-    const errorMessage = error?.message || 'Unknown error occurred';
+    const errorMessage = error?.message || "Unknown error occurred";
 
     // Send error annotation
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       id: updateId,
       data: {
         title: `Executing ${queries.length} searches`,
-        type: 'web',
-        status: 'completed',
+        type: "web",
+        status: "completed",
         queries: queries.map((q) => q.query),
       },
     });

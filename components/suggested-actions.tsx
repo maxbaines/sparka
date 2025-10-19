@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { motion } from 'motion/react';
-import { Button } from './ui/button';
-import { memo } from 'react';
-import { useSendMessage } from '@/lib/stores/hooks';
-import { cn } from '@/lib/utils';
-import type { AppModelId } from '@/lib/ai/app-models';
+import { motion } from "motion/react";
+import { memo } from "react";
+import type { AppModelId } from "@/lib/ai/app-models";
+import { useSendMessage } from "@/lib/stores/hooks";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 
-interface SuggestedActionsProps {
+type SuggestedActionsProps = {
   chatId: string;
   selectedModelId: AppModelId;
   className?: string;
-}
+};
 
 function PureSuggestedActions({
   chatId,
@@ -21,52 +21,54 @@ function PureSuggestedActions({
   const sendMessage = useSendMessage();
   const suggestedActions = [
     {
-      title: 'What are the advantages',
-      label: 'of using Next.js?',
-      action: 'What are the advantages of using Next.js?',
+      title: "What are the advantages",
+      label: "of using Next.js?",
+      action: "What are the advantages of using Next.js?",
     },
     {
-      title: 'Write code to',
+      title: "Write code to",
       label: `demonstrate djikstra's algorithm`,
       action: `Write code to demonstrate djikstra's algorithm`,
     },
     {
-      title: 'Help me write an essay',
-      label: `about silicon valley`,
-      action: `Help me write an essay about silicon valley`,
+      title: "Help me write an essay",
+      label: "about silicon valley",
+      action: "Help me write an essay about silicon valley",
     },
     {
-      title: 'What is the weather',
-      label: 'in San Francisco?',
-      action: 'What is the weather in San Francisco?',
+      title: "What is the weather",
+      label: "in San Francisco?",
+      action: "What is the weather in San Francisco?",
     },
   ];
 
   return (
     <div
+      className={cn("grid w-full gap-2 sm:grid-cols-2", className)}
       data-testid="suggested-actions"
-      className={cn('grid sm:grid-cols-2 gap-2 w-full', className)}
     >
       {suggestedActions.map((suggestedAction, index) => (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          className={index > 1 ? "hidden sm:block" : "block"}
           exit={{ opacity: 0, y: 20 }}
-          transition={{ delay: 0.05 * index }}
+          initial={{ opacity: 0, y: 20 }}
           key={`suggested-action-${suggestedAction.title}-${index}`}
-          className={index > 1 ? 'hidden sm:block' : 'block'}
+          transition={{ delay: 0.05 * index }}
         >
           <Button
-            variant="ghost"
+            className="h-auto w-full flex-1 items-start justify-start gap-1 rounded-xl border px-4 py-3.5 text-left text-sm sm:flex-col"
             onClick={async () => {
-              if (!sendMessage) return;
+              if (!sendMessage) {
+                return;
+              }
 
-              window.history.replaceState({}, '', `/chat/${chatId}`);
+              window.history.replaceState({}, "", `/chat/${chatId}`);
 
               sendMessage(
                 {
-                  role: 'user',
-                  parts: [{ type: 'text', text: suggestedAction.action }],
+                  role: "user",
+                  parts: [{ type: "text", text: suggestedAction.action }],
                   metadata: {
                     selectedModel: selectedModelId,
                     createdAt: new Date(),
@@ -83,10 +85,10 @@ function PureSuggestedActions({
                       writeOrCode: false,
                     },
                   },
-                },
+                }
               );
             }}
-            className="text-left border rounded-xl px-4 py-3.5 text-sm flex-1 gap-1 sm:flex-col w-full h-auto justify-start items-start"
+            variant="ghost"
           >
             <span className="font-medium">{suggestedAction.title}</span>
             <span className="text-muted-foreground">

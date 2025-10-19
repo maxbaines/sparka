@@ -1,12 +1,12 @@
-import type { StorybookConfig } from '@storybook/nextjs';
+import type { StorybookConfig } from "@storybook/nextjs";
 
 const config: StorybookConfig = {
   framework: {
-    name: '@storybook/nextjs',
+    name: "@storybook/nextjs",
     options: {},
   },
-  stories: ['../components/**/*.stories.@(ts|tsx|mdx)'],
-  addons: ['@storybook/addon-links'],
+  stories: ["../components/**/*.stories.@(ts|tsx|mdx)"],
+  addons: ["@storybook/addon-links"],
   docs: {},
   typescript: {
     // Use project tsconfig for path aliases

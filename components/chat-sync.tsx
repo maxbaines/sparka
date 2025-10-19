@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo } from 'react';
-import { DefaultChatTransport } from 'ai';
-import { useChat } from '@ai-sdk/react';
-import { useSession } from '@/providers/session-provider';
-import { toast } from 'sonner';
-import type { ChatMessage } from '@/lib/ai/types';
-import { generateUUID, fetchWithErrorHandlers } from '@/lib/utils';
-import { useSaveMessageMutation } from '@/hooks/chat-sync-hooks';
-import { useDataStream } from '@/components/data-stream-provider';
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import { useEffect, useMemo } from "react";
+import { toast } from "sonner";
+import { useDataStream } from "@/components/data-stream-provider";
+import { useSaveMessageMutation } from "@/hooks/chat-sync-hooks";
+import { useAutoResume } from "@/hooks/use-auto-resume";
+import type { ChatMessage } from "@/lib/ai/types";
 import {
-  ZustandChat,
-  useChatStoreApi,
   useChatStateInstance,
-} from '@/lib/stores/chat-store-context';
-import { useAutoResume } from '@/hooks/use-auto-resume';
+  useChatStoreApi,
+  ZustandChat,
+} from "@/lib/stores/chat-store-context";
+import { fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
+import { useSession } from "@/providers/session-provider";
 
-function useRecreateChat(id: string, initialMessages: Array<ChatMessage>) {
+function useRecreateChat(id: string, initialMessages: ChatMessage[]) {
   const chatStore = useChatStoreApi();
   useEffect(() => {
     if (id !== chatStore.getState().id) {
@@ -30,7 +30,7 @@ export function ChatSync({
   initialMessages,
 }: {
   id: string;
-  initialMessages: Array<ChatMessage>;
+  initialMessages: ChatMessage[];
 }) {
   const chatStore = useChatStoreApi();
   const { data: session } = useSession();
@@ -51,7 +51,7 @@ export function ChatSync({
         saveChatMessage({ message, chatId: id });
       },
       transport: new DefaultChatTransport({
-        api: '/api/chat',
+        api: "/api/chat",
         fetch: fetchWithErrorHandlers,
         prepareSendMessagesRequest({ messages, id, body }) {
           return {
@@ -70,12 +70,12 @@ export function ChatSync({
       onError: (error) => {
         console.error(error);
         const cause = error.cause;
-        if (cause && typeof cause === 'string') {
-          toast.error(error.message ?? 'An error occured, please try again!', {
+        if (cause && typeof cause === "string") {
+          toast.error(error.message ?? "An error occured, please try again!", {
             description: cause,
           });
         } else {
-          toast.error(error.message ?? 'An error occured, please try again!');
+          toast.error(error.message ?? "An error occured, please try again!");
         }
       },
     });
@@ -89,7 +89,7 @@ export function ChatSync({
   });
 
   useEffect(() => {
-    console.log('setting current chat helpers');
+    console.log("setting current chat helpers");
     chatStore.getState().setCurrentChatHelpers({
       stop: helpers.stop,
       sendMessage: helpers.sendMessage,

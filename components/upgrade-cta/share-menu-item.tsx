@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
-import { useSession } from '@/providers/session-provider';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import type { ReactNode } from "react";
+import { ShareIcon } from "@/components/icons";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { ShareIcon } from '@/components/icons';
+} from "@/components/ui/popover";
+import { useSession } from "@/providers/session-provider";
 
-interface ShareMenuItemProps {
+type ShareMenuItemProps = {
   onShare: () => void;
   children?: ReactNode;
-}
+};
 
 export function ShareMenuItem({ onShare, children }: ShareMenuItemProps) {
   const { data: session } = useSession();

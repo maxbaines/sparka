@@ -1,16 +1,16 @@
-import { ChatProviders } from './chat-providers';
-import { auth } from '../../lib/auth';
-import { cookies, headers } from 'next/headers';
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
-import { DefaultModelProvider } from '@/providers/default-model-provider';
-import { DEFAULT_CHAT_MODEL, type AppModelId } from '@/lib/ai/app-models';
-import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
-import { AppSidebar } from '@/components/app-sidebar';
-import { KeyboardShortcuts } from '@/components/keyboard-shortcuts';
+import { AIDevtools } from "@ai-sdk-tools/devtools";
+import { cookies, headers } from "next/headers";
+import { AppSidebar } from "@/components/app-sidebar";
+import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { type AppModelId, DEFAULT_CHAT_MODEL } from "@/lib/ai/app-models";
+import { ANONYMOUS_LIMITS } from "@/lib/types/anonymous";
+import { DefaultModelProvider } from "@/providers/default-model-provider";
+import { SessionProvider } from "@/providers/session-provider";
 
-import { TRPCReactProvider } from '@/trpc/react';
-import { SessionProvider } from '@/providers/session-provider';
-import { AIDevtools } from '@ai-sdk-tools/devtools';
+import { TRPCReactProvider } from "@/trpc/react";
+import { auth } from "../../lib/auth";
+import { ChatProviders } from "./chat-providers";
 
 export default async function ChatLayout({
   children,
@@ -34,9 +34,9 @@ export default async function ChatLayout({
           : undefined,
       }
     : undefined;
-  const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
+  const isCollapsed = cookieStore.get("sidebar:state")?.value !== "true";
 
-  const cookieModel = cookieStore.get('chat-model')?.value as AppModelId;
+  const cookieModel = cookieStore.get("chat-model")?.value as AppModelId;
   const isAnonymous = !session?.user;
 
   // Check if the model from cookie is available for anonymous users
@@ -44,7 +44,7 @@ export default async function ChatLayout({
 
   if (isAnonymous && cookieModel) {
     const isModelAvailable = ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(
-      cookieModel as (typeof ANONYMOUS_LIMITS.AVAILABLE_MODELS)[number],
+      cookieModel as (typeof ANONYMOUS_LIMITS.AVAILABLE_MODELS)[number]
     );
     if (!isModelAvailable) {
       // Switch to default model if current model is not available for anonymous users
@@ -61,7 +61,7 @@ export default async function ChatLayout({
             <SidebarInset
               style={
                 {
-                  '--header-height': 'calc(var(--spacing) * 13)',
+                  "--header-height": "calc(var(--spacing) * 13)",
                 } as React.CSSProperties
               }
             >
@@ -74,7 +74,7 @@ export default async function ChatLayout({
           </SidebarProvider>
         </ChatProviders>
       </SessionProvider>
-      {process.env.NODE_ENV === 'development' && <AIDevtools />}
+      {process.env.NODE_ENV === "development" && <AIDevtools />}
     </TRPCReactProvider>
   );
 }

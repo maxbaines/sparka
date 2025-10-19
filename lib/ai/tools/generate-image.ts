@@ -1,22 +1,22 @@
-import { z } from 'zod';
-import { tool, experimental_generateImage, type FileUIPart } from 'ai';
-import { getImageModel } from '@/lib/ai/providers';
-import { DEFAULT_IMAGE_MODEL } from '@/lib/ai/app-models';
-import OpenAI, { toFile } from 'openai';
-import { uploadFile } from '@/lib/blob';
-import { createModuleLogger } from '@/lib/logger';
-import { env } from '@/lib/env';
+import { experimental_generateImage, type FileUIPart, tool } from "ai";
+import OpenAI, { toFile } from "openai";
+import { z } from "zod";
+import { DEFAULT_IMAGE_MODEL } from "@/lib/ai/app-models";
+import { getImageModel } from "@/lib/ai/providers";
+import { uploadFile } from "@/lib/blob";
+import { env } from "@/lib/env";
+import { createModuleLogger } from "@/lib/logger";
 
-interface GenerateImageProps {
-  attachments?: Array<FileUIPart>;
+type GenerateImageProps = {
+  attachments?: FileUIPart[];
   lastGeneratedImage?: { imageUrl: string; name: string } | null;
-}
+};
 
 const openaiClient = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
 });
 
-const log = createModuleLogger('ai.tools.generate-image');
+const log = createModuleLogger("ai.tools.generate-image");
 
 export const generateImage = ({
   attachments = [],
@@ -35,14 +35,14 @@ Use for:
       prompt: z
         .string()
         .describe(
-          'Detailed description of the image to generate. Include style, composition, colors, mood, and any other relevant details.',
+          "Detailed description of the image to generate. Include style, composition, colors, mood, and any other relevant details."
         ),
     }),
     execute: async ({ prompt }) => {
       const startMs = Date.now();
       // Filter only image file parts for reference
       const imageParts = attachments.filter(
-        (part) => part.type === 'file' && part.mediaType?.startsWith('image/'),
+        (part) => part.type === "file" && part.mediaType?.startsWith("image/")
       );
 
       const hasLastGeneratedImage = lastGeneratedImage !== null;
@@ -50,27 +50,27 @@ Use for:
 
       log.info(
         {
-          mode: isEdit ? 'edit' : 'generate',
+          mode: isEdit ? "edit" : "generate",
           attachmentCount: imageParts.length,
           hasLastGeneratedImage,
           promptLength: prompt.length,
         },
-        'generateImage: start',
+        "generateImage: start"
       );
 
       try {
         if (isEdit) {
           log.debug(
             {
-              note: 'OpenAI edit mode',
+              note: "OpenAI edit mode",
               lastGeneratedCount: hasLastGeneratedImage ? 1 : 0,
               attachmentCount: imageParts.length,
             },
-            'generateImage: preparing edit images',
+            "generateImage: preparing edit images"
           );
 
           // Convert parts and lastGeneratedImage to the format expected by OpenAI
-          const inputImages = [] as Array<File>;
+          const inputImages = [] as File[];
 
           // Add lastGeneratedImage first if it exists
           if (lastGeneratedImage) {
@@ -78,7 +78,7 @@ Use for:
             const arrayBuffer = await response.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
             const lastGenImage = await toFile(buffer, lastGeneratedImage.name, {
-              type: 'image/png',
+              type: "image/png",
             });
             inputImages.push(lastGenImage);
           }
@@ -91,22 +91,22 @@ Use for:
               const buffer = Buffer.from(arrayBuffer);
 
               // Use toFile to create the proper format for OpenAI
-              return await toFile(buffer, part.filename || 'image.png', {
-                type: part.mediaType || 'image/png',
+              return await toFile(buffer, part.filename || "image.png", {
+                type: part.mediaType || "image/png",
               });
-            }),
+            })
           );
 
           inputImages.push(...partImages);
 
           const rsp = await openaiClient.images.edit({
-            model: 'gpt-image-1',
+            model: "gpt-image-1",
             image: inputImages, // Pass all images to OpenAI
             prompt,
           });
 
           // Convert base64 to buffer and upload to blob storage
-          const buffer = Buffer.from(rsp.data?.[0]?.b64_json || '', 'base64');
+          const buffer = Buffer.from(rsp.data?.[0]?.b64_json || "", "base64");
           const timestamp = Date.now();
           const filename = `generated-image-${timestamp}.png`;
 
@@ -114,12 +114,12 @@ Use for:
 
           log.info(
             {
-              mode: 'edit',
+              mode: "edit",
               ms: Date.now() - startMs,
               imageUrl: result.url,
               uploadedFilename: filename,
             },
-            'generateImage: success',
+            "generateImage: success"
           );
 
           return {
@@ -140,14 +140,14 @@ Use for:
 
         log.debug(
           {
-            mode: 'generate',
+            mode: "generate",
             base64Length: res.images?.[0]?.base64?.length ?? 0,
           },
-          'generateImage: provider response received',
+          "generateImage: provider response received"
         );
 
         // Convert base64 to buffer and upload to blob storage
-        const buffer = Buffer.from(res.images[0].base64, 'base64');
+        const buffer = Buffer.from(res.images[0].base64, "base64");
         const timestamp = Date.now();
         const filename = `generated-image-${timestamp}.png`;
 
@@ -155,12 +155,12 @@ Use for:
 
         log.info(
           {
-            mode: 'generate',
+            mode: "generate",
             ms: Date.now() - startMs,
             imageUrl: result.url,
             uploadedFilename: filename,
           },
-          'generateImage: success',
+          "generateImage: success"
         );
 
         return {
@@ -171,10 +171,10 @@ Use for:
         const err = error as unknown;
         log.error(
           {
-            mode: isEdit ? 'edit' : 'generate',
+            mode: isEdit ? "edit" : "generate",
             ms: Date.now() - startMs,
             error:
-              err && typeof err === 'object'
+              err && typeof err === "object"
                 ? {
                     name: (err as Error).name,
                     message: (err as Error).message,
@@ -182,7 +182,7 @@ Use for:
                   }
                 : { message: String(err) },
           },
-          'generateImage: failure',
+          "generateImage: failure"
         );
         throw error;
       }

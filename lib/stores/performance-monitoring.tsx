@@ -1,4 +1,4 @@
-'use client';
+"use client";
 // --- Freeze detector (RAF jitter) and action correlation ---
 let __freezeDetectorStarted = false;
 let __freezeRafId = 0;
@@ -8,10 +8,14 @@ let __clearLastActionTimer: ReturnType<typeof setTimeout> | null = null;
 
 export function markLastAction(label: string) {
   __lastActionLabel = label;
-  if (typeof window !== 'undefined') {
-    if (__clearLastActionTimer) clearTimeout(__clearLastActionTimer);
+  if (typeof window !== "undefined") {
+    if (__clearLastActionTimer) {
+      clearTimeout(__clearLastActionTimer);
+    }
     __clearLastActionTimer = setTimeout(() => {
-      if (__lastActionLabel === label) __lastActionLabel = undefined;
+      if (__lastActionLabel === label) {
+        __lastActionLabel = undefined;
+      }
     }, 250);
   }
 }
@@ -20,7 +24,9 @@ function startFreezeDetector({
 }: {
   thresholdMs?: number;
 } = {}): void {
-  if (typeof window === 'undefined' || __freezeDetectorStarted) return;
+  if (typeof window === "undefined" || __freezeDetectorStarted) {
+    return;
+  }
   __freezeDetectorStarted = true;
   __freezeLastTs = performance.now();
   const tick = (now: number) => {
@@ -29,20 +35,22 @@ function startFreezeDetector({
     if (blockedMs > thresholdMs) {
       // eslint-disable-next-line no-console
       console.warn(
-        '[Freeze]',
+        "[Freeze]",
         `${Math.round(blockedMs)}ms`,
-        'lastAction=',
-        __lastActionLabel,
+        "lastAction=",
+        __lastActionLabel
       );
     }
     __freezeLastTs = now;
     __freezeRafId = window.requestAnimationFrame(tick);
   };
   __freezeRafId = window.requestAnimationFrame(tick);
-  window.addEventListener('beforeunload', () => {
-    if (__freezeRafId) cancelAnimationFrame(__freezeRafId);
+  window.addEventListener("beforeunload", () => {
+    if (__freezeRafId) {
+      cancelAnimationFrame(__freezeRafId);
+    }
   });
 }
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   startFreezeDetector({ thresholdMs: 80 });
 }

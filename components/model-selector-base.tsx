@@ -1,15 +1,23 @@
-'use client';
+"use client";
 
+import type {
+  ModelDefinition,
+  ModelId,
+  ProviderId,
+} from "@ai-models/vercel-gateway";
+import { ChevronUpIcon, FilterIcon } from "lucide-react";
 import {
+  type ComponentProps,
+  memo,
   startTransition,
+  useCallback,
   useMemo,
   useOptimistic,
   useState,
-  memo,
-  type ComponentProps,
-  useCallback,
-} from 'react';
-import { Button } from '@/components/ui/button';
+} from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
   CommandEmpty,
@@ -17,30 +25,22 @@ import {
   CommandInput,
   CommandList,
   CommandItem as UICommandItem,
-} from '@/components/ui/command';
+} from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { getEnabledFeatures } from '@/lib/features-config';
-import { ChevronUpIcon, FilterIcon } from 'lucide-react';
-import type {
-  ModelDefinition,
-  ModelId,
-  ProviderId,
-} from '@ai-models/vercel-gateway';
-import { getProviderIcon } from './get-provider-icon';
+} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { getEnabledFeatures } from "@/lib/features-config";
+import { cn } from "@/lib/utils";
+import { getProviderIcon } from "./get-provider-icon";
 
 type FeatureFilter = Record<string, boolean>;
 
 // Base interface that both ModelDefinition and AppModelDefinition satisfy
-export interface ModelDefinitionLike {
+export type ModelDefinitionLike = {
   id: string;
   name: string;
   owned_by: string;
@@ -56,7 +56,7 @@ export interface ModelDefinitionLike {
     audio?: boolean;
     text?: boolean;
   };
-}
+};
 
 const enabledFeatures = getEnabledFeatures();
 const initialFilters = enabledFeatures.reduce<FeatureFilter>((acc, feature) => {
@@ -72,19 +72,19 @@ function getFeatureIcons(modelDefinition: ModelDefinitionLike) {
   const enabled = getEnabledFeatures();
   const featureIconMap = [
     {
-      key: 'functionCalling',
+      key: "functionCalling",
       condition: features.toolCall,
-      config: enabled.find((f) => f.key === 'functionCalling'),
+      config: enabled.find((f) => f.key === "functionCalling"),
     },
     {
-      key: 'imageInput',
+      key: "imageInput",
       condition: features.input?.image,
-      config: enabled.find((f) => f.key === 'imageInput'),
+      config: enabled.find((f) => f.key === "imageInput"),
     },
     {
-      key: 'pdfInput',
+      key: "pdfInput",
       condition: features.input?.pdf,
-      config: enabled.find((f) => f.key === 'pdfInput'),
+      config: enabled.find((f) => f.key === "pdfInput"),
     },
   ];
 
@@ -93,12 +93,12 @@ function getFeatureIcons(modelDefinition: ModelDefinitionLike) {
       const IconComponent = config.icon;
       icons.push(
         <div
-          key={config.key}
           className="flex items-center"
+          key={config.key}
           title={config.description}
         >
-          <IconComponent className="w-3 h-3 text-muted-foreground" />
-        </div>,
+          <IconComponent className="h-3 w-3 text-muted-foreground" />
+        </div>
       );
     }
   });
@@ -127,40 +127,44 @@ function PureCommandItem<
   const hasReasoning = useMemo(() => definition.reasoning, [definition]);
   const searchValue = useMemo(
     () =>
-      `${definition.name} ${hasReasoning ? 'reasoning' : ''} ${definition.owned_by} `.toLowerCase(),
-    [definition],
+      `${definition.name} ${hasReasoning ? "reasoning" : ""} ${definition.owned_by} `.toLowerCase(),
+    [definition, hasReasoning]
   );
 
   return (
     <UICommandItem
-      value={searchValue}
+      className={cn(
+        "flex h-9 cursor-pointer items-center justify-between px-3 py-1.5 transition-all",
+        isSelected && "border-l-2 border-l-primary bg-primary/10",
+        disabled && "cursor-not-allowed opacity-50"
+      )}
       onSelect={() => {
-        if (disabled) return;
+        if (disabled) {
+          return;
+        }
         onSelectModel(id);
       }}
-      className={cn(
-        'flex items-center justify-between px-3 py-1.5 cursor-pointer transition-all h-9',
-        isSelected && 'bg-primary/10 border-l-2 border-l-primary',
-        disabled && 'opacity-50 cursor-not-allowed',
-      )}
+      value={searchValue}
     >
-      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+      <div className="flex min-w-0 flex-1 items-center gap-2.5">
         <div className="shrink-0">{getProviderIcon(provider)}</div>
-        <span className="font-medium text-sm truncate flex items-center gap-1.5">
+        <span className="flex items-center gap-1.5 truncate font-medium text-sm">
           {definition.name}
           {hasReasoning
             ? (() => {
                 const cfg = getEnabledFeatures().find(
-                  (f) => f.key === 'reasoning',
+                  (f) => f.key === "reasoning"
                 );
-                if (!cfg) return null;
+                if (!cfg) {
+                  return null;
+                }
                 const IconComponent = cfg.icon;
                 return (
                   <span
+                    className="inline-flex shrink-0 items-center gap-1"
                     title={cfg.description}
-                    className="inline-flex items-center gap-1 shrink-0"
                   >
-                    <IconComponent className="w-3 h-3 text-muted-foreground" />
+                    <IconComponent className="h-3 w-3 text-muted-foreground" />
                   </span>
                 );
               })()
@@ -169,7 +173,7 @@ function PureCommandItem<
       </div>
       <div className="flex items-center gap-1.5">
         {featureIcons.length > 0 && (
-          <div className="flex items-center gap-1 shrink-0">{featureIcons}</div>
+          <div className="flex shrink-0 items-center gap-1">{featureIcons}</div>
         )}
       </div>
     </UICommandItem>
@@ -182,7 +186,7 @@ const CommandItem = memo(
     prevProps.id === nextProps.id &&
     prevProps.disabled === nextProps.disabled &&
     prevProps.isSelected === nextProps.isSelected &&
-    prevProps.definition === nextProps.definition,
+    prevProps.definition === nextProps.definition
 ) as typeof PureCommandItem;
 function PureModelSelectorPopoverContent<
   TModelId extends string,
@@ -208,7 +212,7 @@ function PureModelSelectorPopoverContent<
   clearFilters: () => void;
   featureFilters: FeatureFilter;
   onUpdateFeatureFilters: (
-    updater: (prev: FeatureFilter) => FeatureFilter,
+    updater: (prev: FeatureFilter) => FeatureFilter
   ) => void;
   topContent?: React.ReactNode;
   filteredModels: Array<{
@@ -232,42 +236,42 @@ function PureModelSelectorPopoverContent<
     <Command>
       <div className="flex items-center border-b">
         <CommandInput
-          placeholder="Search models..."
           className="px-3"
           containerClassName="w-full border-0 h-11"
+          placeholder="Search models..."
         />
         {enableFilters && (
-          <Popover open={filterOpen} onOpenChange={onFilterOpenChange}>
+          <Popover onOpenChange={onFilterOpenChange} open={filterOpen}>
             <PopoverTrigger asChild>
               <Button
-                variant="ghost"
-                size="sm"
                 className={cn(
-                  'mr-3 h-8 w-8 p-0 relative',
-                  activeFilterCount > 0 && 'text-primary',
+                  "relative mr-3 h-8 w-8 p-0",
+                  activeFilterCount > 0 && "text-primary"
                 )}
+                size="sm"
+                variant="ghost"
               >
                 <FilterIcon className="h-4 w-4" />
                 {activeFilterCount > 0 && (
                   <Badge
+                    className="-top-1 -right-1 absolute flex h-4 min-w-[16px] items-center justify-center p-0 text-xs"
                     variant="secondary"
-                    className="absolute -top-1 -right-1 text-xs min-w-[16px] h-4 flex items-center justify-center p-0"
                   >
                     {activeFilterCount}
                   </Badge>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="p-0" align="end">
+            <PopoverContent align="end" className="p-0">
               <div className="p-4">
-                <div className="mb-3 h-7 flex items-center justify-between">
-                  <div className="text-sm font-medium">Filter by Tools</div>
+                <div className="mb-3 flex h-7 items-center justify-between">
+                  <div className="font-medium text-sm">Filter by Tools</div>
                   {activeFilterCount > 0 && (
                     <Button
-                      variant="ghost"
-                      size="sm"
+                      className="h-6 text-xs"
                       onClick={clearFilters}
-                      className="text-xs h-6"
+                      size="sm"
+                      variant="ghost"
                     >
                       Clear filters
                     </Button>
@@ -278,12 +282,12 @@ function PureModelSelectorPopoverContent<
                     const IconComponent = feature.icon;
                     return (
                       <div
-                        key={feature.key}
                         className="flex items-center space-x-2"
+                        key={feature.key}
                       >
                         <Checkbox
+                          checked={featureFilters[feature.key]}
                           id={feature.key}
-                          checked={featureFilters[feature.key] || false}
                           onCheckedChange={(checked) =>
                             onUpdateFeatureFilters((prev) => ({
                               ...prev,
@@ -292,10 +296,10 @@ function PureModelSelectorPopoverContent<
                           }
                         />
                         <Label
+                          className="flex items-center gap-1.5 text-sm"
                           htmlFor={feature.key}
-                          className="text-sm flex items-center gap-1.5"
                         >
-                          <IconComponent className="w-3.5 h-3.5" />
+                          <IconComponent className="h-3.5 w-3.5" />
                           {feature.name}
                         </Label>
                       </div>
@@ -322,11 +326,11 @@ function PureModelSelectorPopoverContent<
               const isSelected = id === optimisticModelId;
               return (
                 <CommandItemComponent
-                  key={id}
-                  id={id}
                   definition={definition}
                   disabled={disabled}
+                  id={id}
                   isSelected={isSelected}
+                  key={id}
                   onSelectModel={onSelectModel}
                 />
               );
@@ -342,7 +346,7 @@ export const ModelSelectorPopoverContent = memo(
   PureModelSelectorPopoverContent as typeof PureModelSelectorPopoverContent<
     string,
     ModelDefinitionLike
-  >,
+  >
 ) as typeof PureModelSelectorPopoverContent;
 
 export type ModelSelectorBaseItem<
@@ -365,15 +369,15 @@ export function PureModelSelectorBase<
   placeholder,
   topContent,
   enableFilters = true,
-  initialChevronDirection = 'up',
+  initialChevronDirection = "up",
 }: {
-  models: Array<ModelSelectorBaseItem<TModelId, TModelDefinition>>;
+  models: ModelSelectorBaseItem<TModelId, TModelDefinition>[];
   selectedModelId?: TModelId;
   onModelChange?: (modelId: TModelId) => void;
   placeholder?: string;
   topContent?: React.ReactNode;
   enableFilters?: boolean;
-  initialChevronDirection?: 'up' | 'down';
+  initialChevronDirection?: "up" | "down";
 } & ComponentProps<typeof Button>) {
   const [open, setOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -386,26 +390,32 @@ export function PureModelSelectorBase<
   const filteredModels = useMemo(() => {
     const hasActiveFilters =
       enableFilters && Object.values(featureFilters).some(Boolean);
-    if (!hasActiveFilters) return models;
+    if (!hasActiveFilters) {
+      return models;
+    }
     return models.filter((item) => {
       const features = item.definition;
-      if (!features) return false;
+      if (!features) {
+        return false;
+      }
       return Object.entries(featureFilters).every(([key, isActive]) => {
-        if (!isActive) return true;
+        if (!isActive) {
+          return true;
+        }
         switch (key) {
-          case 'reasoning':
+          case "reasoning":
             return features.reasoning;
-          case 'functionCalling':
+          case "functionCalling":
             return features.toolCall;
-          case 'imageInput':
+          case "imageInput":
             return features.input?.image;
-          case 'pdfInput':
+          case "pdfInput":
             return features.input?.pdf;
-          case 'audioInput':
+          case "audioInput":
             return features.input?.audio;
-          case 'imageOutput':
+          case "imageOutput":
             return features.output?.image;
-          case 'audioOutput':
+          case "audioOutput":
             return features.output?.audio;
           default:
             return true;
@@ -416,23 +426,25 @@ export function PureModelSelectorBase<
 
   const selectedItem = useMemo(
     () => models.find((m) => m.id === optimisticModelId),
-    [models, optimisticModelId],
+    [models, optimisticModelId]
   );
 
   const selectedProviderIcon = useMemo(() => {
-    if (!selectedItem) return null;
+    if (!selectedItem) {
+      return null;
+    }
     const provider = selectedItem.definition.owned_by as ProviderId;
     return getProviderIcon(provider);
   }, [selectedItem]);
 
   const reasoningFeatureConfig = useMemo(
-    () => getEnabledFeatures().find((f) => f.key === 'reasoning'),
-    [],
+    () => getEnabledFeatures().find((f) => f.key === "reasoning"),
+    []
   );
 
   const activeFilterCount = useMemo(
     () => Object.values(featureFilters).filter(Boolean).length,
-    [featureFilters],
+    [featureFilters]
   );
 
   const clearFilters = () => setFeatureFilters(initialFilters);
@@ -445,34 +457,34 @@ export function PureModelSelectorBase<
         setOpen(false);
       });
     },
-    [onModelChange],
+    [onModelChange, setOptimisticModelId]
   );
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
-          data-testid="model-selector"
-          variant="ghost"
-          role="combobox"
           aria-expanded={open}
-          className={cn('md:px-2 gap-2 flex justify-between', className)}
+          className={cn("flex justify-between gap-2 md:px-2", className)}
+          data-testid="model-selector"
+          role="combobox"
+          variant="ghost"
         >
           <div className="flex items-center gap-2">
             {selectedProviderIcon && (
               <div className="shrink-0">{selectedProviderIcon}</div>
             )}
-            <p className="truncate inline-flex items-center gap-1.5">
-              {selectedItem?.definition.name || placeholder || 'Select model'}
+            <p className="inline-flex items-center gap-1.5 truncate">
+              {selectedItem?.definition.name || placeholder || "Select model"}
               {selectedItem?.definition.reasoning && reasoningFeatureConfig
                 ? (() => {
                     const IconComponent = reasoningFeatureConfig.icon;
                     return (
                       <span
+                        className="inline-flex shrink-0 items-center gap-1"
                         title={reasoningFeatureConfig.description}
-                        className="inline-flex items-center gap-1 shrink-0"
                       >
-                        <IconComponent className="w-3 h-3 text-muted-foreground" />
+                        <IconComponent className="h-3 w-3 text-muted-foreground" />
                       </span>
                     );
                   })()
@@ -481,27 +493,27 @@ export function PureModelSelectorBase<
           </div>
           <ChevronUpIcon
             className={cn(
-              'h-4 w-4 shrink-0 opacity-50 transition-transform',
-              (initialChevronDirection === 'up') === open && 'rotate-180',
+              "h-4 w-4 shrink-0 opacity-50 transition-transform",
+              (initialChevronDirection === "up") === open && "rotate-180"
             )}
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[350px] p-0" align="start">
+      <PopoverContent align="start" className="w-[350px] p-0">
         {open ? (
           <ModelSelectorPopoverContent
-            enableFilters={enableFilters}
-            filterOpen={filterOpen}
-            onFilterOpenChange={setFilterOpen}
             activeFilterCount={activeFilterCount}
             clearFilters={clearFilters}
-            featureFilters={featureFilters}
-            onUpdateFeatureFilters={setFeatureFilters}
-            topContent={topContent}
-            filteredModels={filteredModels}
-            optimisticModelId={optimisticModelId}
-            onSelectModel={selectModel}
             commandItemComponent={CommandItem}
+            enableFilters={enableFilters}
+            featureFilters={featureFilters}
+            filteredModels={filteredModels}
+            filterOpen={filterOpen}
+            onFilterOpenChange={setFilterOpen}
+            onSelectModel={selectModel}
+            onUpdateFeatureFilters={setFeatureFilters}
+            optimisticModelId={optimisticModelId}
+            topContent={topContent}
           />
         ) : null}
       </PopoverContent>
@@ -514,14 +526,11 @@ export const ModelSelectorBase = memo(
     string,
     ModelDefinitionLike
   >,
-  (prevProps, nextProps) => {
-    return (
-      prevProps.selectedModelId === nextProps.selectedModelId &&
-      prevProps.className === nextProps.className &&
-      prevProps.onModelChange === nextProps.onModelChange &&
-      prevProps.placeholder === nextProps.placeholder &&
-      prevProps.models === nextProps.models &&
-      prevProps.enableFilters === nextProps.enableFilters
-    );
-  },
+  (prevProps, nextProps) =>
+    prevProps.selectedModelId === nextProps.selectedModelId &&
+    prevProps.className === nextProps.className &&
+    prevProps.onModelChange === nextProps.onModelChange &&
+    prevProps.placeholder === nextProps.placeholder &&
+    prevProps.models === nextProps.models &&
+    prevProps.enableFilters === nextProps.enableFilters
 ) as typeof PureModelSelectorBase;

@@ -1,11 +1,11 @@
-'use client';
-import { SidebarToggle } from '@/components/sidebar-toggle';
-import { memo } from 'react';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { ShareButton } from './share-button';
-import { Share } from 'lucide-react';
-import type { Session } from '@/lib/auth';
-import { HeaderActions } from '@/components/header-actions';
+"use client";
+import { Share } from "lucide-react";
+import { memo } from "react";
+import { HeaderActions } from "@/components/header-actions";
+import { SidebarToggle } from "@/components/sidebar-toggle";
+import type { Session } from "@/lib/auth";
+import { ShareButton } from "./share-button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 function PureChatHeader({
   chatId,
@@ -16,10 +16,10 @@ function PureChatHeader({
   chatId: string;
   isReadonly: boolean;
   hasMessages: boolean;
-  user: Session['user'];
+  user: Session["user"];
 }) {
   return (
-    <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2 justify-between h-(--header-height)">
+    <header className="sticky top-0 flex h-(--header-height) items-center justify-between gap-2 bg-background px-2 py-1.5 md:px-2">
       <div className="flex items-center gap-2">
         <SidebarToggle />
 
@@ -27,15 +27,15 @@ function PureChatHeader({
         {isReadonly && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/50 text-muted-foreground text-sm">
-                <Share size={14} className="opacity-70" />
+              <div className="flex items-center gap-1.5 rounded-md bg-muted/50 px-2 py-1 text-muted-foreground text-sm">
+                <Share className="opacity-70" size={14} />
                 <span>Shared</span>
               </div>
             </TooltipTrigger>
             <TooltipContent>
               <div className="text-center">
                 <div className="font-medium">Shared Chat</div>
-                <div className="text-xs text-muted-foreground mt-1">
+                <div className="mt-1 text-muted-foreground text-xs">
                   This is a shared chat
                 </div>
               </div>
@@ -49,6 +49,7 @@ function PureChatHeader({
   );
 }
 
-export const ChatHeader = memo(PureChatHeader, (prevProps, nextProps) => {
-  return prevProps.hasMessages === nextProps.hasMessages;
-});
+export const ChatHeader = memo(
+  PureChatHeader,
+  (prevProps, nextProps) => prevProps.hasMessages === nextProps.hasMessages
+);

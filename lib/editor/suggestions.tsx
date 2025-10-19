@@ -1,31 +1,31 @@
+import type { LexicalEditor } from "lexical";
 import {
+  $getRoot,
+  $getSelection,
+  $isElementNode,
+  $isRangeSelection,
   $isTextNode,
+  DecoratorNode,
   type LexicalNode,
   type NodeKey,
-  $getSelection,
-  $isRangeSelection,
-  $isElementNode,
-} from 'lexical';
-import { DecoratorNode, $getRoot } from 'lexical';
-
-import { Suggestion as PreviewSuggestion } from '@/components/suggestion';
-import type { Suggestion } from '@/lib/db/schema';
-import type { ArtifactKind } from '@/lib/artifacts/artifact-kind';
-import type { LexicalEditor } from 'lexical';
+} from "lexical";
+import { Suggestion as PreviewSuggestion } from "@/components/suggestion";
+import type { ArtifactKind } from "@/lib/artifacts/artifact-kind";
+import type { Suggestion } from "@/lib/db/schema";
 
 export interface UISuggestion extends Suggestion {
   selectionStart: number;
   selectionEnd: number;
 }
 
-interface Position {
+type Position = {
   start: number;
   end: number;
-}
+};
 
 function findPositionsInEditor(
   editor: LexicalEditor,
-  searchText: string,
+  searchText: string
 ): Position | null {
   let positions: { start: number; end: number } | null = null;
 
@@ -56,7 +56,9 @@ function findPositionsInEditor(
         const children = node.getChildren();
         for (const child of children) {
           traverse(child);
-          if (positions) return;
+          if (positions) {
+            return;
+          }
         }
       }
     }
@@ -69,8 +71,8 @@ function findPositionsInEditor(
 
 export function projectWithPositions(
   editor: LexicalEditor,
-  suggestions: Array<Suggestion>,
-): Array<UISuggestion> {
+  suggestions: Suggestion[]
+): UISuggestion[] {
   return suggestions.map((suggestion) => {
     const positions = findPositionsInEditor(editor, suggestion.originalText);
 
@@ -97,7 +99,7 @@ export class SuggestionNode extends DecoratorNode<React.ReactElement> {
   __artifactKind: ArtifactKind;
 
   static getType(): string {
-    return 'suggestion';
+    return "suggestion";
   }
 
   static clone(node: SuggestionNode): SuggestionNode {
@@ -105,15 +107,15 @@ export class SuggestionNode extends DecoratorNode<React.ReactElement> {
       node.__suggestion,
       node.__editor,
       node.__artifactKind,
-      node.__key,
+      node.__key
     );
   }
 
   constructor(
     suggestion: UISuggestion,
     editor: LexicalEditor,
-    artifactKind: ArtifactKind = 'text',
-    key?: NodeKey,
+    artifactKind: ArtifactKind = "text",
+    key?: NodeKey
   ) {
     super(key);
     this.__suggestion = suggestion;
@@ -122,8 +124,8 @@ export class SuggestionNode extends DecoratorNode<React.ReactElement> {
   }
 
   createDOM(): HTMLElement {
-    const dom = document.createElement('span');
-    dom.className = 'suggestion-highlight';
+    const dom = document.createElement("span");
+    dom.className = "suggestion-highlight";
     return dom;
   }
 
@@ -142,7 +144,7 @@ export class SuggestionNode extends DecoratorNode<React.ReactElement> {
             const textContent = node.getTextContent();
             const newText = textContent.replace(
               this.__suggestion.originalText,
-              this.__suggestion.suggestedText,
+              this.__suggestion.suggestedText
             );
             node.setTextContent(newText);
           }
@@ -155,9 +157,9 @@ export class SuggestionNode extends DecoratorNode<React.ReactElement> {
 
     return (
       <PreviewSuggestion
-        suggestion={this.__suggestion}
-        onApply={onApply}
         artifactKind={this.__artifactKind}
+        onApply={onApply}
+        suggestion={this.__suggestion}
       />
     );
   }
@@ -166,7 +168,7 @@ export class SuggestionNode extends DecoratorNode<React.ReactElement> {
 export function createSuggestionDecorator(
   suggestion: UISuggestion,
   editor: LexicalEditor,
-  artifactKind: ArtifactKind = 'text',
+  artifactKind: ArtifactKind = "text"
 ): SuggestionNode {
   return new SuggestionNode(suggestion, editor, artifactKind);
 }
@@ -174,7 +176,7 @@ export function createSuggestionDecorator(
 // Plugin-like function to register suggestions
 export function registerSuggestions(
   editor: LexicalEditor,
-  suggestions: Array<UISuggestion>,
+  suggestions: UISuggestion[]
 ): void {
   editor.update(() => {
     // Clear existing suggestion nodes

@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import {
-  useQuery,
-  type UseQueryOptions,
-  type UseQueryResult,
-  type DefinedUseQueryResult,
-  type UseSuspenseQueryOptions,
-  type DefinedInitialDataOptions,
-  type UndefinedInitialDataOptions,
-  type QueryKey,
-} from '@tanstack/react-query';
 import type {
   DefaultError,
   QueryClient,
   QueryFunction,
-} from '@tanstack/query-core';
+} from "@tanstack/query-core";
+import {
+  type DefinedInitialDataOptions,
+  type DefinedUseQueryResult,
+  type QueryKey,
+  type UndefinedInitialDataOptions,
+  type UseQueryOptions,
+  type UseQueryResult,
+  type UseSuspenseQueryOptions,
+  useQuery,
+} from "@tanstack/react-query";
+import { useMemo } from "react";
 
 export type UseDualQueryOptions<
   TQueryFnData = unknown,
@@ -28,7 +28,7 @@ export type UseDualQueryOptions<
     TError,
     TData,
     TQueryKey
-  >['queryFn'];
+  >["queryFn"];
   shouldUseLocal?: boolean | (() => boolean);
 };
 
@@ -43,7 +43,7 @@ type UseDualDefinedInitialDataOptions<
     TError,
     TData,
     TQueryKey
-  >['queryFn'];
+  >["queryFn"];
   shouldUseLocal?: boolean | (() => boolean);
 };
 
@@ -58,14 +58,14 @@ type UseDualUndefinedInitialDataOptions<
     TError,
     TData,
     TQueryKey
-  >['queryFn'];
+  >["queryFn"];
   shouldUseLocal?: boolean | (() => boolean);
 };
 
 function resolveShouldUseLocal(
-  shouldUseLocal: boolean | (() => boolean) | undefined,
+  shouldUseLocal: boolean | (() => boolean) | undefined
 ): boolean {
-  if (typeof shouldUseLocal === 'function') {
+  if (typeof shouldUseLocal === "function") {
     return shouldUseLocal();
   }
   return Boolean(shouldUseLocal);
@@ -77,14 +77,14 @@ export function useDualQueryOptions<
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey,
 >(
-  options: UseDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  options: UseDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>
 ): UseQueryOptions<TQueryFnData, TError, TData, TQueryKey> {
   return useMemo(() => {
     const shouldLocal = resolveShouldUseLocal(options.shouldUseLocal);
 
     if (shouldLocal) {
       if (!options.localQueryFn) {
-        throw new Error('localQueryFn is required when shouldUseLocal is true');
+        throw new Error("localQueryFn is required when shouldUseLocal is true");
       }
 
       const { localQueryFn, shouldUseLocal: _unused, ...rest } = options;
@@ -93,8 +93,8 @@ export function useDualQueryOptions<
 
     const { localQueryFn: _l, shouldUseLocal: _s, ...rest } = options;
     // Narrow TRPC's possible `skipToken` union on queryFn for suspense compatibility
-    if (typeof rest.queryFn !== 'function') {
-      throw new Error('queryFn is required for remote queries');
+    if (typeof rest.queryFn !== "function") {
+      throw new Error("queryFn is required for remote queries");
     }
     const remoteQueryFn = rest.queryFn;
     return { ...rest, queryFn: remoteQueryFn };
@@ -113,7 +113,7 @@ export function useDualQuery<
     TData,
     TQueryKey
   >,
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError>;
 export function useDualQuery<
   TQueryFnData = unknown,
@@ -127,7 +127,7 @@ export function useDualQuery<
     TData,
     TQueryKey
   >,
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError>;
 export function useDualQuery<
   TQueryFnData = unknown,
@@ -136,7 +136,7 @@ export function useDualQuery<
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: UseDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError>;
 export function useDualQuery<
   TQueryFnData = unknown,
@@ -145,10 +145,10 @@ export function useDualQuery<
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: UseDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseQueryResult<TData, TError> {
   const merged = useDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>(
-    options,
+    options
   );
   return useQuery<TQueryFnData, TError, TData, TQueryKey>(merged, queryClient);
 }
@@ -159,10 +159,10 @@ export function useDualSuspenseQueryOptions<
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey,
 >(
-  options: UseDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  options: UseDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>
 ): UseSuspenseQueryOptions<TQueryFnData, TError, TData, TQueryKey> {
   const merged = useDualQueryOptions<TQueryFnData, TError, TData, TQueryKey>(
-    options,
+    options
   );
   const {
     enabled: _e,
@@ -171,8 +171,8 @@ export function useDualSuspenseQueryOptions<
     ...rest
   } = merged;
   const qf = rest.queryFn;
-  if (typeof qf !== 'function') {
-    throw new Error('queryFn is required for suspense queries');
+  if (typeof qf !== "function") {
+    throw new Error("queryFn is required for suspense queries");
   }
   const safeQueryFn = qf as QueryFunction<TQueryFnData, TQueryKey>;
   return { ...rest, queryFn: safeQueryFn };

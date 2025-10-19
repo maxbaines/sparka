@@ -1,43 +1,45 @@
-import { ImageResponse } from '@vercel/og';
+import { ImageResponse } from "@vercel/og";
+import { OGCard, OGContainer, OGFooter, OGTitle } from "@/lib/og/components";
 import {
-  OG_SIZE,
-  getBaseUrl,
   getAppIconUrl,
+  getBaseUrl,
   OG_BACKGROUND_IMAGE,
-} from '@/lib/og/shared';
-import { OGContainer, OGCard, OGFooter, OGTitle } from '@/lib/og/components';
+  OG_SIZE,
+} from "@/lib/og/shared";
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 const size = OG_SIZE;
 
 function truncate(input: string, max: number) {
-  if (!input) return input;
+  if (!input) {
+    return input;
+  }
   return input.length > max ? `${input.slice(0, max - 3)}...` : input;
 }
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const title = url.searchParams.get('title');
-  const description = url.searchParams.get('description');
+  const title = url.searchParams.get("title");
+  const description = url.searchParams.get("description");
 
-  if (!title || !description) {
+  if (!(title && description)) {
     return new ImageResponse(
       <div
         style={{
           width: size.width,
           height: size.height,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#0B1220',
-          color: 'white',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#0B1220",
+          color: "white",
           fontSize: 28,
         }}
       >
         Missing required query parameters: title and description
       </div>,
-      { width: size.width, height: size.height },
+      { width: size.width, height: size.height }
     );
   }
 
@@ -51,23 +53,23 @@ export async function GET(req: Request) {
     <OGContainer backgroundImage={OG_BACKGROUND_IMAGE}>
       <OGCard
         roundedTw="rounded-3xl"
-        style={{ position: 'relative', gap: '3rem' }}
+        style={{ position: "relative", gap: "3rem" }}
       >
-        <div tw="flex flex-1" style={{ display: 'flex' }}>
-          <div tw="flex-1 flex-col" style={{ display: 'flex', gap: '1rem' }}>
-            <div tw="flex items-start" style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }} tw="flex flex-1">
+          <div style={{ display: "flex", gap: "1rem" }} tw="flex-1 flex-col">
+            <div style={{ display: "flex" }} tw="flex items-start">
               <OGTitle
-                text={displayTitle}
-                threshold={40}
-                smallTw="text-[60px]"
                 largeTw="text-[80px]"
                 maxWidthPx={980}
+                smallTw="text-[60px]"
+                text={displayTitle}
+                threshold={40}
               />
             </div>
 
             <div
+              style={{ display: "flex", maxWidth: "980px" }}
               tw="flex text-[40px] text-slate-300"
-              style={{ display: 'flex', maxWidth: '980px' }}
             >
               <span>{displayDescription}</span>
             </div>
@@ -76,14 +78,14 @@ export async function GET(req: Request) {
 
         <OGFooter
           appIconUrl={appIcon}
-          siteName={'Sparka AI'}
           containerTw="mt-auto"
+          siteName={"Sparka AI"}
         />
       </OGCard>
     </OGContainer>,
     {
       width: size.width,
       height: size.height,
-    },
+    }
   );
 }

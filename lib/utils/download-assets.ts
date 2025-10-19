@@ -1,10 +1,10 @@
 import type {
+  DataContent,
+  FilePart,
+  ImagePart,
   ModelMessage,
   TextPart,
-  ImagePart,
-  FilePart,
-  DataContent,
-} from 'ai';
+} from "ai";
 
 // Minimal utilities to download assets from URL-based parts and inline them.
 
@@ -21,21 +21,22 @@ async function defaultDownload({ url }: { url: URL }): Promise<DownloadResult> {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(
-      `Failed to download asset: ${url.toString()} (${response.status})`,
+      `Failed to download asset: ${url.toString()} (${response.status})`
     );
   }
-  const contentType = response.headers.get('content-type') || undefined;
+  const contentType = response.headers.get("content-type") || undefined;
   const arrayBuffer = await response.arrayBuffer();
   return { mediaType: contentType, data: new Uint8Array(arrayBuffer) };
 }
 
 function toHttpUrl(value: unknown): URL | null {
-  if (value instanceof URL)
-    return value.protocol.startsWith('http') ? value : null;
-  if (typeof value === 'string') {
+  if (value instanceof URL) {
+    return value.protocol.startsWith("http") ? value : null;
+  }
+  if (typeof value === "string") {
     try {
       const url = new URL(value);
-      return url.protocol === 'http:' || url.protocol === 'https:' ? url : null;
+      return url.protocol === "http:" || url.protocol === "https:" ? url : null;
     } catch {
       return null;
     }
@@ -49,20 +50,26 @@ function toHttpUrl(value: unknown): URL | null {
  */
 export async function downloadAssetsFromModelMessages(
   messages: ModelMessage[],
-  downloadImplementation: DownloadImplementation = defaultDownload,
+  downloadImplementation: DownloadImplementation = defaultDownload
 ): Promise<Record<string, DownloadResult>> {
   const urlSet = new Set<string>();
 
   for (const message of messages) {
-    if (typeof message.content === 'string') continue;
+    if (typeof message.content === "string") {
+      continue;
+    }
     for (const part of message.content) {
-      if (part.type !== 'file' && part.type !== 'image') continue;
+      if (part.type !== "file" && part.type !== "image") {
+        continue;
+      }
       const dataOrUrl: DataContent | URL =
-        part.type === 'file'
+        part.type === "file"
           ? (part as FilePart).data
           : (part as ImagePart).image;
       const url = toHttpUrl(dataOrUrl);
-      if (url) urlSet.add(url.toString());
+      if (url) {
+        urlSet.add(url.toString());
+      }
     }
   }
 
@@ -71,10 +78,10 @@ export async function downloadAssetsFromModelMessages(
     urls.map(async (url) => ({
       url,
       data: await downloadImplementation({ url }),
-    })),
+    }))
   );
   return Object.fromEntries(
-    downloaded.map(({ url, data }) => [url.toString(), data]),
+    downloaded.map(({ url, data }) => [url.toString(), data])
   );
 }
 
@@ -84,17 +91,17 @@ export async function downloadAssetsFromModelMessages(
  */
 export async function replaceFilePartUrlByBinaryDataInMessages(
   messages: ModelMessage[],
-  downloadImplementation: DownloadImplementation = defaultDownload,
+  downloadImplementation: DownloadImplementation = defaultDownload
 ): Promise<ModelMessage[]> {
   const downloaded = await downloadAssetsFromModelMessages(
     messages,
-    downloadImplementation,
+    downloadImplementation
   );
 
   const mapPart = (
-    part: TextPart | ImagePart | FilePart | any,
+    part: TextPart | ImagePart | FilePart | any
   ): TextPart | ImagePart | FilePart | any => {
-    if (part.type === 'file') {
+    if (part.type === "file") {
       const url = toHttpUrl((part as FilePart).data);
       if (url) {
         const found = downloaded[url.toString()];
@@ -110,7 +117,7 @@ export async function replaceFilePartUrlByBinaryDataInMessages(
       }
       return part;
     }
-    if (part.type === 'image') {
+    if (part.type === "image") {
       const url = toHttpUrl((part as ImagePart).image);
       if (url) {
         const found = downloaded[url.toString()];
@@ -130,7 +137,9 @@ export async function replaceFilePartUrlByBinaryDataInMessages(
   };
 
   return messages.map((message) => {
-    if (typeof message.content === 'string') return message;
+    if (typeof message.content === "string") {
+      return message;
+    }
     return {
       ...message,
       content: (

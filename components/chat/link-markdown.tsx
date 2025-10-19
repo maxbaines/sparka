@@ -1,11 +1,11 @@
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-interface LinkMarkdownProps {
+type LinkMarkdownProps = {
   href: string;
   children: React.ReactNode;
   className?: string;
-}
+};
 
 export function LinkMarkdown({
   href,
@@ -13,15 +13,15 @@ export function LinkMarkdown({
   className,
   ...props
 }: LinkMarkdownProps) {
-  const isExternal = href.startsWith('http') || href.startsWith('https');
+  const isExternal = href.startsWith("http") || href.startsWith("https");
 
   if (isExternal) {
     return (
       <a
+        className={cn("text-blue-500 hover:underline", className)}
         href={href}
-        target="_blank"
         rel="noopener noreferrer"
-        className={cn('text-blue-500 hover:underline', className)}
+        target="_blank"
         {...props}
       >
         {children}
@@ -31,9 +31,9 @@ export function LinkMarkdown({
 
   return (
     <Link
+      className={cn("text-blue-500 hover:underline", className)}
       // @ts-expect-error - href is a valid URL
       href={href}
-      className={cn('text-blue-500 hover:underline', className)}
       {...props}
     >
       {children}

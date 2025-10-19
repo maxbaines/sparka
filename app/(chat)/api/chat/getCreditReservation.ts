@@ -1,13 +1,13 @@
-import { reserveCreditsWithCleanup } from '@/lib/credits/credit-reservation';
+import { reserveCreditsWithCleanup } from "@/lib/credits/credit-reservation";
 
 export async function getCreditReservation(
   userId: string,
-  baseModelCost: number,
+  baseModelCost: number
 ) {
   const reservedCredits = await reserveCreditsWithCleanup(
     userId,
     baseModelCost,
-    1,
+    1
   );
 
   if (!reservedCredits.success) {

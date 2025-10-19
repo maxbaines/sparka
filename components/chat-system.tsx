@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
-import { Chat } from '@/components/chat';
-import { DataStreamHandler } from '@/components/data-stream-handler';
-import { ChatSync } from '@/components/chat-sync';
-import { ChatInputProvider } from '@/providers/chat-input-provider';
-import { ArtifactProvider } from '@/hooks/use-artifact';
-import type { UiToolName, ChatMessage } from '@/lib/ai/types';
-import { ChatStoreProvider } from '@/lib/stores/chat-store-context';
-import { MessageTreeProvider } from '@/providers/message-tree-provider';
-import { DataStreamProvider } from '@/components/data-stream-provider';
-import type { AppModelId } from '@/lib/ai/app-models';
+import { memo } from "react";
+import { Chat } from "@/components/chat";
+import { ChatSync } from "@/components/chat-sync";
+import { DataStreamHandler } from "@/components/data-stream-handler";
+import { DataStreamProvider } from "@/components/data-stream-provider";
+import { ArtifactProvider } from "@/hooks/use-artifact";
+import type { AppModelId } from "@/lib/ai/app-models";
+import type { ChatMessage, UiToolName } from "@/lib/ai/types";
+import { ChatStoreProvider } from "@/lib/stores/chat-store-context";
+import { ChatInputProvider } from "@/providers/chat-input-provider";
+import { MessageTreeProvider } from "@/providers/message-tree-provider";
 
 export const ChatSystem = memo(function ChatSystem({
   id,
@@ -20,7 +20,7 @@ export const ChatSystem = memo(function ChatSystem({
   overrideModelId,
 }: {
   id: string;
-  initialMessages: Array<ChatMessage>;
+  initialMessages: ChatMessage[];
   isReadonly: boolean;
   initialTool?: UiToolName | null;
   overrideModelId?: AppModelId;
@@ -34,24 +34,24 @@ export const ChatSystem = memo(function ChatSystem({
               <>
                 <ChatSync id={id} initialMessages={initialMessages} />
                 <Chat
-                  key={id}
                   id={id}
                   initialMessages={initialMessages}
                   isReadonly={isReadonly}
+                  key={id}
                 />
               </>
             ) : (
               <ChatInputProvider
-                localStorageEnabled={true}
                 initialTool={initialTool ?? null}
+                localStorageEnabled={true}
                 overrideModelId={overrideModelId}
               >
                 <ChatSync id={id} initialMessages={initialMessages} />
                 <Chat
-                  key={id}
                   id={id}
                   initialMessages={initialMessages}
                   isReadonly={isReadonly}
+                  key={id}
                 />
                 <DataStreamHandler id={id} />
               </ChatInputProvider>

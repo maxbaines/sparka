@@ -1,30 +1,30 @@
-import { ImageResponse } from '@vercel/og';
-import { allModels } from '@ai-models/vercel-gateway';
-import { getProviderIconUrl } from '../../../(models)/get-provider-icon-url';
-import { ModalitiesRow } from '@/lib/og/ModalitiesRow';
+import { allModels } from "@ai-models/vercel-gateway";
+import { ImageResponse } from "@vercel/og";
 import {
-  OG_SIZE,
-  OG_BACKGROUND_IMAGE,
-  getBaseUrl,
-  getAppIconUrl,
-  getCapabilityIcons,
-  getArrowRightUrl,
-  inputModalitiesOrder,
-  outputModalitiesOrder,
-  buildBulletItems,
-  capitalizeFirst,
-  truncate,
-  OG_SITE_NAME,
-} from '@/lib/og/shared';
-import {
-  OGContainer,
   OGCard,
+  OGContainer,
   OGFooter,
   OGIcon,
   OGTitle,
-} from '@/lib/og/components';
+} from "@/lib/og/components";
+import { ModalitiesRow } from "@/lib/og/ModalitiesRow";
+import {
+  buildBulletItems,
+  capitalizeFirst,
+  getAppIconUrl,
+  getArrowRightUrl,
+  getBaseUrl,
+  getCapabilityIcons,
+  inputModalitiesOrder,
+  OG_BACKGROUND_IMAGE,
+  OG_SITE_NAME,
+  OG_SIZE,
+  outputModalitiesOrder,
+  truncate,
+} from "@/lib/og/shared";
+import { getProviderIconUrl } from "../../../(models)/get-provider-icon-url";
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 const size = OG_SIZE;
 
@@ -32,8 +32,8 @@ const size = OG_SIZE;
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const modelId1 = url.searchParams.get('modelId1');
-  const modelId2 = url.searchParams.get('modelId2');
+  const modelId1 = url.searchParams.get("modelId1");
+  const modelId2 = url.searchParams.get("modelId2");
 
   if (!modelId1) {
     return new ImageResponse(
@@ -41,17 +41,17 @@ export async function GET(req: Request) {
         style={{
           width: size.width,
           height: size.height,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#0B1220',
-          color: 'white',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#0B1220",
+          color: "white",
           fontSize: 28,
         }}
       >
         Missing required query parameter: modelId1
       </div>,
-      { width: size.width, height: size.height },
+      { width: size.width, height: size.height }
     );
   }
 
@@ -63,21 +63,21 @@ export async function GET(req: Request) {
   // modelId1 is required, so no ecosystem summary branch
 
   const leftProvider = capitalizeFirst(
-    (left?.owned_by || (modelId1?.split('/')?.[0] ?? '')) as string,
+    (left?.owned_by || (modelId1?.split("/")?.[0] ?? "")) as string
   );
   const rightProvider = right
     ? capitalizeFirst(
-        (right?.owned_by || (modelId2?.split('/')?.[0] ?? '')) as string,
+        (right?.owned_by || (modelId2?.split("/")?.[0] ?? "")) as string
       )
-    : '';
+    : "";
   const leftTitle = truncate(
-    `${left?.name || modelId1?.split('/')?.[1] || ''}`.trim(),
-    30,
+    `${left?.name || modelId1?.split("/")?.[1] || ""}`.trim(),
+    30
   );
 
   const rightTitle = right
-    ? truncate(`${right?.name || modelId2?.split('/')?.[1] || ''}`.trim(), 30)
-    : 'Other Models';
+    ? truncate(`${right?.name || modelId2?.split("/")?.[1] || ""}`.trim(), 30)
+    : "Other Models";
   const baseUrl = getBaseUrl();
   const leftIcon = left ? getProviderIconUrl(left.owned_by, baseUrl) : null;
   const rightIcon = right ? getProviderIconUrl(right.owned_by, baseUrl) : null;
@@ -89,58 +89,58 @@ export async function GET(req: Request) {
     <OGContainer backgroundImage={OG_BACKGROUND_IMAGE}>
       <OGCard
         roundedTw="rounded-3xl"
-        style={{ position: 'relative', gap: '3rem' }}
+        style={{ position: "relative", gap: "3rem" }}
       >
         <div
+          style={{ display: "flex", gap: "2rem" }}
           tw="flex flex-1 justify-between"
-          style={{ display: 'flex', gap: '2rem' }}
         >
           <div
-            tw="flex-1 flex-col"
             style={{
-              display: 'flex',
-              gap: '1.5rem',
-              flexDirection: 'column',
-              width: '450px',
+              display: "flex",
+              gap: "1.5rem",
+              flexDirection: "column",
+              width: "450px",
             }}
+            tw="flex-1 flex-col"
           >
             <div
+              style={{ display: "flex", gap: "1.25rem" }}
               tw="flex items-center h-[105px] "
-              style={{ display: 'flex', gap: '1.25rem' }}
             >
               {leftIcon ? (
-                <OGIcon src={leftIcon} alt={`${leftProvider} logo`} size="sm" />
+                <OGIcon alt={`${leftProvider} logo`} size="sm" src={leftIcon} />
               ) : (
                 <div
+                  style={{ display: "flex" }}
                   tw="w-[84px] h-[84px] rounded-xl bg-white/10 flex items-center justify-center text-white/80 text-4xl font-bold"
-                  style={{ display: 'flex' }}
                 >
                   {leftProvider.slice(0, 1)}
                 </div>
               )}
-              <div tw="flex flex-col" style={{ display: 'flex' }}>
+              <div style={{ display: "flex" }} tw="flex flex-col">
                 <OGTitle
-                  text={leftTitle}
-                  threshold={20}
-                  smallTw="text-[40px]"
                   largeTw="text-[44px]"
                   maxWidthPx={350}
+                  smallTw="text-[40px]"
+                  text={leftTitle}
+                  threshold={20}
                 />
               </div>
             </div>
 
             <div
-              tw="flex flex-col text-2xl text-slate-300"
               style={{
-                display: 'flex',
-                gap: '.5rem',
-                alignItems: 'flex-start',
+                display: "flex",
+                gap: ".5rem",
+                alignItems: "flex-start",
               }}
+              tw="flex flex-col text-2xl text-slate-300"
             >
               {buildBulletItems(left).map((item, idx) => (
                 <span
                   key={`l-${item.label}-${idx}`}
-                  style={{ display: 'flex', gap: '.5rem' }}
+                  style={{ display: "flex", gap: ".5rem" }}
                 >
                   <span>{item.label}</span>
                   <span tw="text-white">{item.value}</span>
@@ -148,16 +148,16 @@ export async function GET(req: Request) {
               ))}
             </div>
 
-            <div tw="" style={{ display: 'flex' }}>
+            <div style={{ display: "flex" }} tw="">
               <ModalitiesRow
+                arrowRightUrl={arrowRight}
+                capabilityIcons={capabilityIcons}
                 inputKeys={inputModalitiesOrder.filter(
-                  (key) => left?.input?.[key],
+                  (key) => left?.input?.[key]
                 )}
                 outputKeys={outputModalitiesOrder.filter(
-                  (key) => left?.output?.[key],
+                  (key) => left?.output?.[key]
                 )}
-                capabilityIcons={capabilityIcons}
-                arrowRightUrl={arrowRight}
                 size="md"
               />
             </div>
@@ -165,74 +165,74 @@ export async function GET(req: Request) {
 
           <div
             style={{
-              width: '50px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              pointerEvents: 'none',
-              gap: '12px',
+              width: "50px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              pointerEvents: "none",
+              gap: "12px",
             }}
           >
             <div
               style={{
-                width: '1px',
-                height: '150px',
-                background: 'rgba(255,255,255,0.10)',
+                width: "1px",
+                height: "150px",
+                background: "rgba(255,255,255,0.10)",
               }}
             />
             <div
-              tw="text-[50px] font-bold text-slate-100"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '90px',
-                height: '90px',
-                borderRadius: '9999px',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "90px",
+                height: "90px",
+                borderRadius: "9999px",
                 // background: 'rgba(255,255,255,0.05)',
                 // border: '1px solid rgba(255,255,255,0.10)',
               }}
+              tw="text-[50px] font-bold text-slate-100"
             >
-              <div style={{ display: 'flex' }}>VS</div>
+              <div style={{ display: "flex" }}>VS</div>
             </div>
             <div
               style={{
-                width: '1px',
-                height: '150px',
-                background: 'rgba(255,255,255,0.10)',
+                width: "1px",
+                height: "150px",
+                background: "rgba(255,255,255,0.10)",
               }}
             />
           </div>
 
           {right ? (
             <div
+              style={{ display: "flex", gap: "1.5rem", width: "450px" }}
               tw="flex-1 flex flex-col items-end"
-              style={{ display: 'flex', gap: '1.5rem', width: '450px' }}
             >
               <div
+                style={{ display: "flex", gap: "1.25rem" }}
                 tw="flex items-center justify-end h-[105px]"
-                style={{ display: 'flex', gap: '1.25rem' }}
               >
-                <div tw="flex flex-col items-end" style={{ display: 'flex' }}>
+                <div style={{ display: "flex" }} tw="flex flex-col items-end">
                   <OGTitle
-                    text={rightTitle}
-                    threshold={20}
-                    smallTw="text-[40px]"
                     largeTw="text-[44px]"
                     maxWidthPx={350}
+                    smallTw="text-[40px]"
+                    text={rightTitle}
+                    threshold={20}
                   />
                 </div>
                 {rightIcon ? (
                   <OGIcon
-                    src={rightIcon}
                     alt={`${rightProvider} logo`}
                     size="sm"
+                    src={rightIcon}
                   />
                 ) : (
                   <div
+                    style={{ display: "flex" }}
                     tw="w-[84px] h-[84px] rounded-xl bg-white/10 flex items-center justify-center text-white/80 text-4xl font-bold"
-                    style={{ display: 'flex' }}
                   >
                     {rightProvider.slice(0, 1)}
                   </div>
@@ -240,17 +240,17 @@ export async function GET(req: Request) {
               </div>
 
               <div
-                tw="flex flex-col items-end text-2xl text-slate-300"
                 style={{
-                  display: 'flex',
-                  gap: '.5rem',
-                  alignItems: 'flex-end',
+                  display: "flex",
+                  gap: ".5rem",
+                  alignItems: "flex-end",
                 }}
+                tw="flex flex-col items-end text-2xl text-slate-300"
               >
                 {buildBulletItems(right).map((item, idx) => (
                   <span
                     key={`r-${item.label}-${idx}`}
-                    style={{ display: 'flex', gap: '.5rem' }}
+                    style={{ display: "flex", gap: ".5rem" }}
                   >
                     <span>{item.label}</span>
                     <span tw="text-white">{item.value}</span>
@@ -259,30 +259,30 @@ export async function GET(req: Request) {
               </div>
 
               <div
+                style={{ display: "flex" }}
                 tw="flex items-center justify-end"
-                style={{ display: 'flex' }}
               >
                 <ModalitiesRow
+                  arrowRightUrl={arrowRight}
+                  capabilityIcons={capabilityIcons}
                   inputKeys={inputModalitiesOrder.filter(
-                    (key) => right?.input?.[key],
+                    (key) => right?.input?.[key]
                   )}
                   outputKeys={outputModalitiesOrder.filter(
-                    (key) => right?.output?.[key],
+                    (key) => right?.output?.[key]
                   )}
-                  capabilityIcons={capabilityIcons}
-                  arrowRightUrl={arrowRight}
                   size="md"
                 />
               </div>
             </div>
           ) : (
             <div
+              style={{ display: "flex", width: "450px" }}
               tw="flex-1 flex items-center justify-center"
-              style={{ display: 'flex', width: '450px' }}
             >
               <div
+                style={{ display: "flex" }}
                 tw="text-[44px] leading-[1.1] font-bold text-white tracking-tight"
-                style={{ display: 'flex' }}
               >
                 {rightTitle}
               </div>
@@ -292,14 +292,14 @@ export async function GET(req: Request) {
 
         <OGFooter
           appIconUrl={appIcon}
-          siteName={OG_SITE_NAME}
           containerTw="mt-auto"
+          siteName={OG_SITE_NAME}
         />
       </OGCard>
     </OGContainer>,
     {
       width: size.width,
       height: size.height,
-    },
+    }
   );
 }

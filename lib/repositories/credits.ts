@@ -1,8 +1,7 @@
-import 'server-only';
-import { and, eq, gte, sql } from 'drizzle-orm';
-
-import { userCredit } from '../db/schema';
-import { db } from '../db/client';
+import "server-only";
+import { and, eq, gte, sql } from "drizzle-orm";
+import { db } from "../db/client";
+import { userCredit } from "../db/schema";
 
 async function ensureUserCreditRow(userId: string) {
   await db.insert(userCredit).values({ userId }).onConflictDoNothing();
@@ -30,7 +29,9 @@ export async function getUserCreditsInfo({ userId }: { userId: string }) {
       .where(eq(userCredit.userId, userId))
       .limit(1);
     userInfo = creditsRows[0];
-    if (!userInfo) return null;
+    if (!userInfo) {
+      return null;
+    }
   }
 
   return {
@@ -61,14 +62,14 @@ export async function reserveAvailableCredits({
   try {
     const userInfo = await getUserCreditsInfo({ userId });
     if (!userInfo) {
-      return { success: false, error: 'User credits not initialized' };
+      return { success: false, error: "User credits not initialized" };
     }
 
     const availableCredits = userInfo.availableCredits;
     const amountToReserve = Math.min(maxAmount, availableCredits);
 
     if (amountToReserve < minAmount) {
-      return { success: false, error: 'Insufficient credits' };
+      return { success: false, error: "Insufficient credits" };
     }
 
     const result = await db
@@ -81,9 +82,9 @@ export async function reserveAvailableCredits({
           eq(userCredit.userId, userId),
           gte(
             sql`${userCredit.credits} - ${userCredit.reservedCredits}`,
-            amountToReserve,
-          ),
-        ),
+            amountToReserve
+          )
+        )
       )
       .returning({
         credits: userCredit.credits,
@@ -91,7 +92,7 @@ export async function reserveAvailableCredits({
       });
 
     if (result.length === 0) {
-      return { success: false, error: 'Failed to reserve credits' };
+      return { success: false, error: "Failed to reserve credits" };
     }
 
     return {
@@ -99,8 +100,8 @@ export async function reserveAvailableCredits({
       reservedAmount: amountToReserve,
     };
   } catch (error) {
-    console.error('Failed to reserve available credits:', error);
-    return { success: false, error: 'Failed to reserve credits' };
+    console.error("Failed to reserve available credits:", error);
+    return { success: false, error: "Failed to reserve credits" };
   }
 }
 
@@ -137,7 +138,7 @@ export async function releaseReservedCredits({
     .where(
       and(
         eq(userCredit.userId, userId),
-        gte(userCredit.reservedCredits, amount),
-      ),
+        gte(userCredit.reservedCredits, amount)
+      )
     );
 }

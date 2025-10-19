@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useRef, createContext, useContext } from 'react';
-import type { ChatMessage } from '@/lib/ai/types';
-import { ZustandChatState } from './zustand-chat-adapter';
-import { createChatStore } from './chat-store';
-export { ZustandChat } from './zustand-chat-adapter';
+import { createContext, useContext, useRef } from "react";
+import type { ChatMessage } from "@/lib/ai/types";
+import { createChatStore } from "./chat-store";
+import { ZustandChatState } from "./zustand-chat-adapter";
+
+export { ZustandChat } from "./zustand-chat-adapter";
 
 type ChatStoreApi = ReturnType<typeof createChatStore<ChatMessage>>;
 
@@ -15,7 +16,7 @@ export function ChatStoreProvider({
   initialMessages,
 }: {
   children: React.ReactNode;
-  initialMessages: Array<ChatMessage>;
+  initialMessages: ChatMessage[];
 }) {
   const storeRef = useRef<ChatStoreApi | null>(null);
   const chatStateRef = useRef<ZustandChatState<ChatMessage> | null>(null);
@@ -41,26 +42,29 @@ const ChatStateContext = createContext<
 
 export function useChatStateInstance() {
   const state = useContext(ChatStateContext);
-  if (!state)
+  if (!state) {
     throw new Error(
-      'useChatStateInstance must be used within ChatStateProvider',
+      "useChatStateInstance must be used within ChatStateProvider"
     );
+  }
   return state;
 }
 
 export function useChatStoreContext() {
   const store = useContext(ChatStoreContext);
-  if (!store)
+  if (!store) {
     throw new Error(
-      'useChatStoreContext must be used within ChatStoreProvider',
+      "useChatStoreContext must be used within ChatStoreProvider"
     );
+  }
   return store;
 }
 
 // Convenience alias expected by components: returns the store API from context
 export function useChatStoreApi() {
   const store = useContext(ChatStoreContext);
-  if (!store)
-    throw new Error('useChatStoreApi must be used within ChatStoreProvider');
+  if (!store) {
+    throw new Error("useChatStoreApi must be used within ChatStoreProvider");
+  }
   return store;
 }

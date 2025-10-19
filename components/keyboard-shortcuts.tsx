@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSidebar } from '@/components/ui/sidebar';
-import { useChatId } from '@/providers/chat-id-provider';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSidebar } from "@/components/ui/sidebar";
+import { useChatId } from "@/providers/chat-id-provider";
 
 export function KeyboardShortcuts() {
   const router = useRouter();
@@ -13,16 +13,16 @@ export function KeyboardShortcuts() {
   // Keyboard shortcut for new chat
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.shiftKey && e.key === 'O' && (e.metaKey || e.ctrlKey)) {
+      if (e.shiftKey && e.key === "O" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpenMobile(false);
         refreshChatID();
-        router.push('/');
+        router.push("/");
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [setOpenMobile, refreshChatID, router]);
 
   return null; // This component only handles keyboard events
@@ -30,8 +30,10 @@ export function KeyboardShortcuts() {
 
 // Helper function to get platform-specific shortcut text
 export function getNewChatShortcutText() {
-  if (typeof window === 'undefined') return 'Ctrl+Shift+O';
+  if (typeof window === "undefined") {
+    return "Ctrl+Shift+O";
+  }
 
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-  return isMac ? 'Cmd+Shift+O' : 'Ctrl+Shift+O';
+  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+  return isMac ? "Cmd+Shift+O" : "Ctrl+Shift+O";
 }

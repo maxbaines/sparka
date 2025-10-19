@@ -1,18 +1,16 @@
-'use client';
+"use client";
 
-import type { ChatMessage } from '@/lib/ai/types';
-import type { UiToolName } from '@/lib/ai/types';
-import { useChatStoreApi } from '@/lib/stores/chat-store-context';
-import { useChatInput } from '@/providers/chat-input-provider';
-import { generateUUID } from '@/lib/utils';
-import { useCallback } from 'react';
-import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon } from "lucide-react";
+import { useCallback } from "react";
+import type { ChatMessage, UiToolName } from "@/lib/ai/types";
+import { useChatStoreApi } from "@/lib/stores/chat-store-context";
 import {
   useMessagePartByPartIdx,
   useMessagePartTypesById,
-} from '@/lib/stores/hooks-message-parts';
+} from "@/lib/stores/hooks-message-parts";
+import { cn, generateUUID } from "@/lib/utils";
+import { useChatInput } from "@/providers/chat-input-provider";
+import { Button } from "./ui/button";
 
 export function FollowUpSuggestions({
   suggestions,
@@ -27,16 +25,18 @@ export function FollowUpSuggestions({
   const handleClick = useCallback(
     (suggestion: string) => {
       const sendMessage = storeApi.getState().currentChatHelpers?.sendMessage;
-      if (!sendMessage) return;
+      if (!sendMessage) {
+        return;
+      }
 
       const parentMessageId = storeApi.getState().getLastMessageId();
 
       const message: ChatMessage = {
         id: generateUUID(),
-        role: 'user',
+        role: "user",
         parts: [
           {
-            type: 'text',
+            type: "text",
             text: suggestion,
           },
         ],
@@ -50,23 +50,25 @@ export function FollowUpSuggestions({
 
       sendMessage(message);
     },
-    [storeApi, selectedModelId, selectedTool],
+    [storeApi, selectedModelId, selectedTool]
   );
 
-  if (!suggestions || suggestions.length === 0) return null;
+  if (!suggestions || suggestions.length === 0) {
+    return null;
+  }
 
   return (
-    <div className={cn('flex flex-col gap-2 mt-2 mb-2', className)}>
-      <div className="text-xs font-medium text-muted-foreground">Related</div>
+    <div className={cn("mt-2 mb-2 flex flex-col gap-2", className)}>
+      <div className="font-medium text-muted-foreground text-xs">Related</div>
       <div className="flex flex-wrap items-center gap-1.5">
         {suggestions.map((s) => (
           <Button
+            className="h-7 rounded-full bg-muted/40 px-2.5 text-muted-foreground text-xs shadow-none hover:bg-muted hover:text-foreground"
             key={s}
+            onClick={() => handleClick(s)}
+            size="sm"
             type="button"
             variant="ghost"
-            size="sm"
-            onClick={() => handleClick(s)}
-            className="rounded-full h-7 px-2.5 text-xs bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground shadow-none"
           >
             {s}
             <PlusIcon className="size-3 opacity-70" />
@@ -80,8 +82,10 @@ export function FollowUpSuggestions({
 export function FollowUpSuggestionsParts({ messageId }: { messageId: string }) {
   const types = useMessagePartTypesById(messageId);
 
-  const partIdx = types.findIndex((t) => t === 'data-followupSuggestions');
-  if (partIdx === -1) return null;
+  const partIdx = types.indexOf("data-followupSuggestions");
+  if (partIdx === -1) {
+    return null;
+  }
   return <FollowUpSuggestionsPart messageId={messageId} partIdx={partIdx} />;
 }
 
@@ -95,7 +99,7 @@ function FollowUpSuggestionsPart({
   const part = useMessagePartByPartIdx(
     messageId,
     partIdx,
-    'data-followupSuggestions',
+    "data-followupSuggestions"
   );
   const { data } = part;
 

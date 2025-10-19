@@ -1,11 +1,11 @@
-import { z } from 'zod';
-import { tool } from 'ai';
+import { tool } from "ai";
+import { z } from "zod";
+import { createModuleLogger } from "../../logger";
+import type { StreamWriter } from "../types";
 import {
-  multiQueryWebSearchStep,
   type MultiQuerySearchOptions,
-} from './steps/multi-query-web-search';
-import type { StreamWriter } from '../types';
-import { createModuleLogger } from '../../logger';
+  multiQueryWebSearchStep,
+} from "./steps/multi-query-web-search";
 
 const DEFAULT_MAX_RESULTS = 5;
 
@@ -21,9 +21,9 @@ const searchQueriesSchema = z
         .max(10)
         .nullable()
         .describe(
-          `Maximum number of results for this query. Defaults to ${DEFAULT_MAX_RESULTS}.`,
+          `Maximum number of results for this query. Defaults to ${DEFAULT_MAX_RESULTS}.`
         ),
-    }),
+    })
   )
   .max(MAX_SEARCH_QUERIES)
   .describe(`Array of search queries. Maximum ${MAX_SEARCH_QUERIES} queries.`);
@@ -44,18 +44,18 @@ async function executeMultiQuerySearch({
   title: string;
   completeTitle: string;
 }) {
-  const log = createModuleLogger('tools/web-search');
+  const log = createModuleLogger("tools/web-search");
   log.debug(
     { queriesCount: search_queries.length, options },
-    'executeMultiQuerySearch start',
+    "executeMultiQuerySearch start"
   );
   if (writeTopLevelUpdates) {
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       data: {
         title,
         timestamp: Date.now(),
-        type: 'started',
+        type: "started",
       },
     });
   }
@@ -71,35 +71,35 @@ async function executeMultiQuerySearch({
   if (error) {
     log.error(
       { error, queriesCount: search_queries.length },
-      'multiQueryWebSearchStep returned error',
+      "multiQueryWebSearchStep returned error"
     );
   }
 
   completedSteps++;
   if (writeTopLevelUpdates) {
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       data: {
         title: completeTitle,
         timestamp: Date.now(),
-        type: 'completed',
+        type: "completed",
       },
     });
   }
   log.debug(
     { completedSteps, totalSteps, resultGroups: searchResults.length },
-    'executeMultiQuerySearch complete',
+    "executeMultiQuerySearch complete"
   );
   return { searches: searchResults };
 }
 
 export const QueryCompletionSchema = z.object({
-  type: z.literal('query_completion'),
+  type: z.literal("query_completion"),
   data: z.object({
     query: z.string(),
     index: z.number(),
     total: z.number(),
-    status: z.literal('completed'),
+    status: z.literal("completed"),
     resultsCount: z.number(),
     imagesCount: z.number(),
   }),
@@ -123,16 +123,16 @@ Avoid:
     inputSchema: z.object({
       search_queries: searchQueriesSchema,
       topics: z
-        .array(z.enum(['general', 'news']))
-        .describe('Array of topic types to search for.')
+        .array(z.enum(["general", "news"]))
+        .describe("Array of topic types to search for.")
         .nullable(),
       searchDepth: z
-        .enum(['basic', 'advanced'])
+        .enum(["basic", "advanced"])
         .describe('Search depth to use. Defaults to "basic".')
         .nullable(),
       exclude_domains: z
         .array(z.string())
-        .describe('A list of domains to exclude from all search results.')
+        .describe("A list of domains to exclude from all search results.")
         .nullable(),
     }),
     execute: async ({
@@ -142,11 +142,11 @@ Avoid:
       exclude_domains,
     }: {
       search_queries: { query: string; maxResults: number | null }[];
-      topics: ('general' | 'news')[] | null;
-      searchDepth: 'basic' | 'advanced' | null;
+      topics: ("general" | "news")[] | null;
+      searchDepth: "basic" | "advanced" | null;
       exclude_domains: string[] | null;
     }) => {
-      const log = createModuleLogger('tools/web-search');
+      const log = createModuleLogger("tools/web-search");
       log.debug(
         {
           queriesCount: search_queries.length,
@@ -154,11 +154,11 @@ Avoid:
           searchDepth,
           exclude_domains,
         },
-        'tavilyWebSearch.execute',
+        "tavilyWebSearch.execute"
       );
       // Handle nullable arrays with defaults
-      const safeTopics = topics ?? ['general'];
-      const _safeSearchDepth = searchDepth ?? 'basic';
+      const safeTopics = topics ?? ["general"];
+      const _safeSearchDepth = searchDepth ?? "basic";
       const safeExcludeDomains = exclude_domains ?? [];
 
       return executeMultiQuerySearch({
@@ -168,15 +168,15 @@ Avoid:
         })),
         options: {
           baseProviderOptions: {
-            provider: 'firecrawl',
+            provider: "firecrawl",
           },
           topics: safeTopics,
           excludeDomains: safeExcludeDomains,
         },
         dataStream,
         writeTopLevelUpdates,
-        title: 'Searching',
-        completeTitle: 'Search complete',
+        title: "Searching",
+        completeTitle: "Search complete",
       });
     },
   });
@@ -205,10 +205,10 @@ Avoid:
     }: {
       search_queries: { query: string; maxResults: number | null }[];
     }) => {
-      const log = createModuleLogger('tools/web-search');
+      const log = createModuleLogger("tools/web-search");
       log.debug(
         { queriesCount: search_queries.length },
-        'firecrawlWebSearch.execute',
+        "firecrawlWebSearch.execute"
       );
       return executeMultiQuerySearch({
         search_queries: search_queries.map((query) => ({
@@ -217,13 +217,13 @@ Avoid:
         })),
         options: {
           baseProviderOptions: {
-            provider: 'firecrawl',
+            provider: "firecrawl",
           },
         },
         dataStream,
         writeTopLevelUpdates,
-        title: 'Searching with Firecrawl',
-        completeTitle: 'Firecrawl search complete',
+        title: "Searching with Firecrawl",
+        completeTitle: "Firecrawl search complete",
       });
     },
   });

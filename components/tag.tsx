@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export function Tag({
   children,
@@ -13,8 +13,8 @@ export function Tag({
   return (
     <span
       className={cn(
-        'text-xs text-muted-foreground bg-muted px-1.5 py-1 rounded flex gap-1',
-        className,
+        "flex gap-1 rounded bg-muted px-1.5 py-1 text-muted-foreground text-xs",
+        className
       )}
     >
       {children}

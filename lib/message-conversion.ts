@@ -1,7 +1,7 @@
-import type { UIChat } from '@/lib/types/uiChat';
-import type { DBMessage, Chat } from '@/lib/db/schema';
-import type { ChatMessage, UiToolName } from './ai/types';
-import type { ModelId } from '../packages/models';
+import type { Chat, DBMessage } from "@/lib/db/schema";
+import type { UIChat } from "@/lib/types/uiChat";
+import type { ModelId } from "../packages/models";
+import type { ChatMessage, UiToolName } from "./ai/types";
 
 // Helper functions for type conversion
 export function dbChatToUIChat(chat: Chat): UIChat {
@@ -19,13 +19,13 @@ export function dbChatToUIChat(chat: Chat): UIChat {
 export function dbMessageToChatMessage(message: DBMessage): ChatMessage {
   return {
     id: message.id,
-    parts: message.parts as ChatMessage['parts'],
-    role: message.role as ChatMessage['role'],
+    parts: message.parts as ChatMessage["parts"],
+    role: message.role as ChatMessage["role"],
     metadata: {
       createdAt: message.createdAt,
       isPartial: message.isPartial,
       parentMessageId: message.parentMessageId,
-      selectedModel: (message.selectedModel as ModelId) || ('' as ModelId),
+      selectedModel: (message.selectedModel as ModelId) || ("" as ModelId),
       selectedTool: (message.selectedTool as UiToolName | null) || undefined,
     },
   };
@@ -33,24 +33,24 @@ export function dbMessageToChatMessage(message: DBMessage): ChatMessage {
 
 export function chatMessageToDbMessage(
   message: ChatMessage,
-  chatId: string,
+  chatId: string
 ): DBMessage {
   const parentMessageId = message.metadata.parentMessageId || null;
-  const isPartial = message.metadata.isPartial || false;
+  const isPartial = message.metadata.isPartial ?? false;
   const selectedModel = message.metadata.selectedModel;
 
   return {
     id: message.id,
-    chatId: chatId,
+    chatId,
     role: message.role,
     parts: message.parts,
     attachments: [],
     lastContext: message.metadata?.usage || null,
     createdAt: message.metadata?.createdAt || new Date(),
     annotations: [],
-    isPartial: isPartial,
-    parentMessageId: parentMessageId,
-    selectedModel: selectedModel,
+    isPartial,
+    parentMessageId,
+    selectedModel,
     selectedTool: message.metadata?.selectedTool || null,
   };
 }

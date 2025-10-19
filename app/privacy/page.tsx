@@ -1,18 +1,18 @@
-import { siteConfig } from '@/lib/config';
+import { siteConfig } from "@/lib/config";
 
 export default function PrivacyPage() {
   const _currencySymbolMap: Record<string, string> = {
-    USD: '$',
-    EUR: '€',
-    GBP: '£',
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
   };
 
   return (
-    <main className="container mx-auto max-w-3xl py-10 prose dark:prose-invert">
+    <main className="prose dark:prose-invert container mx-auto max-w-3xl py-10">
       <h1>{siteConfig.policies.privacy.title}</h1>
       {siteConfig.policies.privacy.lastUpdated ? (
         <p>
-          <strong>Last updated:</strong>{' '}
+          <strong>Last updated:</strong>{" "}
           {siteConfig.policies.privacy.lastUpdated}
         </p>
       ) : null}
@@ -54,11 +54,11 @@ export default function PrivacyPage() {
         </li>
       </ul>
       <p>
-        <strong>Important Note on Payment Data</strong>:{' '}
+        <strong>Important Note on Payment Data</strong>:{" "}
         {siteConfig.organization.name} does not collect, store, or process any
         payment card details, bank information, or other sensitive payment data.
         All payment information is handled directly by our payment processors (
-        {siteConfig.services.paymentProcessors.join(', ')}) and is subject to
+        {siteConfig.services.paymentProcessors.join(", ")}) and is subject to
         their respective privacy policies and security standards.
       </p>
 
@@ -84,12 +84,12 @@ export default function PrivacyPage() {
         </li>
         <li>
           <strong>AI Processing Partners</strong>: We utilize services from
-          companies including {siteConfig.services.aiProviders.join(', ')} to
+          companies including {siteConfig.services.aiProviders.join(", ")} to
           process queries and provide results.
         </li>
         <li>
-          <strong>Payment Processors</strong>: We use{' '}
-          {siteConfig.services.paymentProcessors.join(', ')} to process payments
+          <strong>Payment Processors</strong>: We use{" "}
+          {siteConfig.services.paymentProcessors.join(", ")} to process payments
           and manage subscriptions. These providers handle all payment data
           directly and have their own privacy policies governing payment
           information.

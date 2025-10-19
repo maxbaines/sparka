@@ -1,5 +1,5 @@
-import { TextShimmerLoader } from '@/components/prompt-kit/loader';
-import { cn } from '@/lib/utils';
+import { TextShimmerLoader } from "@/components/prompt-kit/loader";
+import { cn } from "@/lib/utils";
 
 export const UpdateTitle = ({
   title,
@@ -13,11 +13,11 @@ export const UpdateTitle = ({
   if (isRunning) {
     return (
       <TextShimmerLoader
+        className={cn("font-medium text-sm", className)}
         text={title}
-        className={cn('text-sm font-medium', className)}
       />
     );
   }
 
-  return <h3 className={cn('text-sm font-medium', className)}>{title}</h3>;
+  return <h3 className={cn("font-medium text-sm", className)}>{title}</h3>;
 };

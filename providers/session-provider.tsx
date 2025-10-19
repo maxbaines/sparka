@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useMemo } from 'react';
-import type { Session } from '@/lib/auth';
-import authClient from '@/lib/auth-client';
+import { createContext, useContext, useMemo } from "react";
+import type { Session } from "@/lib/auth";
+import authClient from "@/lib/auth-client";
 
 type SessionContextValue = {
   data: Session | undefined;
@@ -10,7 +10,7 @@ type SessionContextValue = {
 };
 
 const SessionContext = createContext<SessionContextValue | undefined>(
-  undefined,
+  undefined
 );
 
 export function SessionProvider({
@@ -39,7 +39,7 @@ export function SessionProvider({
 export function useSession(): SessionContextValue {
   const ctx = useContext(SessionContext);
   if (!ctx) {
-    throw new Error('useSession must be used within a SessionProvider');
+    throw new Error("useSession must be used within a SessionProvider");
   }
   return ctx;
 }

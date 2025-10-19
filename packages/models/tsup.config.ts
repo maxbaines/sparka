@@ -1,12 +1,12 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ['./index.ts'],
+  entry: ["./index.ts"],
   dts: true,
-  format: ['esm', 'cjs'],
-  outDir: 'dist',
+  format: ["esm", "cjs"],
+  outDir: "dist",
   sourcemap: true,
   clean: true,
   splitting: false,
-  external: ['@ai-sdk/openai', 'zod'],
+  external: ["@ai-sdk/openai", "zod"],
 });

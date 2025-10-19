@@ -1,16 +1,16 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { getAllAttachmentUrls } from '@/lib/db/queries';
-import { listFiles, deleteFilesByUrls } from '@/lib/blob';
-import { env } from '@/lib/env';
+import { type NextRequest, NextResponse } from "next/server";
+import { deleteFilesByUrls, listFiles } from "@/lib/blob";
+import { getAllAttachmentUrls } from "@/lib/db/queries";
+import { env } from "@/lib/env";
 
 const ORPHANED_ATTACHMENTS_RETENTION_TIME = 4 * 60 * 60 * 1000; // 4 hours
 
 export async function GET(request: NextRequest) {
   try {
     // Verify this is being called by Vercel cron
-    const authHeader = request.headers.get('authorization');
+    const authHeader = request.headers.get("authorization");
     if (authHeader !== `Bearer ${env.CRON_SECRET}`) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const results = {
@@ -24,13 +24,13 @@ export async function GET(request: NextRequest) {
       results,
     });
   } catch (error) {
-    console.error('Cleanup cron job failed:', error);
+    console.error("Cleanup cron job failed:", error);
     return NextResponse.json(
       {
-        error: 'Cleanup failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Cleanup failed",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -45,7 +45,7 @@ async function cleanupOrphanedAttachments() {
 
     // Find orphaned blobs (older than 1 hour and not referenced in any message)
     const oneHourAgo = new Date(
-      Date.now() - ORPHANED_ATTACHMENTS_RETENTION_TIME,
+      Date.now() - ORPHANED_ATTACHMENTS_RETENTION_TIME
     );
     const orphanedUrls: string[] = [];
 
@@ -70,7 +70,7 @@ async function cleanupOrphanedAttachments() {
       deletedUrls: orphanedUrls,
     };
   } catch (error) {
-    console.error('Failed to cleanup orphaned attachments:', error);
+    console.error("Failed to cleanup orphaned attachments:", error);
     throw error;
   }
 }

@@ -1,10 +1,10 @@
 import {
-  getAppModelDefinition,
   type AppModelDefinition,
   type AppModelId,
-} from '../ai/app-models';
-import { toolsDefinitions } from '../ai/tools/tools-definitions';
-import type { ToolName } from '../ai/types';
+  getAppModelDefinition,
+} from "../ai/app-models";
+import { toolsDefinitions } from "../ai/tools/tools-definitions";
+import type { ToolName } from "../ai/types";
 
 // Credit costs for different operations (in credits)
 export const CREDIT_COSTS = {
@@ -37,7 +37,7 @@ export const ANONYMOUS_DAILY_LIMITS = {
 
 export function filterAffordableTools(
   tools: ToolName[],
-  toolBudget: number,
+  toolBudget: number
 ): ToolName[] {
   const affordableTools = tools.filter((toolName) => {
     const toolCost = toolsDefinitions[toolName].cost;
@@ -48,9 +48,10 @@ export function filterAffordableTools(
 }
 
 export function getMaxToolCost(tools: ToolName[]): number {
-  return tools.reduce((max, toolName) => {
-    return Math.max(max, toolsDefinitions[toolName].cost);
-  }, 0);
+  return tools.reduce(
+    (max, toolName) => Math.max(max, toolsDefinitions[toolName].cost),
+    0
+  );
 }
 
 export function getBaseModelCostByModelId(modelId: AppModelId) {
@@ -66,8 +67,8 @@ export function getBaseModelCost(model: AppModelDefinition) {
   const { input, output } = model.pricing;
 
   // Convert from string to number and scale to per million tokens
-  const inputCostPerMTok = Number.parseFloat(input) * 1000000;
-  const outputCostPerMTok = Number.parseFloat(output) * 1000000;
+  const inputCostPerMTok = Number.parseFloat(input) * 1_000_000;
+  const outputCostPerMTok = Number.parseFloat(output) * 1_000_000;
 
   // Formula: Weighted average assuming typical 1:3 input:output ratio
   // This gives more weight to output since models typically generate more output

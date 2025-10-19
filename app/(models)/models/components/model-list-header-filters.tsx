@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { SearchInput } from '@/app/(models)/models/search-input';
-import { SortSelect } from '@/app/(models)/models/sort-select';
-import { FilterSheet } from '@/app/(models)/models/filter-sheet';
-import { RotateCcw } from 'lucide-react';
-import { useModels } from '@/app/(models)/models/models-store-context';
+import { RotateCcw } from "lucide-react";
+import { FilterSheet } from "@/app/(models)/models/filter-sheet";
+import { useModels } from "@/app/(models)/models/models-store-context";
+import { SearchInput } from "@/app/(models)/models/search-input";
+import { SortSelect } from "@/app/(models)/models/sort-select";
+import { Button } from "@/components/ui/button";
 
 export function ModelListHeaderFilters() {
   return (
@@ -26,10 +26,10 @@ export function ModelListHeaderFilters() {
       </div>
 
       {/* Controls - desktop */}
-      <div className="hidden sm:flex items-center justify-between gap-3">
+      <div className="hidden items-center justify-between gap-3 sm:flex">
         {/* Filters button hidden on desktop because filters are visible elsewhere */}
-        <div className="flex items-center gap-2  justify-between w-full">
-          <div className="flex gap-2 items-center w-full">
+        <div className="flex w-full items-center justify-between gap-2">
+          <div className="flex w-full items-center gap-2">
             <ConnectedSearchInput />
             <ConnectedSortSelect />
           </div>
@@ -46,9 +46,9 @@ function ConnectedSearchInput() {
   const setValue = useModels((s) => s.setSearchQuery);
   return (
     <SearchInput
-      value={value}
       onChange={setValue}
-      onClear={() => setValue('')}
+      onClear={() => setValue("")}
+      value={value}
     />
   );
 }
@@ -56,15 +56,17 @@ function ConnectedSearchInput() {
 function ConnectedSortSelect() {
   const value = useModels((s) => s.sortBy);
   const setValue = useModels((s) => s.setSortBy);
-  return <SortSelect value={value} onChangeAction={setValue} />;
+  return <SortSelect onChangeAction={setValue} value={value} />;
 }
 
 function ResetFiltersButton() {
   const hasActive = useModels((s) => s.hasActiveFilters());
   const reset = useModels((s) => s.resetFiltersAndSearch);
-  if (!hasActive) return null;
+  if (!hasActive) {
+    return null;
+  }
   return (
-    <Button variant="ghost" className="hidden sm:inline-flex" onClick={reset}>
+    <Button className="hidden sm:inline-flex" onClick={reset} variant="ghost">
       <RotateCcw className="mr-2 h-4 w-4" /> Reset Filters
     </Button>
   );

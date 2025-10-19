@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import type React from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-interface ImageModalProps {
+type ImageModalProps = {
   isOpen: boolean;
   onClose: () => void;
   imageUrl: string;
   imageName?: string;
-}
+};
 
 export function ImageModal({
   isOpen,
@@ -17,14 +17,14 @@ export function ImageModal({
   imageName,
 }: ImageModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog onOpenChange={onClose} open={isOpen}>
       <DialogContent>
         {/* biome-ignore lint/performance/noImgElement: Next/Image not desired for modal preview */}
         <img
-          src={imageUrl || undefined}
-          alt={imageName ?? 'Expanded image'}
-          className="max-w-full max-h-[90vh] object-contain rounded-lg"
+          alt={imageName ?? "Expanded image"}
+          className="max-h-[90vh] max-w-full rounded-lg object-contain"
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          src={imageUrl || undefined}
         />
       </DialogContent>
     </Dialog>

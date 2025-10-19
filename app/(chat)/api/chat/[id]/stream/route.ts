@@ -1,16 +1,16 @@
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import { getChatById, getAllMessagesByChatId } from '@/lib/db/queries';
-import type { Chat } from '@/lib/db/schema';
-import { ChatSDKError } from '@/lib/ai/errors';
-import type { ChatMessage } from '@/lib/ai/types';
-import { createUIMessageStream, JsonToSseTransformStream } from 'ai';
-import { getRedisPublisher, getStreamContext } from '../../route';
-import { differenceInSeconds } from 'date-fns';
+import { createUIMessageStream, JsonToSseTransformStream } from "ai";
+import { differenceInSeconds } from "date-fns";
+import { headers } from "next/headers";
+import { ChatSDKError } from "@/lib/ai/errors";
+import type { ChatMessage } from "@/lib/ai/types";
+import { auth } from "@/lib/auth";
+import { getAllMessagesByChatId, getChatById } from "@/lib/db/queries";
+import type { Chat } from "@/lib/db/schema";
+import { getRedisPublisher, getStreamContext } from "../../route";
 
 export async function GET(
   _: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: chatId } = await params;
 
@@ -22,7 +22,7 @@ export async function GET(
   }
 
   if (!chatId) {
-    return new ChatSDKError('bad_request:api').toResponse();
+    return new ChatSDKError("bad_request:api").toResponse();
   }
 
   const session = await auth.api.getSession({ headers: await headers() });
@@ -36,17 +36,15 @@ export async function GET(
     const chat = await getChatById({ id: chatId });
 
     if (!chat) {
-      return new ChatSDKError('not_found:chat').toResponse();
+      return new ChatSDKError("not_found:chat").toResponse();
     }
 
     // If chat is not public, require authentication and ownership
-    if (chat.visibility !== 'public') {
-      if (chat.userId !== userId) {
-        console.log(
-          'RESPONSE > GET /api/chat: Unauthorized - chat ownership mismatch',
-        );
-        return new ChatSDKError('forbidden:chat').toResponse();
-      }
+    if (chat.visibility !== "public" && chat.userId !== userId) {
+      console.log(
+        "RESPONSE > GET /api/chat: Unauthorized - chat ownership mismatch"
+      );
+      return new ChatSDKError("forbidden:chat").toResponse();
     }
   }
 
@@ -63,20 +61,20 @@ export async function GET(
     const keys = await redisPublisher.keys(keyPattern);
     streamIds = keys
       .map((key: string) => {
-        const parts = key.split(':');
-        return parts[parts.length - 1] || '';
+        const parts = key.split(":");
+        return parts.at(-1) || "";
       })
       .filter(Boolean);
   }
 
   if (!streamIds.length) {
-    return new ChatSDKError('not_found:stream').toResponse();
+    return new ChatSDKError("not_found:stream").toResponse();
   }
 
   const recentStreamId = streamIds.at(-1);
 
   if (!recentStreamId) {
-    return new ChatSDKError('not_found:stream').toResponse();
+    return new ChatSDKError("not_found:stream").toResponse();
   }
 
   const emptyDataStream = createUIMessageStream<ChatMessage>({
@@ -84,7 +82,7 @@ export async function GET(
   });
 
   const stream = await streamContext.resumableStream(recentStreamId, () =>
-    emptyDataStream.pipeThrough(new JsonToSseTransformStream()),
+    emptyDataStream.pipeThrough(new JsonToSseTransformStream())
   );
 
   /*
@@ -99,7 +97,7 @@ export async function GET(
       return new Response(emptyDataStream, { status: 200 });
     }
 
-    if (mostRecentMessage.role !== 'assistant') {
+    if (mostRecentMessage.role !== "assistant") {
       return new Response(emptyDataStream, { status: 200 });
     }
 
@@ -112,7 +110,7 @@ export async function GET(
     const restoredStream = createUIMessageStream<ChatMessage>({
       execute: ({ writer }) => {
         writer.write({
-          type: 'data-appendMessage',
+          type: "data-appendMessage",
           data: JSON.stringify(mostRecentMessage),
           transient: true,
         });
@@ -121,7 +119,7 @@ export async function GET(
 
     return new Response(
       restoredStream.pipeThrough(new JsonToSseTransformStream()),
-      { status: 200 },
+      { status: 200 }
     );
   }
 
