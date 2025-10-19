@@ -157,7 +157,7 @@ function ReadingLevelSelector({
     'Graduate',
   ];
 
-  const { selectedModelId: _selectedModelId } = useChatInput();
+  const { selectedModelId } = useChatInput();
 
   const y = useMotionValue(-40 * 2);
   const dragConstraints = 5 * 40 + 2;
@@ -332,8 +332,6 @@ function PureToolbar({
 
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  const { selectedModelId: _selectedModelId2 } = useChatInput();
 
   useOnClickOutside(toolbarRef, () => {
     setIsToolbarVisible(false);
