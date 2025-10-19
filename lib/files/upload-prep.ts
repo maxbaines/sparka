@@ -1,6 +1,6 @@
 // Utilities for client-side file preparation prior to upload
 
-import imageCompression from 'browser-image-compression';
+import imageCompression from "browser-image-compression";
 
 export async function compressImageIfNeeded(
   file: File,
@@ -12,13 +12,19 @@ export async function compressImageIfNeeded(
     maxBytes: number;
     maxDimension: number;
     minQuality?: number;
-  },
+  }
 ): Promise<File> {
-  if (!file.type.startsWith('image/')) return file;
-  if (file.size <= maxBytes) return file;
+  if (!file.type.startsWith("image/")) {
+    return file;
+  }
+  if (file.size <= maxBytes) {
+    return file;
+  }
 
   // Only compress JPEG/PNG. Leave others unchanged.
-  if (!['image/jpeg', 'image/png'].includes(file.type)) return file;
+  if (!["image/jpeg", "image/png"].includes(file.type)) {
+    return file;
+  }
 
   const outputMime = file.type;
 
@@ -39,15 +45,17 @@ export async function compressImageIfNeeded(
             type: outputMime,
             lastModified: Date.now(),
           });
-    if (resultBlob.size >= file.size) return file;
+    if (resultBlob.size >= file.size) {
+      return file;
+    }
 
-    const base = file.name.replace(/\.[^.]+$/, '');
+    const base = file.name.replace(/\.[^.]+$/, "");
     const ext =
-      outputMime === 'image/jpeg'
-        ? 'jpg'
-        : outputMime === 'image/png'
-          ? 'png'
-          : (outputMime.split('/')[1] ?? 'jpg');
+      outputMime === "image/jpeg"
+        ? "jpg"
+        : outputMime === "image/png"
+          ? "png"
+          : (outputMime.split("/")[1] ?? "jpg");
     return new File([resultBlob], `${base}.${ext}`, {
       type: outputMime,
       lastModified: Date.now(),
@@ -62,7 +70,7 @@ export async function processFilesForUpload(
   options: {
     maxBytes: number;
     maxDimension: number;
-  },
+  }
 ): Promise<{
   processedImages: File[];
   pdfFiles: File[];
@@ -76,14 +84,14 @@ export async function processFilesForUpload(
   const maxBytes = options.maxBytes;
 
   for (const file of files) {
-    if (file.type.startsWith('image/')) {
+    if (file.type.startsWith("image/")) {
       const maybeCompressed = await compressImageIfNeeded(file, options);
       if (maybeCompressed.size > maxBytes) {
         stillOversized.push(file);
         continue;
       }
       processedImages.push(maybeCompressed);
-    } else if (file.type === 'application/pdf') {
+    } else if (file.type === "application/pdf") {
       if (file.size > maxBytes) {
         stillOversized.push(file);
         continue;

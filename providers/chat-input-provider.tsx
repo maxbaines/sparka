@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
 import React, {
   createContext,
-  useContext,
-  useState,
-  useCallback,
-  type ReactNode,
   type Dispatch,
+  type ReactNode,
   type SetStateAction,
+  useCallback,
+  useContext,
   useRef,
-} from 'react';
-import type { Attachment, UiToolName } from '@/lib/ai/types';
-import { useDefaultModel, useModelChange } from './default-model-provider';
-import { getAppModelDefinition } from '@/lib/ai/app-models';
-import type { LexicalChatInputRef } from '@/components/lexical-chat-input';
-import type { AppModelId } from '@/lib/ai/app-models';
+  useState,
+} from "react";
+import type { LexicalChatInputRef } from "@/components/lexical-chat-input";
+import type { AppModelId } from "@/lib/ai/app-models";
+import { getAppModelDefinition } from "@/lib/ai/app-models";
+import type { Attachment, UiToolName } from "@/lib/ai/types";
+import { useDefaultModel, useModelChange } from "./default-model-provider";
 
-interface ChatInputContextType {
+type ChatInputContextType = {
   editorRef: React.RefObject<LexicalChatInputRef>;
   selectedTool: UiToolName | null;
   setSelectedTool: Dispatch<SetStateAction<UiToolName | null>>;
-  attachments: Array<Attachment>;
-  setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
+  attachments: Attachment[];
+  setAttachments: Dispatch<SetStateAction<Attachment[]>>;
   selectedModelId: AppModelId;
   handleModelChange: (modelId: AppModelId) => Promise<void>;
   getInputValue: () => string;
@@ -29,24 +29,24 @@ interface ChatInputContextType {
   getInitialInput: () => string;
   isEmpty: boolean;
   handleSubmit: (submitFn: () => void, isEditMode?: boolean) => void;
-}
+};
 
 const ChatInputContext = createContext<ChatInputContextType | undefined>(
-  undefined,
+  undefined
 );
 
-interface ChatInputProviderProps {
+type ChatInputProviderProps = {
   children: ReactNode;
   initialInput?: string;
   initialTool?: UiToolName | null;
-  initialAttachments?: Array<Attachment>;
+  initialAttachments?: Attachment[];
   overrideModelId?: AppModelId; // For message editing where we want to use the original model
   localStorageEnabled?: boolean;
-}
+};
 
 export function ChatInputProvider({
   children,
-  initialInput = '',
+  initialInput = "",
   initialTool = null,
   initialAttachments = [],
   overrideModelId,
@@ -54,24 +54,28 @@ export function ChatInputProvider({
 }: ChatInputProviderProps) {
   // Helper functions for localStorage access without state
   const getLocalStorageInput = useCallback(() => {
-    if (!localStorageEnabled) return '';
+    if (!localStorageEnabled) {
+      return "";
+    }
     try {
-      return localStorage.getItem('input') || '';
+      return localStorage.getItem("input") || "";
     } catch {
-      return '';
+      return "";
     }
   }, [localStorageEnabled]);
 
   const setLocalStorageInput = useCallback(
     (value: string) => {
-      if (!localStorageEnabled) return;
+      if (!localStorageEnabled) {
+        return;
+      }
       try {
-        localStorage.setItem('input', value);
+        localStorage.setItem("input", value);
       } catch {
         // Silently fail if localStorage is not available
       }
     },
-    [localStorageEnabled],
+    [localStorageEnabled]
   );
 
   const defaultModel = useDefaultModel();
@@ -79,14 +83,14 @@ export function ChatInputProvider({
 
   // Initialize selectedModelId from override or default model
   const [selectedModelId, setSelectedModelId] = useState<AppModelId>(
-    overrideModelId || defaultModel,
+    overrideModelId || defaultModel
   );
 
   const [selectedTool, setSelectedTool] = useState<UiToolName | null>(
-    initialTool,
+    initialTool
   );
   const [attachments, setAttachments] =
-    useState<Array<Attachment>>(initialAttachments);
+    useState<Attachment[]>(initialAttachments);
 
   // Track if input is empty for reactive UI updates
   const [isEmpty, setIsEmpty] = useState<boolean>(() => {
@@ -99,7 +103,9 @@ export function ChatInputProvider({
 
   // Get the initial input value from localStorage if enabled and no initial input provided
   const getInitialInput = useCallback(() => {
-    if (!localStorageEnabled) return initialInput;
+    if (!localStorageEnabled) {
+      return initialInput;
+    }
     return initialInput || getLocalStorageInput();
   }, [initialInput, getLocalStorageInput, localStorageEnabled]);
 
@@ -114,7 +120,7 @@ export function ChatInputProvider({
         setSelectedTool(null);
       }
       // If switching to a reasoning model and deep research is selected, disable it
-      else if (hasReasoning && selectedTool === 'deepResearch') {
+      else if (hasReasoning && selectedTool === "deepResearch") {
         setSelectedTool(null);
       }
 
@@ -124,12 +130,12 @@ export function ChatInputProvider({
       // Update global default model (which handles cookie persistence)
       await changeModel(modelId);
     },
-    [selectedTool, setSelectedTool, changeModel],
+    [selectedTool, changeModel]
   );
 
   const clearInput = useCallback(() => {
     editorRef.current?.clear();
-    setLocalStorageInput('');
+    setLocalStorageInput("");
     setIsEmpty(true);
   }, [setLocalStorageInput]);
 
@@ -141,9 +147,10 @@ export function ChatInputProvider({
     setAttachments([]);
   }, []);
 
-  const getInputValue = useCallback(() => {
-    return editorRef.current?.getValue() || '';
-  }, []);
+  const getInputValue = useCallback(
+    () => editorRef.current?.getValue() || "",
+    []
+  );
 
   // Save to localStorage when input changes (will be called by the lexical editor)
   const handleInputChange = useCallback(
@@ -154,7 +161,7 @@ export function ChatInputProvider({
       // Update isEmpty state reactively
       setIsEmpty(value.trim().length === 0);
     },
-    [setLocalStorageInput, localStorageEnabled],
+    [setLocalStorageInput, localStorageEnabled]
   );
 
   // Unified submit handler that ensures consistent behavior for both Enter key and send button
@@ -172,11 +179,11 @@ export function ChatInputProvider({
       }
 
       // deepResearch stays active until the research process completes (handled via DataStreamHandler)
-      if (selectedTool !== 'deepResearch') {
+      if (selectedTool !== "deepResearch") {
         resetData();
       }
     },
-    [clearAttachments, clearInput, selectedTool, resetData],
+    [clearAttachments, clearInput, selectedTool, resetData]
   );
 
   return (
@@ -204,7 +211,7 @@ export function ChatInputProvider({
 export function useChatInput() {
   const context = useContext(ChatInputContext);
   if (context === undefined) {
-    throw new Error('useChatInput must be used within a ChatInputProvider');
+    throw new Error("useChatInput must be used within a ChatInputProvider");
   }
   return context;
 }

@@ -1,9 +1,9 @@
-import Exa from 'exa-js';
-import type { StreamWriter } from '../../types';
-import { env } from '@/lib/env';
+import Exa from "exa-js";
+import { env } from "@/lib/env";
+import type { StreamWriter } from "../../types";
 
 export type AcademicSearchResult = {
-  source: 'academic';
+  source: "academic";
   title: string;
   url: string;
   content: string;
@@ -33,39 +33,39 @@ export async function academicSearchStep({
     // Send running annotation
     if (annotate) {
       dataStream.write({
-        type: 'data-researchUpdate',
+        type: "data-researchUpdate",
         id: stepId,
         data: {
           title: `Searching for "${query}"`,
-          type: 'web',
-          status: 'running',
+          type: "web",
+          status: "running",
           queries: [query],
         },
       });
     }
     const academicResults = await exa.searchAndContents(query, {
-      type: 'auto',
+      type: "auto",
       numResults: maxResults,
-      category: 'research paper',
+      category: "research paper",
       summary: true,
     });
 
     const results = academicResults.results.map((r) => ({
-      source: 'academic' as const,
-      title: r.title || '',
-      url: r.url || '',
-      content: r.summary || '',
+      source: "academic" as const,
+      title: r.title || "",
+      url: r.url || "",
+      content: r.summary || "",
     }));
 
     // Send completed annotation
     if (annotate) {
       dataStream.write({
-        type: 'data-researchUpdate',
+        type: "data-researchUpdate",
         id: stepId,
         data: {
           title: `Searching for "${query}"`,
-          type: 'web',
-          status: 'completed',
+          type: "web",
+          status: "completed",
           queries: [query],
           results,
         },
@@ -75,17 +75,17 @@ export async function academicSearchStep({
     return { results };
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : 'Unknown error occurred';
+      error instanceof Error ? error.message : "Unknown error occurred";
 
     // Send error annotation
     if (annotate) {
       dataStream.write({
-        type: 'data-researchUpdate',
+        type: "data-researchUpdate",
         id: stepId,
         data: {
           title: `Searching for "${query}"`,
-          type: 'web',
-          status: 'completed',
+          type: "web",
+          status: "completed",
           queries: [query],
         },
       });

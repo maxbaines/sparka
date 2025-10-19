@@ -1,7 +1,7 @@
-import z from 'zod';
-import { tool } from 'ai';
-import CodeInterpreter from '@e2b/code-interpreter';
-import { env } from '@/lib/env';
+import CodeInterpreter from "@e2b/code-interpreter";
+import { tool } from "ai";
+import z from "zod";
+import { env } from "@/lib/env";
 
 export const codeInterpreter = tool({
   description: `Python-only sandbox for calculations, data analysis & simple visualisations.
@@ -18,15 +18,15 @@ Avoid:
 - Any non-Python language
 - Chart types other than line / scatter / bar`,
   inputSchema: z.object({
-    title: z.string().describe('The title of the code snippet.'),
+    title: z.string().describe("The title of the code snippet."),
     code: z
       .string()
       .describe(
-        'The Python code to execute. put the variables in the end of the code to print them. do not use the print function.',
+        "The Python code to execute. put the variables in the end of the code to print them. do not use the print function."
       ),
     icon: z
-      .enum(['stock', 'date', 'calculation', 'default'])
-      .describe('The icon to display for the code snippet.'),
+      .enum(["stock", "date", "calculation", "default"])
+      .describe("The icon to display for the code snippet."),
   }),
   execute: async ({
     code,
@@ -37,15 +37,15 @@ Avoid:
     title: string;
     icon: string;
   }) => {
-    console.log('Code:', code);
-    console.log('Title:', title);
-    console.log('Icon:', icon);
+    console.log("Code:", code);
+    console.log("Title:", title);
+    console.log("Icon:", icon);
 
     const sandbox = await CodeInterpreter.create(
-      env.SANDBOX_TEMPLATE_ID as string,
+      env.SANDBOX_TEMPLATE_ID as string
     );
     const execution = await sandbox.runCode(code);
-    let message = '';
+    let message = "";
 
     if (execution.results.length > 0) {
       for (const result of execution.results) {
@@ -59,16 +59,16 @@ Avoid:
 
     if (execution.logs.stdout.length > 0 || execution.logs.stderr.length > 0) {
       if (execution.logs.stdout.length > 0) {
-        message += `${execution.logs.stdout.join('\n')}\n`;
+        message += `${execution.logs.stdout.join("\n")}\n`;
       }
       if (execution.logs.stderr.length > 0) {
-        message += `${execution.logs.stderr.join('\n')}\n`;
+        message += `${execution.logs.stderr.join("\n")}\n`;
       }
     }
 
     if (execution.error) {
       message += `Error: ${execution.error}\n`;
-      console.log('Error: ', execution.error);
+      console.log("Error: ", execution.error);
     }
 
     console.log(execution.results);
@@ -80,7 +80,7 @@ Avoid:
 
     return {
       message: message.trim(),
-      chart: execution.results[0].chart ?? '',
+      chart: execution.results[0].chart ?? "",
     };
   },
 });

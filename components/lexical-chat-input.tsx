@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
 import {
   type InitialConfigType,
   LexicalComposer,
-} from '@lexical/react/LexicalComposer';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
+} from "@lexical/react/LexicalComposer";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import {
   $createParagraphNode,
   $createTextNode,
@@ -18,9 +18,9 @@ import {
   type EditorState,
   KEY_ENTER_COMMAND,
   type LexicalEditor,
-} from 'lexical';
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+} from "lexical";
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 // Plugin to handle Enter key submissions
 function EnterKeySubmitPlugin({
@@ -47,7 +47,7 @@ function EnterKeySubmitPlugin({
         // Allow default behavior for non-submit cases (Shift+Enter, etc.)
         return false;
       },
-      COMMAND_PRIORITY_HIGH,
+      COMMAND_PRIORITY_HIGH
     );
   }, [editor, onEnterSubmit]);
 
@@ -69,13 +69,13 @@ function EditorRefPlugin({
   return null;
 }
 
-interface LexicalChatInputRef {
+type LexicalChatInputRef = {
   focus: () => void;
   clear: () => void;
   getValue: () => string;
-}
+};
 
-interface LexicalChatInputProps {
+type LexicalChatInputProps = {
   initialValue?: string;
   onInputChange?: (value: string) => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
@@ -85,164 +85,159 @@ interface LexicalChatInputProps {
   autoFocus?: boolean;
   className?: string;
   maxRows?: number;
-  'data-testid'?: string;
-}
+  "data-testid"?: string;
+};
 
 const theme = {
-  root: 'lexical-root',
-  ltr: 'ltr',
-  rtl: 'rtl',
-  placeholder: 'editor-placeholder',
-  paragraph: 'editor-paragraph',
+  root: "lexical-root",
+  ltr: "ltr",
+  rtl: "rtl",
+  placeholder: "editor-placeholder",
+  paragraph: "editor-paragraph",
 };
 
 function onError(error: Error) {
-  console.error('Lexical error:', error);
+  console.error("Lexical error:", error);
 }
 
-export const LexicalChatInput = React.forwardRef<
-  LexicalChatInputRef,
-  LexicalChatInputProps
->(
-  (
-    {
-      initialValue = '',
-      onInputChange,
-      onKeyDown,
-      onPaste,
-      onEnterSubmit,
-      placeholder = 'Type a message...',
-      autoFocus = false,
-      className,
-      'data-testid': testId,
-      ..._props
+export const LexicalChatInput = ({
+  initialValue = "",
+  onInputChange,
+  onKeyDown,
+  onPaste,
+  onEnterSubmit,
+  placeholder = "Type a message...",
+  autoFocus = false,
+  className,
+  "data-testid": testId,
+  ref,
+  ..._props
+}: LexicalChatInputProps & {
+  ref?: React.RefObject<LexicalChatInputRef | null>;
+}) => {
+  const [editor, setEditor] = React.useState<LexicalEditor | null>(null);
+
+  const initialConfig: InitialConfigType = {
+    namespace: "LexicalChatInput",
+    theme,
+    onError,
+    nodes: [],
+  };
+
+  const handleChange = React.useCallback(
+    (editorState: EditorState) => {
+      if (onInputChange) {
+        editorState.read(() => {
+          const root = $getRoot();
+          const textContent = root.getTextContent();
+          onInputChange(textContent);
+        });
+      }
     },
+    [onInputChange]
+  );
+
+  React.useImperativeHandle(
     ref,
-  ) => {
-    const [editor, setEditor] = React.useState<LexicalEditor | null>(null);
-
-    const initialConfig: InitialConfigType = {
-      namespace: 'LexicalChatInput',
-      theme,
-      onError,
-      nodes: [],
-    };
-
-    const handleChange = React.useCallback(
-      (editorState: EditorState) => {
-        if (onInputChange) {
-          editorState.read(() => {
+    () => ({
+      focus: () => {
+        if (editor) {
+          editor.focus();
+        }
+      },
+      clear: () => {
+        if (editor) {
+          editor.update(() => {
             const root = $getRoot();
-            const textContent = root.getTextContent();
-            onInputChange(textContent);
+            root.clear();
           });
         }
       },
-      [onInputChange],
-    );
+      getValue: () => {
+        if (editor) {
+          return editor.getEditorState().read(() => {
+            const root = $getRoot();
+            return root.getTextContent();
+          });
+        }
+        return "";
+      },
+    }),
+    [editor]
+  );
 
-    React.useImperativeHandle(
-      ref,
-      () => ({
-        focus: () => {
-          if (editor) {
-            editor.focus();
+  // Handle value changes from parent
+  React.useEffect(() => {
+    if (editor && initialValue !== undefined) {
+      editor.update(() => {
+        const root = $getRoot();
+        const currentText = root.getTextContent();
+
+        if (currentText !== initialValue) {
+          root.clear();
+          const paragraph = $createParagraphNode();
+          if (initialValue) {
+            const textNode = $createTextNode(initialValue);
+            paragraph.append(textNode);
           }
-        },
-        clear: () => {
-          if (editor) {
-            editor.update(() => {
-              const root = $getRoot();
-              root.clear();
-            });
+          root.append(paragraph);
+        }
+      });
+    }
+  }, [editor, initialValue]);
+
+  const PlaceholderComponent = React.useCallback(
+    () => (
+      <div className="lexical-placeholder pointer-events-none absolute pt-2 pl-3 text-muted-foreground">
+        {placeholder}
+      </div>
+    ),
+    [placeholder]
+  );
+
+  return (
+    <LexicalComposer initialConfig={initialConfig}>
+      <div
+        className="lexical-editor-container"
+        style={{
+          borderTop: "0px",
+        }}
+      >
+        <PlainTextPlugin
+          contentEditable={
+            <ContentEditable
+              className={cn(
+                "focus:outline-hidden focus-visible:outline-hidden",
+                "[&>.lexical-root]:min-h-[20px] [&>.lexical-root]:outline-hidden",
+                "lexical-content-editable",
+                "editor-input",
+                className
+              )}
+              data-testid={testId}
+              onKeyDown={onKeyDown}
+              onPaste={onPaste}
+              spellCheck={true}
+              style={{
+                WebkitBoxShadow: "none",
+                MozBoxShadow: "none",
+                boxShadow: "none",
+              }}
+              // aria-placeholder={placeholder}
+            />
           }
-        },
-        getValue: () => {
-          if (editor) {
-            return editor.getEditorState().read(() => {
-              const root = $getRoot();
-              return root.getTextContent();
-            });
-          }
-          return '';
-        },
-      }),
-      [editor],
-    );
+          ErrorBoundary={LexicalErrorBoundary}
+          placeholder={<PlaceholderComponent />}
+        />
+        <OnChangePlugin onChange={handleChange} />
+        <HistoryPlugin />
+        {/* {autoFocus && <AutoFocusPlugin />} */}
+        <EditorRefPlugin setEditor={setEditor} />
+        <EnterKeySubmitPlugin onEnterSubmit={onEnterSubmit} />
+      </div>
+    </LexicalComposer>
+  );
+};
 
-    // Handle value changes from parent
-    React.useEffect(() => {
-      if (editor && initialValue !== undefined) {
-        editor.update(() => {
-          const root = $getRoot();
-          const currentText = root.getTextContent();
-
-          if (currentText !== initialValue) {
-            root.clear();
-            const paragraph = $createParagraphNode();
-            if (initialValue) {
-              const textNode = $createTextNode(initialValue);
-              paragraph.append(textNode);
-            }
-            root.append(paragraph);
-          }
-        });
-      }
-    }, [editor, initialValue]);
-
-    const PlaceholderComponent = React.useCallback(
-      () => (
-        <div className="lexical-placeholder absolute pointer-events-none text-muted-foreground pl-3 pt-2">
-          {placeholder}
-        </div>
-      ),
-      [placeholder],
-    );
-
-    return (
-      <LexicalComposer initialConfig={initialConfig}>
-        <div
-          className="lexical-editor-container"
-          style={{
-            borderTop: '0px',
-          }}
-        >
-          <PlainTextPlugin
-            contentEditable={
-              <ContentEditable
-                className={cn(
-                  'focus:outline-hidden focus-visible:outline-hidden',
-                  '[&>.lexical-root]:min-h-[20px] [&>.lexical-root]:outline-hidden',
-                  'lexical-content-editable',
-                  'editor-input',
-                  className,
-                )}
-                style={{
-                  WebkitBoxShadow: 'none',
-                  MozBoxShadow: 'none',
-                  boxShadow: 'none',
-                }}
-                data-testid={testId}
-                spellCheck={true}
-                onKeyDown={onKeyDown}
-                onPaste={onPaste}
-                // aria-placeholder={placeholder}
-              />
-            }
-            placeholder={<PlaceholderComponent />}
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <OnChangePlugin onChange={handleChange} />
-          <HistoryPlugin />
-          {/* {autoFocus && <AutoFocusPlugin />} */}
-          <EditorRefPlugin setEditor={setEditor} />
-          <EnterKeySubmitPlugin onEnterSubmit={onEnterSubmit} />
-        </div>
-      </LexicalComposer>
-    );
-  },
-);
-
-LexicalChatInput.displayName = 'LexicalChatInput';
+LexicalChatInput.displayName = "LexicalChatInput";
 
 export type { LexicalChatInputRef };

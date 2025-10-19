@@ -1,11 +1,11 @@
-import { sheetPrompt, updateDocumentPrompt } from '@/lib/ai/prompts';
-import { getLanguageModel } from '@/lib/ai/providers';
-import { createDocumentHandler } from '@/lib/artifacts/server';
-import { streamObject } from 'ai';
-import { z } from 'zod';
+import { streamObject } from "ai";
+import { z } from "zod";
+import { sheetPrompt, updateDocumentPrompt } from "@/lib/ai/prompts";
+import { getLanguageModel } from "@/lib/ai/providers";
+import { createDocumentHandler } from "@/lib/artifacts/server";
 
-export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
-  kind: 'sheet',
+export const sheetDocumentHandler = createDocumentHandler<"sheet">({
+  kind: "sheet",
   onCreateDocument: async ({
     title: _title,
     description: _description,
@@ -13,7 +13,7 @@ export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
     prompt,
     selectedModel,
   }) => {
-    let draftContent = '';
+    let draftContent = "";
 
     const { fullStream } = streamObject({
       model: getLanguageModel(selectedModel),
@@ -21,20 +21,20 @@ export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
       experimental_telemetry: { isEnabled: true },
       prompt,
       schema: z.object({
-        csv: z.string().describe('CSV data'),
+        csv: z.string().describe("CSV data"),
       }),
     });
 
     for await (const delta of fullStream) {
       const { type } = delta;
 
-      if (type === 'object') {
+      if (type === "object") {
         const { object } = delta;
         const { csv } = object;
 
         if (csv) {
           dataStream.write({
-            type: 'data-sheetDelta',
+            type: "data-sheetDelta",
             data: csv,
             transient: true,
           });
@@ -45,7 +45,7 @@ export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
     }
 
     dataStream.write({
-      type: 'data-sheetDelta',
+      type: "data-sheetDelta",
       data: draftContent,
       transient: true,
     });
@@ -58,11 +58,11 @@ export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
     dataStream,
     selectedModel,
   }) => {
-    let draftContent = '';
+    let draftContent = "";
 
     const { fullStream } = streamObject({
       model: getLanguageModel(selectedModel),
-      system: updateDocumentPrompt(document.content, 'sheet'),
+      system: updateDocumentPrompt(document.content, "sheet"),
       experimental_telemetry: { isEnabled: true },
       prompt: description,
       schema: z.object({
@@ -73,13 +73,13 @@ export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
     for await (const delta of fullStream) {
       const { type } = delta;
 
-      if (type === 'object') {
+      if (type === "object") {
         const { object } = delta;
         const { csv } = object;
 
         if (csv) {
           dataStream.write({
-            type: 'data-sheetDelta',
+            type: "data-sheetDelta",
             data: csv,
             transient: true,
           });

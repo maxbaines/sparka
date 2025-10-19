@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const ModelsDevModalitiesSchema = z.object({
   input: z.array(z.string()).optional(),
@@ -21,7 +21,7 @@ export const ModelsDevProviderSchema = z.object({
 // The API returns a top-level object keyed by provider
 export const ModelsDevResponseSchema = z.record(
   z.string(),
-  ModelsDevProviderSchema,
+  ModelsDevProviderSchema
 );
 
 export type ModelsDevModalities = z.infer<typeof ModelsDevModalitiesSchema>;

@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { memo } from 'react';
-import { useSession } from '@/providers/session-provider';
-import { HeaderActions } from '@/components/header-actions';
-import { Button } from '@/components/ui/button';
+import { Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { memo } from "react";
+import { HeaderActions } from "@/components/header-actions";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Menu } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { useSession } from "@/providers/session-provider";
 
 function PureModelsHeader({ className }: { className?: string }) {
   const pathname = usePathname();
@@ -24,8 +24,8 @@ function PureModelsHeader({ className }: { className?: string }) {
   const _isAuthenticated = !!user;
 
   const isActive = (path: string) => {
-    if (path === '/') {
-      return pathname === '/';
+    if (path === "/") {
+      return pathname === "/";
     }
     return pathname.startsWith(path);
   };
@@ -33,49 +33,49 @@ function PureModelsHeader({ className }: { className?: string }) {
   return (
     <header
       className={cn(
-        'bg-background h-(--header-height) px-2 sm:px-3 flex items-center w-full gap-2 relative',
-        className,
+        "relative flex h-(--header-height) w-full items-center gap-2 bg-background px-2 sm:px-3",
+        className
       )}
     >
-      <Link href="/" className="py-2" aria-label="Sparka home">
-        <span className="text-lg font-semibold hover:bg-muted rounded-md cursor-pointer flex items-center gap-2 h-9 px-2">
+      <Link aria-label="Sparka home" className="py-2" href="/">
+        <span className="flex h-9 cursor-pointer items-center gap-2 rounded-md px-2 font-semibold text-lg hover:bg-muted">
           <Image
-            src="/icon.svg"
             alt="Sparka AI"
-            width={24}
-            height={24}
             className="size-6"
+            height={24}
+            src="/icon.svg"
+            width={24}
           />
           <span className="hidden sm:inline">Sparka</span>
         </span>
       </Link>
 
-      <nav className="hidden sm:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+      <nav className="-translate-x-1/2 absolute left-1/2 hidden items-center gap-6 sm:flex">
         <Link
-          href="/"
           className={cn(
-            'text-sm font-medium transition-colors hover:text-foreground',
-            isActive('/') ? 'text-foreground' : 'text-muted-foreground',
+            "font-medium text-sm transition-colors hover:text-foreground",
+            isActive("/") ? "text-foreground" : "text-muted-foreground"
           )}
+          href="/"
         >
           Chat
         </Link>
         <Link
-          href="/models"
           className={cn(
-            'text-sm font-medium transition-colors hover:text-foreground',
-            isActive('/models') ? 'text-foreground' : 'text-muted-foreground',
+            "font-medium text-sm transition-colors hover:text-foreground",
+            isActive("/models") ? "text-foreground" : "text-muted-foreground"
           )}
+          href="/models"
         >
           Models
         </Link>
         <Link
+          className={cn(
+            "font-medium text-sm transition-colors hover:text-foreground",
+            isActive("/compare") ? "text-foreground" : "text-muted-foreground"
+          )}
           // @ts-expect-error - Compare is a valid route
           href="/compare"
-          className={cn(
-            'text-sm font-medium transition-colors hover:text-foreground',
-            isActive('/compare') ? 'text-foreground' : 'text-muted-foreground',
-          )}
         >
           Compare
         </Link>
@@ -88,37 +88,37 @@ function PureModelsHeader({ className }: { className?: string }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                variant="ghost"
-                size="icon"
                 aria-label="Open navigation menu"
+                size="icon"
+                variant="ghost"
               >
                 <Menu className="size-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
+              className="w-40"
               side="bottom"
               sideOffset={8}
-              className="w-40"
             >
               <DropdownMenuItem asChild>
-                <Link href="/" className={cn(isActive('/') && 'font-semibold')}>
+                <Link className={cn(isActive("/") && "font-semibold")} href="/">
                   Chat
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
+                  className={cn(isActive("/models") && "font-semibold")}
                   href="/models"
-                  className={cn(isActive('/models') && 'font-semibold')}
                 >
                   Models
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
+                  className={cn(isActive("/compare") && "font-semibold")}
                   // @ts-expect-error - Compare is a valid route
                   href="/compare"
-                  className={cn(isActive('/compare') && 'font-semibold')}
                 >
                   Compare
                 </Link>

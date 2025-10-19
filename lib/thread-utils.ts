@@ -1,24 +1,26 @@
 // Generic message type that works for both DB and anonymous messages
-export interface MessageNode {
+export type MessageNode = {
   id: string;
   metadata?: {
     parentMessageId: string | null;
     createdAt: Date;
   };
   [key: string]: any; // Allow other properties
-}
+};
 
 // Get the default leaf (most recent message by timestamp)
 export function getDefaultLeafMessage<T extends MessageNode>(
-  allMessages: T[],
+  allMessages: T[]
 ): T | null {
-  if (allMessages.length === 0) return null;
+  if (allMessages.length === 0) {
+    return null;
+  }
 
   // Sort by createdAt descending and return the first one
   const sorted = [...allMessages].sort(
     (a, b) =>
       new Date(b.metadata?.createdAt || new Date()).getTime() -
-      new Date(a.metadata?.createdAt || new Date()).getTime(),
+      new Date(a.metadata?.createdAt || new Date()).getTime()
   );
 
   return sorted[0];
@@ -27,7 +29,7 @@ export function getDefaultLeafMessage<T extends MessageNode>(
 // Build thread from leaf message using all messages
 export function buildThreadFromLeaf<T extends MessageNode>(
   allMessages: T[],
-  leafMessageId: string,
+  leafMessageId: string
 ): T[] {
   const messageMap = new Map<string, T>();
   allMessages.forEach((msg) => messageMap.set(msg.id, msg));
@@ -53,8 +55,8 @@ export function buildThreadFromLeaf<T extends MessageNode>(
     // Check for self-reference
     if (currentMessage.metadata?.parentMessageId === currentMessage.id) {
       console.error(
-        '[buildThreadFromLeaf] SELF-REFERENCE DETECTED for message:',
-        currentMessage.id,
+        "[buildThreadFromLeaf] SELF-REFERENCE DETECTED for message:",
+        currentMessage.id
       );
       break;
     }
@@ -77,15 +79,22 @@ export function getDefaultThread<T extends MessageNode>(allMessages: T[]): T[] {
 
 export function findLeafDfsToRightFromMessageId<T extends MessageNode>(
   childrenMapSorted: Map<string | null, T[]>,
-  messageId: string,
+  messageId: string
 ): T | null {
   const children = childrenMapSorted.get(messageId);
-  if (!children || children.length === 0) return null;
+  if (!children || children.length === 0) {
+    return null;
+  }
 
-  const rightmostChild = children[children.length - 1];
+  const rightmostChild = children.at(-1);
+
+  if (!rightmostChild) {
+    return null;
+  }
+
   const leaf = findLeafDfsToRightFromMessageId(
     childrenMapSorted,
-    rightmostChild.id,
+    rightmostChild.id
   );
   return leaf || rightmostChild;
 }

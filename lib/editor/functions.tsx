@@ -1,18 +1,17 @@
-'use client';
+"use client";
 
-import { $generateNodesFromDOM } from '@lexical/html';
+import { $generateNodesFromDOM } from "@lexical/html";
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
-} from '@lexical/markdown';
-import { createEditor, type LexicalEditor } from 'lexical';
-import { $getRoot } from 'lexical';
-import { renderToString } from 'react-dom/server';
+} from "@lexical/markdown";
+import { $getRoot, createEditor, type LexicalEditor } from "lexical";
+import { renderToString } from "react-dom/server";
 
-import Markdown from 'react-markdown';
+import Markdown from "react-markdown";
 
-import { createEditorConfig } from './config';
-import { createSuggestionDecorator, type UISuggestion } from './suggestions';
+import { createEditorConfig } from "./config";
+import { createSuggestionDecorator, type UISuggestion } from "./suggestions";
 
 export const buildEditorFromContent = (content: string): LexicalEditor => {
   const config = createEditorConfig();
@@ -26,7 +25,7 @@ export const buildEditorFromContent = (content: string): LexicalEditor => {
 };
 
 export const buildContentFromEditor = (editor: LexicalEditor): string => {
-  let content = '';
+  let content = "";
 
   editor.getEditorState().read(() => {
     content = $convertToMarkdownString();
@@ -36,8 +35,8 @@ export const buildContentFromEditor = (editor: LexicalEditor): string => {
 };
 
 export const createSuggestionDecorators = (
-  suggestions: Array<UISuggestion>,
-  editor: LexicalEditor,
+  suggestions: UISuggestion[],
+  editor: LexicalEditor
 ) => {
   const decorators: Record<string, any> = {};
 
@@ -58,7 +57,7 @@ export const buildEditorFromContentHTML = (content: string): LexicalEditor => {
 
   editor.update(() => {
     const parser = new DOMParser();
-    const dom = parser.parseFromString(stringFromMarkdown, 'text/html');
+    const dom = parser.parseFromString(stringFromMarkdown, "text/html");
     const nodes = $generateNodesFromDOM(editor, dom);
     const root = $getRoot();
     root.clear();

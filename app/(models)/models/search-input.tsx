@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Search, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Search, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function SearchInput({
   value,
   onChange,
   onClear,
-  placeholder = 'Search models...',
+  placeholder = "Search models...",
   className,
 }: {
   value: string;
@@ -19,21 +19,21 @@ export function SearchInput({
 }) {
   return (
     <div
-      className={`relative w-full sm:max-w-[250px] md:max-w-[350px] ${className ?? ''}`}
+      className={`relative w-full sm:max-w-[250px] md:max-w-[350px] ${className ?? ""}`}
     >
-      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
       <Input
+        className="h-10 w-full pr-10 pl-10"
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="pl-10 pr-10 h-10 w-full"
       />
       {value && (
         <Button
-          variant="ghost"
-          size="sm"
+          className="-translate-y-1/2 absolute top-1/2 right-1 h-8 w-8 p-0"
           onClick={onClear}
-          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+          size="sm"
+          variant="ghost"
         >
           <X className="h-4 w-4" />
         </Button>

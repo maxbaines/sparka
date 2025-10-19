@@ -1,20 +1,20 @@
-import 'server-only';
-import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
+import "server-only";
+import { ANONYMOUS_LIMITS } from "@/lib/types/anonymous";
 
-interface RateLimitResult {
+type RateLimitResult = {
   success: boolean;
   remaining: number;
   resetTime: number;
   error?: string;
-}
+};
 
-interface RateLimitOptions {
+type RateLimitOptions = {
   identifier: string;
   limit: number;
   windowSize: number;
   redisClient: any;
   keyPrefix: string;
-}
+};
 
 async function checkRateLimit({
   identifier,
@@ -56,7 +56,7 @@ async function checkRateLimit({
         success: false,
         remaining: 0,
         resetTime,
-        error: 'Rate limit exceeded',
+        error: "Rate limit exceeded",
       };
     }
 
@@ -66,7 +66,7 @@ async function checkRateLimit({
       resetTime,
     };
   } catch (error) {
-    console.error('Rate limit check failed:', error);
+    console.error("Rate limit check failed:", error);
     // Fail open - allow request if Redis is down
     return {
       success: true,
@@ -81,7 +81,7 @@ const WINDOW_SIZE_MONTH = 30 * 24 * 60 * 60;
 
 export async function checkAnonymousRateLimit(
   ip: string,
-  redisClient: any,
+  redisClient: any
 ): Promise<{
   success: boolean;
   error?: string;
@@ -95,7 +95,7 @@ export async function checkAnonymousRateLimit(
     limit: RATE_LIMIT.REQUESTS_PER_MINUTE,
     windowSize: WINDOW_SIZE_MINUTE,
     redisClient,
-    keyPrefix: 'sparka-ai:rate-limit:minute',
+    keyPrefix: "sparka-ai:rate-limit:minute",
   });
 
   if (!minuteResult.success) {
@@ -103,9 +103,9 @@ export async function checkAnonymousRateLimit(
       success: false,
       error: `Rate limit exceeded. You can make ${RATE_LIMIT.REQUESTS_PER_MINUTE} requests per minute. You've made ${RATE_LIMIT.REQUESTS_PER_MINUTE - minuteResult.remaining} requests this minute. Try again in ${Math.ceil((minuteResult.resetTime - Date.now()) / 1000)} seconds.`,
       headers: {
-        'X-RateLimit-Limit': RATE_LIMIT.REQUESTS_PER_MINUTE.toString(),
-        'X-RateLimit-Remaining': minuteResult.remaining.toString(),
-        'X-RateLimit-Reset': minuteResult.resetTime.toString(),
+        "X-RateLimit-Limit": RATE_LIMIT.REQUESTS_PER_MINUTE.toString(),
+        "X-RateLimit-Remaining": minuteResult.remaining.toString(),
+        "X-RateLimit-Reset": minuteResult.resetTime.toString(),
       },
     };
   }
@@ -116,20 +116,20 @@ export async function checkAnonymousRateLimit(
     limit: RATE_LIMIT.REQUESTS_PER_MONTH,
     windowSize: WINDOW_SIZE_MONTH,
     redisClient,
-    keyPrefix: 'sparka-ai:rate-limit:month',
+    keyPrefix: "sparka-ai:rate-limit:month",
   });
 
   if (!monthResult.success) {
     const daysUntilReset = Math.ceil(
-      (monthResult.resetTime - Date.now()) / (1000 * 60 * 60 * 24),
+      (monthResult.resetTime - Date.now()) / (1000 * 60 * 60 * 24)
     );
     return {
       success: false,
-      error: `Monthly message limit exceeded. You can make ${RATE_LIMIT.REQUESTS_PER_MONTH} requests per month. You've made ${RATE_LIMIT.REQUESTS_PER_MONTH - monthResult.remaining} requests this month. Try again in ${daysUntilReset} day${daysUntilReset !== 1 ? 's' : ''}.`,
+      error: `Monthly message limit exceeded. You can make ${RATE_LIMIT.REQUESTS_PER_MONTH} requests per month. You've made ${RATE_LIMIT.REQUESTS_PER_MONTH - monthResult.remaining} requests this month. Try again in ${daysUntilReset} day${daysUntilReset !== 1 ? "s" : ""}.`,
       headers: {
-        'X-RateLimit-Limit': RATE_LIMIT.REQUESTS_PER_MONTH.toString(),
-        'X-RateLimit-Remaining': monthResult.remaining.toString(),
-        'X-RateLimit-Reset': monthResult.resetTime.toString(),
+        "X-RateLimit-Limit": RATE_LIMIT.REQUESTS_PER_MONTH.toString(),
+        "X-RateLimit-Remaining": monthResult.remaining.toString(),
+        "X-RateLimit-Reset": monthResult.resetTime.toString(),
       },
     };
   }
@@ -137,25 +137,25 @@ export async function checkAnonymousRateLimit(
   return {
     success: true,
     headers: {
-      'X-RateLimit-Limit-Minute': RATE_LIMIT.REQUESTS_PER_MINUTE.toString(),
-      'X-RateLimit-Remaining-Minute': minuteResult.remaining.toString(),
-      'X-RateLimit-Reset-Minute': minuteResult.resetTime.toString(),
-      'X-RateLimit-Limit-Month': RATE_LIMIT.REQUESTS_PER_MONTH.toString(),
-      'X-RateLimit-Remaining-Month': monthResult.remaining.toString(),
-      'X-RateLimit-Reset-Month': monthResult.resetTime.toString(),
+      "X-RateLimit-Limit-Minute": RATE_LIMIT.REQUESTS_PER_MINUTE.toString(),
+      "X-RateLimit-Remaining-Minute": minuteResult.remaining.toString(),
+      "X-RateLimit-Reset-Minute": minuteResult.resetTime.toString(),
+      "X-RateLimit-Limit-Month": RATE_LIMIT.REQUESTS_PER_MONTH.toString(),
+      "X-RateLimit-Remaining-Month": monthResult.remaining.toString(),
+      "X-RateLimit-Reset-Month": monthResult.resetTime.toString(),
     },
   };
 }
 
 export function getClientIP(request: Request): string {
   // Try to get the real IP from various headers
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIp = request.headers.get('x-real-ip');
-  const cfConnectingIp = request.headers.get('cf-connecting-ip');
+  const forwarded = request.headers.get("x-forwarded-for");
+  const realIp = request.headers.get("x-real-ip");
+  const cfConnectingIp = request.headers.get("cf-connecting-ip");
 
   if (forwarded) {
     // x-forwarded-for can contain multiple IPs, take the first one
-    return forwarded.split(',')[0].trim();
+    return forwarded.split(",")[0].trim();
   }
 
   if (realIp) {
@@ -167,5 +167,5 @@ export function getClientIP(request: Request): string {
   }
 
   // Fallback to a default IP if no headers are present
-  return '127.0.0.1';
+  return "127.0.0.1";
 }

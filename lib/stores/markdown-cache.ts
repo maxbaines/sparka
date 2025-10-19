@@ -1,6 +1,6 @@
-import type { UIMessage } from 'ai';
-import { marked } from 'marked';
-import { parseIncompleteMarkdown } from '@/components/ai-elements/parseIncompleteMarkdown';
+import type { UIMessage } from "ai";
+import { marked } from "marked";
+import { parseIncompleteMarkdown } from "@/components/ai-elements/parseIncompleteMarkdown";
 
 export type MarkdownCacheEntry = {
   text: string;
@@ -56,7 +56,9 @@ function ensureCacheForPart({
 }): void {
   const key = getMarkdownCacheKey({ messageId, partIdx });
   const cached = cache.get(key);
-  if (cached && cached.text === text) return;
+  if (cached && cached.text === text) {
+    return;
+  }
   computeCacheEntry({
     cache,
     messageId,
@@ -79,22 +81,28 @@ export function getMarkdownFromCache({
 }): MarkdownCacheEntry | null {
   const key = getMarkdownCacheKey({ messageId, partIdx });
   const entry = cache.get(key);
-  if (entry && entry.text === text) return entry;
+  if (entry && entry.text === text) {
+    return entry;
+  }
   return null;
 }
 
 function precomputeMarkdownForMessage(
   message: UIMessage,
-  cache: Map<string, MarkdownCacheEntry>,
+  cache: Map<string, MarkdownCacheEntry>
 ): void {
   const messageId = message.id;
   const parts = message.parts;
 
-  if (message.role === 'user') return;
+  if (message.role === "user") {
+    return;
+  }
 
   for (let i = 0; i < parts.length; i++) {
     const p = parts[i];
-    if (!p || p.type !== 'text') continue;
+    if (!p || p.type !== "text") {
+      continue;
+    }
     const text = p.text;
 
     ensureCacheForPart({ cache, messageId, partIdx: i, text });
@@ -103,7 +111,7 @@ function precomputeMarkdownForMessage(
 
 export function precomputeMarkdownForAllMessages(
   messages: UIMessage[],
-  existingCache?: Map<string, MarkdownCacheEntry>,
+  existingCache?: Map<string, MarkdownCacheEntry>
 ): {
   cache: Map<string, MarkdownCacheEntry>;
 } {
@@ -114,20 +122,21 @@ export function precomputeMarkdownForAllMessages(
   // Stable caches for all assistant messages
   for (let i = 0; i < messages.length; i++) {
     const msg = messages[i];
-    if (!msg || msg.role !== 'assistant') continue;
+    if (!msg || msg.role !== "assistant") {
+      continue;
+    }
     precomputeMarkdownForMessage(msg, cache);
   }
 
   // Streaming target: last assistant message's last text part
-  const lastMessage =
-    messages.length > 0 ? messages[messages.length - 1] : null;
-  if (lastMessage && lastMessage.role === 'assistant') {
+  const lastMessage = messages.length > 0 ? messages.at(-1) : null;
+  if (lastMessage && lastMessage.role === "assistant") {
     const parts = lastMessage.parts;
     if (parts.length > 0) {
       const lastPartIdx = parts.length - 1;
       const lastPart = parts[lastPartIdx];
-      if (lastPart && lastPart.type === 'text') {
-        const text = lastPart.text || '';
+      if (lastPart && lastPart.type === "text") {
+        const text = lastPart.text || "";
         ensureCacheForPart({
           cache,
           messageId: lastMessage.id,

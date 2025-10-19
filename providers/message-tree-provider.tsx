@@ -1,40 +1,40 @@
-'use client';
+"use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import {
   createContext,
-  useContext,
-  useMemo,
   useCallback,
+  useContext,
   useEffect,
+  useMemo,
   useState,
-} from 'react';
+} from "react";
+import type { ChatMessage } from "@/lib/ai/types";
+import { useSetMessages } from "@/lib/stores/hooks";
 import {
   buildThreadFromLeaf,
   findLeafDfsToRightFromMessageId,
-} from '@/lib/thread-utils';
-import { useTRPC } from '@/trpc/react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useChatId } from './chat-id-provider';
-import type { ChatMessage } from '@/lib/ai/types';
-import { useSetMessages } from '@/lib/stores/hooks';
+} from "@/lib/thread-utils";
+import { useTRPC } from "@/trpc/react";
+import { useChatId } from "./chat-id-provider";
 
-interface MessageSiblingInfo {
+type MessageSiblingInfo = {
   siblings: ChatMessage[];
   siblingIndex: number;
-}
+};
 
-interface MessageTreeContextType {
+type MessageTreeContextType = {
   getMessageSiblingInfo: (messageId: string) => MessageSiblingInfo | null;
-  navigateToSibling: (messageId: string, direction: 'prev' | 'next') => void;
-}
+  navigateToSibling: (messageId: string, direction: "prev" | "next") => void;
+};
 
 const MessageTreeContext = createContext<MessageTreeContextType | undefined>(
-  undefined,
+  undefined
 );
 
-interface MessageTreeProviderProps {
+type MessageTreeProviderProps = {
   children: React.ReactNode;
-}
+};
 
 export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
   const { id, type } = useChatId();
@@ -47,32 +47,32 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
   // Subscribe to query cache changes for the specific chat messages query
   useEffect(() => {
     // TODO: IS this effect still needed or can it be replaced with a useQuery ?
-    if (type === 'provisional' && window.location.pathname === '/') {
+    if (type === "provisional" && window.location.pathname === "/") {
       // New chat
       setAllMessages([]);
     }
 
     const queryKey =
-      type === 'shared'
+      type === "shared"
         ? trpc.chat.getPublicChatMessages.queryKey({ chatId: id })
         : trpc.chat.getChatMessages.queryKey({ chatId: id });
 
     // Get initial data
     const initialData = queryClient.getQueryData<ChatMessage[]>(queryKey);
     if (initialData) {
-      console.log('initialData', initialData);
+      console.log("initialData", initialData);
       setAllMessages(initialData);
     }
 
     // Subscribe to cache changes
     const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
       // Check if this event is for our specific query
-      if (event.type === 'updated' && event.query.queryKey) {
+      if (event.type === "updated" && event.query.queryKey) {
         const eventQueryKey = event.query.queryKey;
 
         // Get current query key to avoid stale closure issues
         const currentQueryKey =
-          type === 'shared'
+          type === "shared"
             ? trpc.chat.getPublicChatMessages.queryKey({
                 chatId: id,
               })
@@ -80,7 +80,7 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
 
         // Compare query keys (simple deep comparison for this case)
         if (JSON.stringify(eventQueryKey) === JSON.stringify(currentQueryKey)) {
-          console.log('event.query.state.data', event.query.state.data);
+          console.log("event.query.state.data", event.query.state.data);
           const newData = event.query.state.data as ChatMessage[] | undefined;
           if (newData) {
             setAllMessages(newData);
@@ -101,7 +101,9 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
   // Build parent->children mapping once
   const childrenMap = useMemo(() => {
     const map = new Map<string | null, ChatMessage[]>();
-    if (!allMessages) return map;
+    if (!allMessages) {
+      return map;
+    }
     allMessages.forEach((message) => {
       const parentId = message.metadata?.parentMessageId || null;
 
@@ -119,7 +121,7 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
       siblings.sort(
         (a, b) =>
           new Date(a.metadata?.createdAt || new Date()).getTime() -
-          new Date(b.metadata?.createdAt || new Date()).getTime(),
+          new Date(b.metadata?.createdAt || new Date()).getTime()
       );
     });
 
@@ -128,9 +130,13 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
 
   const getMessageSiblingInfo = useCallback(
     (messageId: string): MessageSiblingInfo | null => {
-      if (!allMessages) return null;
+      if (!allMessages) {
+        return null;
+      }
       const message = allMessages.find((m) => m.id === messageId);
-      if (!message) return null;
+      if (!message) {
+        return null;
+      }
 
       const siblings =
         childrenMap.get(message.metadata?.parentMessageId || null) || [];
@@ -141,34 +147,38 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
         siblingIndex,
       };
     },
-    [allMessages, childrenMap],
+    [allMessages, childrenMap]
   );
 
   const navigateToSibling = useCallback(
-    (messageId: string, direction: 'prev' | 'next') => {
-      if (!allMessages || !id) return;
+    (messageId: string, direction: "prev" | "next") => {
+      if (!(allMessages && id)) {
+        return;
+      }
       const siblingInfo = getMessageSiblingInfo(messageId);
-      if (!siblingInfo || siblingInfo.siblings.length <= 1) return;
+      if (!siblingInfo || siblingInfo.siblings.length <= 1) {
+        return;
+      }
 
       const { siblings, siblingIndex } = siblingInfo;
       const nextIndex =
-        direction === 'next'
+        direction === "next"
           ? (siblingIndex + 1) % siblings.length
           : (siblingIndex - 1 + siblings.length) % siblings.length;
 
       const targetSibling = siblings[nextIndex];
       const leaf = findLeafDfsToRightFromMessageId(
         childrenMap,
-        targetSibling.id,
+        targetSibling.id
       );
       const newThread = buildThreadFromLeaf(
         allMessages,
-        leaf ? leaf.id : targetSibling.id,
+        leaf ? leaf.id : targetSibling.id
       );
 
       setMessages(newThread);
     },
-    [allMessages, getMessageSiblingInfo, childrenMap, id, setMessages],
+    [allMessages, getMessageSiblingInfo, childrenMap, id, setMessages]
   );
 
   const value = useMemo(
@@ -176,7 +186,7 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
       getMessageSiblingInfo,
       navigateToSibling,
     }),
-    [getMessageSiblingInfo, navigateToSibling],
+    [getMessageSiblingInfo, navigateToSibling]
   );
 
   return (
@@ -189,7 +199,7 @@ export function MessageTreeProvider({ children }: MessageTreeProviderProps) {
 export function useMessageTree() {
   const context = useContext(MessageTreeContext);
   if (!context) {
-    throw new Error('useMessageTree must be used within MessageTreeProvider');
+    throw new Error("useMessageTree must be used within MessageTreeProvider");
   }
   return context;
 }

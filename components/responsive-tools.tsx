@@ -1,25 +1,25 @@
-import React, {
+import { Settings2, X } from "lucide-react";
+import {
+  createElement,
   type Dispatch,
   type SetStateAction,
   useState,
-  createElement,
-} from 'react';
-import { Settings2, X } from 'lucide-react';
-import { useSession } from '@/providers/session-provider';
-import { Button } from './ui/button';
+} from "react";
+import { getAppModelDefinition } from "@/lib/ai/app-models";
+import type { UiToolName } from "@/lib/ai/types";
+import { useSession } from "@/providers/session-provider";
+import { enabledTools, toolDefinitions } from "./chat-features-definitions";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { Separator } from './ui/separator';
-import { getAppModelDefinition } from '@/lib/ai/app-models';
-import { LoginPrompt } from './upgrade-cta/login-prompt';
-import { toolDefinitions, enabledTools } from './chat-features-definitions';
-import type { UiToolName } from '@/lib/ai/types';
+} from "./ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Separator } from "./ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { LoginPrompt } from "./upgrade-cta/login-prompt";
 
 export function ResponsiveTools({
   tools,
@@ -52,7 +52,7 @@ export function ResponsiveTools({
   const activeTool = tools;
 
   const setTool = (tool: UiToolName | null) => {
-    if (tool === 'deepResearch' && hasReasoningModel) {
+    if (tool === "deepResearch" && hasReasoningModel) {
       return;
     }
 
@@ -69,27 +69,27 @@ export function ResponsiveTools({
   };
 
   return (
-    <div className="flex items-center gap-1 @[400px]:gap-2">
+    <div className="flex items-center @[400px]:gap-2 gap-1">
       {isAnonymous ? (
-        <Popover open={showLoginPopover} onOpenChange={setShowLoginPopover}>
+        <Popover onOpenChange={setShowLoginPopover} open={showLoginPopover}>
           <Tooltip>
             <TooltipTrigger asChild>
               <PopoverTrigger asChild>
                 <Button
+                  className="@[400px]:h-10 h-8 @[400px]:gap-2 gap-1 p-1.5"
                   variant="ghost"
-                  className="gap-1 @[400px]:gap-2 p-1.5 h-8 @[400px]:h-10"
                 >
                   <Settings2 size={14} />
-                  <span className="hidden @[400px]:inline">Tools</span>
+                  <span className="@[400px]:inline hidden">Tools</span>
                 </Button>
               </PopoverTrigger>
             </TooltipTrigger>
             <TooltipContent>Select Tools</TooltipContent>
           </Tooltip>
-          <PopoverContent className="w-80 p-0" align="start">
+          <PopoverContent align="start" className="w-80 p-0">
             <LoginPrompt
-              title="Sign in to use Tools"
               description="Access web search, deep research, and more to get better answers."
+              title="Sign in to use Tools"
             />
           </PopoverContent>
         </Popover>
@@ -99,12 +99,12 @@ export function ResponsiveTools({
             <TooltipTrigger asChild>
               <DropdownMenuTrigger asChild>
                 <Button
-                  variant="ghost"
+                  className="@[400px]:h-10 h-8 @[400px]:gap-2 gap-1 p-1.5 px-2.5"
                   size="sm"
-                  className="gap-1 @[400px]:gap-2 p-1.5 px-2.5 h-8 @[400px]:h-10"
+                  variant="ghost"
                 >
                   <Settings2 size={14} />
-                  <span className="hidden @[400px]:inline">Tools</span>
+                  <span className="@[400px]:inline hidden">Tools</span>
                 </Button>
               </DropdownMenuTrigger>
             </TooltipTrigger>
@@ -119,19 +119,19 @@ export function ResponsiveTools({
             {enabledTools.map((key) => {
               const tool = toolDefinitions[key];
               const isDeepResearchDisabled =
-                key === 'deepResearch' && hasReasoningModel;
+                key === "deepResearch" && hasReasoningModel;
               const isToolDisabled =
                 hasUnspecifiedFeatures || isDeepResearchDisabled;
               const Icon = tool.icon;
               return (
                 <DropdownMenuItem
+                  className="flex items-center gap-2"
+                  disabled={isToolDisabled}
                   key={key}
                   onClick={(e) => {
                     e.stopPropagation();
                     setTool(tools === key ? null : key);
                   }}
-                  className="flex items-center gap-2"
-                  disabled={isToolDisabled}
                 >
                   <Icon size={14} />
                   <span>{tool.name}</span>
@@ -156,22 +156,22 @@ export function ResponsiveTools({
       {activeTool && (
         <>
           <Separator
+            className="h-4 bg-muted-foreground/50"
             orientation="vertical"
-            className="bg-muted-foreground/50 h-4"
           />
           <Button
-            variant="ghost"
-            size="sm"
+            className="@[400px]:h-10 h-8 @[400px]:gap-2 gap-1 rounded-full text-primary hover:text-primary/80"
             onClick={() => setTool(null)}
-            className="gap-1 @[400px]:gap-2 rounded-full h-8 @[400px]:h-10 text-primary hover:text-primary/80"
+            size="sm"
+            variant="ghost"
           >
             {createElement(toolDefinitions[activeTool].icon, {
               size: 14,
             })}
-            <span className="hidden @[500px]:inline">
+            <span className="@[500px]:inline hidden">
               {toolDefinitions[activeTool].shortName}
             </span>
-            <X size={12} className="opacity-70" />
+            <X className="opacity-70" size={12} />
           </Button>
         </>
       )}

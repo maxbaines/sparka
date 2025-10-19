@@ -1,13 +1,13 @@
-import { tool } from 'ai';
-import type { Session } from '@/lib/auth';
-import { z } from 'zod';
-import { getDocumentById } from '@/lib/db/queries';
-import type { StreamWriter } from '../types';
+import { tool } from "ai";
+import { z } from "zod";
+import type { Session } from "@/lib/auth";
+import { getDocumentById } from "@/lib/db/queries";
+import type { StreamWriter } from "../types";
 
-interface ReadDocumentProps {
+type ReadDocumentProps = {
   session: Session;
   dataStream: StreamWriter;
-}
+};
 
 export const readDocument = ({
   session,
@@ -22,20 +22,20 @@ Use for:
 Avoid:
 - Documents that were not produced in the current conversation`,
     inputSchema: z.object({
-      id: z.string().describe('The ID of the document to read'),
+      id: z.string().describe("The ID of the document to read"),
     }),
     execute: async ({ id }) => {
       const document = await getDocumentById({ id });
 
       if (!document) {
         return {
-          error: 'Document not found',
+          error: "Document not found",
         };
       }
 
       if (document.userId !== session.user?.id) {
         return {
-          error: 'Unauthorized access to document',
+          error: "Unauthorized access to document",
         };
       }
 

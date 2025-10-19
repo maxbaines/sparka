@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   useSidebar,
-} from '@/components/ui/sidebar';
+} from "@/components/ui/sidebar";
 import {
-  useRenameChat,
-  usePinChat,
   useGetAllChats,
-} from '@/hooks/chat-sync-hooks';
-import { GroupedChatsList } from './grouped-chats-list';
-import { DeleteDialog } from './delete-dialog';
+  usePinChat,
+  useRenameChat,
+} from "@/hooks/chat-sync-hooks";
+import { DeleteDialog } from "./delete-dialog";
+import { GroupedChatsList } from "./grouped-chats-list";
 
 export function SidebarHistory() {
   const { setOpenMobile } = useSidebar();
@@ -30,21 +30,21 @@ export function SidebarHistory() {
     (chatId: string, title: string) => {
       renameChatMutation({ chatId, title });
     },
-    [renameChatMutation],
+    [renameChatMutation]
   );
 
   const pinChat = useCallback(
     (chatId: string, isPinned: boolean) => {
       pinChatMutation({ chatId, isPinned });
     },
-    [pinChatMutation],
+    [pinChatMutation]
   );
 
   if (!isLoading && chats?.length === 0) {
     return (
       <SidebarGroup>
         <SidebarGroupContent>
-          <div className="px-2 text-zinc-500 w-full flex flex-row justify-center items-center text-sm gap-2">
+          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 text-sm text-zinc-500">
             Start chatting to see your conversation history!
           </div>
         </SidebarGroupContent>
@@ -55,21 +55,21 @@ export function SidebarHistory() {
   if (isLoading) {
     return (
       <SidebarGroup>
-        <div className="px-2 py-1 text-xs text-sidebar-foreground/50">
+        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
           Today
         </div>
         <SidebarGroupContent>
           <div className="flex flex-col">
             {[44, 32, 28, 64, 52].map((item) => (
               <div
+                className="flex h-8 items-center gap-2 rounded-md px-2"
                 key={item}
-                className="rounded-md h-8 flex gap-2 px-2 items-center"
               >
                 <div
-                  className="h-4 rounded-md flex-1 max-w-(--skeleton-width) bg-sidebar-accent-foreground/10"
+                  className="h-4 max-w-(--skeleton-width) flex-1 rounded-md bg-sidebar-accent-foreground/10"
                   style={
                     {
-                      '--skeleton-width': `${item}%`,
+                      "--skeleton-width": `${item}%`,
                     } as React.CSSProperties
                   }
                 />
@@ -93,8 +93,8 @@ export function SidebarHistory() {
                   setDeleteId(chatId);
                   setShowDeleteDialog(true);
                 }}
-                onRename={renameChat}
                 onPin={pinChat}
+                onRename={renameChat}
                 setOpenMobile={setOpenMobile}
               />
             )}
@@ -103,8 +103,8 @@ export function SidebarHistory() {
       </SidebarGroup>
       <DeleteDialog
         deleteId={deleteId}
-        showDeleteDialog={showDeleteDialog}
         setShowDeleteDialog={setShowDeleteDialog}
+        showDeleteDialog={showDeleteDialog}
       />
     </>
   );

@@ -1,20 +1,20 @@
-import { memo } from 'react';
+import { memo } from "react";
 import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
-} from '@/components/ai-elements/conversation';
-import type { Vote } from '@/lib/db/schema';
-import { useChatId, useChatStatus, useMessageIds } from '@/lib/stores/hooks';
-import { Greeting } from './greeting';
-import { PreviewMessage } from './message';
-import { ResponseErrorMessage } from './response-error-message';
-import { ThinkingMessage } from './thinking-message';
+} from "@/components/ai-elements/conversation";
+import type { Vote } from "@/lib/db/schema";
+import { useChatId, useChatStatus, useMessageIds } from "@/lib/stores/hooks";
+import { Greeting } from "./greeting";
+import { PreviewMessage } from "./message";
+import { ResponseErrorMessage } from "./response-error-message";
+import { ThinkingMessage } from "./thinking-message";
 
-interface PureMessagesInternalProps {
-  votes: Array<Vote> | undefined;
+type PureMessagesInternalProps = {
+  votes: Vote[] | undefined;
   isReadonly: boolean;
-}
+};
 
 const PureMessagesInternal = memo(function PureMessagesInternal({
   votes,
@@ -36,35 +36,35 @@ const PureMessagesInternal = memo(function PureMessagesInternal({
     <>
       {messageIds.map((messageId, index) => (
         <PreviewMessage
+          isLoading={status === "streaming" && messageIds.length - 1 === index}
+          isReadonly={isReadonly}
           key={messageId}
           messageId={messageId}
-          isLoading={status === 'streaming' && messageIds.length - 1 === index}
+          parentMessageId={index > 0 ? messageIds[index - 1] : null}
           vote={
             votes
               ? votes.find((vote) => vote.messageId === messageId)
               : undefined
           }
-          parentMessageId={index > 0 ? messageIds[index - 1] : null}
-          isReadonly={isReadonly}
         />
       ))}
 
-      {status === 'submitted' && messageIds.length > 0 && (
+      {status === "submitted" && messageIds.length > 0 && (
         // messages[messages.length - 1].role === 'user' &&
         <ThinkingMessage />
       )}
 
-      {status === 'error' && <ResponseErrorMessage />}
+      {status === "error" && <ResponseErrorMessage />}
     </>
   );
 });
 
-export interface MessagesProps {
-  votes: Array<Vote> | undefined;
+export type MessagesProps = {
+  votes: Vote[] | undefined;
   isReadonly: boolean;
   isVisible: boolean;
   onModelChange?: (modelId: string) => void;
-}
+};
 
 function PureMessages({
   votes,
@@ -72,9 +72,9 @@ function PureMessages({
   isVisible: _isVisible,
 }: MessagesProps) {
   return (
-    <Conversation className="flex flex-col flex-1 w-full">
-      <ConversationContent className="flex flex-col min-w-0 sm:max-w-2xl md:max-w-3xl container mx-auto h-full pb-10">
-        <PureMessagesInternal votes={votes} isReadonly={isReadonly} />
+    <Conversation className="flex w-full flex-1 flex-col">
+      <ConversationContent className="container mx-auto flex h-full min-w-0 flex-col pb-10 sm:max-w-2xl md:max-w-3xl">
+        <PureMessagesInternal isReadonly={isReadonly} votes={votes} />
       </ConversationContent>
       <ConversationScrollButton />
     </Conversation>
@@ -82,10 +82,16 @@ function PureMessages({
 }
 
 export const Messages = memo(PureMessages, (prevProps, nextProps) => {
-  if (prevProps.votes !== nextProps.votes) return false;
-  if (prevProps.isReadonly !== nextProps.isReadonly) return false;
+  if (prevProps.votes !== nextProps.votes) {
+    return false;
+  }
+  if (prevProps.isReadonly !== nextProps.isReadonly) {
+    return false;
+  }
   // NOTE: isVisible avoids re-renders when the messages aren't visible
-  if (prevProps.isVisible !== nextProps.isVisible) return false;
+  if (prevProps.isVisible !== nextProps.isVisible) {
+    return false;
+  }
 
   return true;
 });

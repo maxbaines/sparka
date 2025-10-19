@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
+import type { ReactNode } from "react";
 import {
   createContext,
-  useContext,
-  useState,
   useCallback,
+  useContext,
   useMemo,
-} from 'react';
-import type { UIArtifact } from '@/components/artifact';
-import type { ReactNode } from 'react';
+  useState,
+} from "react";
+import type { UIArtifact } from "@/components/artifact";
 
 const initialArtifactData: UIArtifact = {
-  documentId: 'init',
-  content: '',
-  kind: 'text',
-  title: '',
-  messageId: '',
-  status: 'idle',
+  documentId: "init",
+  content: "",
+  kind: "text",
+  title: "",
+  messageId: "",
+  status: "idle",
   isVisible: false,
   boundingBox: {
     top: 0,
@@ -28,10 +28,10 @@ const initialArtifactData: UIArtifact = {
 
 type Selector<T> = (state: UIArtifact) => T;
 
-interface ArtifactContextType {
+type ArtifactContextType = {
   artifact: UIArtifact;
   setArtifact: (
-    updaterFn: UIArtifact | ((currentArtifact: UIArtifact) => UIArtifact),
+    updaterFn: UIArtifact | ((currentArtifact: UIArtifact) => UIArtifact)
   ) => void;
   metadata: Record<string, any> | null;
   setMetadata: (
@@ -39,12 +39,12 @@ interface ArtifactContextType {
     metadata:
       | Record<string, any>
       | null
-      | ((current: Record<string, any> | null) => Record<string, any> | null),
+      | ((current: Record<string, any> | null) => Record<string, any> | null)
   ) => void;
-}
+};
 
 const ArtifactContext = createContext<ArtifactContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export function ArtifactProvider({ children }: { children: ReactNode }) {
@@ -55,18 +55,18 @@ export function ArtifactProvider({ children }: { children: ReactNode }) {
     any
   > | null>(initialArtifactData);
 
-  console.log('metadataStore', metadataStore);
+  console.log("metadataStore", metadataStore);
 
   const setArtifact = useCallback(
     (updaterFn: UIArtifact | ((currentArtifact: UIArtifact) => UIArtifact)) => {
       setArtifactState((currentArtifact) => {
-        if (typeof updaterFn === 'function') {
+        if (typeof updaterFn === "function") {
           return updaterFn(currentArtifact);
         }
         return updaterFn;
       });
     },
-    [],
+    []
   );
 
   const setMetadata = useCallback(
@@ -74,12 +74,12 @@ export function ArtifactProvider({ children }: { children: ReactNode }) {
       setMetadataStore((current) => ({
         ...current,
         [documentId]:
-          typeof metadata === 'function'
+          typeof metadata === "function"
             ? metadata(current ? current[documentId] : null)
             : metadata,
       }));
     },
-    [],
+    []
   );
 
   const contextValue = useMemo(
@@ -89,7 +89,7 @@ export function ArtifactProvider({ children }: { children: ReactNode }) {
       metadata: metadataStore,
       setMetadata,
     }),
-    [artifact, setArtifact, metadataStore, setMetadata],
+    [artifact, setArtifact, metadataStore, setMetadata]
   );
 
   return (
@@ -102,7 +102,7 @@ export function ArtifactProvider({ children }: { children: ReactNode }) {
 function useArtifactContext() {
   const context = useContext(ArtifactContext);
   if (!context) {
-    throw new Error('Artifact hooks must be used within ArtifactProvider');
+    throw new Error("Artifact hooks must be used within ArtifactProvider");
   }
   return context;
 }
@@ -110,9 +110,7 @@ function useArtifactContext() {
 export function useArtifactSelector<Selected>(selector: Selector<Selected>) {
   const { artifact } = useArtifactContext();
 
-  const selectedValue = useMemo(() => {
-    return selector(artifact);
-  }, [artifact, selector]);
+  const selectedValue = useMemo(() => selector(artifact), [artifact, selector]);
 
   return selectedValue;
 }
@@ -125,9 +123,10 @@ export function useArtifact() {
     setMetadata: setMetadataStore,
   } = useArtifactContext();
 
-  const metadata = useMemo(() => {
-    return artifact.documentId ? metadataStore?.[artifact.documentId] : null;
-  }, [metadataStore, artifact.documentId]);
+  const metadata = useMemo(
+    () => (artifact.documentId ? metadataStore?.[artifact.documentId] : null),
+    [metadataStore, artifact.documentId]
+  );
 
   const setMetadata = useCallback(
     (metadata: any | ((current: any) => any)) => {
@@ -135,7 +134,7 @@ export function useArtifact() {
         setMetadataStore(artifact.documentId, metadata);
       }
     },
-    [artifact.documentId, setMetadataStore],
+    [artifact.documentId, setMetadataStore]
   );
 
   const resetArtifact = useCallback(() => {
@@ -144,12 +143,12 @@ export function useArtifact() {
 
   const closeArtifact = useCallback(() => {
     setArtifact((currentArtifact) =>
-      currentArtifact.status === 'streaming'
+      currentArtifact.status === "streaming"
         ? {
             ...currentArtifact,
             isVisible: false,
           }
-        : { ...initialArtifactData, status: 'idle' },
+        : { ...initialArtifactData, status: "idle" }
     );
   }, [setArtifact]);
 
@@ -162,13 +161,6 @@ export function useArtifact() {
       metadata,
       setMetadata,
     }),
-    [
-      artifact,
-      setArtifact,
-      metadata,
-      setMetadata,
-      resetArtifact,
-      closeArtifact,
-    ],
+    [artifact, setArtifact, metadata, setMetadata, resetArtifact, closeArtifact]
   );
 }

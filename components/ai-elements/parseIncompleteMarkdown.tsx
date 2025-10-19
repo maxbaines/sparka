@@ -1,10 +1,10 @@
-'use client';
+"use client";
 /**
  * Parses markdown text and removes incomplete tokens to prevent partial rendering
  * of links, images, bold, and italic formatting during streaming.
  */
 export function parseIncompleteMarkdown(text: string): string {
-  if (!text || typeof text !== 'string') {
+  if (!text || typeof text !== "string") {
     return text;
   }
 
@@ -49,12 +49,12 @@ export function parseIncompleteMarkdown(text: string): string {
   const singleAsteriskMatch = result.match(singleAsteriskPattern);
   if (singleAsteriskMatch) {
     // Count single asterisks that aren't part of **
-    const singleAsterisks = result.split('').reduce((acc, char, index) => {
-      if (char === '*') {
+    const singleAsterisks = result.split("").reduce((acc, char, index) => {
+      if (char === "*") {
         // Check if it's part of a ** pair
         const prevChar = result[index - 1];
         const nextChar = result[index + 1];
-        if (prevChar !== '*' && nextChar !== '*') {
+        if (prevChar !== "*" && nextChar !== "*") {
           return acc + 1;
         }
       }
@@ -72,12 +72,12 @@ export function parseIncompleteMarkdown(text: string): string {
   const singleUnderscoreMatch = result.match(singleUnderscorePattern);
   if (singleUnderscoreMatch) {
     // Count single underscores that aren't part of __
-    const singleUnderscores = result.split('').reduce((acc, char, index) => {
-      if (char === '_') {
+    const singleUnderscores = result.split("").reduce((acc, char, index) => {
+      if (char === "_") {
         // Check if it's part of a __ pair
         const prevChar = result[index - 1];
         const nextChar = result[index + 1];
-        if (prevChar !== '_' && nextChar !== '_') {
+        if (prevChar !== "_" && nextChar !== "_") {
           return acc + 1;
         }
       }
@@ -95,7 +95,7 @@ export function parseIncompleteMarkdown(text: string): string {
   const inlineCodeMatch = result.match(inlineCodePattern);
   if (inlineCodeMatch) {
     // Check if we're dealing with a code block (triple backticks)
-    const _hasCodeBlockStart = result.includes('```');
+    const _hasCodeBlockStart = result.includes("```");
     const codeBlockPattern = /```[\s\S]*?```/g;
     const _completeCodeBlocks = (result.match(codeBlockPattern) || []).length;
     const allTripleBackticks = (result.match(/```/g) || []).length;
@@ -108,14 +108,14 @@ export function parseIncompleteMarkdown(text: string): string {
       // Count the number of single backticks that are NOT part of triple backticks
       let singleBacktickCount = 0;
       for (let i = 0; i < result.length; i++) {
-        if (result[i] === '`') {
+        if (result[i] === "`") {
           // Check if this backtick is part of a triple backtick sequence
-          const isTripleStart = result.substring(i, i + 3) === '```';
+          const isTripleStart = result.substring(i, i + 3) === "```";
           const isTripleMiddle =
-            i > 0 && result.substring(i - 1, i + 2) === '```';
-          const isTripleEnd = i > 1 && result.substring(i - 2, i + 1) === '```';
+            i > 0 && result.substring(i - 1, i + 2) === "```";
+          const isTripleEnd = i > 1 && result.substring(i - 2, i + 1) === "```";
 
-          if (!isTripleStart && !isTripleMiddle && !isTripleEnd) {
+          if (!(isTripleStart || isTripleMiddle || isTripleEnd)) {
             singleBacktickCount++;
           }
         }

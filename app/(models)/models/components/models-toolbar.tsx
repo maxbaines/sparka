@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
-import { Search, X, RotateCcw } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { RotateCcw, Search, X } from "lucide-react";
+import { memo } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
-} from '@/components/ui/select';
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type SortOption =
-  | 'newest'
-  | 'pricing-low'
-  | 'pricing-high'
-  | 'context-high'
-  | 'context-low';
+  | "newest"
+  | "pricing-low"
+  | "pricing-high"
+  | "context-high"
+  | "context-low";
 
 export const PureModelsToolbar = memo(function PureModelsToolbar({
   searchQuery,
@@ -35,31 +35,31 @@ export const PureModelsToolbar = memo(function PureModelsToolbar({
   onClearAll: () => void;
 }) {
   return (
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-      <div className="relative flex-1 max-w-md">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+    <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+      <div className="relative max-w-md flex-1">
+        <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
         <Input
+          className="pr-10 pl-10"
+          onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search models..."
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10 pr-10"
         />
         {searchQuery && (
           <Button
-            variant="ghost"
-            size="sm"
+            className="-translate-y-1/2 absolute top-1/2 right-1 h-8 w-8 p-0"
             onClick={onClearSearch}
-            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+            size="sm"
+            variant="ghost"
           >
             <X className="h-4 w-4" />
           </Button>
         )}
       </div>
       <Select
-        value={sortBy}
         onValueChange={(value: SortOption) => onChangeSort(value)}
+        value={sortBy}
       >
-        <SelectTrigger className="h-8 w-full sm:w-40 text-xs">
+        <SelectTrigger className="h-8 w-full text-xs sm:w-40">
           <SelectValue placeholder="Sort" />
         </SelectTrigger>
         <SelectContent className="text-sm">
@@ -70,7 +70,7 @@ export const PureModelsToolbar = memo(function PureModelsToolbar({
           <SelectItem value="context-low">Context Low → High</SelectItem>
         </SelectContent>
       </Select>
-      <Button variant="ghost" className="shrink-0" onClick={onClearAll}>
+      <Button className="shrink-0" onClick={onClearAll} variant="ghost">
         <RotateCcw className="mr-2 h-4 w-4" /> Reset
       </Button>
     </div>

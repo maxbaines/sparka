@@ -1,4 +1,4 @@
-import { type RefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useRef } from "react";
 
 export function useScrollToBottom<T extends HTMLElement>(): [
   RefObject<T>,
@@ -14,28 +14,28 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 
     if (container && end) {
       // Immediate scroll to bottom on initial load
-      end.scrollIntoView({ behavior: 'instant', block: 'end' });
+      end.scrollIntoView({ behavior: "instant", block: "end" });
 
       // Keep track of previous message count and content
       let prevMessageCount = container.querySelectorAll(
-        '[data-role="user"], [data-role="assistant"]',
+        '[data-role="user"], [data-role="assistant"]'
       ).length;
       let lastMessageTextLength = 0;
       const observer = new MutationObserver((_mutations) => {
         // Check if new messages were added or content is streaming
         const currentMessageCount = container.querySelectorAll(
-          '[data-role="user"], [data-role="assistant"]',
+          '[data-role="user"], [data-role="assistant"]'
         ).length;
         const messages = container.querySelectorAll(
-          '[data-role="user"], [data-role="assistant"]',
+          '[data-role="user"], [data-role="assistant"]'
         );
 
         // If there are messages, check the last one for streaming content changes
         let shouldScroll = false;
 
         if (currentMessageCount > 0) {
-          const lastMessage = messages[messages.length - 1];
-          const lastMessageContent = lastMessage.textContent || '';
+          const lastMessage = Array.from(messages).at(-1);
+          const lastMessageContent = lastMessage?.textContent ?? "";
 
           // Determine if we should scroll based on:
           // 1. New message was added
@@ -53,13 +53,11 @@ export function useScrollToBottom<T extends HTMLElement>(): [
         }
 
         if (shouldScroll) {
-          end.scrollIntoView({ behavior: 'instant', block: 'end' });
+          end.scrollIntoView({ behavior: "instant", block: "end" });
           oneTimeScrollRef.current = false;
-        } else {
-          if (oneTimeScrollRef.current === false) {
-            end.scrollIntoView({ behavior: 'instant', block: 'end' });
-            oneTimeScrollRef.current = true;
-          }
+        } else if (oneTimeScrollRef.current === false) {
+          end.scrollIntoView({ behavior: "instant", block: "end" });
+          oneTimeScrollRef.current = true;
         }
       });
 

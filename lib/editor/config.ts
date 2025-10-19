@@ -1,20 +1,20 @@
+import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import { LinkNode } from "@lexical/link";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { $convertToMarkdownString, TRANSFORMERS } from "@lexical/markdown";
 import {
   $createHeadingNode,
   HeadingNode,
-  QuoteNode,
   type HeadingTagType,
-} from '@lexical/rich-text';
-import { ListItemNode, ListNode } from '@lexical/list';
-import { CodeNode, CodeHighlightNode } from '@lexical/code';
-import { LinkNode } from '@lexical/link';
-import type { LexicalEditor } from 'lexical';
-import { $insertNodes, $getSelection } from 'lexical';
-import { $convertToMarkdownString, TRANSFORMERS } from '@lexical/markdown';
+  QuoteNode,
+} from "@lexical/rich-text";
+import type { LexicalEditor } from "lexical";
+import { $getSelection, $insertNodes } from "lexical";
 
 // Create initial editor configuration
 export function createEditorConfig() {
   return {
-    namespace: 'DocumentEditor',
+    namespace: "DocumentEditor",
     nodes: [
       HeadingNode,
       ListNode,
@@ -25,7 +25,7 @@ export function createEditorConfig() {
       LinkNode,
     ],
     onError: (error: Error) => {
-      console.error('Lexical error:', error);
+      console.error("Lexical error:", error);
     },
   };
 }
@@ -46,8 +46,8 @@ export function createHeadingTransform(level: number) {
         $insertNodes([headingNode]);
       }
     },
-    trigger: ' ',
-    type: 'text-match',
+    trigger: " ",
+    type: "text-match",
   };
 }
 
@@ -60,7 +60,7 @@ export const handleEditorChange = ({
   editor: LexicalEditor;
   onSaveContent: (updatedContent: string, debounce: boolean) => void;
 }) => {
-  let updatedContent = '';
+  let updatedContent = "";
 
   editor.getEditorState().read(() => {
     updatedContent = $convertToMarkdownString(TRANSFORMERS);

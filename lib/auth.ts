@@ -1,9 +1,9 @@
-import { betterAuth } from 'better-auth';
-import { env } from '@/lib/env';
-import { nextCookies } from 'better-auth/next-js';
-import { db } from './db/client';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { schema } from './db/schema';
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { nextCookies } from "better-auth/next-js";
+import { env } from "@/lib/env";
+import { db } from "./db/client";
+import { schema } from "./db/schema";
 
 export type Session = {
   user?: {
@@ -17,7 +17,7 @@ export type Session = {
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: 'pg',
+    provider: "pg",
     schema,
   }),
   trustedOrigins: env.VERCEL_URL ? [env.VERCEL_URL] : undefined,
@@ -30,17 +30,17 @@ export const auth = betterAuth({
     const githubSecret = env.AUTH_GITHUB_SECRET;
 
     const google =
-      typeof googleId === 'string' &&
+      typeof googleId === "string" &&
       googleId.length > 0 &&
-      typeof googleSecret === 'string' &&
+      typeof googleSecret === "string" &&
       googleSecret.length > 0
         ? { clientId: googleId, clientSecret: googleSecret }
         : undefined;
 
     const github =
-      typeof githubId === 'string' &&
+      typeof githubId === "string" &&
       githubId.length > 0 &&
-      typeof githubSecret === 'string' &&
+      typeof githubSecret === "string" &&
       githubSecret.length > 0
         ? { clientId: githubId, clientSecret: githubSecret }
         : undefined;

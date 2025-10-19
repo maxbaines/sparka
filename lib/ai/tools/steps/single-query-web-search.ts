@@ -1,10 +1,10 @@
-import { generateUUID } from '@/lib/utils';
-import type { StreamWriter } from '../../types';
+import { generateUUID } from "@/lib/utils";
+import type { StreamWriter } from "../../types";
 import {
-  webSearchStep,
   type SearchProviderOptions,
   type WebSearchResponse,
-} from './web-search';
+  webSearchStep,
+} from "./web-search";
 
 export async function singleQueryWebSearchStep({
   query,
@@ -21,12 +21,12 @@ export async function singleQueryWebSearchStep({
   try {
     // Send running status
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       id: updateId,
       data: {
         title: `Searching for "${query}"`,
-        type: 'web',
-        status: 'running',
+        type: "web",
+        status: "running",
         queries: [query],
       },
     });
@@ -41,12 +41,12 @@ export async function singleQueryWebSearchStep({
 
     // Send completed status
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       id: updateId,
       data: {
         title: `Searching for "${query}"`,
-        type: 'web',
-        status: 'completed',
+        type: "web",
+        status: "completed",
         queries: [query],
         results: result.results,
       },
@@ -54,16 +54,16 @@ export async function singleQueryWebSearchStep({
 
     return result;
   } catch (error: any) {
-    const errorMessage = error?.message || 'Unknown error occurred';
+    const errorMessage = error?.message || "Unknown error occurred";
 
     // Send error status
     dataStream.write({
-      type: 'data-researchUpdate',
+      type: "data-researchUpdate",
       id: updateId,
       data: {
         title: `Searching for "${query}"`,
-        type: 'web',
-        status: 'completed',
+        type: "web",
+        status: "completed",
         queries: [query],
       },
     });

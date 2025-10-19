@@ -1,21 +1,22 @@
-import { createDocumentHandler } from '@/lib/artifacts/server';
-import { streamText } from 'ai';
+import { streamText } from "ai";
+import { createDocumentHandler } from "@/lib/artifacts/server";
 
 type StreamTextConfig = Parameters<typeof streamText>[0];
 
 export class ReportDocumentWriter {
-  private streamTextConfig: StreamTextConfig;
+  private readonly streamTextConfig: StreamTextConfig;
 
+  // biome-ignore lint/style/useReadonlyClassProperties: It is reassigned
   private reportContent: string;
 
   constructor(streamTextConfig: StreamTextConfig) {
     this.streamTextConfig = streamTextConfig;
-    this.reportContent = '';
+    this.reportContent = "";
   }
 
-  createDocumentHandler = () => {
-    return createDocumentHandler<'text'>({
-      kind: 'text',
+  createDocumentHandler = () =>
+    createDocumentHandler<"text">({
+      kind: "text",
       onCreateDocument: async ({
         title: _title,
         description: _description,
@@ -23,20 +24,20 @@ export class ReportDocumentWriter {
         prompt: _prompt,
         selectedModel: _selectedModel,
       }) => {
-        let draftContent = '';
+        let draftContent = "";
 
         const { fullStream } = streamText(this.streamTextConfig);
 
         for await (const delta of fullStream) {
           const { type } = delta;
 
-          if (type === 'text-delta') {
+          if (type === "text-delta") {
             const { text } = delta;
 
             draftContent += text;
 
             dataStream.write({
-              type: 'data-textDelta',
+              type: "data-textDelta",
               data: text,
               transient: true,
             });
@@ -46,13 +47,10 @@ export class ReportDocumentWriter {
         this.reportContent = draftContent;
         return draftContent;
       },
-      onUpdateDocument: async () => {
-        throw new Error('Not implemented');
+      onUpdateDocument: () => {
+        throw new Error("Not implemented");
       },
     });
-  };
 
-  getReportContent = () => {
-    return this.reportContent;
-  };
+  getReportContent = () => this.reportContent;
 }

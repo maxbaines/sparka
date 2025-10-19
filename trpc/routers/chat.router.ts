@@ -1,40 +1,40 @@
+import { TRPCError } from "@trpc/server";
+import { generateText } from "ai";
+import { z } from "zod";
+import { DEFAULT_TITLE_MODEL } from "@/lib/ai/app-models";
+import { getLanguageModel } from "@/lib/ai/providers";
+import type { ChatMessage } from "@/lib/ai/types";
 import {
-  getChatsByUserId,
-  updateChatTitleById,
-  getChatById,
-  getMessageById,
+  cloneAttachmentsInMessages,
+  cloneMessagesWithDocuments,
+} from "@/lib/clone-messages";
+import {
+  deleteChatById,
   deleteMessagesByChatIdAfterMessageId,
   getAllMessagesByChatId,
-  updateChatVisiblityById,
-  saveChat,
-  saveMessages,
+  getChatById,
+  getChatsByUserId,
   getDocumentsByMessageIds,
+  getMessageById,
+  saveChat,
   saveDocuments,
+  saveMessages,
   updateChatIsPinnedById,
-  deleteChatById,
-} from '@/lib/db/queries';
+  updateChatTitleById,
+  updateChatVisiblityById,
+} from "@/lib/db/queries";
+import type { DBMessage } from "@/lib/db/schema";
+import { MAX_MESSAGE_CHARS } from "@/lib/limits/tokens";
+import {
+  dbChatToUIChat,
+  dbMessageToChatMessage,
+} from "@/lib/message-conversion";
+import { generateUUID } from "@/lib/utils";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
-} from '@/trpc/init';
-import { z } from 'zod';
-import { generateText } from 'ai';
-import { getLanguageModel } from '@/lib/ai/providers';
-import { TRPCError } from '@trpc/server';
-import {
-  dbChatToUIChat,
-  dbMessageToChatMessage,
-} from '@/lib/message-conversion';
-import { generateUUID } from '@/lib/utils';
-import {
-  cloneMessagesWithDocuments,
-  cloneAttachmentsInMessages,
-} from '@/lib/clone-messages';
-import { DEFAULT_TITLE_MODEL } from '@/lib/ai/app-models';
-import type { DBMessage } from '@/lib/db/schema';
-import type { ChatMessage } from '@/lib/ai/types';
-import { MAX_MESSAGE_CHARS } from '@/lib/limits/tokens';
+} from "@/trpc/init";
 
 export const chatRouter = createTRPCRouter({
   getAllChats: protectedProcedure.query(async ({ ctx }) => {
@@ -42,8 +42,12 @@ export const chatRouter = createTRPCRouter({
 
     // Sort chats by pinned status, then by last updated date
     chats.sort((a, b) => {
-      if (a.isPinned && !b.isPinned) return -1;
-      if (!a.isPinned && b.isPinned) return 1;
+      if (a.isPinned && !b.isPinned) {
+        return -1;
+      }
+      if (!a.isPinned && b.isPinned) {
+        return 1;
+      }
       return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
     });
 
@@ -54,15 +58,15 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         chatId: z.string().uuid(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const chat = await getChatById({ id: input.chatId });
 
       if (!chat || chat.userId !== ctx.user.id) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Chat not found',
+          code: "NOT_FOUND",
+          message: "Chat not found",
         });
       }
 
@@ -73,15 +77,15 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         chatId: z.string().uuid(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       // Verify the chat belongs to the user
       const chat = await getChatById({ id: input.chatId });
       if (!chat || chat.userId !== ctx.user.id) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Chat not found',
+          code: "NOT_FOUND",
+          message: "Chat not found",
         });
       }
 
@@ -94,13 +98,13 @@ export const chatRouter = createTRPCRouter({
       z.object({
         chatId: z.string().uuid(),
         title: z.string().min(1).max(255),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       // Verify the chat belongs to the user
       const chat = await getChatById({ id: input.chatId });
       if (!chat || chat.userId !== ctx.user.id) {
-        throw new Error('Chat not found or access denied');
+        throw new Error("Chat not found or access denied");
       }
 
       const _res = await updateChatTitleById({
@@ -114,7 +118,7 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         messageId: z.string().uuid(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       // Get the message to verify it exists and get its chat
@@ -122,15 +126,15 @@ export const chatRouter = createTRPCRouter({
 
       if (!message) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Message not found',
+          code: "NOT_FOUND",
+          message: "Message not found",
         });
       }
 
       // Verify the chat belongs to the user
       const chat = await getChatById({ id: message.chatId });
       if (!chat || chat.userId !== ctx.user.id) {
-        throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Access denied' });
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied" });
       }
 
       // Delete all messages after the specified message (by position, not timestamp)
@@ -146,16 +150,16 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         chatId: z.string().uuid(),
-        visibility: z.enum(['private', 'public']),
-      }),
+        visibility: z.enum(["private", "public"]),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       // Verify the chat belongs to the user
       const chat = await getChatById({ id: input.chatId });
       if (!chat || chat.userId !== ctx.user.id) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Chat not found or access denied',
+          code: "NOT_FOUND",
+          message: "Chat not found or access denied",
         });
       }
 
@@ -173,15 +177,15 @@ export const chatRouter = createTRPCRouter({
       z.object({
         chatId: z.string().uuid(),
         isPinned: z.boolean(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       // Verify the chat belongs to the user
       const chat = await getChatById({ id: input.chatId });
       if (!chat || chat.userId !== ctx.user.id) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Chat not found or access denied',
+          code: "NOT_FOUND",
+          message: "Chat not found or access denied",
         });
       }
 
@@ -198,14 +202,14 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         chatId: z.string().uuid(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const chat = await getChatById({ id: input.chatId });
       if (!chat || chat.userId !== ctx.user.id) {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Chat not found or access denied',
+          code: "NOT_FOUND",
+          message: "Chat not found or access denied",
         });
       }
 
@@ -217,7 +221,7 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         message: z.string().min(1).max(MAX_MESSAGE_CHARS),
-      }),
+      })
     )
     .mutation(async ({ input }) => {
       const { text: title } = await generateText({
@@ -238,15 +242,15 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         chatId: z.string().uuid(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       const chat = await getChatById({ id: input.chatId });
 
-      if (!chat || chat.visibility !== 'public') {
+      if (!chat || chat.visibility !== "public") {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Public chat not found',
+          code: "NOT_FOUND",
+          message: "Public chat not found",
         });
       }
 
@@ -257,16 +261,16 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         chatId: z.string().uuid(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       // First verify the chat is public
       const chat = await getChatById({ id: input.chatId });
 
-      if (!chat || chat.visibility !== 'public') {
+      if (!chat || chat.visibility !== "public") {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Public chat not found',
+          code: "NOT_FOUND",
+          message: "Public chat not found",
         });
       }
 
@@ -278,16 +282,16 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         chatId: z.string().uuid(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       // First verify the chat is public
       const sourceChat = await getChatById({ id: input.chatId });
 
-      if (!sourceChat || sourceChat.visibility !== 'public') {
+      if (!sourceChat || sourceChat.visibility !== "public") {
         throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Public chat not found',
+          code: "NOT_FOUND",
+          message: "Public chat not found",
         });
       }
 
@@ -298,8 +302,8 @@ export const chatRouter = createTRPCRouter({
 
       if (sourceMessages.length === 0) {
         throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Source chat has no messages to copy',
+          code: "BAD_REQUEST",
+          message: "Source chat has no messages to copy",
         });
       }
 
@@ -324,12 +328,12 @@ export const chatRouter = createTRPCRouter({
         sourceMessages,
         sourceDocuments,
         newChatId,
-        ctx.user.id,
+        ctx.user.id
       );
 
       // Clone attachments in messages (this has side effects - network calls to blob storage)
       const messagesWithClonedAttachments = await cloneAttachmentsInMessages(
-        clonedMessages as (DBMessage & { parts: ChatMessage['parts'] })[],
+        clonedMessages as (DBMessage & { parts: ChatMessage["parts"] })[]
       );
 
       // Save cloned messages first, then documents due to foreign key dependency

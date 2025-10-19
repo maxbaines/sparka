@@ -1,5 +1,5 @@
-import { useTRPC } from '@/trpc/react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/react";
 
 export function usePublicChat(chatId: string) {
   const trpc = useTRPC();

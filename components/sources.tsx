@@ -1,57 +1,53 @@
-import { FileText, ArrowRight } from 'lucide-react';
-import React from 'react';
-import { cn } from '@/lib/utils';
+import { ArrowRight, FileText } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer';
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { FaviconGroup } from './favicon-group';
-
-import type { SearchResultItem } from '@/lib/ai/tools/research-updates-schema';
-import { Favicon } from './favicon';
-import { getFaviconUrl } from '@/lib/url-utils';
+} from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import type { SearchResultItem } from "@/lib/ai/tools/research-updates-schema";
+import { getFaviconUrl } from "@/lib/url-utils";
+import { cn } from "@/lib/utils";
+import { Favicon } from "./favicon";
+import { FaviconGroup } from "./favicon-group";
 
 const SourcesList = ({
   sources,
 }: {
   sources: SearchResultItem[] | undefined;
-}) => {
-  return (
-    <div className="space-y-3">
-      {sources?.map((source: SearchResultItem, i: number) => (
-        <a
-          key={i}
-          href={source.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-4 rounded-lg bg-neutral-50 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-        >
-          <div className="flex items-start gap-3">
-            <div className="shrink-0 mt-1">
-              <Favicon url={getFaviconUrl(source)} />
-            </div>
-            <div className="flex flex-col gap-1">
-              <h4 className="text-sm font-medium leading-tight">
-                {source.title}
-              </h4>
-            </div>
+}) => (
+  <div className="space-y-3">
+    {sources?.map((source: SearchResultItem, i: number) => (
+      <a
+        className="block rounded-lg bg-neutral-50 p-4 transition-colors hover:bg-neutral-100 dark:bg-neutral-800/50 dark:hover:bg-neutral-800"
+        href={source.url}
+        key={i}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <div className="flex items-start gap-3">
+          <div className="mt-1 shrink-0">
+            <Favicon url={getFaviconUrl(source)} />
           </div>
-        </a>
-      ))}
-    </div>
-  );
-};
+          <div className="flex flex-col gap-1">
+            <h4 className="font-medium text-sm leading-tight">
+              {source.title}
+            </h4>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+);
 
 const AllSourcesView = ({
   sources,
@@ -60,19 +56,19 @@ const AllSourcesView = ({
   sources: SearchResultItem[] | undefined;
   id?: string;
 }) => {
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-  const title = 'All Sources';
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const title = "All Sources";
 
   if (isDesktop) {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <button id={id} className="hidden" type="button">
+          <button className="hidden" id={id} type="button">
             Show All
           </button>
         </DialogTrigger>
         <DialogContent
-          className={cn('max-h-[80vh] overflow-y-auto', 'max-w-4xl')}
+          className={cn("max-h-[80vh] overflow-y-auto", "max-w-4xl")}
         >
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -89,7 +85,7 @@ const AllSourcesView = ({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <button id={id} className="hidden" type="button">
+        <button className="hidden" id={id} type="button">
           Show All
         </button>
       </DrawerTrigger>
@@ -100,7 +96,7 @@ const AllSourcesView = ({
             {title}
           </DrawerTitle>
         </DrawerHeader>
-        <div className="p-4 overflow-y-auto">
+        <div className="overflow-y-auto p-4">
           <SourcesList sources={sources} />
         </div>
       </DrawerContent>
@@ -117,22 +113,22 @@ function ShowSourcesButton({
 }) {
   return (
     <button
-      type="button"
+      className="group flex items-center justify-center gap-2 rounded-lg border border-neutral-200 p-2.5 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-800/50"
       onClick={() => document.getElementById(dialogId)?.click()}
-      className="flex items-center justify-center gap-2 p-2.5 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors group"
+      type="button"
     >
       <FaviconGroup
+        className="mr-1.5"
+        maxVisible={3}
         sources={sources.map((s) => ({
           url: s.url,
           title: s.title,
         }))}
-        maxVisible={3}
-        className="mr-1.5"
       />
-      <span className="text-xs text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
+      <span className="text-neutral-600 text-xs group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-300">
         {sources.length} Sources
       </span>
-      <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-500 transition-colors" />
+      <ArrowRight className="h-3.5 w-3.5 text-neutral-400 transition-colors group-hover:text-neutral-500" />
     </button>
   );
 }
@@ -142,13 +138,13 @@ export const Sources = ({ sources }: { sources: SearchResultItem[] }) => {
     return null;
   }
 
-  const sourcesDialogId = 'show-all-sources-dialog';
+  const sourcesDialogId = "show-all-sources-dialog";
 
   return (
     <div className="space-y-3">
-      <ShowSourcesButton sources={sources} dialogId={sourcesDialogId} />
+      <ShowSourcesButton dialogId={sourcesDialogId} sources={sources} />
       <div className="hidden">
-        <AllSourcesView sources={sources} id={sourcesDialogId} />
+        <AllSourcesView id={sourcesDialogId} sources={sources} />
       </div>
     </div>
   );

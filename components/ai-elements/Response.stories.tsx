@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Response } from './response';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Response } from "./response";
 
 const meta: Meta<typeof Response> = {
-  title: 'Components/AI/Response',
+  title: "Components/AI/Response",
   component: Response,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
   decorators: [
     (Story) => (

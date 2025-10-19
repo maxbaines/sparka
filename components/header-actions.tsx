@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
-import { useSession } from '@/providers/session-provider';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { LogIn } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { memo } from "react";
+import { GitIcon } from "@/components/icons";
+import { HeaderUserNav } from "@/components/sidebar-user-nav";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import type { Session } from '@/lib/auth';
-import { GitIcon } from '@/components/icons';
-import { LogIn } from 'lucide-react';
-import { HeaderUserNav } from '@/components/sidebar-user-nav';
+} from "@/components/ui/tooltip";
+import type { Session } from "@/lib/auth";
+import { useSession } from "@/providers/session-provider";
 
-function PureHeaderActions({ user }: { user?: Session['user'] }) {
+function PureHeaderActions({ user }: { user?: Session["user"] }) {
   const router = useRouter();
   const { data: session } = useSession();
   const effectiveUser = user ?? session?.user;
@@ -22,12 +22,12 @@ function PureHeaderActions({ user }: { user?: Session['user'] }) {
 
   return (
     <div className="flex items-center gap-2">
-      <Button type="button" variant="ghost" size="icon" asChild>
+      <Button asChild size="icon" type="button" variant="ghost">
         <a
-          href="https://github.com/franciscomoretti/sparka"
-          target="_blank"
-          rel="noopener noreferrer"
           className="flex items-center justify-center"
+          href="https://github.com/franciscomoretti/sparka"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           <GitIcon size={20} />
         </a>
@@ -39,15 +39,15 @@ function PureHeaderActions({ user }: { user?: Session['user'] }) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant="outline"
-              size="sm"
               className="h-8 px-3"
               onClick={() => {
-                router.push('/login');
+                router.push("/login");
                 router.refresh();
               }}
+              size="sm"
+              variant="outline"
             >
-              <LogIn className="h-4 w-4 mr-2" />
+              <LogIn className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Sign in</span>
             </Button>
           </TooltipTrigger>

@@ -1,9 +1,9 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { memo } from 'react';
-import { Action } from '@/components/ai-elements/actions';
-import { useMessageById, useMessageRoleById } from '@/lib/stores/hooks';
-import { useMessageTree } from '@/providers/message-tree-provider';
-import { useSession } from '@/providers/session-provider';
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { memo } from "react";
+import { Action } from "@/components/ai-elements/actions";
+import { useMessageById, useMessageRoleById } from "@/lib/stores/hooks";
+import { useMessageTree } from "@/providers/message-tree-provider";
+import { useSession } from "@/providers/session-provider";
 
 export function PureMessageSiblings({
   messageId,
@@ -23,14 +23,14 @@ export function PureMessageSiblings({
   const _message = useMessageById(messageId);
 
   return (
-    <div className="flex gap-1 items-center justify-center">
+    <div className="flex items-center justify-center gap-1">
       {hasSiblings && (
         <>
           <Action
-            tooltip="Previous version"
-            className="text-muted-foreground hover:text-accent-foreground hover:bg-accent h-7 w-7 px-0"
-            onClick={() => navigateToSibling(messageId, 'prev')}
+            className="h-7 w-7 px-0 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             disabled={siblingInfo.siblingIndex === 0}
+            onClick={() => navigateToSibling(messageId, "prev")}
+            tooltip="Previous version"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
           </Action>
@@ -40,12 +40,12 @@ export function PureMessageSiblings({
           </span>
 
           <Action
-            tooltip="Next version"
-            className="text-muted-foreground hover:text-accent-foreground hover:bg-accent h-7 w-7 px-0"
-            onClick={() => navigateToSibling(messageId, 'next')}
+            className="h-7 w-7 px-0 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             disabled={
               siblingInfo.siblingIndex === siblingInfo.siblings.length - 1
             }
+            onClick={() => navigateToSibling(messageId, "next")}
+            tooltip="Next version"
           >
             <ChevronRight className="h-3.5 w-3.5" />
           </Action>

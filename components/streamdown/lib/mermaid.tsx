@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import { cn } from './utils';
+import { useEffect, useState } from "react";
+import { cn } from "./utils";
 
 // Global mermaid initialization
 let mermaidInitialized = false;
 
 const initializeMermaid = async () => {
   if (!mermaidInitialized) {
-    const mermaidModule = await import('mermaid');
+    const mermaidModule = await import("mermaid");
     const mermaid = mermaidModule.default;
 
     mermaid.initialize({
       startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'strict',
-      fontFamily: 'monospace',
+      theme: "default",
+      securityLevel: "strict",
+      fontFamily: "monospace",
       suppressErrorRendering: true,
     });
 
@@ -21,7 +21,7 @@ const initializeMermaid = async () => {
     return mermaid;
   }
 
-  const mermaidModule = await import('mermaid');
+  const mermaidModule = await import("mermaid");
   return mermaidModule.default;
 };
 
@@ -33,8 +33,8 @@ type MermaidProps = {
 export const Mermaid = ({ chart, className }: MermaidProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [svgContent, setSvgContent] = useState<string>('');
-  const [lastValidSvg, setLastValidSvg] = useState<string>('');
+  const [svgContent, setSvgContent] = useState<string>("");
+  const [lastValidSvg, setLastValidSvg] = useState<string>("");
 
   useEffect(() => {
     const renderChart = async () => {
@@ -47,10 +47,10 @@ export const Mermaid = ({ chart, className }: MermaidProps) => {
 
         // Use a stable ID based on chart content hash to prevent re-renders
         const chartHash = chart
-          .split('')
+          .split("")
           .reduce(
             (acc, char) => ((acc << 5) - acc + char.charCodeAt(0)) | 0,
-            0,
+            0
           );
         const uniqueId = `mermaid-${Math.abs(chartHash)}`;
 
@@ -68,7 +68,7 @@ export const Mermaid = ({ chart, className }: MermaidProps) => {
           const errorMessage =
             err instanceof Error
               ? err.message
-              : 'Failed to render Mermaid chart';
+              : "Failed to render Mermaid chart";
           setError(errorMessage);
         }
       } finally {
@@ -77,12 +77,12 @@ export const Mermaid = ({ chart, className }: MermaidProps) => {
     };
 
     renderChart();
-  }, [chart]);
+  }, [chart, lastValidSvg, svgContent]);
 
   // Show loading only on initial load when we have no content
   if (isLoading && !svgContent && !lastValidSvg) {
     return (
-      <div className={cn('my-4 flex justify-center p-4', className)}>
+      <div className={cn("my-4 flex justify-center p-4", className)}>
         <div className="flex items-center space-x-2 text-muted-foreground">
           <div className="h-4 w-4 animate-spin rounded-full border-current border-b-2" />
           <span className="text-sm">Loading diagram...</span>
@@ -96,8 +96,8 @@ export const Mermaid = ({ chart, className }: MermaidProps) => {
     return (
       <div
         className={cn(
-          'rounded-lg border border-red-200 bg-red-50 p-4',
-          className,
+          "rounded-lg border border-red-200 bg-red-50 p-4",
+          className
         )}
       >
         <p className="font-mono text-red-700 text-sm">Mermaid Error: {error}</p>
@@ -119,7 +119,7 @@ export const Mermaid = ({ chart, className }: MermaidProps) => {
   return (
     <div
       aria-label="Mermaid chart"
-      className={cn('my-4 flex justify-center', className)}
+      className={cn("my-4 flex justify-center", className)}
       dangerouslySetInnerHTML={{ __html: displaySvg }}
       role="img"
     />

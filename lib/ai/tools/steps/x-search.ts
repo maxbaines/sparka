@@ -1,9 +1,9 @@
-import Exa from 'exa-js';
-import type { StreamWriter } from '../../types';
-import { env } from '@/lib/env';
+import Exa from "exa-js";
+import { env } from "@/lib/env";
+import type { StreamWriter } from "../../types";
 
 export type XSearchResult = {
-  source: 'x';
+  source: "x";
   title: string;
   url: string;
   content: string;
@@ -35,7 +35,7 @@ export async function xSearchStep({
   annotate = true,
 }: {
   query: string;
-  type: 'neural' | 'keyword';
+  type: "neural" | "keyword";
   maxResults?: number;
   dataStream: StreamWriter;
   stepId: string;
@@ -45,12 +45,12 @@ export async function xSearchStep({
     // Send running status
     if (annotate) {
       dataStream.write({
-        type: 'data-researchUpdate',
+        type: "data-researchUpdate",
         id: stepId,
         data: {
           title: `Searching for "${query}"`,
-          type: 'web',
-          status: 'running',
+          type: "web",
+          status: "running",
           queries: [query],
         },
       });
@@ -62,20 +62,22 @@ export async function xSearchStep({
       numResults: maxResults,
       text: true,
       highlights: true,
-      includeDomains: ['twitter.com', 'x.com'],
+      includeDomains: ["twitter.com", "x.com"],
     });
 
     // Process tweets to include tweet IDs
     const processedTweets = xResults.results
       .map((result) => {
         const tweetId = extractTweetId(result.url);
-        if (!tweetId) return null;
+        if (!tweetId) {
+          return null;
+        }
 
         return {
-          source: 'x' as const,
-          title: result.title || result.author || 'Tweet',
+          source: "x" as const,
+          title: result.title || result.author || "Tweet",
           url: result.url,
-          content: result.text || '',
+          content: result.text || "",
           tweetId,
         };
       })
@@ -84,12 +86,12 @@ export async function xSearchStep({
     // Send completed status
     if (annotate) {
       dataStream.write({
-        type: 'data-researchUpdate',
+        type: "data-researchUpdate",
         id: stepId,
         data: {
           title: `Searching for "${query}"`,
-          type: 'web',
-          status: 'completed',
+          type: "web",
+          status: "completed",
           queries: [query],
           results: processedTweets,
         },
@@ -98,17 +100,17 @@ export async function xSearchStep({
 
     return { results: processedTweets };
   } catch (error: any) {
-    const errorMessage = error?.message || 'Unknown error occurred';
+    const errorMessage = error?.message || "Unknown error occurred";
 
     // Send error status
     if (annotate) {
       dataStream.write({
-        type: 'data-researchUpdate',
+        type: "data-researchUpdate",
         id: stepId,
         data: {
           title: `Searching for "${query}"`,
-          type: 'web',
-          status: 'completed',
+          type: "web",
+          status: "completed",
           queries: [query],
         },
       });

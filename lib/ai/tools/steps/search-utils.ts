@@ -1,5 +1,5 @@
 export const deduplicateByDomainAndUrl = <T extends { url: string }>(
-  items: T[],
+  items: T[]
 ): T[] => {
   const seenDomains = new Set<string>();
   const seenUrls = new Set<string>();

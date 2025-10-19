@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
+import Link from "next/link";
+import { SocialAuthProviders } from "@/components/social-auth-providers";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { SocialAuthProviders } from '@/components/social-auth-providers';
-import Link from 'next/link';
+} from "@/components/ui/card";
 
 export function SignupForm({
   className,
@@ -25,17 +25,17 @@ export function SignupForm({
           <div className="grid gap-6">
             <SocialAuthProviders />
             <div className="text-center text-sm">
-              Already have an account?{' '}
-              <a href="/login" className="underline underline-offset-4">
+              Already have an account?{" "}
+              <a className="underline underline-offset-4" href="/login">
                 Sign in
               </a>
             </div>
           </div>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        By clicking continue, you agree to our{' '}
-        <Link href="/terms">Terms of Service</Link> and{' '}
+      <div className="text-balance text-center text-muted-foreground text-xs [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
+        By clicking continue, you agree to our{" "}
+        <Link href="/terms">Terms of Service</Link> and{" "}
         <Link href="/privacy">Privacy Policy</Link>.
       </div>
     </div>

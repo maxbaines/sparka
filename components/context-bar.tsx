@@ -1,30 +1,29 @@
-'use client';
+"use client";
 
-import type { Attachment } from '@/lib/ai/types';
-import type { ModelId } from '@ai-models/vercel-gateway';
-import { useLastUsageUntilMessageId } from '@/lib/stores/hooks';
-import { PromptInputContextBar } from '@/components/ai-elements/prompt-input';
-import { AttachmentList } from '@/components/attachment-list';
+import type { ModelId } from "@ai-models/vercel-gateway";
+import type { LanguageModelUsage } from "ai";
+import { motion } from "motion/react";
+import { useMemo } from "react";
+import type { ModelId as TokenLensModelId } from "tokenlens";
+import { getContextWindow } from "tokenlens";
 import {
   Context,
-  ContextTrigger,
+  ContextCacheUsage,
   ContextContent,
-  ContextContentHeader,
   ContextContentBody,
   ContextContentFooter,
+  ContextContentHeader,
   ContextInputUsage,
   ContextOutputUsage,
   ContextReasoningUsage,
-  ContextCacheUsage,
-} from '@/components/ai-elements/context';
-import type { ModelId as TokenLensModelId } from 'tokenlens';
-
-import { getContextWindow } from 'tokenlens';
-import type { LanguageModelUsage } from 'ai';
-import { motion } from 'motion/react';
-import { useMemo } from 'react';
-import { cn } from '@/lib/utils';
-import { getAppModelDefinition, type AppModelId } from '@/lib/ai/app-models';
+  ContextTrigger,
+} from "@/components/ai-elements/context";
+import { PromptInputContextBar } from "@/components/ai-elements/prompt-input";
+import { AttachmentList } from "@/components/attachment-list";
+import { type AppModelId, getAppModelDefinition } from "@/lib/ai/app-models";
+import type { Attachment } from "@/lib/ai/types";
+import { useLastUsageUntilMessageId } from "@/lib/stores/hooks";
+import { cn } from "@/lib/utils";
 
 export function ContextBar({
   attachments,
@@ -55,30 +54,30 @@ export function ContextBar({
 
   return (
     <motion.div
-      className={cn(className)}
       animate={{
-        height: hasBarContent ? 'auto' : 0,
+        height: hasBarContent ? "auto" : 0,
         opacity: hasBarContent ? 1 : 0,
       }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      style={{ overflow: 'hidden' }}
+      className={cn(className)}
+      style={{ overflow: "hidden" }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      <PromptInputContextBar className="border-b w-full">
+      <PromptInputContextBar className="w-full border-b">
         {(attachments.length > 0 || uploadQueue.length > 0) && (
           <AttachmentList
             attachments={attachments}
-            uploadQueue={uploadQueue}
-            onRemove={onRemove}
+            className="grow px-3 py-2"
             onImageClick={onImageClick}
+            onRemove={onRemove}
             testId="attachments-preview"
-            className="px-3 py-2 grow"
+            uploadQueue={uploadQueue}
           />
         )}
         {usage && (
           <div className="ml-auto">
             <ContextUsage
-              usage={usage}
               selectedModelId={modelDefinition.apiModelId}
+              usage={usage}
             />
           </div>
         )}
@@ -104,7 +103,9 @@ function ContextUsage({
   }, [selectedModelId]);
 
   const usedTokens = useMemo(() => {
-    if (!usage) return 0;
+    if (!usage) {
+      return 0;
+    }
     const input = (usage as any).inputTokens ?? 0;
     const cached = (usage as any).cachedInputTokens ?? 0;
     return input + cached;
@@ -112,10 +113,10 @@ function ContextUsage({
 
   return (
     <Context
-      usedTokens={usedTokens}
       maxTokens={contextMax}
+      modelId={selectedModelId.split("/").join(":") as TokenLensModelId}
       usage={usage as LanguageModelUsage | undefined}
-      modelId={selectedModelId.split('/').join(':') as TokenLensModelId}
+      usedTokens={usedTokens}
     >
       <ContextTrigger />
       <ContextContent align="end">

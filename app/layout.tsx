@@ -1,46 +1,46 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import Script from 'next/script';
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 
-import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from 'sonner';
-import { env } from '@/lib/env';
+import "./globals.css";
+import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
+import { env } from "@/lib/env";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sparka.ai'),
-  title: 'Sparka AI - Production-Ready AI Chat Template',
+  metadataBase: new URL("https://sparka.ai"),
+  title: "Sparka AI - Production-Ready AI Chat Template",
   description:
-    'Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.',
+    "Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.",
   openGraph: {
-    siteName: 'Sparka AI',
-    url: 'https://sparka.ai',
-    title: 'Sparka AI - Production-Ready AI Chat Template',
+    siteName: "Sparka AI",
+    url: "https://sparka.ai",
+    title: "Sparka AI - Production-Ready AI Chat Template",
     description:
-      'Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.',
+      "Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.",
   },
 };
 
 export const viewport = {
   maximumScale: 1, // Disable auto-zoom on mobile Safari
-  interactiveWidget: 'resizes-content' as const,
+  interactiveWidget: "resizes-content" as const,
 };
 
 const geist = Geist({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-geist',
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist",
 });
 
 const geistMono = Geist_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-geist-mono',
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist-mono",
 });
 
-const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)';
-const DARK_THEME_COLOR = 'hsl(240deg 10% 3.92%)';
+const LIGHT_THEME_COLOR = "hsl(0 0% 100%)";
+const DARK_THEME_COLOR = "hsl(240deg 10% 3.92%)";
 const THEME_COLOR_SCRIPT = `\
 (function() {
   var html = document.documentElement;
@@ -66,13 +66,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      className={`${geist.variable} ${geistMono.variable}`}
       // `next-themes` injects an extra classname to the body element to avoid
       // visual flicker before hydration. Hence the `suppressHydrationWarning`
       // prop is necessary to avoid the React hydration mismatch warning.
       // https://github.com/pacocoursey/next-themes?tab=readme-ov-file#with-app
+      lang="en"
       suppressHydrationWarning
-      className={`${geist.variable} ${geistMono.variable}`}
     >
       <head>
         <script
@@ -80,7 +80,7 @@ export default async function RootLayout({
             __html: THEME_COLOR_SCRIPT,
           }}
         />
-        {env.NEXT_PUBLIC_NODE_ENV !== 'production' ? (
+        {env.NEXT_PUBLIC_NODE_ENV !== "production" ? (
           <Script
             src="https://unpkg.com/react-scan/dist/auto.global.js"
             strategy="beforeInteractive"
@@ -95,8 +95,8 @@ export default async function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
-          enableSystem
           disableTransitionOnChange
+          enableSystem
         >
           <Toaster position="top-center" />
           {children}

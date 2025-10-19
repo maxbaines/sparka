@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
-import { ModelListHeaders } from './model-list-header';
-import { ModelListHeaderFilters } from './model-list-header-filters';
-import { ModelResultsCount } from './model-results-count';
+import { memo } from "react";
+import { ModelListHeaders } from "./model-list-header";
+import { ModelListHeaderFilters } from "./model-list-header-filters";
+import { ModelResultsCount } from "./model-results-count";
 
 export function PureModelResultsHeader() {
   return (

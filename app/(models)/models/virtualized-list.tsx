@@ -1,9 +1,9 @@
-import { useVirtualizer } from '@tanstack/react-virtual';
-import * as React from 'react';
+import { useVirtualizer } from "@tanstack/react-virtual";
+import * as React from "react";
 
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-interface VirtualizedScrollAreaProps<T> {
+type VirtualizedScrollAreaProps<T> = {
   items: T[];
   renderItem: (item: T, index: number) => React.ReactNode;
   overscan?: number;
@@ -15,17 +15,17 @@ interface VirtualizedScrollAreaProps<T> {
     index: number;
     clickAfterScroll: boolean;
   };
-}
+};
 
-export interface VirtualizedScrollAreaRef {
+export type VirtualizedScrollAreaRef = {
   scrollToIndex: (
     index: number,
     options?: {
-      align?: 'start' | 'center' | 'end';
-      behavior?: 'auto' | 'smooth';
-    },
+      align?: "start" | "center" | "end";
+      behavior?: "auto" | "smooth";
+    }
   ) => void;
-}
+};
 
 const VirtualizedScrollArea = ({
   items,
@@ -43,7 +43,7 @@ const VirtualizedScrollArea = ({
   const rowVirtualizer = useVirtualizer({
     count: items.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: estimateSize,
+    estimateSize,
     overscan,
     getItemKey: getItemKey || ((index) => index),
   });
@@ -55,15 +55,15 @@ const VirtualizedScrollArea = ({
     }
     if (initialScroll.index > -1) {
       rowVirtualizer.scrollToIndex(initialScroll.index, {
-        align: 'start',
-        behavior: 'auto',
+        align: "start",
+        behavior: "auto",
       });
 
       if (initialScroll.clickAfterScroll) {
         //need to wait for the scroll to be completed
         setTimeout(() => {
           const targetElement = parentRef.current?.querySelector(
-            `[data-virtual-index="${initialScroll.index}"]`,
+            `[data-virtual-index="${initialScroll.index}"]`
           );
           const renderedElement = targetElement?.children[0];
           if (renderedElement instanceof HTMLElement) {
@@ -72,29 +72,29 @@ const VirtualizedScrollArea = ({
         }, 100);
       }
     }
-  }, [initialScroll?.index, rowVirtualizer]);
+  }, [initialScroll?.index, rowVirtualizer, initialScroll]);
   return (
     <ScrollArea
-      style={{ height: `${listHeight}px` }}
       ref={parentRef}
+      style={{ height: `${listHeight}px` }}
       {...props}
     >
       <div
         style={{
           height: `${rowVirtualizer.getTotalSize()}px`,
-          width: '100%',
-          position: 'relative',
+          width: "100%",
+          position: "relative",
         }}
       >
         {virtualItems.map((virtualItem) => (
           <div
-            key={virtualItem.key}
             data-virtual-index={virtualItem.index}
+            key={virtualItem.key}
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: 0,
               left: 0,
-              width: '100%',
+              width: "100%",
               height: `${virtualItem.size}px`,
               transform: `translateY(${virtualItem.start}px)`,
             }}
@@ -107,6 +107,6 @@ const VirtualizedScrollArea = ({
   );
 };
 
-VirtualizedScrollArea.displayName = 'VirtualizedScrollArea';
+VirtualizedScrollArea.displayName = "VirtualizedScrollArea";
 
 export { VirtualizedScrollArea };

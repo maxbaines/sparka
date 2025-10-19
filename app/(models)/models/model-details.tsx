@@ -1,11 +1,10 @@
-'use client';
-import { cn } from '@/lib/utils';
-import { ModelDetailsCard } from '@/app/(models)/compare/model-details-card';
-import { getModelDefinition } from '@ai-models/vercel-gateway';
-import { allModels } from '@ai-models/vercel-gateway';
-import type { ModelDefinition } from '@ai-models/vercel-gateway';
-import { ModelSelectorBase } from '@/components/model-selector-base';
-import { ChatModelButton } from '@/components/model-action-buttons';
+"use client";
+import type { ModelDefinition } from "@ai-models/vercel-gateway";
+import { allModels, getModelDefinition } from "@ai-models/vercel-gateway";
+import { ModelDetailsCard } from "@/app/(models)/compare/model-details-card";
+import { ChatModelButton } from "@/components/model-action-buttons";
+import { ModelSelectorBase } from "@/components/model-selector-base";
+import { cn } from "@/lib/utils";
 
 export function ModelDetails({
   className,
@@ -24,37 +23,34 @@ export function ModelDetails({
 }) {
   return (
     <div
-      className={cn(
-        'mb-6 flex flex-col gap-4 w-full max-w-[450px] ',
-        className,
-      )}
+      className={cn("mb-6 flex w-full max-w-[450px] flex-col gap-4", className)}
     >
-      <div className="flex items-center gap-2 ">
+      <div className="flex items-center gap-2">
         <ModelSelectorBase
+          className="h-9 w-fit shrink grow truncate border bg-card text-base"
+          enableFilters
+          initialChevronDirection="down"
           models={allModels.map((m) => ({
             id: m.id,
             definition: getModelDefinition(m.id),
           }))}
-          selectedModelId={modelDefinition?.id}
           onModelChange={onModelChangeAction}
-          className="border text-base bg-card h-9 w-fit shrink grow truncate"
-          enableFilters
-          initialChevronDirection="down"
+          selectedModelId={modelDefinition?.id}
         />
         {enabledActions?.chat ? (
           <ChatModelButton
+            className="h-9 whitespace-nowrap px-3"
             modelId={modelDefinition?.id}
-            className="h-9 px-3 whitespace-nowrap"
-            variant="default"
             size="sm"
+            variant="default"
           >
             Chat
           </ChatModelButton>
         ) : null}
       </div>
       <ModelDetailsCard
-        model={modelDefinition}
         enabledActions={enabledActions}
+        model={modelDefinition}
       />
     </div>
   );

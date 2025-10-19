@@ -1,19 +1,19 @@
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { diffWords } from "diff";
 import {
+  $createParagraphNode,
   $getRoot,
-  TextNode,
   type EditorConfig,
   type LexicalEditor,
-  $createParagraphNode,
-} from 'lexical';
-import React, { useEffect } from 'react';
-import { diffWords } from 'diff';
+  TextNode,
+} from "lexical";
+import { useEffect } from "react";
 
-import { createEditorConfig } from '@/lib/editor/config';
+import { createEditorConfig } from "@/lib/editor/config";
 
 export const DiffType = {
   Unchanged: 0,
@@ -29,7 +29,7 @@ class DiffTextNode extends TextNode {
   __diffType?: DiffTypeValue;
 
   static getType(): string {
-    return 'diff-text';
+    return "diff-text";
   }
 
   static clone(node: DiffTextNode): DiffTextNode {
@@ -51,7 +51,7 @@ class DiffTextNode extends TextNode {
     return {
       ...super.exportJSON(),
       diffType: this.__diffType,
-      type: 'diff-text',
+      type: "diff-text",
       version: 1,
     };
   }
@@ -70,18 +70,18 @@ class DiffTextNode extends TextNode {
     const diffType = this.getDiffType();
 
     if (diffType) {
-      let className = '';
+      let className = "";
       switch (diffType) {
         case DiffType.Inserted:
           className =
-            'bg-green-100 text-green-700 dark:bg-green-500/70 dark:text-green-300';
+            "bg-green-100 text-green-700 dark:bg-green-500/70 dark:text-green-300";
           break;
         case DiffType.Deleted:
           className =
-            'bg-red-100 line-through text-red-600 dark:bg-red-500/70 dark:text-red-300';
+            "bg-red-100 line-through text-red-600 dark:bg-red-500/70 dark:text-red-300";
           break;
         default:
-          className = '';
+          className = "";
       }
       element.className = className;
     }
@@ -92,7 +92,7 @@ class DiffTextNode extends TextNode {
   updateDOM(
     prevNode: DiffTextNode,
     dom: HTMLElement,
-    config: EditorConfig,
+    config: EditorConfig
   ): boolean {
     const prevDiffType = prevNode.getDiffType();
     const currentDiffType = this.getDiffType();
@@ -173,16 +173,16 @@ export const DiffView = ({ oldContent, newContent }: DiffEditorProps) => {
   };
 
   return (
-    <div className="relative prose dark:prose-invert w-full text-left">
+    <div className="prose dark:prose-invert relative w-full text-left">
       <LexicalComposer initialConfig={initialConfig}>
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="outline-hidden lexical-editor text-left" />
+            <ContentEditable className="lexical-editor text-left outline-hidden" />
           }
-          placeholder={null}
           ErrorBoundary={LexicalErrorBoundary}
+          placeholder={null}
         />
-        <DiffContentPlugin oldContent={oldContent} newContent={newContent} />
+        <DiffContentPlugin newContent={newContent} oldContent={oldContent} />
       </LexicalComposer>
     </div>
   );

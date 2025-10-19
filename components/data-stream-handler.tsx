@@ -1,26 +1,26 @@
-'use client';
-import { useEffect, useRef } from 'react';
-import { useSaveDocument } from '@/hooks/chat-sync-hooks';
-import { useArtifact } from '@/hooks/use-artifact';
-import type { Suggestion } from '@/lib/db/schema';
-import { useChatInput } from '@/providers/chat-input-provider';
-import { useSession } from '@/providers/session-provider';
-import { artifactDefinitions } from './artifact';
-import { useDataStream } from './data-stream-provider';
+"use client";
+import { useEffect, useRef } from "react";
+import { useSaveDocument } from "@/hooks/chat-sync-hooks";
+import { useArtifact } from "@/hooks/use-artifact";
+import type { Suggestion } from "@/lib/db/schema";
+import { useChatInput } from "@/providers/chat-input-provider";
+import { useSession } from "@/providers/session-provider";
+import { artifactDefinitions } from "./artifact";
+import { useDataStream } from "./data-stream-provider";
 
 export type DataStreamDelta = {
   type:
-    | 'text-delta'
-    | 'code-delta'
-    | 'sheet-delta'
-    | 'image-delta'
-    | 'title'
-    | 'id'
-    | 'message-id'
-    | 'suggestion'
-    | 'clear'
-    | 'finish'
-    | 'kind';
+    | "text-delta"
+    | "code-delta"
+    | "sheet-delta"
+    | "image-delta"
+    | "title"
+    | "id"
+    | "message-id"
+    | "suggestion"
+    | "clear"
+    | "finish"
+    | "kind";
   content: string | Suggestion;
 };
 
@@ -32,29 +32,31 @@ export function DataStreamHandler({ id: _id }: { id: string }) {
   const { setSelectedTool } = useChatInput();
   const saveDocumentMutation = useSaveDocument(
     artifact.documentId,
-    artifact.messageId,
+    artifact.messageId
   );
   const isAuthenticated = !!session;
 
   useEffect(() => {
-    if (!dataStream?.length) return;
+    if (!dataStream?.length) {
+      return;
+    }
 
     const newDeltas = dataStream.slice(lastProcessedIndex.current + 1);
     lastProcessedIndex.current = dataStream.length - 1;
 
     newDeltas.forEach((delta) => {
       // Clear deepResearch tool when a research process completes
-      if (delta.type === 'data-researchUpdate') {
+      if (delta.type === "data-researchUpdate") {
         const update: any = (delta as any).data;
-        if (update?.type === 'completed') {
+        if (update?.type === "completed") {
           setSelectedTool((current) =>
-            current === 'deepResearch' ? null : current,
+            current === "deepResearch" ? null : current
           );
         }
       }
 
       const artifactDefinition = artifactDefinitions.find(
-        (artifactDefinition) => artifactDefinition.kind === artifact.kind,
+        (artifactDefinition) => artifactDefinition.kind === artifact.kind
       );
 
       if (artifactDefinition?.onStreamPart) {
@@ -67,45 +69,45 @@ export function DataStreamHandler({ id: _id }: { id: string }) {
 
       setArtifact((draftArtifact) => {
         switch (delta.type) {
-          case 'data-id':
+          case "data-id":
             return {
               ...draftArtifact,
               documentId: delta.data,
-              status: 'streaming',
+              status: "streaming",
             };
 
-          case 'data-messageId':
+          case "data-messageId":
             return {
               ...draftArtifact,
               messageId: delta.data,
-              status: 'streaming',
+              status: "streaming",
             };
 
-          case 'data-title':
+          case "data-title":
             return {
               ...draftArtifact,
               title: delta.data,
-              status: 'streaming',
+              status: "streaming",
             };
 
-          case 'data-kind':
+          case "data-kind":
             return {
               ...draftArtifact,
               kind: delta.data,
-              status: 'streaming',
+              status: "streaming",
             };
 
-          case 'data-clear':
+          case "data-clear":
             return {
               ...draftArtifact,
-              content: '',
-              status: 'streaming',
+              content: "",
+              status: "streaming",
             };
 
-          case 'data-finish':
+          case "data-finish":
             return {
               ...draftArtifact,
-              status: 'idle',
+              status: "idle",
             };
 
           default:
@@ -114,7 +116,7 @@ export function DataStreamHandler({ id: _id }: { id: string }) {
       });
 
       // Artifacts need to be saved locally for anonymous users
-      if (delta.type === 'data-finish' && !isAuthenticated) {
+      if (delta.type === "data-finish" && !isAuthenticated) {
         saveDocumentMutation.mutate({
           id: artifact.documentId,
           title: artifact.title,

@@ -1,9 +1,8 @@
-import * as React from 'react';
-import Link from 'next/link';
-import type { VariantProps } from 'class-variance-authority';
-
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import type { VariantProps } from "class-variance-authority";
+import Link from "next/link";
+import type * as React from "react";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 function LinkButton({
   className,
@@ -15,8 +14,8 @@ function LinkButton({
   ...props
 }: {
   className?: string;
-  variant?: VariantProps<typeof buttonVariants>['variant'];
-  size?: VariantProps<typeof buttonVariants>['size'];
+  variant?: VariantProps<typeof buttonVariants>["variant"];
+  size?: VariantProps<typeof buttonVariants>["size"];
   href: string;
   disabled?: boolean;
   children?: React.ReactNode;
@@ -24,13 +23,13 @@ function LinkButton({
 }) {
   return (
     <Link
-      // @ts-expect-error - href is a valid URL
-      href={href}
+      aria-disabled={disabled}
       className={cn(
         buttonVariants({ variant, size, className }),
-        disabled && 'pointer-events-none opacity-50',
+        disabled && "pointer-events-none opacity-50"
       )}
-      aria-disabled={disabled}
+      // @ts-expect-error - href is a valid URL
+      href={href}
       tabIndex={disabled ? -1 : undefined}
       {...props}
     >

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useSidebar } from '@/components/ui/sidebar';
-import { useChatId } from '@/providers/chat-id-provider';
+import Image from "next/image";
+import Link from "next/link";
+import { useSidebar } from "@/components/ui/sidebar";
+import { useChatId } from "@/providers/chat-id-provider";
 
 export function SidebarTopRow() {
   const { setOpenMobile, open, openMobile } = useSidebar();
@@ -11,22 +11,22 @@ export function SidebarTopRow() {
 
   return (
     <Link
+      className="flex flex-row items-center gap-2"
       href="/"
       onClick={() => {
         setOpenMobile(false);
         refreshChatID();
       }}
-      className="flex flex-row gap-2 items-center"
     >
-      <span className="text-lg font-semibold hover:bg-muted rounded-md cursor-pointer flex items-center gap-2 p-1">
+      <span className="flex cursor-pointer items-center gap-2 rounded-md p-1 font-semibold text-lg hover:bg-muted">
         <Image
-          src="/icon.svg"
           alt="Sparka AI"
-          width={24}
+          className="h-6 w-6"
           height={24}
-          className="w-6 h-6"
+          src="/icon.svg"
+          width={24}
         />
-        {(open || openMobile) && 'Sparka'}
+        {(open || openMobile) && "Sparka"}
       </span>
     </Link>
   );

@@ -1,7 +1,7 @@
-import { tool } from 'ai';
-import { z } from 'zod';
-import FirecrawlApp from '@mendable/firecrawl-js';
-import { env } from '@/lib/env';
+import FirecrawlApp from "@mendable/firecrawl-js";
+import { tool } from "ai";
+import { z } from "zod";
+import { env } from "@/lib/env";
 
 const app = new FirecrawlApp({
   apiKey: env.FIRECRAWL_API_KEY,
@@ -16,12 +16,12 @@ Use for:
 Avoid:
 - General-purpose web searches`,
   inputSchema: z.object({
-    url: z.string().describe('The URL to retrieve the information from.'),
+    url: z.string().describe("The URL to retrieve the information from."),
   }),
   execute: async ({ url }: { url: string }) => {
     try {
       const content = await app.scrapeUrl(url);
-      if (!content.success || !content.metadata) {
+      if (!(content.success && content.metadata)) {
         return {
           results: [
             {
@@ -43,11 +43,11 @@ Avoid:
       let extractedContent = content.markdown;
 
       // If any content is missing, use extract to get it
-      if (!title || !description || !extractedContent) {
+      if (!(title && description && extractedContent)) {
         const extractResult = await app.extract([url], {
           prompt:
-            'Extract the page title, main content, and a brief description.',
-          schema: schema,
+            "Extract the page title, main content, and a brief description.",
+          schema,
         });
 
         if (extractResult.success && extractResult.data) {
@@ -60,17 +60,17 @@ Avoid:
       return {
         results: [
           {
-            title: title || 'Untitled',
-            content: extractedContent || '',
+            title: title || "Untitled",
+            content: extractedContent || "",
             url: content.metadata.sourceURL,
-            description: description || '',
+            description: description || "",
             language: content.metadata.language,
           },
         ],
       };
     } catch (error) {
-      console.error('Firecrawl API error:', error);
-      return { error: 'Failed to retrieve content' };
+      console.error("Firecrawl API error:", error);
+      return { error: "Failed to retrieve content" };
     }
   },
 });

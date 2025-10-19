@@ -1,41 +1,41 @@
-import { ModelsHeader } from './models-header';
-import { auth } from '../../lib/auth';
-import { headers } from 'next/headers';
-import type { Metadata } from 'next';
-import { allModels, providers } from '@ai-models/vercel-gateway';
-import { TRPCReactProvider } from '@/trpc/react';
-import { SessionProvider } from '@/providers/session-provider';
+import { allModels, providers } from "@ai-models/vercel-gateway";
+import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { SessionProvider } from "@/providers/session-provider";
+import { TRPCReactProvider } from "@/trpc/react";
+import { auth } from "../../lib/auth";
+import { ModelsHeader } from "./models-header";
 
 const totalModels = allModels.length;
 const totalProviders = providers.length;
 
-const pageTitle = `Models | Sparka AI`;
+const pageTitle = "Models | Sparka AI";
 const pageDescription = `Browse ${totalModels} models across ${totalProviders} providers from Vercel AI Gateway in Sparka AI. Filter and compare by provider, context window, and pricing.`;
 
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
   keywords: [
-    'Sparka',
-    'Vercel AI Gateway',
-    'models',
-    'LLM',
-    'AI models',
-    'providers',
+    "Sparka",
+    "Vercel AI Gateway",
+    "models",
+    "LLM",
+    "AI models",
+    "providers",
   ],
   openGraph: {
     title: pageTitle,
     description: pageDescription,
-    url: '/models',
-    type: 'website',
+    url: "/models",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: pageTitle,
     description: pageDescription,
   },
   alternates: {
-    canonical: '/models',
+    canonical: "/models",
   },
   robots: {
     index: true,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
 };
 
-const HEADER_HEIGHT = '2.75rem';
+const HEADER_HEIGHT = "2.75rem";
 
 export default async function ModelsLayout({
   children,
@@ -70,15 +70,15 @@ export default async function ModelsLayout({
     <TRPCReactProvider>
       <SessionProvider initialSession={session}>
         <div
-          className="h-dvh max-h-dvh grid grid-rows-[auto_1fr]"
+          className="grid h-dvh max-h-dvh grid-rows-[auto_1fr]"
           style={
             {
-              '--header-height': HEADER_HEIGHT,
+              "--header-height": HEADER_HEIGHT,
             } as React.CSSProperties
           }
         >
           <ModelsHeader />
-          <div className="relative flex-1 min-h-0 ">{children}</div>
+          <div className="relative min-h-0 flex-1">{children}</div>
         </div>
       </SessionProvider>
     </TRPCReactProvider>

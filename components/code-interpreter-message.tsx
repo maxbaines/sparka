@@ -1,5 +1,5 @@
-import InteractiveChart, { type BaseChart } from './interactive-charts';
-import { CollapsibleSection } from './collapsible-section';
+import { CollapsibleSection } from "./collapsible-section";
+import InteractiveChart, { type BaseChart } from "./interactive-charts";
 
 export function CodeInterpreterMessage({
   result,
@@ -19,11 +19,11 @@ export function CodeInterpreterMessage({
     <div className="space-y-6">
       <CollapsibleSection
         code={args.code}
-        output={result?.message}
+        icon={args.icon || "default"}
         language="python"
+        output={result?.message}
+        status={result ? "completed" : "running"}
         title={args.title}
-        icon={args.icon || 'default'}
-        status={result ? 'completed' : 'running'}
       />
 
       {result?.chart && (

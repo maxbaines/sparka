@@ -1,8 +1,8 @@
-interface TextSplitterParams {
+type TextSplitterParams = {
   chunkSize: number;
 
   chunkOverlap: number;
-}
+};
 
 abstract class TextSplitter implements TextSplitterParams {
   chunkSize = 1000;
@@ -12,7 +12,7 @@ abstract class TextSplitter implements TextSplitterParams {
     this.chunkSize = fields?.chunkSize ?? this.chunkSize;
     this.chunkOverlap = fields?.chunkOverlap ?? this.chunkOverlap;
     if (this.chunkOverlap >= this.chunkSize) {
-      throw new Error('Cannot have chunkOverlap >= chunkSize');
+      throw new Error("Cannot have chunkOverlap >= chunkSize");
     }
   }
 
@@ -22,7 +22,9 @@ abstract class TextSplitter implements TextSplitterParams {
     const documents: string[] = [];
     for (let i = 0; i < texts.length; i += 1) {
       const text = texts[i];
-      if (text == null) continue;
+      if (text == null) {
+        continue;
+      }
       for (const chunk of this.splitText(text)) {
         documents.push(chunk);
       }
@@ -36,7 +38,7 @@ abstract class TextSplitter implements TextSplitterParams {
 
   private joinDocs(docs: string[], separator: string): string | null {
     const text = docs.join(separator).trim();
-    return text === '' ? null : text;
+    return text === "" ? null : text;
   }
 
   mergeSplits(splits: string[], separator: string): string[] {
@@ -49,7 +51,7 @@ abstract class TextSplitter implements TextSplitterParams {
         if (total > this.chunkSize) {
           console.warn(
             `Created a chunk of size ${total}, +
-which is longer than the specified ${this.chunkSize}`,
+which is longer than the specified ${this.chunkSize}`
           );
         }
         if (currentDoc.length > 0) {
@@ -89,7 +91,7 @@ export class RecursiveCharacterTextSplitter
   extends TextSplitter
   implements RecursiveCharacterTextSplitterParams
 {
-  separators: string[] = ['\n\n', '\n', '.', ',', '>', '<', ' ', ''];
+  separators: string[] = ["\n\n", "\n", ".", ",", ">", "<", " ", ""];
 
   constructor(fields?: Partial<RecursiveCharacterTextSplitterParams>) {
     super(fields);
@@ -100,9 +102,9 @@ export class RecursiveCharacterTextSplitter
     const finalChunks: string[] = [];
 
     // Get appropriate separator to use
-    let separator: string = this.separators[this.separators.length - 1] ?? '';
+    let separator: string = this.separators.at(-1) ?? "";
     for (const s of this.separators) {
-      if (s === '') {
+      if (s === "") {
         separator = s;
         break;
       }
@@ -117,7 +119,7 @@ export class RecursiveCharacterTextSplitter
     if (separator) {
       splits = text.split(separator);
     } else {
-      splits = text.split('');
+      splits = text.split("");
     }
 
     // Now go merging things, recursively splitting longer texts.

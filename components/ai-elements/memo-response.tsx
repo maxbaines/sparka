@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { type ComponentProps, memo } from 'react';
-import { Streamdown } from '../streamdown/memo-streamdown';
+import { type ComponentProps, memo } from "react";
+import { cn } from "@/lib/utils";
+import { Streamdown } from "../streamdown/memo-streamdown";
 
 type ResponseProps = ComponentProps<typeof Streamdown>;
 
@@ -13,13 +13,13 @@ export const Response = memo(
   }: ResponseProps & { messageId: string; partIdx: number }) => (
     <Streamdown
       className={cn(
-        'size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
-        className,
+        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
+        className
       )}
       {...props}
     />
   ),
-  (prevProps, nextProps) => prevProps.children === nextProps.children,
+  (prevProps, nextProps) => prevProps.children === nextProps.children
 );
 
-Response.displayName = 'Response';
+Response.displayName = "Response";

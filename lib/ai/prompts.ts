@@ -1,7 +1,6 @@
-import type { ArtifactKind } from '../artifacts/artifact-kind';
+import type { ArtifactKind } from "../artifacts/artifact-kind";
 
-export const systemPrompt = () => {
-  return `You are a friendly assistant!
+export const systemPrompt = () => `You are a friendly assistant!
 
 ## Your Goals
 - Stay concious and aware of the guidelines.
@@ -23,10 +22,9 @@ export const systemPrompt = () => {
 - Cite only the most relevant hits and avoid fluff
 
 
-Today's Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' })}
+Today's Date: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit", weekday: "short" })}
   
   `;
-};
 
 export const codePrompt = `
 You are a Python code generator that creates self-contained, executable code snippets. When writing code:
@@ -67,24 +65,24 @@ IMPORTANT CSV FORMATTING RULES:
 
 export const updateDocumentPrompt = (
   currentContent: string | null,
-  type: ArtifactKind,
+  type: ArtifactKind
 ) =>
-  type === 'text'
+  type === "text"
     ? `\
 Improve the following contents of the document based on the given prompt.
 
 ${currentContent}
 `
-    : type === 'code'
+    : type === "code"
       ? `\
 Improve the following code snippet based on the given prompt.
 
 ${currentContent}
 `
-      : type === 'sheet'
+      : type === "sheet"
         ? `\
 Improve the following spreadsheet based on the given prompt.
 
 ${currentContent}
 `
-        : '';
+        : "";

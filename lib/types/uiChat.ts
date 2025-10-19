@@ -1,9 +1,9 @@
-export interface UIChat {
+export type UIChat = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
   title: string;
-  visibility: 'private' | 'public';
+  visibility: "private" | "public";
   userId: string;
   isPinned: boolean;
-}
+};

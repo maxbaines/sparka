@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
+import type { DefaultError } from "@tanstack/query-core";
 import {
-  useMutation,
+  type QueryClient,
   type UseMutationOptions,
   type UseMutationResult,
-  type QueryClient,
-} from '@tanstack/react-query';
-import type { DefaultError } from '@tanstack/query-core';
+  useMutation,
+} from "@tanstack/react-query";
 
 export type UseDualMutationOptions<
   TData = unknown,
@@ -25,7 +25,7 @@ export function useDualMutation<
   TContext = unknown,
 >(
   options: UseDualMutationOptions<TData, TError, TVariables, TContext>,
-  queryClient?: QueryClient,
+  queryClient?: QueryClient
 ): UseMutationResult<TData, TError, TVariables, TContext> {
   const {
     mutationFn,
@@ -39,7 +39,7 @@ export function useDualMutation<
   } = options;
 
   const useLocal =
-    typeof shouldUseLocal === 'function' ? shouldUseLocal() : shouldUseLocal;
+    typeof shouldUseLocal === "function" ? shouldUseLocal() : shouldUseLocal;
 
   const mergedOptions: UseMutationOptions<TData, TError, TVariables, TContext> =
     {
@@ -48,14 +48,14 @@ export function useDualMutation<
         if (useLocal) {
           if (!localMutationFn) {
             throw new Error(
-              'localMutationFn is required when shouldUseLocal is true',
+              "localMutationFn is required when shouldUseLocal is true"
             );
           }
           return await localMutationFn(variables);
         }
         if (!mutationFn) {
           throw new Error(
-            'mutationFn is required when shouldUseLocal is false',
+            "mutationFn is required when shouldUseLocal is false"
           );
         }
         return await mutationFn(variables);
@@ -64,7 +64,7 @@ export function useDualMutation<
         if (onMutate) {
           return await onMutate(variables);
         }
-        return undefined;
+        return;
       },
       onError: (error, variables, context) => {
         if (onError) {
@@ -85,6 +85,6 @@ export function useDualMutation<
 
   return useMutation<TData, TError, TVariables, TContext>(
     mergedOptions,
-    queryClient,
+    queryClient
   );
 }

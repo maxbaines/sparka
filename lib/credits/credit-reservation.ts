@@ -1,12 +1,12 @@
 import {
   finalizeCreditsUsage,
   releaseReservedCredits,
-} from '@/lib/repositories/credits';
-import { reserveCredits } from './reserveCredits';
+} from "@/lib/repositories/credits";
+import { reserveCredits } from "./reserveCredits";
 
 export class CreditReservation {
-  private userId: string;
-  private amount: number;
+  private readonly userId: string;
+  private readonly amount: number;
   private released = false;
   public readonly budget: number;
 
@@ -45,7 +45,7 @@ export class CreditReservation {
 export async function reserveCreditsWithCleanup(
   userId: string,
   baseModelCost: number,
-  maxSteps: number,
+  maxSteps: number
 ): Promise<
   | { success: true; reservation: CreditReservation }
   | { success: false; error: string }
@@ -61,6 +61,6 @@ export async function reserveCreditsWithCleanup(
 
   return {
     success: false,
-    error: result.error || 'Credit reservation failed',
+    error: result.error || "Credit reservation failed",
   };
 }

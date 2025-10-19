@@ -1,43 +1,42 @@
-import React from 'react';
-import ReactECharts from 'echarts-for-react/lib/index';
-import type { EChartsOption } from 'echarts-for-react/lib/types';
-import { Card } from '@/components/ui/card';
-import { useTheme } from 'next-themes';
-import { motion } from 'motion/react';
+import ReactECharts from "echarts-for-react/lib/index";
+import type { EChartsOption } from "echarts-for-react/lib/types";
+import { motion } from "motion/react";
+import { useTheme } from "next-themes";
+import { Card } from "@/components/ui/card";
 
 const CHART_COLORS = [
-  '#22c55e', // green
-  '#3b82f6', // blue
-  '#f59e0b', // amber
-  '#8b5cf6', // purple
-  '#ec4899', // pink
-  '#06b6d4', // cyan
-  '#ef4444', // red
-  '#84cc16', // lime
+  "#22c55e", // green
+  "#3b82f6", // blue
+  "#f59e0b", // amber
+  "#8b5cf6", // purple
+  "#ec4899", // pink
+  "#06b6d4", // cyan
+  "#ef4444", // red
+  "#84cc16", // lime
 ];
 
-export interface BaseChart {
+export type BaseChart = {
   type: string;
   title: string;
   x_label?: string;
   y_label?: string;
   elements: any[];
   x_scale?: string;
-}
+};
 
 export function InteractiveChart({ chart }: { chart: BaseChart }) {
   const { theme } = useTheme();
   // TOOD: Update for multitheme support
   // const textColor = theme === 'dark' ? '#e5e5e5' : '#171717';
-  const textColor = '#e5e5e5';
+  const textColor = "#e5e5e5";
   // const gridColor =
   //   theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-  const gridColor = 'rgba(255, 255, 255, 0.1)';
+  const gridColor = "rgba(255, 255, 255, 0.1)";
   // const tooltipBg = theme === 'dark' ? '#171717' : '#ffffff';
-  const tooltipBg = '#171717';
+  const tooltipBg = "#171717";
 
   const sharedOptions: EChartsOption = {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     grid: {
       top: 50,
       right: 32,
@@ -48,22 +47,22 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
     legend: {
       textStyle: { color: textColor },
       top: 8,
-      icon: 'circle',
+      icon: "circle",
       itemWidth: 8,
       itemHeight: 8,
       itemGap: 16,
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: "axis",
       backgroundColor: tooltipBg,
       borderWidth: 0,
       padding: [6, 10],
       className:
-        'echarts-tooltip rounded-lg! border! border-neutral-200! dark:border-neutral-800!',
+        "echarts-tooltip rounded-lg! border! border-neutral-200! dark:border-neutral-800!",
       textStyle: {
         color: textColor,
         fontSize: 13,
-        fontFamily: 'system-ui, -apple-system, sans-serif',
+        fontFamily: "system-ui, -apple-system, sans-serif",
       },
     },
   };
@@ -85,22 +84,22 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
       },
       splitLine: {
         show: true,
-        lineStyle: { color: gridColor, type: 'dashed' },
+        lineStyle: { color: gridColor, type: "dashed" },
       },
     };
 
-    if (chart.type === 'line' || chart.type === 'scatter') {
+    if (chart.type === "line" || chart.type === "scatter") {
       const series = chart.elements.map((e, index) => ({
         name: e.label,
         type: chart.type,
         data: e.points.map((p: [number | string, number]) => {
           // Handle datetime x-axis
           const x =
-            chart.x_scale === 'datetime' ? new Date(p[0]).getTime() : p[0];
+            chart.x_scale === "datetime" ? new Date(p[0]).getTime() : p[0];
           return [x, p[1]];
         }),
         smooth: true,
-        symbolSize: chart.type === 'scatter' ? 10 : 0,
+        symbolSize: chart.type === "scatter" ? 10 : 0,
         lineStyle: {
           width: 2,
           color: CHART_COLORS[index % CHART_COLORS.length],
@@ -109,10 +108,10 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
           color: CHART_COLORS[index % CHART_COLORS.length],
         },
         areaStyle:
-          chart.type === 'line'
+          chart.type === "line"
             ? {
                 color: {
-                  type: 'linear',
+                  type: "linear",
                   x: 0,
                   y: 0,
                   x2: 0,
@@ -124,7 +123,7 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
                     },
                     {
                       offset: 1,
-                      color: 'rgba(23, 23, 23, 0)',
+                      color: "rgba(23, 23, 23, 0)",
                       // theme === 'dark'
                       //   ? 'rgba(23, 23, 23, 0)'
                       //   : 'rgba(255, 255, 255, 0)',
@@ -138,32 +137,32 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
       return {
         ...sharedOptions,
         xAxis: {
-          type: chart.x_scale === 'datetime' ? 'time' : 'value',
+          type: chart.x_scale === "datetime" ? "time" : "value",
           name: chart.x_label,
-          nameLocation: 'middle',
+          nameLocation: "middle",
           nameGap: 40,
           scale: true,
           ...defaultAxisOptions,
           axisLabel: {
             ...defaultAxisOptions.axisLabel,
             formatter:
-              chart.x_scale === 'datetime'
+              chart.x_scale === "datetime"
                 ? (value: number) => {
                     const date = new Date(value);
-                    return date.toLocaleDateString('en-US', {
-                      month: 'short',
-                      year: 'numeric',
+                    return date.toLocaleDateString("en-US", {
+                      month: "short",
+                      year: "numeric",
                     });
                   }
                 : undefined,
           },
         },
         yAxis: {
-          type: 'value',
+          type: "value",
           name: chart.y_label,
-          nameLocation: 'middle',
+          nameLocation: "middle",
           nameGap: 50,
-          position: 'right',
+          position: "right",
           scale: true,
           ...defaultAxisOptions,
         },
@@ -171,18 +170,20 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
       };
     }
 
-    if (chart.type === 'bar') {
+    if (chart.type === "bar") {
       const data = chart.elements.reduce((acc: Record<string, any[]>, item) => {
         const key = item.group;
-        if (!acc[key]) acc[key] = [];
+        if (!acc[key]) {
+          acc[key] = [];
+        }
         acc[key].push(item);
         return acc;
       }, {});
 
       const series = Object.entries(data).map(([group, elements], index) => ({
         name: group,
-        type: 'bar',
-        stack: 'total',
+        type: "bar",
+        stack: "total",
         data: elements?.map((e) => [e.label, e.value]),
         itemStyle: {
           color: CHART_COLORS[index % CHART_COLORS.length],
@@ -190,7 +191,7 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
-            shadowColor: 'rgba(0,0,0,0.3)',
+            shadowColor: "rgba(0,0,0,0.3)",
           },
         },
       }));
@@ -198,18 +199,18 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
       return {
         ...sharedOptions,
         xAxis: {
-          type: 'category',
+          type: "category",
           name: chart.x_label,
-          nameLocation: 'middle',
+          nameLocation: "middle",
           nameGap: 40,
           ...defaultAxisOptions,
         },
         yAxis: {
-          type: 'value',
+          type: "value",
           name: chart.y_label,
-          nameLocation: 'middle',
+          nameLocation: "middle",
           nameGap: 50,
-          position: 'right',
+          position: "right",
           ...defaultAxisOptions,
         },
         series,
@@ -221,22 +222,22 @@ export function InteractiveChart({ chart }: { chart: BaseChart }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="overflow-hidden bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800">
+      <Card className="overflow-hidden border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
         <div className="p-6">
           {chart.title && (
-            <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-4">
+            <h3 className="mb-4 font-medium text-lg text-neutral-900 dark:text-neutral-100">
               {chart.title}
             </h3>
           )}
           <ReactECharts
-            option={getChartOptions()}
-            style={{ height: '400px', width: '100%' }}
-            theme={theme === 'dark' ? 'dark' : undefined}
             notMerge={true}
+            option={getChartOptions()}
+            style={{ height: "400px", width: "100%" }}
+            theme={theme === "dark" ? "dark" : undefined}
           />
         </div>
       </Card>

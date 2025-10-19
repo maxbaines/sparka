@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { memo, useMemo } from 'react';
-import type { ChatMessage } from '@/lib/ai/types';
-import { useChatStoreApi } from '@/lib/stores/chat-store-context';
+import { memo, useMemo } from "react";
+import type { ChatMessage } from "@/lib/ai/types";
+import { useChatStoreApi } from "@/lib/stores/chat-store-context";
 import {
   useMessagePartByPartIdx,
   useMessagePartsByPartRange,
   useMessagePartTypesById,
-} from '@/lib/stores/hooks';
-import { CodeInterpreterMessage } from './code-interpreter-message';
-import { DocumentToolCall, DocumentToolResult } from './document';
-import { DocumentPreview } from './document-preview';
-import { GeneratedImage } from './generated-image';
-import { ResearchUpdates } from './message-annotations';
-import { MessageReasoning } from './message-reasoning';
-import { ReadDocument } from './read-document';
-import { Retrieve } from './retrieve';
-import { StockChartMessage } from './stock-chart-message';
-import { TextMessagePart } from './text-message-part';
-import { Weather } from './weather';
+} from "@/lib/stores/hooks";
+import { CodeInterpreterMessage } from "./code-interpreter-message";
+import { DocumentToolCall, DocumentToolResult } from "./document";
+import { DocumentPreview } from "./document-preview";
+import { GeneratedImage } from "./generated-image";
+import { ResearchUpdates } from "./message-annotations";
+import { MessageReasoning } from "./message-reasoning";
+import { ReadDocument } from "./read-document";
+import { Retrieve } from "./retrieve";
+import { StockChartMessage } from "./stock-chart-message";
+import { TextMessagePart } from "./text-message-part";
+import { Weather } from "./weather";
 
 type MessagePartsProps = {
   messageId: string;
@@ -28,19 +28,19 @@ type MessagePartsProps = {
 
 const isLastArtifact = (
   messages: ChatMessage[],
-  currentToolCallId: string,
+  currentToolCallId: string
 ): boolean => {
   let lastArtifact: { messageIndex: number; toolCallId: string } | null = null;
 
   for (let i = messages.length - 1; i >= 0; i--) {
     const message = messages[i];
-    if (message.role === 'assistant') {
+    if (message.role === "assistant") {
       for (const part of message.parts) {
         if (
-          (part.type === 'tool-createDocument' ||
-            part.type === 'tool-updateDocument' ||
-            part.type === 'tool-deepResearch') &&
-          part.state === 'output-available'
+          (part.type === "tool-createDocument" ||
+            part.type === "tool-updateDocument" ||
+            part.type === "tool-deepResearch") &&
+          part.state === "output-available"
         ) {
           lastArtifact = {
             messageIndex: i,
@@ -49,7 +49,9 @@ const isLastArtifact = (
           break;
         }
       }
-      if (lastArtifact) break;
+      if (lastArtifact) {
+        break;
+      }
     }
   }
 
@@ -59,65 +61,65 @@ const isLastArtifact = (
 function useResearchUpdates(
   messageId: string,
   partIdx: number,
-  type: ChatMessage['parts'][number]['type'],
+  type: ChatMessage["parts"][number]["type"]
 ) {
   const types = useMessagePartTypesById(messageId);
   const startIdx = partIdx;
   const nextIdx = types.findIndex(
     (t, i) =>
-      i > startIdx && (t === 'tool-deepResearch' || t === 'tool-webSearch'),
+      i > startIdx && (t === "tool-deepResearch" || t === "tool-webSearch")
   );
 
   // If not a research tool, constrain the range to empty to minimize work
   let sliceEnd = nextIdx === -1 ? types.length - 1 : nextIdx - 1;
-  if (type !== 'tool-deepResearch' && type !== 'tool-webSearch') {
+  if (type !== "tool-deepResearch" && type !== "tool-webSearch") {
     sliceEnd = startIdx;
   }
 
   const range = useMessagePartsByPartRange(messageId, startIdx + 1, sliceEnd);
 
-  if (type !== 'tool-deepResearch' && type !== 'tool-webSearch') {
-    return [] as Array<
-      Extract<
-        ChatMessage['parts'][number],
-        { type: 'data-researchUpdate' }
-      >['data']
-    >;
+  if (type !== "tool-deepResearch" && type !== "tool-webSearch") {
+    return [] as Extract<
+      ChatMessage["parts"][number],
+      { type: "data-researchUpdate" }
+    >["data"][];
   }
 
   return range
-    .filter((p) => p.type === 'data-researchUpdate')
+    .filter((p) => p.type === "data-researchUpdate")
     .map(
       (u) =>
         (
           u as Extract<
-            ChatMessage['parts'][number],
-            { type: 'data-researchUpdate' }
+            ChatMessage["parts"][number],
+            { type: "data-researchUpdate" }
           >
-        ).data,
+        ).data
     );
 }
 
 const _collectResearchUpdates = (
-  parts: ChatMessage['parts'],
+  parts: ChatMessage["parts"],
   toolCallId: string,
-  toolType: 'tool-deepResearch' | 'tool-webSearch',
+  toolType: "tool-deepResearch" | "tool-webSearch"
 ) => {
   const startIdx = parts.findIndex(
-    (p) => p.type === toolType && p.toolCallId === toolCallId,
+    (p) => p.type === toolType && p.toolCallId === toolCallId
   );
-  if (startIdx === -1) return [];
+  if (startIdx === -1) {
+    return [];
+  }
 
   const endIdx = parts.findIndex(
     (p, i) =>
       i > startIdx &&
-      (p.type === 'tool-deepResearch' || p.type === 'tool-webSearch'),
+      (p.type === "tool-deepResearch" || p.type === "tool-webSearch")
   );
 
   const sliceEnd = endIdx === -1 ? parts.length : endIdx;
   return parts
     .slice(startIdx + 1, sliceEnd)
-    .filter((p) => p.type === 'data-researchUpdate')
+    .filter((p) => p.type === "data-researchUpdate")
     .map((u) => u.data);
 };
 
@@ -136,16 +138,16 @@ function PureMessagePart({
   const researchUpdates = useResearchUpdates(messageId, partIdx, type);
   const chatStore = useChatStoreApi();
 
-  if (type === 'tool-getWeather') {
+  if (type === "tool-getWeather") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       return (
-        <div key={toolCallId} className="skeleton">
+        <div className="skeleton" key={toolCallId}>
           <Weather />
         </div>
       );
     }
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output } = part;
       return (
         <div key={toolCallId}>
@@ -155,31 +157,31 @@ function PureMessagePart({
     }
   }
 
-  if (type === 'tool-createDocument') {
+  if (type === "tool-createDocument") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       const { input } = part;
       return (
         <div key={toolCallId}>
           <DocumentPreview
-            isReadonly={isReadonly}
             args={input}
+            isReadonly={isReadonly}
             messageId={messageId}
           />
         </div>
       );
     }
 
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output, input } = part;
       const shouldShowFullPreview = isLastArtifact(
         chatStore.getState().messages,
-        toolCallId,
+        toolCallId
       );
 
-      if ('error' in output) {
+      if ("error" in output) {
         return (
-          <div key={toolCallId} className="text-red-500 p-2 border rounded">
+          <div className="rounded border p-2 text-red-500" key={toolCallId}>
             Error: {String(output.error)}
           </div>
         );
@@ -189,18 +191,18 @@ function PureMessagePart({
         <div key={toolCallId}>
           {shouldShowFullPreview ? (
             <DocumentPreview
-              isReadonly={isReadonly}
-              result={output}
               args={input}
+              isReadonly={isReadonly}
               messageId={messageId}
+              result={output}
               type="create"
             />
           ) : (
             <DocumentToolResult
-              type="create"
-              result={output}
               isReadonly={isReadonly}
               messageId={messageId}
+              result={output}
+              type="create"
             />
           )}
         </div>
@@ -208,32 +210,32 @@ function PureMessagePart({
     }
   }
 
-  if (type === 'tool-updateDocument') {
+  if (type === "tool-updateDocument") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       const { input } = part;
       return (
         <div key={toolCallId}>
           <DocumentToolCall
+            // @ts-expect-error - TODO: fix this
+            args={input}
+            isReadonly={isReadonly}
             type="update"
-            // @ts-expect-error - TODO: fix this
-            args={input}
-            isReadonly={isReadonly}
           />
         </div>
       );
     }
 
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output, input } = part;
       const shouldShowFullPreview = isLastArtifact(
         chatStore.getState().messages,
-        toolCallId,
+        toolCallId
       );
 
-      if ('error' in output) {
+      if ("error" in output) {
         return (
-          <div key={toolCallId} className="text-red-500 p-2 border rounded">
+          <div className="rounded border p-2 text-red-500" key={toolCallId}>
             Error: {String(output.error)}
           </div>
         );
@@ -243,18 +245,18 @@ function PureMessagePart({
         <div key={toolCallId}>
           {shouldShowFullPreview ? (
             <DocumentPreview
-              isReadonly={isReadonly}
-              result={output}
               args={input}
+              isReadonly={isReadonly}
               messageId={messageId}
+              result={output}
               type="update"
             />
           ) : (
             <DocumentToolResult
-              type="update"
-              result={output}
               isReadonly={isReadonly}
               messageId={messageId}
+              result={output}
+              type="update"
             />
           )}
         </div>
@@ -262,27 +264,27 @@ function PureMessagePart({
     }
   }
 
-  if (type === 'tool-requestSuggestions') {
+  if (type === "tool-requestSuggestions") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       const { input } = part;
       return (
         <div key={toolCallId}>
           <DocumentToolCall
-            type="request-suggestions"
             // @ts-expect-error - TODO: fix this
             args={input}
             isReadonly={isReadonly}
+            type="request-suggestions"
           />
         </div>
       );
     }
 
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output } = part;
-      if ('error' in output) {
+      if ("error" in output) {
         return (
-          <div key={toolCallId} className="text-red-500 p-2 border rounded">
+          <div className="rounded border p-2 text-red-500" key={toolCallId}>
             Error: {String(output.error)}
           </div>
         );
@@ -291,19 +293,19 @@ function PureMessagePart({
       return (
         <div key={toolCallId}>
           <DocumentToolResult
-            type="request-suggestions"
-            result={output}
             isReadonly={isReadonly}
             messageId={messageId}
+            result={output}
+            type="request-suggestions"
           />
         </div>
       );
     }
   }
 
-  if (type === 'tool-retrieve') {
+  if (type === "tool-retrieve") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       return (
         <div key={toolCallId}>
           <Retrieve />
@@ -311,7 +313,7 @@ function PureMessagePart({
       );
     }
 
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output } = part;
       return (
         <div key={toolCallId}>
@@ -322,12 +324,12 @@ function PureMessagePart({
     }
   }
 
-  if (type === 'tool-readDocument') {
+  if (type === "tool-readDocument") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       return null;
     }
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output } = part;
       return (
         <div key={toolCallId}>
@@ -338,52 +340,52 @@ function PureMessagePart({
     }
   }
 
-  if (type === 'tool-stockChart') {
+  if (type === "tool-stockChart") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       const { input } = part;
       return (
         <div key={toolCallId}>
           {/* @ts-expect-error - TODO: fix this */}
-          <StockChartMessage result={null} args={input} />
+          <StockChartMessage args={input} result={null} />
         </div>
       );
     }
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output, input } = part;
       return (
         <div key={toolCallId}>
           {/* @ts-expect-error - TODO: fix this */}
-          <StockChartMessage result={output} args={input} />
+          <StockChartMessage args={input} result={output} />
         </div>
       );
     }
   }
 
-  if (type === 'tool-codeInterpreter') {
+  if (type === "tool-codeInterpreter") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       const { input } = part;
       return (
         <div key={toolCallId}>
-          <CodeInterpreterMessage result={null} args={input} />
+          <CodeInterpreterMessage args={input} result={null} />
         </div>
       );
     }
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output, input } = part;
       return (
         <div key={toolCallId}>
           {/* @ts-expect-error - TODO: fix this */}
-          <CodeInterpreterMessage result={output} args={input} />
+          <CodeInterpreterMessage args={input} result={output} />
         </div>
       );
     }
   }
 
-  if (type === 'tool-generateImage') {
+  if (type === "tool-generateImage") {
     const { toolCallId, state } = part;
-    if (state === 'input-available') {
+    if (state === "input-available") {
       const { input } = part;
       return (
         <div key={toolCallId}>
@@ -391,34 +393,34 @@ function PureMessagePart({
         </div>
       );
     }
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output, input } = part;
       return (
         <div key={toolCallId}>
-          <GeneratedImage result={output} args={input} />
+          <GeneratedImage args={input} result={output} />
         </div>
       );
     }
   }
 
-  if (type === 'tool-deepResearch') {
+  if (type === "tool-deepResearch") {
     const { toolCallId, state } = part;
 
-    if (state === 'input-available') {
+    if (state === "input-available") {
       return (
-        <div key={toolCallId} className="flex flex-col gap-3 w-full">
+        <div className="flex w-full flex-col gap-3" key={toolCallId}>
           <ResearchUpdates updates={researchUpdates} />
         </div>
       );
     }
-    if (state === 'output-available') {
+    if (state === "output-available") {
       const { output, input } = part;
       const shouldShowFullPreview = isLastArtifact(
         chatStore.getState().messages,
-        toolCallId,
+        toolCallId
       );
 
-      if (output.format === 'report') {
+      if (output.format === "report") {
         return (
           <div key={toolCallId}>
             <div className="mb-2">
@@ -426,18 +428,18 @@ function PureMessagePart({
             </div>
             {shouldShowFullPreview ? (
               <DocumentPreview
-                isReadonly={isReadonly}
-                result={output}
                 args={input}
+                isReadonly={isReadonly}
                 messageId={messageId}
+                result={output}
                 type="create"
               />
             ) : (
               <DocumentToolResult
-                type="create"
-                result={output}
                 isReadonly={isReadonly}
                 messageId={messageId}
+                result={output}
+                type="create"
               />
             )}
           </div>
@@ -446,19 +448,19 @@ function PureMessagePart({
     }
   }
 
-  if (type === 'tool-webSearch') {
+  if (type === "tool-webSearch") {
     const { toolCallId, state } = part;
 
-    if (state === 'input-available') {
+    if (state === "input-available") {
       return (
-        <div key={toolCallId} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3" key={toolCallId}>
           <ResearchUpdates updates={researchUpdates} />
         </div>
       );
     }
-    if (state === 'output-available') {
+    if (state === "output-available") {
       return (
-        <div key={toolCallId} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3" key={toolCallId}>
           <ResearchUpdates updates={researchUpdates} />
         </div>
       );
@@ -486,7 +488,7 @@ export function PureMessageReasoningParts({
     messageId,
     startIdx,
     endIdx,
-    'reasoning',
+    "reasoning"
   );
 
   return (
@@ -505,23 +507,25 @@ export function PureMessageParts({
   const types = useMessagePartTypesById(messageId);
 
   type NonReasoningPartType = Exclude<
-    ChatMessage['parts'][number]['type'],
-    'reasoning'
+    ChatMessage["parts"][number]["type"],
+    "reasoning"
   >;
 
   const groups = useMemo(() => {
     const result: Array<
-      | { kind: 'reasoning'; startIndex: number; endIndex: number }
+      | { kind: "reasoning"; startIndex: number; endIndex: number }
       | { kind: NonReasoningPartType; index: number }
     > = [];
 
     for (let i = 0; i < types.length; i++) {
       const t = types[i];
-      if (t === 'reasoning') {
+      if (t === "reasoning") {
         const start = i;
-        while (i < types.length && types[i] === 'reasoning') i++;
+        while (i < types.length && types[i] === "reasoning") {
+          i++;
+        }
         const end = i - 1;
-        result.push({ kind: 'reasoning', startIndex: start, endIndex: end });
+        result.push({ kind: "reasoning", startIndex: start, endIndex: end });
         i = end;
       } else {
         result.push({ kind: t as NonReasoningPartType, index: i });
@@ -531,21 +535,21 @@ export function PureMessageParts({
   }, [types]);
 
   return groups.map((group, groupIdx) => {
-    if (group.kind === 'reasoning') {
+    if (group.kind === "reasoning") {
       const key = `message-${messageId}-reasoning-${groupIdx}`;
       const isLast = group.endIndex === types.length - 1;
       return (
         <PureMessageReasoningParts
+          endIdx={group.endIndex}
+          isLoading={isLoading && isLast}
           key={key}
           messageId={messageId}
           startIdx={group.startIndex}
-          endIdx={group.endIndex}
-          isLoading={isLoading && isLast}
         />
       );
     }
 
-    if (group.kind === 'text') {
+    if (group.kind === "text") {
       const key = `message-${messageId}-text-${group.index}`;
       return (
         <TextMessagePart
@@ -559,10 +563,10 @@ export function PureMessageParts({
     const key = `message-${messageId}-part-${group.index}-${group.kind}`;
     return (
       <MessagePart
+        isReadonly={isReadonly}
         key={key}
         messageId={messageId}
         partIdx={group.index}
-        isReadonly={isReadonly}
       />
     );
   });

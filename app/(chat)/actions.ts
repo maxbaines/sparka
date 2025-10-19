@@ -1,10 +1,9 @@
-'use server';
+"use server";
 
-import { generateText } from 'ai';
-
-import { getLanguageModel } from '@/lib/ai/providers';
-import { DEFAULT_TITLE_MODEL } from '@/lib/ai/app-models';
-import type { ChatMessage } from '@/lib/ai/types';
+import { generateText } from "ai";
+import { DEFAULT_TITLE_MODEL } from "@/lib/ai/app-models";
+import { getLanguageModel } from "@/lib/ai/providers";
+import type { ChatMessage } from "@/lib/ai/types";
 
 export async function generateTitleFromUserMessage({
   message,

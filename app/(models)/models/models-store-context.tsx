@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useRef } from 'react';
-import { useStoreWithEqualityFn } from 'zustand/traditional';
-import { createStore } from 'zustand/vanilla';
-import type { FilterState } from '@/app/(models)/models/model-filters';
-import { type ModelDefinition, allModels } from '@ai-models/vercel-gateway';
+import { allModels, type ModelDefinition } from "@ai-models/vercel-gateway";
+import { createContext, useContext, useRef } from "react";
+import { useStoreWithEqualityFn } from "zustand/traditional";
+import { createStore } from "zustand/vanilla";
+import type { FilterState } from "@/app/(models)/models/model-filters";
 
 // Derive dynamic ranges from available models
 const contextWindows = allModels
   .map((m) => m.context_window)
-  .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
+  .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
 const maxTokensValues = allModels
   .map((m) => m.max_tokens)
-  .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
+  .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
 const inputPrices = allModels
   .map((m) => Number.parseFloat(m.pricing.input) * 1_000_000)
   .filter((n) => Number.isFinite(n));
@@ -53,11 +53,11 @@ const DEFAULT_FILTERS: FilterState = {
 };
 
 export type SortOption =
-  | 'newest'
-  | 'pricing-low'
-  | 'pricing-high'
-  | 'context-high'
-  | 'max-output-tokens-high';
+  | "newest"
+  | "pricing-low"
+  | "pricing-high"
+  | "context-high"
+  | "max-output-tokens-high";
 
 export type ModelsStore = {
   searchQuery: string;
@@ -78,24 +78,24 @@ export type ModelsStore = {
 
 const defaultModelsState: Pick<
   ModelsStore,
-  'searchQuery' | 'sortBy' | 'filters'
+  "searchQuery" | "sortBy" | "filters"
 > = {
-  searchQuery: '',
-  sortBy: 'newest',
+  searchQuery: "",
+  sortBy: "newest",
   filters: DEFAULT_FILTERS,
 };
 
 export const createModelsStore = (
   initState: Pick<
     ModelsStore,
-    'searchQuery' | 'sortBy' | 'filters'
-  > = defaultModelsState,
+    "searchQuery" | "sortBy" | "filters"
+  > = defaultModelsState
 ) => {
   const initialState = initState;
   const computeResults = (
     searchQuery: string,
     filters: FilterState,
-    sortBy: SortOption,
+    sortBy: SortOption
   ): ModelDefinition[] => {
     let workingList: ModelDefinition[] = allModels;
 
@@ -105,65 +105,84 @@ export const createModelsStore = (
         (m) =>
           m.name.toLowerCase().includes(q) ||
           m.owned_by.toLowerCase().includes(q) ||
-          m.description.toLowerCase().includes(q),
+          m.description.toLowerCase().includes(q)
       );
     }
 
     const f = filters;
     const filteredList = workingList.filter((m) => {
-      if (f.providers.length > 0 && !f.providers.includes(m.owned_by))
+      if (f.providers.length > 0 && !f.providers.includes(m.owned_by)) {
         return false;
+      }
       if (f.inputModalities.length > 0) {
         const fi = m.input;
         const set = new Set<string>(
           [
-            fi?.text ? 'text' : '',
-            fi?.image ? 'image' : '',
-            fi?.audio ? 'audio' : '',
-            fi?.pdf ? 'pdf' : '',
-            fi?.video ? 'video' : '',
-          ].filter(Boolean),
+            fi?.text ? "text" : "",
+            fi?.image ? "image" : "",
+            fi?.audio ? "audio" : "",
+            fi?.pdf ? "pdf" : "",
+            fi?.video ? "video" : "",
+          ].filter(Boolean)
         );
-        if (!f.inputModalities.some((val) => set.has(val))) return false;
+        if (!f.inputModalities.some((val) => set.has(val))) {
+          return false;
+        }
       }
       if (f.outputModalities.length > 0) {
         const fo = m.output;
         const set = new Set<string>(
           [
-            fo?.text ? 'text' : '',
-            fo?.image ? 'image' : '',
-            fo?.audio ? 'audio' : '',
-          ].filter(Boolean),
+            fo?.text ? "text" : "",
+            fo?.image ? "image" : "",
+            fo?.audio ? "audio" : "",
+          ].filter(Boolean)
         );
-        if (!f.outputModalities.some((val) => set.has(val))) return false;
+        if (!f.outputModalities.some((val) => set.has(val))) {
+          return false;
+        }
       }
       const contextOk =
         m.context_window >= f.contextLength[0] &&
         m.context_window <= f.contextLength[1];
-      if (!contextOk) return false;
+      if (!contextOk) {
+        return false;
+      }
       const maxTokensOk =
         (m.max_tokens ?? 0) >= f.maxTokens[0] &&
         (m.max_tokens ?? 0) <= f.maxTokens[1];
-      if (!maxTokensOk) return false;
+      if (!maxTokensOk) {
+        return false;
+      }
       const inputPrice = Number.parseFloat(m.pricing.input) * 1_000_000;
       const outputPrice = Number.parseFloat(m.pricing.output) * 1_000_000;
-      if (inputPrice < f.inputPricing[0] || inputPrice > f.inputPricing[1])
+      if (inputPrice < f.inputPricing[0] || inputPrice > f.inputPricing[1]) {
         return false;
-      if (outputPrice < f.outputPricing[0] || outputPrice > f.outputPricing[1])
+      }
+      if (
+        outputPrice < f.outputPricing[0] ||
+        outputPrice > f.outputPricing[1]
+      ) {
         return false;
-      if (f.features.reasoning && !m.reasoning) return false;
-      if (f.features.toolCall && !m.toolCall) return false;
-      if (f.features.temperatureControl && m.fixedTemperature !== undefined)
+      }
+      if (f.features.reasoning && !m.reasoning) {
         return false;
+      }
+      if (f.features.toolCall && !m.toolCall) {
+        return false;
+      }
+      if (f.features.temperatureControl && m.fixedTemperature !== undefined) {
+        return false;
+      }
       return true;
     });
 
     const sorted = [...filteredList].sort(
       (a: ModelDefinition, b: ModelDefinition) => {
         switch (sortBy) {
-          case 'newest':
+          case "newest":
             return b.releaseDate.getTime() - a.releaseDate.getTime();
-          case 'pricing-low':
+          case "pricing-low":
             return (
               (Number.parseFloat(a.pricing.input) +
                 Number.parseFloat(a.pricing.output)) *
@@ -172,7 +191,7 @@ export const createModelsStore = (
                 Number.parseFloat(b.pricing.output)) *
                 1_000_000
             );
-          case 'pricing-high':
+          case "pricing-high":
             return (
               (Number.parseFloat(b.pricing.input) +
                 Number.parseFloat(b.pricing.output)) *
@@ -181,14 +200,14 @@ export const createModelsStore = (
                 Number.parseFloat(a.pricing.output)) *
                 1_000_000
             );
-          case 'context-high':
+          case "context-high":
             return b.context_window - a.context_window;
-          case 'max-output-tokens-high':
+          case "max-output-tokens-high":
             return (b.max_tokens ?? 0) - (a.max_tokens ?? 0);
           default:
             return 0;
         }
-      },
+      }
     );
 
     return sorted;
@@ -198,7 +217,7 @@ export const createModelsStore = (
     _results: computeResults(
       initialState.searchQuery,
       initialState.filters,
-      initialState.sortBy,
+      initialState.sortBy
     ),
     setSearchQuery: (v: string) =>
       set((state) => ({
@@ -230,7 +249,7 @@ export const createModelsStore = (
           _results: computeResults(
             state.searchQuery,
             nextFilters,
-            state.sortBy,
+            state.sortBy
           ),
         };
       }),
@@ -262,11 +281,12 @@ export const createModelsStore = (
         !!f.features.reasoning ||
         !!f.features.toolCall ||
         !!f.features.temperatureControl;
-      const anyRangesActive =
-        !rangeEquals(f.contextLength, DEFAULT_FILTERS.contextLength) ||
-        !rangeEquals(f.inputPricing, DEFAULT_FILTERS.inputPricing) ||
-        !rangeEquals(f.outputPricing, DEFAULT_FILTERS.outputPricing) ||
-        !rangeEquals(f.maxTokens, DEFAULT_FILTERS.maxTokens);
+      const anyRangesActive = !(
+        rangeEquals(f.contextLength, DEFAULT_FILTERS.contextLength) &&
+        rangeEquals(f.inputPricing, DEFAULT_FILTERS.inputPricing) &&
+        rangeEquals(f.outputPricing, DEFAULT_FILTERS.outputPricing) &&
+        rangeEquals(f.maxTokens, DEFAULT_FILTERS.maxTokens)
+      );
       return anyArraysActive || anyFeaturesActive || anyRangesActive;
     },
     activeFiltersCount: () => {
@@ -317,15 +337,17 @@ export function ModelsProvider({ children }: { children: React.ReactNode }) {
 
 export function useModels<T>(
   selector: (store: ModelsStore) => T,
-  equalityFn?: (a: T, b: T) => boolean,
+  equalityFn?: (a: T, b: T) => boolean
 ): T;
 export function useModels(): ModelsStore;
 export function useModels<T = ModelsStore>(
   selector?: (store: ModelsStore) => T,
-  equalityFn?: (a: T, b: T) => boolean,
+  equalityFn?: (a: T, b: T) => boolean
 ) {
   const store = useContext(ModelsStoreContext);
-  if (!store) throw new Error('useModels must be used within ModelsProvider');
+  if (!store) {
+    throw new Error("useModels must be used within ModelsProvider");
+  }
   const selectorOrIdentity =
     (selector as (store: ModelsStore) => T) ??
     ((s: ModelsStore) => s as unknown as T);

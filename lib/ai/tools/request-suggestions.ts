@@ -1,17 +1,17 @@
-import { z } from 'zod';
-import type { Session } from '@/lib/auth';
-import { streamObject, tool } from 'ai';
-import { getDocumentById, saveSuggestions } from '@/lib/db/queries';
-import type { Suggestion } from '@/lib/db/schema';
-import { generateUUID } from '@/lib/utils';
-import { getLanguageModel } from '../providers';
-import { DEFAULT_ARTIFACT_SUGGESTION_MODEL } from '../app-models';
-import type { StreamWriter } from '../types';
+import { streamObject, tool } from "ai";
+import { z } from "zod";
+import type { Session } from "@/lib/auth";
+import { getDocumentById, saveSuggestions } from "@/lib/db/queries";
+import type { Suggestion } from "@/lib/db/schema";
+import { generateUUID } from "@/lib/utils";
+import { DEFAULT_ARTIFACT_SUGGESTION_MODEL } from "../app-models";
+import { getLanguageModel } from "../providers";
+import type { StreamWriter } from "../types";
 
-interface RequestSuggestionsProps {
+type RequestSuggestionsProps = {
   session: Session;
   dataStream: StreamWriter;
-}
+};
 
 export const requestSuggestions = ({
   session,
@@ -37,34 +37,35 @@ Behavior:
       documentId: z
         .string()
         .describe(
-          'ID of the existing document to critique and propose rewritten sentences for',
+          "ID of the existing document to critique and propose rewritten sentences for"
         ),
     }),
     execute: async ({ documentId }) => {
       const document = await getDocumentById({ id: documentId });
 
-      if (!document || !document.content) {
+      if (!document?.content) {
         return {
-          error: 'Document not found',
+          error: "Document not found",
         };
       }
 
-      const suggestions: Array<
-        Omit<Suggestion, 'userId' | 'createdAt' | 'documentCreatedAt'>
-      > = [];
+      const suggestions: Omit<
+        Suggestion,
+        "userId" | "createdAt" | "documentCreatedAt"
+      >[] = [];
 
       const { elementStream } = streamObject({
         model: getLanguageModel(DEFAULT_ARTIFACT_SUGGESTION_MODEL),
         experimental_telemetry: { isEnabled: true },
 
         system:
-          'You are a help writing assistant. Given a piece of writing, please offer suggestions to improve the piece of writing and describe the change. It is very important for the edits to contain full sentences instead of just words. Max 5 suggestions.',
+          "You are a help writing assistant. Given a piece of writing, please offer suggestions to improve the piece of writing and describe the change. It is very important for the edits to contain full sentences instead of just words. Max 5 suggestions.",
         prompt: document.content,
-        output: 'array',
+        output: "array",
         schema: z.object({
-          originalSentence: z.string().describe('The original sentence'),
-          suggestedSentence: z.string().describe('The suggested sentence'),
-          description: z.string().describe('The description of the suggestion'),
+          originalSentence: z.string().describe("The original sentence"),
+          suggestedSentence: z.string().describe("The suggested sentence"),
+          description: z.string().describe("The description of the suggestion"),
         }),
       });
 
@@ -74,15 +75,15 @@ Behavior:
           suggestedText: element.suggestedSentence,
           description: element.description,
           id: generateUUID(),
-          documentId: documentId,
+          documentId,
           isResolved: false,
           createdAt: new Date(),
-          userId: session.user?.id ?? '',
+          userId: session.user?.id ?? "",
           documentCreatedAt: document.createdAt,
         };
 
         dataStream.write({
-          type: 'data-suggestion',
+          type: "data-suggestion",
           data: suggestion,
           transient: true,
         });
@@ -107,7 +108,7 @@ Behavior:
         id: documentId,
         title: document.title,
         kind: document.kind,
-        message: 'Suggestions have been added to the document',
+        message: "Suggestions have been added to the document",
       };
     },
   });

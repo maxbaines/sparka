@@ -1,27 +1,27 @@
-import { siteConfig } from '@/lib/config';
+import { siteConfig } from "@/lib/config";
 
 export default function TermsPage() {
   const currencySymbolMap: Record<string, string> = {
-    USD: '$',
-    EUR: '€',
-    GBP: '£',
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
   };
 
   const currencyCode = siteConfig.pricing?.currency;
   const currencySymbol = currencyCode
     ? (currencySymbolMap[currencyCode] ?? currencyCode)
-    : '';
+    : "";
   const hasFree = Boolean(siteConfig.pricing?.free);
   const hasPro = Boolean(siteConfig.pricing?.pro);
   const hasAnyPlan = hasFree || hasPro;
   const paymentProcessors = Array.isArray(
-    siteConfig.services?.paymentProcessors,
+    siteConfig.services?.paymentProcessors
   )
     ? siteConfig.services.paymentProcessors
     : [];
 
   return (
-    <main className="container mx-auto max-w-3xl py-10 prose dark:prose-invert">
+    <main className="prose dark:prose-invert container mx-auto max-w-3xl py-10">
       <h1>{siteConfig.policies.terms.title}</h1>
       {siteConfig.policies.terms.lastUpdated ? (
         <p>
@@ -50,8 +50,8 @@ export default function TermsPage() {
       <p>
         {siteConfig.appName} helps users find information using AI. Our service
         is hosted on {siteConfig.services.hosting} and integrates with AI
-        technology providers including{' '}
-        {siteConfig.services.aiProviders.join(', ')} to deliver results and
+        technology providers including{" "}
+        {siteConfig.services.aiProviders.join(", ")} to deliver results and
         content generation capabilities.
       </p>
 
@@ -92,10 +92,10 @@ export default function TermsPage() {
       </p>
       <ul>
         <li>Hosting: {siteConfig.services.hosting}</li>
-        <li>AI providers: {siteConfig.services.aiProviders.join(', ')}</li>
+        <li>AI providers: {siteConfig.services.aiProviders.join(", ")}</li>
         {siteConfig.services.paymentProcessors.length > 0 ? (
           <li>
-            Payments: {siteConfig.services.paymentProcessors.join(', ')} for
+            Payments: {siteConfig.services.paymentProcessors.join(", ")} for
             billing and subscription management
           </li>
         ) : null}
@@ -111,22 +111,22 @@ export default function TermsPage() {
       {hasAnyPlan ? (
         <>
           <p>
-            {siteConfig.appName} offers{' '}
-            {hasFree && hasPro ? 'free and paid' : hasPro ? 'paid' : 'free'}{' '}
+            {siteConfig.appName} offers{" "}
+            {hasFree && hasPro ? "free and paid" : hasPro ? "paid" : "free"}{" "}
             subscription plans.
           </p>
           <ul>
             {hasFree ? (
               <li>
-                <strong>{siteConfig.pricing?.free?.name}:</strong>{' '}
+                <strong>{siteConfig.pricing?.free?.name}:</strong>{" "}
                 {siteConfig.pricing?.free?.summary}
               </li>
             ) : null}
             {hasPro ? (
               <li>
-                <strong>{siteConfig.pricing?.pro?.name}:</strong>{' '}
+                <strong>{siteConfig.pricing?.pro?.name}:</strong>{" "}
                 {currencySymbol}
-                {siteConfig.pricing?.pro?.monthlyPrice}/month —{' '}
+                {siteConfig.pricing?.pro?.monthlyPrice}/month —{" "}
                 {siteConfig.pricing?.pro?.summary}
               </li>
             ) : null}
@@ -134,7 +134,7 @@ export default function TermsPage() {
           {paymentProcessors.length > 0 ? (
             <p>
               We use third-party payment processors to handle billing and
-              payments: {paymentProcessors.join(', ')}. {siteConfig.appName}{' '}
+              payments: {paymentProcessors.join(", ")}. {siteConfig.appName}{" "}
               does not store any payment card details, bank information, or
               other sensitive payment data. All payment information is processed
               directly by our providers.
@@ -159,8 +159,8 @@ export default function TermsPage() {
           </p>
           {paymentProcessors.length > 0 ? (
             <p>
-              When payments are enabled, billing will be processed by{' '}
-              {paymentProcessors.join(', ')}. We will not store payment card
+              When payments are enabled, billing will be processed by{" "}
+              {paymentProcessors.join(", ")}. We will not store payment card
               details; payment data will be handled directly by our providers
               according to their policies and security standards.
             </p>
@@ -188,7 +188,7 @@ export default function TermsPage() {
 
       <h2>10. Limitation of Liability</h2>
       <p>
-        To the maximum extent permitted by law, {siteConfig.organization.name}{' '}
+        To the maximum extent permitted by law, {siteConfig.organization.name}{" "}
         shall not be liable for indirect, incidental, special, consequential, or
         punitive damages.
       </p>
@@ -212,7 +212,7 @@ export default function TermsPage() {
 
       <h2>14. Contact Us</h2>
       <p>
-        If you have any questions about these Terms of Service, contact us at{' '}
+        If you have any questions about these Terms of Service, contact us at{" "}
         {siteConfig.organization.contact.legalEmail}
       </p>
 

@@ -2,67 +2,66 @@ import {
   convertToModelMessages,
   createUIMessageStream,
   JsonToSseTransformStream,
-  streamText,
+  type ModelMessage,
   stepCountIs,
   streamObject,
-  type ModelMessage,
-} from 'ai';
-import { replaceFilePartUrlByBinaryDataInMessages } from '@/lib/utils/download-assets';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-import { systemPrompt } from '@/lib/ai/prompts';
-import {
-  getChatById,
-  saveChat,
-  getUserById,
-  saveMessage,
-  updateMessage,
-  getMessageById,
-} from '@/lib/db/queries';
-import { generateUUID } from '@/lib/utils';
-import { generateTitleFromUserMessage } from '../../actions';
-import { getTools } from '@/lib/ai/tools/tools';
-import { toolsDefinitions, allTools } from '@/lib/ai/tools/tools-definitions';
-import type { ToolName, ChatMessage, StreamWriter } from '@/lib/ai/types';
-import { z } from 'zod';
-import type { NextRequest } from 'next/server';
-import {
-  filterAffordableTools,
-  getBaseModelCostByModelId,
-} from '@/lib/credits/credits-utils';
-import { getLanguageModel, getModelProviderOptions } from '@/lib/ai/providers';
-import type { CreditReservation } from '@/lib/credits/credit-reservation';
-import {
-  DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
-  getAppModelDefinition,
-  type AppModelDefinition,
-  type AppModelId,
-} from '@/lib/ai/app-models';
+  streamText,
+} from "ai";
+import { headers } from "next/headers";
+import type { NextRequest } from "next/server";
+import { after } from "next/server";
 import {
   createResumableStreamContext,
   type ResumableStreamContext,
-} from 'resumable-stream';
-
-import { after } from 'next/server';
+} from "resumable-stream";
+import { z } from "zod";
 import {
-  getAnonymousSession,
+  type AppModelDefinition,
+  type AppModelId,
+  DEFAULT_FOLLOWUP_SUGGESTIONS_MODEL,
+  getAppModelDefinition,
+} from "@/lib/ai/app-models";
+import { ChatSDKError } from "@/lib/ai/errors";
+import { markdownJoinerTransform } from "@/lib/ai/markdown-joiner-transform";
+import { systemPrompt } from "@/lib/ai/prompts";
+import { getLanguageModel, getModelProviderOptions } from "@/lib/ai/providers";
+import { calculateMessagesTokens } from "@/lib/ai/token-utils";
+import { getTools } from "@/lib/ai/tools/tools";
+import { allTools, toolsDefinitions } from "@/lib/ai/tools/tools-definitions";
+import type { ChatMessage, StreamWriter, ToolName } from "@/lib/ai/types";
+import {
   createAnonymousSession,
+  getAnonymousSession,
   setAnonymousSession,
-} from '@/lib/anonymous-session-server';
-import type { AnonymousSession } from '@/lib/types/anonymous';
-import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
-import { markdownJoinerTransform } from '@/lib/ai/markdown-joiner-transform';
-import { checkAnonymousRateLimit, getClientIP } from '@/lib/utils/rate-limit';
-import { calculateMessagesTokens } from '@/lib/ai/token-utils';
-import { ChatSDKError } from '@/lib/ai/errors';
-import { addExplicitToolRequestToMessages } from './addExplicitToolRequestToMessages';
-import { MAX_INPUT_TOKENS } from '@/lib/limits/tokens';
-import { getRecentGeneratedImage } from './getRecentGeneratedImage';
-import { getCreditReservation } from './getCreditReservation';
-import { filterReasoningParts } from './filterReasoningParts';
-import { getThreadUpToMessageId } from './getThreadUpToMessageId';
-import { createModuleLogger } from '@/lib/logger';
-import { env } from '@/lib/env';
+} from "@/lib/anonymous-session-server";
+import { auth } from "@/lib/auth";
+import type { CreditReservation } from "@/lib/credits/credit-reservation";
+import {
+  filterAffordableTools,
+  getBaseModelCostByModelId,
+} from "@/lib/credits/credits-utils";
+import {
+  getChatById,
+  getMessageById,
+  getUserById,
+  saveChat,
+  saveMessage,
+  updateMessage,
+} from "@/lib/db/queries";
+import { env } from "@/lib/env";
+import { MAX_INPUT_TOKENS } from "@/lib/limits/tokens";
+import { createModuleLogger } from "@/lib/logger";
+import type { AnonymousSession } from "@/lib/types/anonymous";
+import { ANONYMOUS_LIMITS } from "@/lib/types/anonymous";
+import { generateUUID } from "@/lib/utils";
+import { replaceFilePartUrlByBinaryDataInMessages } from "@/lib/utils/download-assets";
+import { checkAnonymousRateLimit, getClientIP } from "@/lib/utils/rate-limit";
+import { generateTitleFromUserMessage } from "../../actions";
+import { addExplicitToolRequestToMessages } from "./addExplicitToolRequestToMessages";
+import { filterReasoningParts } from "./filterReasoningParts";
+import { getCreditReservation } from "./getCreditReservation";
+import { getRecentGeneratedImage } from "./getRecentGeneratedImage";
+import { getThreadUpToMessageId } from "./getThreadUpToMessageId";
 
 // Create shared Redis clients for resumable stream and cleanup
 let redisPublisher: any = null;
@@ -70,7 +69,7 @@ let redisSubscriber: any = null;
 
 if (env.REDIS_URL) {
   (async () => {
-    const redis = await import('redis');
+    const redis = await import("redis");
     redisPublisher = redis.createClient({ url: env.REDIS_URL });
     redisSubscriber = redis.createClient({ url: env.REDIS_URL });
     await Promise.all([redisPublisher.connect(), redisSubscriber.connect()]);
@@ -84,7 +83,7 @@ export function getStreamContext() {
     try {
       globalStreamContext = createResumableStreamContext({
         waitUntil: after,
-        keyPrefix: 'sparka-ai:resumable-stream',
+        keyPrefix: "sparka-ai:resumable-stream",
         ...(redisPublisher && redisSubscriber
           ? {
               publisher: redisPublisher,
@@ -93,9 +92,9 @@ export function getStreamContext() {
           : {}),
       });
     } catch (error: any) {
-      if (error.message.includes('REDIS_URL')) {
+      if (error.message.includes("REDIS_URL")) {
         console.log(
-          ' > Resumable streams are disabled due to missing REDIS_URL',
+          " > Resumable streams are disabled due to missing REDIS_URL"
         );
       } else {
         console.error(error);
@@ -123,7 +122,7 @@ function generateFollowupSuggestions(modelMessages: ModelMessage[]) {
     messages: [
       ...modelMessages,
       {
-        role: 'user',
+        role: "user",
         content: `What question should I ask next? Return an array of suggested questions (minimum ${minQuestionCount}, maximum ${maxQuestionCount}). Each question should be no more than ${maxCharactersPerQuestion} characters.`,
       },
     ],
@@ -148,11 +147,11 @@ async function streamFollowupSuggestions({
   for await (const chunk of followupSuggestionsResult.partialObjectStream) {
     writer.write({
       id: dataPartId,
-      type: 'data-followupSuggestions',
+      type: "data-followupSuggestions",
       data: {
         suggestions:
           chunk.suggestions?.filter(
-            (suggestion): suggestion is string => suggestion !== undefined,
+            (suggestion): suggestion is string => suggestion !== undefined
           ) ?? [],
       },
     });
@@ -160,7 +159,7 @@ async function streamFollowupSuggestions({
 }
 
 export async function POST(request: NextRequest) {
-  const log = createModuleLogger('api:chat');
+  const log = createModuleLogger("api:chat");
   try {
     const {
       id: chatId,
@@ -173,16 +172,16 @@ export async function POST(request: NextRequest) {
     } = await request.json();
 
     if (!userMessage) {
-      log.warn('No user message found');
-      return new Response('No user message found', { status: 400 });
+      log.warn("No user message found");
+      return new Response("No user message found", { status: 400 });
     }
 
     // Extract selectedModel from user message metadata
     const selectedModelId = userMessage.metadata?.selectedModel as AppModelId;
 
     if (!selectedModelId) {
-      log.warn('No selectedModel in user message metadata');
-      return new Response('No selectedModel in user message metadata', {
+      log.warn("No selectedModel in user message metadata");
+      return new Response("No selectedModel in user message metadata", {
         status: 400,
       });
     }
@@ -199,31 +198,31 @@ export async function POST(request: NextRequest) {
       // TODO: Consider if checking if user exists is really needed
       const user = await getUserById({ userId });
       if (!user) {
-        log.warn('User not found');
-        return new Response('User not found', { status: 404 });
+        log.warn("User not found");
+        return new Response("User not found", { status: 404 });
       }
     } else {
       // Apply rate limiting for anonymous users
       const clientIP = getClientIP(request);
       const rateLimitResult = await checkAnonymousRateLimit(
         clientIP,
-        redisPublisher,
+        redisPublisher
       );
 
       if (!rateLimitResult.success) {
-        log.warn({ clientIP }, 'Rate limit exceeded');
+        log.warn({ clientIP }, "Rate limit exceeded");
         return new Response(
           JSON.stringify({
             error: rateLimitResult.error,
-            type: 'RATE_LIMIT_EXCEEDED',
+            type: "RATE_LIMIT_EXCEEDED",
           }),
           {
             status: 429,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               ...(rateLimitResult.headers || {}),
             },
-          },
+          }
         );
       }
 
@@ -234,81 +233,81 @@ export async function POST(request: NextRequest) {
 
       // Check message limits
       if (anonymousSession.remainingCredits <= 0) {
-        log.info('Anonymous message limit reached');
+        log.info("Anonymous message limit reached");
         return new Response(
           JSON.stringify({
             error: `You've used all ${ANONYMOUS_LIMITS.CREDITS} free messages. Sign up to continue chatting with unlimited access!`,
-            type: 'ANONYMOUS_LIMIT_EXCEEDED',
+            type: "ANONYMOUS_LIMIT_EXCEEDED",
             maxMessages: ANONYMOUS_LIMITS.CREDITS,
             suggestion:
-              'Create an account to get unlimited messages and access to more AI models',
+              "Create an account to get unlimited messages and access to more AI models",
           }),
           {
             status: 402,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               ...(rateLimitResult.headers || {}),
             },
-          },
+          }
         );
       }
 
       // Validate model for anonymous users
       if (!ANONYMOUS_LIMITS.AVAILABLE_MODELS.includes(selectedModelId as any)) {
-        log.warn('Model not available for anonymous users');
+        log.warn("Model not available for anonymous users");
         return new Response(
           JSON.stringify({
-            error: 'Model not available for anonymous users',
+            error: "Model not available for anonymous users",
             availableModels: ANONYMOUS_LIMITS.AVAILABLE_MODELS,
           }),
           {
             status: 403,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               ...(rateLimitResult.headers || {}),
             },
-          },
+          }
         );
       }
     }
 
     // Extract selectedTool from user message metadata
     const selectedTool = userMessage.metadata.selectedTool || null;
-    log.debug({ selectedTool }, 'selectedTool');
+    log.debug({ selectedTool }, "selectedTool");
     let modelDefinition: AppModelDefinition;
     try {
       modelDefinition = getAppModelDefinition(selectedModelId);
     } catch (_error) {
-      log.warn('Model not found');
-      return new Response('Model not found', { status: 404 });
+      log.warn("Model not found");
+      return new Response("Model not found", { status: 404 });
     }
     // Skip database operations for anonymous users
     if (!isAnonymous) {
       const chat = await getChatById({ id: chatId });
 
       if (chat && chat.userId !== userId) {
-        log.warn('Unauthorized - chat ownership mismatch');
-        return new Response('Unauthorized', { status: 401 });
+        log.warn("Unauthorized - chat ownership mismatch");
+        return new Response("Unauthorized", { status: 401 });
       }
 
-      if (!chat) {
+      if (chat) {
+        if (chat.userId !== userId) {
+          log.warn("Unauthorized - chat ownership mismatch");
+          return new Response("Unauthorized", { status: 401 });
+        }
+      } else {
         const title = await generateTitleFromUserMessage({
           message: userMessage,
         });
 
         await saveChat({ id: chatId, userId, title });
-      } else {
-        if (chat.userId !== userId) {
-          log.warn('Unauthorized - chat ownership mismatch');
-          return new Response('Unauthorized', { status: 401 });
-        }
       }
 
       const [exsistentMessage] = await getMessageById({ id: userMessage.id });
 
       if (exsistentMessage && exsistentMessage.chatId !== chatId) {
-        log.warn('Unauthorized - message chatId mismatch');
-        return new Response('Unauthorized', { status: 401 });
+        log.warn("Unauthorized - message chatId mismatch");
+        return new Response("Unauthorized", { status: 401 });
       }
 
       if (!exsistentMessage) {
@@ -316,7 +315,7 @@ export async function POST(request: NextRequest) {
         await saveMessage({
           _message: {
             id: userMessage.id,
-            chatId: chatId,
+            chatId,
             role: userMessage.role,
             lastContext: undefined,
             parts: userMessage.parts,
@@ -326,22 +325,24 @@ export async function POST(request: NextRequest) {
             isPartial: false,
             parentMessageId: userMessage.metadata?.parentMessageId || null,
             selectedModel: selectedModelId,
-            selectedTool: selectedTool,
+            selectedTool,
           },
         });
       }
     }
 
     let explicitlyRequestedTools: ToolName[] | null = null;
-    if (selectedTool === 'deepResearch')
-      explicitlyRequestedTools = ['deepResearch'];
+    if (selectedTool === "deepResearch") {
+      explicitlyRequestedTools = ["deepResearch"];
+    }
     // else if (selectedTool === 'reason') explicitlyRequestedTool = 'reasonSearch';
-    else if (selectedTool === 'webSearch')
-      explicitlyRequestedTools = ['webSearch'];
-    else if (selectedTool === 'generateImage')
-      explicitlyRequestedTools = ['generateImage'];
-    else if (selectedTool === 'createDocument')
-      explicitlyRequestedTools = ['createDocument', 'updateDocument'];
+    else if (selectedTool === "webSearch") {
+      explicitlyRequestedTools = ["webSearch"];
+    } else if (selectedTool === "generateImage") {
+      explicitlyRequestedTools = ["generateImage"];
+    } else if (selectedTool === "createDocument") {
+      explicitlyRequestedTools = ["createDocument", "updateDocument"];
+    }
 
     const baseModelCost = getBaseModelCostByModelId(selectedModelId);
 
@@ -353,8 +354,8 @@ export async function POST(request: NextRequest) {
 
       if (creditError) {
         console.log(
-          'RESPONSE > POST /api/chat: Credit reservation error:',
-          creditError,
+          "RESPONSE > POST /api/chat: Credit reservation error:",
+          creditError
         );
         return new Response(creditError, {
           status: 402,
@@ -374,62 +375,60 @@ export async function POST(request: NextRequest) {
         ? ANONYMOUS_LIMITS.CREDITS
         : reservation
           ? reservation.budget - baseModelCost
-          : 0,
+          : 0
     );
 
     // Disable all tools for models with unspecified features
-    if (!modelDefinition || !modelDefinition.input) {
-      activeTools = [];
-    } else {
+    if (modelDefinition?.input) {
       // Let's not allow deepResearch if the model support reasoning (it's expensive and slow)
       if (
         modelDefinition.reasoning &&
-        activeTools.some((tool: ToolName) => tool === 'deepResearch')
+        activeTools.some((tool: ToolName) => tool === "deepResearch")
       ) {
         activeTools = activeTools.filter(
-          (tool: ToolName) => tool !== 'deepResearch',
+          (tool: ToolName) => tool !== "deepResearch"
         );
       }
+    } else {
+      activeTools = [];
     }
 
     if (
       explicitlyRequestedTools &&
       explicitlyRequestedTools.length > 0 &&
       !activeTools.some((tool: ToolName) =>
-        explicitlyRequestedTools.includes(tool),
+        explicitlyRequestedTools.includes(tool)
       )
     ) {
       log.warn(
         { explicitlyRequestedTools },
-        'Insufficient budget for requested tool',
+        "Insufficient budget for requested tool"
       );
       return new Response(
         `Insufficient budget for requested tool: ${explicitlyRequestedTools}.`,
         {
           status: 402,
-        },
+        }
       );
-    } else if (
-      explicitlyRequestedTools &&
-      explicitlyRequestedTools.length > 0
-    ) {
+    }
+    if (explicitlyRequestedTools && explicitlyRequestedTools.length > 0) {
       log.debug(
         { explicitlyRequestedTools },
-        'Setting explicitly requested tools',
+        "Setting explicitly requested tools"
       );
       activeTools = explicitlyRequestedTools;
     }
 
     // Validate input token limit (50k tokens for user message)
     const totalTokens = calculateMessagesTokens(
-      convertToModelMessages([userMessage]),
+      convertToModelMessages([userMessage])
     );
 
     if (totalTokens > MAX_INPUT_TOKENS) {
-      log.warn({ totalTokens, MAX_INPUT_TOKENS }, 'Token limit exceeded');
+      log.warn({ totalTokens, MAX_INPUT_TOKENS }, "Token limit exceeded");
       const error = new ChatSDKError(
-        'input_too_long:chat',
-        `Message too long: ${totalTokens} tokens (max: ${MAX_INPUT_TOKENS})`,
+        "input_too_long:chat",
+        `Message too long: ${totalTokens} tokens (max: ${MAX_INPUT_TOKENS})`
       );
       return error.toResponse();
     }
@@ -438,7 +437,7 @@ export async function POST(request: NextRequest) {
       ? anonymousPreviousMessages
       : await getThreadUpToMessageId(
           chatId,
-          userMessage.metadata.parentMessageId,
+          userMessage.metadata.parentMessageId
         );
 
     const messages = [...messageThreadToParent, userMessage].slice(-5);
@@ -448,7 +447,7 @@ export async function POST(request: NextRequest) {
     addExplicitToolRequestToMessages(
       messages,
       activeTools,
-      explicitlyRequestedTools,
+      explicitlyRequestedTools
     );
 
     // Filter out reasoning parts to ensure compatibility between different models
@@ -460,7 +459,7 @@ export async function POST(request: NextRequest) {
     // TODO: remove this when the gateway provider supports URLs
     const contextForLLM =
       await replaceFilePartUrlByBinaryDataInMessages(modelMessages);
-    log.debug({ activeTools }, 'active tools');
+    log.debug({ activeTools }, "active tools");
 
     // Create AbortController with 55s timeout for credit cleanup
     const abortController = new AbortController();
@@ -469,7 +468,7 @@ export async function POST(request: NextRequest) {
         await reservation.cleanup();
       }
       abortController.abort();
-    }, 290000); // 290 seconds
+    }, 290_000); // 290 seconds
 
     // Ensure cleanup on any unhandled errors
     try {
@@ -485,7 +484,7 @@ export async function POST(request: NextRequest) {
         await redisPublisher.setEx(
           keyPrefix,
           600, // 10 minutes TTL
-          JSON.stringify({ chatId, streamId, createdAt: Date.now() }),
+          JSON.stringify({ chatId, streamId, createdAt: Date.now() })
         );
       }
 
@@ -494,8 +493,8 @@ export async function POST(request: NextRequest) {
         await saveMessage({
           _message: {
             id: messageId,
-            chatId: chatId,
-            role: 'assistant',
+            chatId,
+            role: "assistant",
             lastContext: undefined,
             parts: [], // Empty placeholder
             attachments: [],
@@ -524,19 +523,19 @@ export async function POST(request: NextRequest) {
                   // Don't stop if the tool result is a clarifying question
                   return toolResults.some(
                     (toolResult) =>
-                      toolResult.type === 'tool-result' &&
-                      toolResult.toolName === 'deepResearch' &&
-                      (toolResult.output as any).format === 'report',
+                      toolResult.type === "tool-result" &&
+                      toolResult.toolName === "deepResearch" &&
+                      (toolResult.output as any).format === "report"
                   );
                 });
               },
             ],
 
-            activeTools: activeTools,
+            activeTools,
             experimental_transform: markdownJoinerTransform(),
             experimental_telemetry: {
               isEnabled: true,
-              functionId: 'chat-response',
+              functionId: "chat-response",
             },
             tools: getTools({
               dataStream,
@@ -544,18 +543,18 @@ export async function POST(request: NextRequest) {
                 user: {
                   id: userId || undefined,
                 },
-                expires: 'noop',
+                expires: "noop",
               },
-              contextForLLM: contextForLLM,
+              contextForLLM,
               messageId,
               selectedModel: modelDefinition.apiModelId,
               attachments: userMessage.parts.filter(
-                (part) => part.type === 'file',
+                (part) => part.type === "file"
               ),
               lastGeneratedImage,
             }),
             onError: (error) => {
-              log.error({ error }, 'streamText error');
+              log.error({ error }, "streamText error");
             },
             abortSignal: abortController.signal, // Pass abort signal to streamText
             ...(modelDefinition.fixedTemperature
@@ -579,12 +578,12 @@ export async function POST(request: NextRequest) {
               sendReasoning: true,
               messageMetadata: ({ part }) => {
                 // send custom information to the client on start:
-                if (part.type === 'start') {
+                if (part.type === "start") {
                   return initialMetadata;
                 }
 
                 // when the message is finished, send additional information:
-                if (part.type === 'finish') {
+                if (part.type === "finish") {
                   return {
                     ...initialMetadata,
                     isPartial: false,
@@ -592,7 +591,7 @@ export async function POST(request: NextRequest) {
                   };
                 }
               },
-            }),
+            })
           );
           await result.consumeStream();
 
@@ -624,13 +623,13 @@ export async function POST(request: NextRequest) {
               messages
                 .flatMap((message) => message.parts)
                 .reduce((acc, toolResult) => {
-                  if (!toolResult.type.startsWith('tool-')) {
+                  if (!toolResult.type.startsWith("tool-")) {
                     return acc;
                   }
 
                   const toolDef =
                     toolsDefinitions[
-                      toolResult.type.replace('tool-', '') as ToolName
+                      toolResult.type.replace("tool-", "") as ToolName
                     ];
 
                   if (!toolDef) {
@@ -645,15 +644,15 @@ export async function POST(request: NextRequest) {
               const assistantMessage = messages.at(-1);
 
               if (!assistantMessage) {
-                throw new Error('No assistant message found!');
+                throw new Error("No assistant message found!");
               }
 
               if (!isAnonymous) {
                 await updateMessage({
                   _message: {
                     id: assistantMessage.id,
-                    chatId: chatId,
-                    role: assistantMessage.role ?? '',
+                    chatId,
+                    role: assistantMessage.role ?? "",
                     parts: assistantMessage.parts ?? [],
                     lastContext: responseMessage.metadata.usage,
                     attachments: [],
@@ -672,7 +671,7 @@ export async function POST(request: NextRequest) {
                 await reservation.finalize(actualCost);
               }
             } catch (error) {
-              log.error({ error }, 'Failed to save chat or finalize credits');
+              log.error({ error }, "Failed to save chat or finalize credits");
               // Still release the reservation on error
               if (reservation) {
                 await reservation.cleanup();
@@ -684,7 +683,7 @@ export async function POST(request: NextRequest) {
         onError: (error) => {
           // Clear timeout on error
           clearTimeout(timeoutId);
-          log.error({ error }, 'onError');
+          log.error({ error }, "onError");
           // Release reserved credits on error (fire and forget)
           if (reservation) {
             reservation.cleanup();
@@ -693,7 +692,7 @@ export async function POST(request: NextRequest) {
             anonymousSession.remainingCredits += baseModelCost;
             setAnonymousSession(anonymousSession);
           }
-          return 'Oops, an error occured!';
+          return "Oops, an error occured!";
         },
       });
 
@@ -707,11 +706,11 @@ export async function POST(request: NextRequest) {
             if (keys.length > 0) {
               // Set 5 minute expiration on all stream-related keys
               await Promise.all(
-                keys.map((key: string) => redisPublisher.expire(key, 300)),
+                keys.map((key: string) => redisPublisher.expire(key, 300))
               );
             }
           } catch (error) {
-            log.error({ error }, 'Failed to set TTL on stream keys');
+            log.error({ error }, "Failed to set TTL on stream keys");
           }
         }
 
@@ -725,41 +724,37 @@ export async function POST(request: NextRequest) {
             await redisPublisher.expire(keyPrefix, 300);
           }
         } catch (cleanupError) {
-          log.error({ cleanupError }, 'Failed to cleanup stream record');
+          log.error({ cleanupError }, "Failed to cleanup stream record");
         }
       });
 
       const streamContext = getStreamContext();
 
       if (streamContext) {
-        log.debug('Returning resumable stream');
+        log.debug("Returning resumable stream");
         return new Response(
           await streamContext.resumableStream(streamId, () =>
-            stream.pipeThrough(new JsonToSseTransformStream()),
+            stream.pipeThrough(new JsonToSseTransformStream())
           ),
           {
             headers: {
-              'Content-Type': 'text/event-stream',
-              'Cache-Control': 'no-cache',
-              Connection: 'keep-alive',
+              "Content-Type": "text/event-stream",
+              "Cache-Control": "no-cache",
+              Connection: "keep-alive",
             },
-          },
-        );
-      } else {
-        return new Response(
-          stream.pipeThrough(new JsonToSseTransformStream()),
-          {
-            headers: {
-              'Content-Type': 'text/event-stream',
-              'Cache-Control': 'no-cache',
-              Connection: 'keep-alive',
-            },
-          },
+          }
         );
       }
+      return new Response(stream.pipeThrough(new JsonToSseTransformStream()), {
+        headers: {
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+        },
+      });
     } catch (error) {
       clearTimeout(timeoutId);
-      log.error({ error }, 'error found in try block');
+      log.error({ error }, "error found in try block");
       if (reservation) {
         await reservation.cleanup();
       }
@@ -770,8 +765,8 @@ export async function POST(request: NextRequest) {
       throw error;
     }
   } catch (error) {
-    log.error({ error }, 'RESPONSE > POST /api/chat error');
-    return new Response('An error occurred while processing your request!', {
+    log.error({ error }, "RESPONSE > POST /api/chat error");
+    return new Response("An error occurred while processing your request!", {
       status: 404,
     });
   }

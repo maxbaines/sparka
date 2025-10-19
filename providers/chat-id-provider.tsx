@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import { generateUUID } from '@/lib/utils';
+import { usePathname } from "next/navigation";
 import {
   createContext,
+  type ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useRef,
-  type ReactNode,
-  useCallback,
-} from 'react';
-import { usePathname } from 'next/navigation';
+} from "react";
+import { generateUUID } from "@/lib/utils";
 
-interface ChatIdContextType {
+type ChatIdContextType = {
   id: string;
-  type: 'chat' | 'provisional' | 'shared';
+  type: "chat" | "provisional" | "shared";
   refreshChatID: () => void;
-}
+};
 
 const ChatIdContext = createContext<ChatIdContextType | undefined>(undefined);
 
 type ChatId = {
   id: string;
-  type: 'chat' | 'provisional' | 'shared';
+  type: "chat" | "provisional" | "shared";
 };
 
 export function ChatIdProvider({ children }: { children: ReactNode }) {
@@ -31,24 +31,24 @@ export function ChatIdProvider({ children }: { children: ReactNode }) {
   // Compute final id and type directly from pathname and state
   const { id, type } = useMemo<ChatId>(() => {
     // Handle shared chat paths
-    if (pathname?.startsWith('/share/')) {
-      const sharedChatId = pathname.replace('/share/', '') || null;
+    if (pathname?.startsWith("/share/")) {
+      const sharedChatId = pathname.replace("/share/", "") || null;
       if (sharedChatId) {
         return {
           id: sharedChatId,
-          type: 'shared',
+          type: "shared",
         };
       }
     }
 
-    if (pathname === '/') {
+    if (pathname === "/") {
       return {
         id: provisionalChatIdRef.current,
-        type: 'provisional',
+        type: "provisional",
       };
     }
 
-    const urlChatId = pathname.replace('/chat/', '');
+    const urlChatId = pathname.replace("/chat/", "");
     if (urlChatId === provisionalChatIdRef.current) {
       // Id was provisional and now the url has been updated
 
@@ -57,14 +57,13 @@ export function ChatIdProvider({ children }: { children: ReactNode }) {
 
       return {
         id: urlChatId,
-        type: 'provisional',
-      };
-    } else {
-      return {
-        id: urlChatId,
-        type: 'chat',
+        type: "provisional",
       };
     }
+    return {
+      id: urlChatId,
+      type: "chat",
+    };
   }, [pathname]);
 
   const refreshChatID = useCallback(() => {
@@ -77,7 +76,7 @@ export function ChatIdProvider({ children }: { children: ReactNode }) {
       type,
       refreshChatID,
     }),
-    [id, type, refreshChatID],
+    [id, type, refreshChatID]
   );
 
   return (
@@ -88,7 +87,7 @@ export function ChatIdProvider({ children }: { children: ReactNode }) {
 export function useChatId() {
   const context = useContext(ChatIdContext);
   if (context === undefined) {
-    throw new Error('useChatId must be used within a ChatIdProvider');
+    throw new Error("useChatId must be used within a ChatIdProvider");
   }
   return context;
 }

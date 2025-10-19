@@ -1,142 +1,145 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite"],
   "files": {
-    "ignoreUnknown": false,
     "includes": [
-      "**",
-      "!**/pnpm-lock.yaml",
-      "!**/lib/db/migrations",
-      "!**/lib/editor/react-renderer.tsx",
-      "!**/node_modules",
-      "!**/.next",
-      "!**/public",
-      "!**/.vercel"
+      "**/*",
+      "!components/ui",
+      "!lib/utils.ts",
+      "!hooks/use-mobile.ts"
     ]
   },
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "defaultBranch": "main",
-    "useIgnoreFile": true
-  },
-  "formatter": {
-    "enabled": true,
-    "formatWithErrors": true,
-    "indentStyle": "space",
-    "indentWidth": 2,
-    "lineEnding": "lf",
-    "lineWidth": 80,
-    "attributePosition": "auto"
-  },
   "linter": {
-    "enabled": true,
     "rules": {
-      "recommended": true,
-      "a11y": {
-        "useHtmlLang": "warn", // Not in recommended ruleset, turning on manually
-        "noHeaderScope": "warn", // Not in recommended ruleset, turning on manually
-        "useValidAriaRole": {
-          "level": "warn",
-          "options": {
-            "ignoreNonDom": false,
-            "allowInvalidRoles": ["none", "text"]
-          }
-        },
-        "useSemanticElements": "off", // Rule is buggy, revisit later
-        "noSvgWithoutTitle": "off", // We do not intend to adhere to this rule
-        "useMediaCaption": "off", // We would need a cultural change to turn this on
-        "noAutofocus": "off", // We're highly intentional about when we use autofocus
-        "useFocusableInteractive": "off", // Disable focusable interactive element requirement
-        "useAriaPropsForRole": "off", // Disable required ARIA attributes check
-        "useKeyWithClickEvents": "off", // Disable keyboard event requirement with click events,
-        "noStaticElementInteractions": "warn",
-        "useValidAutocomplete": "warn"
-      },
-      "complexity": {
-        "noUselessStringConcat": "warn", // Not in recommended ruleset, turning on manually
-        "noForEach": "off", // forEach is too familiar to ban
-        "noUselessSwitchCase": "off", // Turned off due to developer preferences
-        "noUselessThisAlias": "off", // Turned off due to developer preferences,
-        "noUselessContinue": "off" // Turned off due to developer preferences
-      },
-      "correctness": {
-        "noUnusedImports": "warn", // Not in recommended ruleset, turning on manually
-        "useJsxKeyInIterable": "off", // Rule is buggy, revisit later
-        "useExhaustiveDependencies": "off", // Community feedback on this rule has been poor, we will continue with ESLint
-        "noInvalidBuiltinInstantiation": "warn"
-      },
-      "security": {
-        "noDangerouslySetInnerHtml": "off", // Covered by Conformance,
-        "noBlankTarget": "off"
+      "suspicious": {
+        /* Needs more work to fix */
+        "noExplicitAny": "off",
+
+        /* Allow for Tailwind @ rules */
+        "noUnknownAtRules": "off",
+
+        /* Allowing console for debugging */
+        "noConsole": "off",
+
+        /* Needed for generateUUID() */
+        "noBitwiseOperators": "off",
+
+        /* 26 errors */
+        "useAwait": "off",
+
+        /* 6 errors */
+        "useIterableCallbackReturn": "off",
+
+        /* 17 errors */
+        "noArrayIndexKey": "off",
+
+        /* 7 errors */
+        "noEmptyBlockStatements": "off",
+
+        /* 1 error */
+        "noDuplicateProperties": "off",
+
+        /* 3 errors */
+        "noEvolvingTypes": "off"
       },
       "style": {
-        "useFragmentSyntax": "warn", // Not in recommended ruleset, turning on manually
-        "noYodaExpression": "warn", // Not in recommended ruleset, turning on manually
-        "useDefaultParameterLast": "warn", // Not in recommended ruleset, turning on manually
-        "useExponentiationOperator": "off", // Obscure and arguably not easily readable
-        "noUnusedTemplateLiteral": "off", // Stylistic opinion
-        "noUselessElse": "off", // Stylistic opinion,
-        "noParameterAssign": "error",
-        "useAsConstAssertion": "error",
-        "useEnumInitializers": "error",
-        "useSelfClosingElements": "error",
-        "useSingleVarDeclarator": "error",
-        "useNumberNamespace": "error",
-        "noInferrableTypes": "error",
-        "useArrayLiterals": "warn"
+        /* Allowing magic numbers */
+        "noMagicNumbers": "off",
+
+        /* Needs more work to fix */
+        "noNestedTernary": "off",
+
+        "useUnifiedTypeSignatures": "off",
+
+        /* 6 errors */
+        "useConsistentMemberAccessibility": "off",
+
+        /* 13 errors */
+        "useFilenamingConvention": "off",
+
+        /* 2 errors */
+        "noExportedImports": "off",
+
+        /* 2 errors */
+        "useForOf": "off",
+
+        /* 2 errors */
+        "noParameterProperties": "off",
+
+        /* 2 errors */
+        "useCollapsedElseIf": "off",
+
+        /* 6 errors */
+        "useCollapsedIf": "off",
+
+        /* 4 errors */
+        "useDefaultSwitchClause": "off"
       },
-      "suspicious": {
-        "noExplicitAny": "off", // We trust Vercelians to use any only when necessary
-        "noArrayIndexKey": "off", // Let's just hack some display stuff for now,
-        "noHeadImportInDocument": "warn",
-        "noDocumentImportInPage": "warn",
-        "noDuplicateElseIf": "warn",
-        "noIrregularWhitespace": "warn"
+      "nursery": {
+        /* Too many false positives */
+        "noUnnecessaryConditions": "off",
+
+        /* 8 errors */
+        "noDeprecatedImports": "off",
+
+        /* 28 errors */
+        "noShadow": "off",
+
+        /* 8 errors */
+        "useMaxParams": "off",
+
+        /* 5 errors */
+        "useImageSize": "off"
       },
-      "nursery": {}
-    }
-  },
-  "javascript": {
-    "jsxRuntime": "reactClassic",
-    "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "always",
-      "arrowParentheses": "always",
-      "bracketSpacing": true,
-      "bracketSameLine": false,
-      "quoteStyle": "single",
-      "attributePosition": "auto"
-    }
-  },
-  "json": {
-    "formatter": {
-      "enabled": true,
-      "trailingCommas": "none"
-    },
-    "parser": {
-      "allowComments": true,
-      "allowTrailingCommas": false
-    }
-  },
-  "css": {
-    "formatter": { "enabled": false },
-    "linter": { "enabled": false }
-  },
-  "assist": { "actions": { "source": { "organizeImports": "off" } } },
-  "overrides": [
-    // Playwright requires an object destructure, even if empty
-    // https://github.com/microsoft/playwright/issues/30007
-    {
-      "includes": ["**/playwright/**"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noEmptyPattern": "off"
-          }
-        }
+      "complexity": {
+        /* Needs more work to fix */
+        "noExcessiveCognitiveComplexity": "off",
+
+        /* This one has false positives. It's a bit... iffy 😉 */
+        "useSimplifiedLogicExpression": "off",
+
+        /* 23 errors */
+        "noForEach": "off",
+
+        /* 5 errors */
+        "noVoid": "off",
+
+        /* 5 errors */
+        "noStaticOnlyClass": "off"
+      },
+      "a11y": {
+        /* Needs more work to fix */
+        "noSvgWithoutTitle": "off",
+
+        /* 2 errors */
+        "noNoninteractiveElementInteractions": "off",
+
+        /* 1 error */
+        "useKeyWithClickEvents": "off",
+
+        /* 1 error */
+        "useSemanticElements": "off",
+
+        /* 1 error */
+        "useFocusableInteractive": "off"
+      },
+      /* noInvalidPositionAtImport: 1 error */
+      "correctness": "off",
+
+      "security": {
+        /* 6 errors */
+        "noDangerouslySetInnerHtml": "off"
+      },
+      "performance": {
+        /* 22 errors */
+        "useTopLevelRegex": "off",
+
+        /* 5 errors */
+        "noBarrelFile": "off",
+
+        /* 2 errors */
+        "noNamespaceImport": "off"
       }
     }
-  ]
+  }
 }

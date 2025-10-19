@@ -1,19 +1,19 @@
-import type { Suggestion } from '@/lib/db/schema';
-import type { UseChatHelpers } from '@ai-sdk/react';
-import type { ComponentType, Dispatch, ReactNode, SetStateAction } from 'react';
-import type { UIArtifact } from './artifact';
-import type { QueryClient } from '@tanstack/react-query';
-import type { ChatMessage, CustomUIDataTypes } from '@/lib/ai/types';
-import type { DataUIPart } from 'ai';
-import type { useChatStoreApi } from '@/lib/stores/chat-store-context';
-import type { useTRPC } from '@/trpc/react';
+import type { UseChatHelpers } from "@ai-sdk/react";
+import type { QueryClient } from "@tanstack/react-query";
+import type { DataUIPart } from "ai";
+import type { ComponentType, Dispatch, ReactNode, SetStateAction } from "react";
+import type { ChatMessage, CustomUIDataTypes } from "@/lib/ai/types";
+import type { Suggestion } from "@/lib/db/schema";
+import type { useChatStoreApi } from "@/lib/stores/chat-store-context";
+import type { useTRPC } from "@/trpc/react";
+import type { UIArtifact } from "./artifact";
 
 export type ArtifactActionContext<M = any> = {
   content: string;
-  handleVersionChange: (type: 'next' | 'prev' | 'toggle' | 'latest') => void;
+  handleVersionChange: (type: "next" | "prev" | "toggle" | "latest") => void;
   currentVersionIndex: number;
   isCurrentVersion: boolean;
-  mode: 'edit' | 'diff';
+  mode: "edit" | "diff";
   metadata: M;
   setMetadata: Dispatch<SetStateAction<M>>;
   isReadonly?: boolean;
@@ -28,7 +28,7 @@ type ArtifactAction<M = any> = {
 };
 
 export type ArtifactToolbarContext = {
-  sendMessage: UseChatHelpers<ChatMessage>['sendMessage'];
+  sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   storeApi: ReturnType<typeof useChatStoreApi>;
 };
 
@@ -38,14 +38,14 @@ export type ArtifactToolbarItem = {
   onClick: (context: ArtifactToolbarContext) => void;
 };
 
-interface ArtifactContent<M = any> {
+type ArtifactContent<M = any> = {
   title: string;
   content: string;
-  mode: 'edit' | 'diff';
+  mode: "edit" | "diff";
   isCurrentVersion: boolean;
   currentVersionIndex: number;
-  status: 'streaming' | 'idle';
-  suggestions: Array<Suggestion>;
+  status: "streaming" | "idle";
+  suggestions: Suggestion[];
   onSaveContent: (updatedContent: string, debounce: boolean) => void;
   isInline: boolean;
   getDocumentContentById: (index: number) => string;
@@ -53,13 +53,13 @@ interface ArtifactContent<M = any> {
   metadata: M;
   setMetadata: Dispatch<SetStateAction<M>>;
   isReadonly?: boolean;
-}
+};
 
 type ArtifactConfig<T extends string, M = any> = {
   kind: T;
   description: string;
   content: ComponentType<ArtifactContent<M>>;
-  actions: Array<ArtifactAction<M>>;
+  actions: ArtifactAction<M>[];
   toolbar: ArtifactToolbarItem[];
   initialize?: ({
     documentId,
@@ -85,7 +85,7 @@ export class Artifact<T extends string, M = any> {
   readonly kind: T;
   readonly description: string;
   readonly content: ComponentType<ArtifactContent<M>>;
-  readonly actions: Array<ArtifactAction<M>>;
+  readonly actions: ArtifactAction<M>[];
   readonly toolbar: ArtifactToolbarItem[];
   readonly initialize?: ({
     documentId,
@@ -96,7 +96,7 @@ export class Artifact<T extends string, M = any> {
   }: {
     documentId: string;
     setMetadata: Dispatch<SetStateAction<M>>;
-    trpc: ReturnType<typeof import('@/trpc/react').useTRPC>;
+    trpc: ReturnType<typeof import("@/trpc/react").useTRPC>;
     queryClient: QueryClient;
     isAuthenticated: boolean;
   }) => void;

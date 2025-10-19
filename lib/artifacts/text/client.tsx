@@ -1,7 +1,7 @@
-import { Artifact } from '@/components/create-artifact';
-import { DiffView } from '@/components/diffview';
-import { DocumentSkeleton } from '@/components/document-skeleton';
-import { Editor } from '@/components/text-editor';
+import { toast } from "sonner";
+import { Artifact } from "@/components/create-artifact";
+import { DiffView } from "@/components/diffview";
+import { DocumentSkeleton } from "@/components/document-skeleton";
 import {
   ClockRewind,
   CopyIcon,
@@ -9,21 +9,21 @@ import {
   PenIcon,
   RedoIcon,
   UndoIcon,
-} from '@/components/icons';
-import type { Suggestion } from '@/lib/db/schema';
-import { toast } from 'sonner';
+} from "@/components/icons";
+import { Editor } from "@/components/text-editor";
 import {
   DEFAULT_POLISH_TEXT_MODEL,
   DEFAULT_SUGGESTIONS_MODEL,
-} from '@/lib/ai/app-models';
+} from "@/lib/ai/app-models";
+import type { Suggestion } from "@/lib/db/schema";
 
-interface TextArtifactMetadata {
-  suggestions: Array<Suggestion>;
-}
+type TextArtifactMetadata = {
+  suggestions: Suggestion[];
+};
 
-export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
-  kind: 'text',
-  description: 'Useful for text content, like drafting essays and emails.',
+export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
+  kind: "text",
+  description: "Useful for text content, like drafting essays and emails.",
   initialize: async ({
     documentId,
     setMetadata,
@@ -39,7 +39,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     }
 
     const suggestions = await queryClient.fetchQuery(
-      trpc.document.getSuggestions.queryOptions({ documentId }),
+      trpc.document.getSuggestions.queryOptions({ documentId })
     );
 
     setMetadata({
@@ -47,28 +47,24 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     });
   },
   onStreamPart: ({ streamPart, setMetadata, setArtifact }) => {
-    if (streamPart.type === 'data-suggestion') {
-      setMetadata((metadata) => {
-        return {
-          suggestions: [...metadata.suggestions, streamPart.data],
-        };
-      });
+    if (streamPart.type === "data-suggestion") {
+      setMetadata((metadata) => ({
+        suggestions: [...metadata.suggestions, streamPart.data],
+      }));
     }
 
-    if (streamPart.type === 'data-textDelta') {
-      setArtifact((draftArtifact) => {
-        return {
-          ...draftArtifact,
-          content: draftArtifact.content + streamPart.data,
-          isVisible:
-            draftArtifact.status === 'streaming' &&
-            draftArtifact.content.length > 400 &&
-            draftArtifact.content.length < 450
-              ? true
-              : draftArtifact.isVisible,
-          status: 'streaming',
-        };
-      });
+    if (streamPart.type === "data-textDelta") {
+      setArtifact((draftArtifact) => ({
+        ...draftArtifact,
+        content: draftArtifact.content + streamPart.data,
+        isVisible:
+          draftArtifact.status === "streaming" &&
+          draftArtifact.content.length > 400 &&
+          draftArtifact.content.length < 450
+            ? true
+            : draftArtifact.isVisible,
+        status: "streaming",
+      }));
     }
   },
   content: ({
@@ -87,31 +83,31 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
       return <DocumentSkeleton artifactKind="text" />;
     }
 
-    if (mode === 'diff') {
+    if (mode === "diff") {
       const oldContent = getDocumentContentById(currentVersionIndex - 1);
       const newContent = getDocumentContentById(currentVersionIndex);
 
       return (
-        <div className="flex flex-row py-8 md:p-20 px-4 max-w-3xl m-auto">
-          <DiffView oldContent={oldContent} newContent={newContent} />
+        <div className="m-auto flex max-w-3xl flex-row px-4 py-8 md:p-20">
+          <DiffView newContent={newContent} oldContent={oldContent} />
         </div>
       );
     }
 
     return (
-      <div className="flex flex-row py-8 md:p-20 px-4 max-w-3xl m-auto">
+      <div className="m-auto flex max-w-3xl flex-row px-4 py-8 md:p-20">
         <Editor
           content={content}
-          suggestions={metadata ? metadata.suggestions : []}
-          isCurrentVersion={isCurrentVersion}
           currentVersionIndex={currentVersionIndex}
-          status={status}
-          onSaveContent={onSaveContent}
+          isCurrentVersion={isCurrentVersion}
           isReadonly={isReadonly}
+          onSaveContent={onSaveContent}
+          status={status}
+          suggestions={metadata ? metadata.suggestions : []}
         />
 
         {metadata?.suggestions && metadata.suggestions.length > 0 ? (
-          <div className="md:hidden h-dvh w-12 shrink-0" />
+          <div className="h-dvh w-12 shrink-0 md:hidden" />
         ) : null}
       </div>
     );
@@ -119,9 +115,9 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
   actions: [
     {
       icon: <ClockRewind size={18} />,
-      description: 'View changes',
+      description: "View changes",
       onClick: ({ handleVersionChange }) => {
-        handleVersionChange('toggle');
+        handleVersionChange("toggle");
       },
       isDisabled: ({ currentVersionIndex, setMetadata: _setMetadata }) => {
         if (currentVersionIndex === 0) {
@@ -133,9 +129,9 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <UndoIcon size={18} />,
-      description: 'View Previous version',
+      description: "View Previous version",
       onClick: ({ handleVersionChange }) => {
-        handleVersionChange('prev');
+        handleVersionChange("prev");
       },
       isDisabled: ({ currentVersionIndex }) => {
         if (currentVersionIndex === 0) {
@@ -147,9 +143,9 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <RedoIcon size={18} />,
-      description: 'View Next version',
+      description: "View Next version",
       onClick: ({ handleVersionChange }) => {
-        handleVersionChange('next');
+        handleVersionChange("next");
       },
       isDisabled: ({ isCurrentVersion }) => {
         if (isCurrentVersion) {
@@ -161,24 +157,24 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <CopyIcon size={18} />,
-      description: 'Copy to clipboard',
+      description: "Copy to clipboard",
       onClick: ({ content }) => {
         navigator.clipboard.writeText(content);
-        toast.success('Copied to clipboard!');
+        toast.success("Copied to clipboard!");
       },
     },
   ],
   toolbar: [
     {
       icon: <PenIcon />,
-      description: 'Add final polish',
+      description: "Add final polish",
       onClick: ({ sendMessage, storeApi }) => {
         sendMessage({
-          role: 'user',
+          role: "user",
           parts: [
             {
-              type: 'text',
-              text: 'Please add final polish and check for grammar, add section titles for better structure, and ensure everything reads smoothly.',
+              type: "text",
+              text: "Please add final polish and check for grammar, add section titles for better structure, and ensure everything reads smoothly.",
             },
           ],
           metadata: {
@@ -191,14 +187,14 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     },
     {
       icon: <MessageIcon />,
-      description: 'Request suggestions',
+      description: "Request suggestions",
       onClick: ({ sendMessage, storeApi }) => {
         sendMessage({
-          role: 'user',
+          role: "user",
           parts: [
             {
-              type: 'text',
-              text: 'Please add suggestions you have that could improve the writing.',
+              type: "text",
+              text: "Please add suggestions you have that could improve the writing.",
             },
           ],
           metadata: {

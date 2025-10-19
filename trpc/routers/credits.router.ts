@@ -1,5 +1,5 @@
-import { getUserCreditsInfo } from '@/lib/repositories/credits';
-import { createTRPCRouter, protectedProcedure } from '@/trpc/init';
+import { getUserCreditsInfo } from "@/lib/repositories/credits";
+import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 export const creditsRouter = createTRPCRouter({
   getAvailableCredits: protectedProcedure.query(async ({ ctx }) => {
