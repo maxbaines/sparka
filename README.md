@@ -32,12 +32,12 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - [Zod 4](https://zod.dev) - Schema validation
 - [Zustand](https://docs.pmnd.rs/zustand) - State management
 - [Motion](https://motion.dev) - Animations
-- [t3-env](https://env.t3.gg) - Environment variables
+- [t3-env](https://env.t3.gg) - Environment varia[](https://www.ultracite.ai/)bles
 - [Pino](https://getpino.io) - Structured Logging
 - [Langfuse](https://langfuse.com) - LLM observability & analytics
 - [Vercel Analytics](https://vercel.com/analytics) - Web analytics
 - [Biome](https://biomejs.dev) - Code linting and formatting
-- [Ultracite](https://ultracite.dev) - Biome preset for humans and AI
+- [Ultracite](https://ultracite.ai) - Biome preset for humans and AI
 - [Streamdown](https://streamdown.ai/) - Markdown for AI streaming
 - [AI Elements](https://ai-sdk.dev/elements/overview) - AI-native Components
 - [AI SDK Tools](https://ai-sdk-tools.dev/) - Developer tools for AI SDK
