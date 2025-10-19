@@ -38,7 +38,7 @@ export async function webSearchStep({
   query,
   maxResults,
   providerOptions,
-  dataStream,
+  dataStream: _dataStream,
 }: {
   query: string;
   maxResults: number;

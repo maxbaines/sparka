@@ -7,8 +7,8 @@ import { createDocumentHandler } from '@/lib/artifacts/server';
 export const codeDocumentHandler = createDocumentHandler<'code'>({
   kind: 'code',
   onCreateDocument: async ({
-    title,
-    description,
+    title: _title,
+    description: _description,
     dataStream,
     prompt,
     selectedModel,

@@ -7,8 +7,8 @@ import { z } from 'zod';
 export const sheetDocumentHandler = createDocumentHandler<'sheet'>({
   kind: 'sheet',
   onCreateDocument: async ({
-    title,
-    description,
+    title: _title,
+    description: _description,
     dataStream,
     prompt,
     selectedModel,

@@ -81,6 +81,7 @@ export function OGFooter({
       tw={`flex items-center text-slate-300 ${containerTw}`}
       style={{ display: 'flex', gap: '.75rem', alignItems: 'center' }}
     >
+      {/* biome-ignore lint/performance/noImgElement: next/image isn't available in OG rendering */}
       <img
         width={iconSize}
         height={iconSize}
@@ -140,11 +141,13 @@ export function OGIcon({
 
   if (bare) {
     return src ? (
+      // biome-ignore lint/performance/noImgElement: next/image isn't available in OG rendering
       <img width={bareSizePx} height={bareSizePx} src={src} alt={alt} />
     ) : null;
   }
 
   return src ? (
+    // biome-ignore lint/performance/noImgElement: next/image isn't available in OG rendering
     <img
       src={src}
       alt={alt}

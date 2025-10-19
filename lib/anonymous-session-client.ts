@@ -21,13 +21,31 @@ function setCookie(name: string, value: string, maxAge: number): void {
 
   const secure = window.location.protocol === 'https:' ? '; Secure' : '';
   const encodedValue = encodeURIComponent(value);
-  document.cookie = `${name}=${encodedValue}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`;
+  if ('cookieStore' in window) {
+    // @ts-expect-error cookieStore is not yet in TS lib.dom
+    void window.cookieStore.set({
+      name,
+      value: encodedValue,
+      path: '/',
+      expires: Date.now() + maxAge * 1000,
+      sameSite: 'lax',
+      secure: window.location.protocol === 'https:',
+    });
+  } else {
+    // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API not available
+    document.cookie = `${name}=${encodedValue}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`;
+  }
 }
 
 function deleteCookie(name: string): void {
   if (typeof document === 'undefined') return;
-
-  document.cookie = `${name}=; Path=/; Max-Age=0`;
+  if ('cookieStore' in window) {
+    // @ts-expect-error cookieStore is not yet in TS lib.dom
+    void window.cookieStore.delete(name);
+  } else {
+    // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API not available
+    document.cookie = `${name}=; Path=/; Max-Age=0`;
+  }
 }
 
 export function createAnonymousSession(): AnonymousSession {

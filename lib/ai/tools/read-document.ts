@@ -9,7 +9,10 @@ interface ReadDocumentProps {
   dataStream: StreamWriter;
 }
 
-export const readDocument = ({ session, dataStream }: ReadDocumentProps) =>
+export const readDocument = ({
+  session,
+  dataStream: _dataStream,
+}: ReadDocumentProps) =>
   tool({
     description: `Read the contents of a document created earlier in this chat.
 

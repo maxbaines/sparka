@@ -478,8 +478,8 @@ export function useSaveMessageMutation() {
   return useDualMutation({
     shouldUseLocal: () => !isAuthenticated,
     mutationFn: async ({
-      message,
-      chatId,
+      message: _message,
+      chatId: _chatId,
     }: {
       message: ChatMessage;
       chatId: string;
@@ -597,7 +597,7 @@ export function useSetVisibility() {
 }
 
 export function useSaveDocument(
-  documentId: string,
+  _documentId: string,
   messageId: string,
   options?: {
     onSettled?: (result: any, error: any, params: any) => void;

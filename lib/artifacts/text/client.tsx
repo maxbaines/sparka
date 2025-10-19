@@ -99,23 +99,21 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
     }
 
     return (
-      <>
-        <div className="flex flex-row py-8 md:p-20 px-4 max-w-3xl m-auto">
-          <Editor
-            content={content}
-            suggestions={metadata ? metadata.suggestions : []}
-            isCurrentVersion={isCurrentVersion}
-            currentVersionIndex={currentVersionIndex}
-            status={status}
-            onSaveContent={onSaveContent}
-            isReadonly={isReadonly}
-          />
+      <div className="flex flex-row py-8 md:p-20 px-4 max-w-3xl m-auto">
+        <Editor
+          content={content}
+          suggestions={metadata ? metadata.suggestions : []}
+          isCurrentVersion={isCurrentVersion}
+          currentVersionIndex={currentVersionIndex}
+          status={status}
+          onSaveContent={onSaveContent}
+          isReadonly={isReadonly}
+        />
 
-          {metadata?.suggestions && metadata.suggestions.length > 0 ? (
-            <div className="md:hidden h-dvh w-12 shrink-0" />
-          ) : null}
-        </div>
-      </>
+        {metadata?.suggestions && metadata.suggestions.length > 0 ? (
+          <div className="md:hidden h-dvh w-12 shrink-0" />
+        ) : null}
+      </div>
     );
   },
   actions: [
@@ -125,7 +123,7 @@ export const textArtifact = new Artifact<'text', TextArtifactMetadata>({
       onClick: ({ handleVersionChange }) => {
         handleVersionChange('toggle');
       },
-      isDisabled: ({ currentVersionIndex, setMetadata }) => {
+      isDisabled: ({ currentVersionIndex, setMetadata: _setMetadata }) => {
         if (currentVersionIndex === 0) {
           return true;
         }

@@ -56,7 +56,7 @@ export const messageMetadataSchema = z.object({
   selectedModel: z.custom<AppModelId>((val) => typeof val === 'string'),
   isPartial: z.boolean().optional(),
   selectedTool: frontendToolsSchema.optional(),
-  usage: z.custom<LanguageModelUsage | undefined>((val) => true).optional(),
+  usage: z.custom<LanguageModelUsage | undefined>((_val) => true).optional(),
 });
 
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;

@@ -17,11 +17,11 @@ export class ReportDocumentWriter {
     return createDocumentHandler<'text'>({
       kind: 'text',
       onCreateDocument: async ({
-        title,
-        description,
+        title: _title,
+        description: _description,
         dataStream,
-        prompt,
-        selectedModel,
+        prompt: _prompt,
+        selectedModel: _selectedModel,
       }) => {
         let draftContent = '';
 

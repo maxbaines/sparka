@@ -57,7 +57,7 @@ export async function xSearchStep({
     }
 
     const xResults = await exa.searchAndContents(query, {
-      type: 'neural',
+      type,
       useAutoprompt: true,
       numResults: maxResults,
       text: true,

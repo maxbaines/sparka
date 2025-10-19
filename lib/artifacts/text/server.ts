@@ -6,8 +6,8 @@ import { getLanguageModel } from '@/lib/ai/providers';
 export const textDocumentHandler = createDocumentHandler<'text'>({
   kind: 'text',
   onCreateDocument: async ({
-    title,
-    description,
+    title: _title,
+    description: _description,
     dataStream,
     prompt,
     selectedModel,

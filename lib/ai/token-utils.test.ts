@@ -3,12 +3,12 @@ import type { ModelMessage } from 'ai';
 import { truncateMessages, calculateMessagesTokens } from './token-utils';
 
 // Mock js-tiktoken encoder for consistent testing
-const mockEncoder = {
+const _mockEncoder = {
   encode: (text: string) => new Array(Math.ceil(text.length / 4)), // ~4 chars per token
 };
 
 // Mock the module
-const originalModule = await import('./token-utils');
+const _originalModule = await import('./token-utils');
 
 describe('truncateMessages', () => {
   let messages: ModelMessage[];

@@ -37,7 +37,7 @@ export function createHeadingTransform(level: number) {
     export: null,
     importDOM: null,
     regExp: new RegExp(`^(#{1,${level}})\\s$`),
-    replace: (textNode: any) => {
+    replace: (_textNode: any) => {
       const selection = $getSelection();
       if (selection) {
         const headingTag = `h${level}` as HeadingTagType;
@@ -52,7 +52,7 @@ export function createHeadingTransform(level: number) {
 }
 
 export const handleEditorChange = ({
-  editorState,
+  editorState: _editorState,
   editor,
   onSaveContent,
 }: {

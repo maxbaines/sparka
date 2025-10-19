@@ -158,7 +158,7 @@ Avoid:
       );
       // Handle nullable arrays with defaults
       const safeTopics = topics ?? ['general'];
-      const safeSearchDepth = searchDepth ?? 'basic';
+      const _safeSearchDepth = searchDepth ?? 'basic';
       const safeExcludeDomains = exclude_domains ?? [];
 
       return executeMultiQuerySearch({

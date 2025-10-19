@@ -79,9 +79,9 @@ export async function loadMcpTools(
 
 export function getSearchTool(
   searchApi: SearchAPI,
-  config: DeepResearchConfig,
+  _config: DeepResearchConfig,
   dataStream: StreamWriter,
-  id?: string,
+  _id?: string,
 ) {
   if (searchApi === 'tavily') {
     return {

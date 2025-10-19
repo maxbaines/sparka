@@ -92,6 +92,7 @@ function SidebarProvider({
           expires: Date.now() + SIDEBAR_COOKIE_MAX_AGE * 1000,
         });
       } else {
+        // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API not available
         document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
       }
     },
