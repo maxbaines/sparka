@@ -1,7 +1,7 @@
 'use client';
 
-import { Dialog, DialogContent } from '@/components/ui/dialog';
 import type React from 'react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -19,7 +19,7 @@ export function ImageModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {/* biome-ignore lint/performance/noImgElement: Next/Image not desired for modal preview */}
         <img
           src={imageUrl || undefined}
           alt={imageName ?? 'Expanded image'}

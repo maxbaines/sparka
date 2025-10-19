@@ -86,7 +86,7 @@ export const documentRouter = createTRPCRouter({
         throw new Error('Document not found');
       }
 
-      const document = await saveDocument({
+      const _document = await saveDocument({
         id: input.id,
         content: input.content,
         title: input.title,

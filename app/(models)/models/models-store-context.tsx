@@ -235,7 +235,7 @@ export const createModelsStore = (
         };
       }),
     resetFiltersAndSearch: () =>
-      set((state) => {
+      set((_state) => {
         const nextSearch = initialState.searchQuery;
         const nextSort = initialState.sortBy;
         const nextFilters = initialState.filters;

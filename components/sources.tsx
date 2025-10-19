@@ -137,11 +137,7 @@ function ShowSourcesButton({
   );
 }
 
-export const Sources = ({
-  sources,
-}: {
-  sources: SearchResultItem[];
-}) => {
+export const Sources = ({ sources }: { sources: SearchResultItem[] }) => {
   if (sources.length === 0) {
     return null;
   }

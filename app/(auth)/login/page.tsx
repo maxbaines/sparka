@@ -21,10 +21,8 @@ export default function LoginPage() {
           'absolute left-4 top-4 md:left-8 md:top-8',
         )}
       >
-        <>
-          <ChevronLeft className="mr-2 h-4 w-4" />
-          Back
-        </>
+        <ChevronLeft className="mr-2 h-4 w-4" />
+        Back
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center items-center sm:w-[420px]">
         <LoginForm className="w-full" />

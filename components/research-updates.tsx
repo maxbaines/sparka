@@ -1,11 +1,11 @@
-import React from 'react';
-import { WebToolAction } from './tool-actions';
+import type React from 'react';
 import type { WebSearchUpdate } from '@/lib/ai/tools/research-updates-schema';
+import { WebToolAction } from './tool-actions';
 
 // TODO: Make sure these components are used or remove them
 
 // Web updates component
-const WebUpdates: React.FC<{ updates: WebSearchUpdate[] }> = ({ updates }) => {
+const _WebUpdates: React.FC<{ updates: WebSearchUpdate[] }> = ({ updates }) => {
   return (
     <>
       {updates.map((update, updateIndex) => (

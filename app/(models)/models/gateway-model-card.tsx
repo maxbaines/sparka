@@ -32,16 +32,18 @@ function ModalityIcon({
 }) {
   return (
     <LazyTooltip content={label}>
-      <div
+      <span
         className={`size-6 rounded-md grid place-items-center border text-foreground/80 bg-muted`}
+        role="img"
+        aria-label={label}
       >
         {children}
-      </div>
+      </span>
     </LazyTooltip>
   );
 }
 
-function ModalityIconLegacy({
+function _ModalityIconLegacy({
   label,
   children,
 }: {
@@ -51,12 +53,13 @@ function ModalityIconLegacy({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div
+        <span
           className={`size-6 rounded-md grid place-items-center border text-foreground/80 bg-muted`}
+          role="img"
           aria-label={label}
         >
           {children}
-        </div>
+        </span>
       </TooltipTrigger>
       <TooltipContent>{label}</TooltipContent>
     </Tooltip>
@@ -77,11 +80,7 @@ function CapabilityIcon({
   );
 }
 
-function PureModelCard({
-  model,
-}: {
-  model: ModelDefinition;
-}) {
+function PureModelCard({ model }: { model: ModelDefinition }) {
   const provider = model.owned_by as ProviderId;
   const hasInput = Boolean(
     model.input?.text ||

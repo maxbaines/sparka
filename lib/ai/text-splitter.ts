@@ -22,7 +22,8 @@ abstract class TextSplitter implements TextSplitterParams {
     const documents: string[] = [];
     for (let i = 0; i < texts.length; i += 1) {
       const text = texts[i];
-      for (const chunk of this.splitText(text!)) {
+      if (text == null) continue;
+      for (const chunk of this.splitText(text)) {
         documents.push(chunk);
       }
     }
@@ -99,7 +100,7 @@ export class RecursiveCharacterTextSplitter
     const finalChunks: string[] = [];
 
     // Get appropriate separator to use
-    let separator: string = this.separators[this.separators.length - 1]!;
+    let separator: string = this.separators[this.separators.length - 1] ?? '';
     for (const s of this.separators) {
       if (s === '') {
         separator = s;

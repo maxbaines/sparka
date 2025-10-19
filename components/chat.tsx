@@ -1,23 +1,22 @@
 'use client';
+import type { UseChatHelpers } from '@ai-sdk/react';
 import { useQuery } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import { ChatHeader } from '@/components/chat-header';
-import { cn } from '@/lib/utils';
-import { Artifact } from './artifact';
-import { MessagesPane } from './messages-pane';
-import { useArtifactSelector } from '@/hooks/use-artifact';
-import { useTRPC } from '@/trpc/react';
-import { useSession } from '@/providers/session-provider';
-
 import { useSidebar } from '@/components/ui/sidebar';
+import { useArtifactSelector } from '@/hooks/use-artifact';
 import type { ChatMessage } from '@/lib/ai/types';
 import { useChatStoreApi } from '@/lib/stores/chat-store-context';
-import { useChatStatus, useMessageIds, useChatId } from '@/lib/stores/hooks';
-import { useCallback } from 'react';
-import type { UseChatHelpers } from '@ai-sdk/react';
+import { useChatId, useChatStatus, useMessageIds } from '@/lib/stores/hooks';
+import { cn } from '@/lib/utils';
+import { useSession } from '@/providers/session-provider';
+import { useTRPC } from '@/trpc/react';
+import { Artifact } from './artifact';
+import { MessagesPane } from './messages-pane';
 
 export function Chat({
   id,
-  initialMessages,
+  initialMessages: _initialMessages,
   isReadonly,
 }: {
   id: string;

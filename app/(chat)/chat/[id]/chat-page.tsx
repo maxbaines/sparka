@@ -50,13 +50,11 @@ export function ChatPage({ id }: { id: string }) {
   }
 
   return (
-    <>
-      <ChatSystem
-        id={chat.id}
-        initialMessages={initialThreadMessages}
-        isReadonly={false}
-        initialTool={initialTool}
-      />
-    </>
+    <ChatSystem
+      id={chat.id}
+      initialMessages={initialThreadMessages}
+      isReadonly={false}
+      initialTool={initialTool}
+    />
   );
 }

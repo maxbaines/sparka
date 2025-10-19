@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
 import ReactECharts from 'echarts-for-react/lib/index';
 import type { EChartsOption } from 'echarts-for-react/lib/types';
-import { Badge } from '@/components/ui/badge';
 import { useTheme } from 'next-themes';
+import React, { useMemo } from 'react';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const CHART_COLORS = [
@@ -87,7 +87,7 @@ const getDateFormat = (interval: StockChartProps['interval'], date: Date) => {
 
 export function InteractiveStockChart({
   title,
-  data,
+  data: _data,
   stock_symbols,
   interval,
   chart,
@@ -178,7 +178,7 @@ export function InteractiveStockChart({
 
           // Find previous point for percentage calculation
           const dataIndex = param.dataIndex;
-          const seriesData = param.data;
+          const _seriesData = param.data;
           let prevPrice = currentPrice;
           let change = 0;
           let changePercent = 0;

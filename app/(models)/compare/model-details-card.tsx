@@ -46,12 +46,13 @@ const ModalityIcon = ({
 }) => (
   <Tooltip>
     <TooltipTrigger asChild>
-      <div
+      <span
         className={`size-6 rounded-md grid place-items-center border text-foreground/80 bg-muted`}
+        role="img"
         aria-label={label}
       >
         {children}
-      </div>
+      </span>
     </TooltipTrigger>
     <TooltipContent>{label}</TooltipContent>
   </Tooltip>
@@ -71,12 +72,13 @@ const CapabilityIcon = ({
 
 const NotAvailableIcon = () => {
   return (
-    <div
+    <span
       className={`size-6 grid place-items-center text-foreground/80`}
+      role="img"
       aria-label="Not available"
     >
       <Minus className="h-4 w-4" />
-    </div>
+    </span>
   );
 };
 

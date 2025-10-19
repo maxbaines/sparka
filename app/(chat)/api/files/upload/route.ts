@@ -64,10 +64,10 @@ export async function POST(request: Request) {
         ...data,
         pathname: cleanFilename || filename,
       });
-    } catch (error) {
+    } catch (_error) {
       return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
     }
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to process request' },
       { status: 500 },

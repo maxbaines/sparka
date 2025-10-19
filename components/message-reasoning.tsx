@@ -28,7 +28,9 @@ function PureMessageReasoning({ isLoading, reasoning }: MessageReasoningProps) {
 
 const MultiReasoningContent = memo(function MultiReasoningContent({
   reasoning,
-}: { reasoning: string[] }) {
+}: {
+  reasoning: string[];
+}) {
   return (
     <div className="flex flex-col gap-4">
       {reasoning.map((r, i) => (

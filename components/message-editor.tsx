@@ -1,14 +1,14 @@
 'use client';
+import type { ModelId } from '@ai-models/vercel-gateway';
 import { type Dispatch, type SetStateAction, useCallback } from 'react';
-import { MultimodalInput } from './multimodal-input';
 import type { ChatMessage } from '@/lib/ai/types';
-import { ChatInputProvider } from '@/providers/chat-input-provider';
+import { useChatStatus } from '@/lib/stores/hooks';
 import {
   getAttachmentsFromMessage,
   getTextContentFromMessage,
 } from '@/lib/utils';
-import type { ModelId } from '@ai-models/vercel-gateway';
-import { useChatStatus } from '@/lib/stores/hooks';
+import { ChatInputProvider } from '@/providers/chat-input-provider';
+import { MultimodalInput } from './multimodal-input';
 
 export type MessageEditorProps = {
   chatId: string;
@@ -53,7 +53,7 @@ export function MessageEditor(
 
   // Use selectedModel from the message metadata, or fall back to current selected model
   const messageSelectedModel = props.message.metadata?.selectedModel as ModelId;
-  const { parentMessageId, ...rest } = props;
+  const { parentMessageId: _parentMessageId, ...rest } = props;
   return (
     <ChatInputProvider
       key={`edit-${props.message.id}`}

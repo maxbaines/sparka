@@ -29,7 +29,7 @@ export async function GET(
   const userId = session?.user?.id || null;
   const isAuthenticated = userId !== null;
 
-  let chat: Chat;
+  let _chat: Chat;
 
   // For authenticated users, check DB permissions first
   if (isAuthenticated) {

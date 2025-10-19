@@ -60,17 +60,15 @@ export function SharedChatPage({ id }: { id: string }) {
   }
 
   return (
-    <>
-      <WithSkeleton
-        isLoading={isChatLoading || isMessagesLoading}
-        className="w-full"
-      >
-        <ChatSystem
-          id={chat.id}
-          initialMessages={initialThreadMessages}
-          isReadonly={true}
-        />
-      </WithSkeleton>
-    </>
+    <WithSkeleton
+      isLoading={isChatLoading || isMessagesLoading}
+      className="w-full"
+    >
+      <ChatSystem
+        id={chat.id}
+        initialMessages={initialThreadMessages}
+        isReadonly={true}
+      />
+    </WithSkeleton>
   );
 }

@@ -39,7 +39,7 @@ export function DeleteDialog({
         onSuccess: () => toast.success('Chat deleted successfully'),
         onError: () => toast.error('Failed to delete chat'),
       });
-    } catch (error) {
+    } catch (_error) {
       // Error already handled by onError callback
     }
 

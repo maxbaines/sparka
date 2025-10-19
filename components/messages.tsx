@@ -1,15 +1,15 @@
-import { PreviewMessage } from './message';
 import { memo } from 'react';
-import type { Vote } from '@/lib/db/schema';
-import { ResponseErrorMessage } from './response-error-message';
-import { ThinkingMessage } from './thinking-message';
-import { Greeting } from './greeting';
 import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
 } from '@/components/ai-elements/conversation';
+import type { Vote } from '@/lib/db/schema';
 import { useChatId, useChatStatus, useMessageIds } from '@/lib/stores/hooks';
+import { Greeting } from './greeting';
+import { PreviewMessage } from './message';
+import { ResponseErrorMessage } from './response-error-message';
+import { ThinkingMessage } from './thinking-message';
 
 interface PureMessagesInternalProps {
   votes: Array<Vote> | undefined;
@@ -66,7 +66,11 @@ export interface MessagesProps {
   onModelChange?: (modelId: string) => void;
 }
 
-function PureMessages({ votes, isReadonly, isVisible }: MessagesProps) {
+function PureMessages({
+  votes,
+  isReadonly,
+  isVisible: _isVisible,
+}: MessagesProps) {
   return (
     <Conversation className="flex flex-col flex-1 w-full">
       <ConversationContent className="flex flex-col min-w-0 sm:max-w-2xl md:max-w-3xl container mx-auto h-full pb-10">

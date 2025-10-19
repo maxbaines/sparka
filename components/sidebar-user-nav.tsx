@@ -17,7 +17,9 @@ import { useGetCredits } from '@/hooks/chat-sync-hooks';
 
 export function HeaderUserNav({
   user,
-}: { user: NonNullable<Session['user']> }) {
+}: {
+  user: NonNullable<Session['user']>;
+}) {
   const { setTheme, theme } = useTheme();
   const { credits } = useGetCredits();
 

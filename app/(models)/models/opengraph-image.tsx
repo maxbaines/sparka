@@ -89,6 +89,7 @@ export default async function OGImage() {
                   title={titleCase(p.name)}
                 >
                   {p.iconUrl ? (
+                    // biome-ignore lint/performance/noImgElement: Next/Image isn't supported in edge OG Image rendering
                     <img
                       src={p.iconUrl}
                       alt={`${p.name} logo`}

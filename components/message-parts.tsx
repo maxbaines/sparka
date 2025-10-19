@@ -1,24 +1,24 @@
 'use client';
 
 import { memo, useMemo } from 'react';
-import { Weather } from './weather';
-import { TextMessagePart } from './text-message-part';
-import { DocumentPreview } from './document-preview';
-import { DocumentToolCall, DocumentToolResult } from './document';
-import { MessageReasoning } from './message-reasoning';
-import { Retrieve } from './retrieve';
-import { ReadDocument } from './read-document';
-import { StockChartMessage } from './stock-chart-message';
-import { CodeInterpreterMessage } from './code-interpreter-message';
-import { GeneratedImage } from './generated-image';
-import { ResearchUpdates } from './message-annotations';
 import type { ChatMessage } from '@/lib/ai/types';
 import { useChatStoreApi } from '@/lib/stores/chat-store-context';
 import {
-  useMessagePartTypesById,
   useMessagePartByPartIdx,
   useMessagePartsByPartRange,
+  useMessagePartTypesById,
 } from '@/lib/stores/hooks';
+import { CodeInterpreterMessage } from './code-interpreter-message';
+import { DocumentToolCall, DocumentToolResult } from './document';
+import { DocumentPreview } from './document-preview';
+import { GeneratedImage } from './generated-image';
+import { ResearchUpdates } from './message-annotations';
+import { MessageReasoning } from './message-reasoning';
+import { ReadDocument } from './read-document';
+import { Retrieve } from './retrieve';
+import { StockChartMessage } from './stock-chart-message';
+import { TextMessagePart } from './text-message-part';
+import { Weather } from './weather';
 
 type MessagePartsProps = {
   messageId: string;
@@ -98,7 +98,7 @@ function useResearchUpdates(
     );
 }
 
-const collectResearchUpdates = (
+const _collectResearchUpdates = (
   parts: ChatMessage['parts'],
   toolCallId: string,
   toolType: 'tool-deepResearch' | 'tool-webSearch',

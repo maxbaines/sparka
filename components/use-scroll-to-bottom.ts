@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 
 export function useScrollToBottom<T extends HTMLElement>(): [
   RefObject<T>,
@@ -21,7 +21,7 @@ export function useScrollToBottom<T extends HTMLElement>(): [
         '[data-role="user"], [data-role="assistant"]',
       ).length;
       let lastMessageTextLength = 0;
-      const observer = new MutationObserver((mutations) => {
+      const observer = new MutationObserver((_mutations) => {
         // Check if new messages were added or content is streaming
         const currentMessageCount = container.querySelectorAll(
           '[data-role="user"], [data-role="assistant"]',

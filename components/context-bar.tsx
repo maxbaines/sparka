@@ -90,7 +90,10 @@ export function ContextBar({
 function ContextUsage({
   usage,
   selectedModelId,
-}: { usage: LanguageModelUsage; selectedModelId: ModelId }) {
+}: {
+  usage: LanguageModelUsage;
+  selectedModelId: ModelId;
+}) {
   const contextMax = useMemo(() => {
     try {
       const cw = getContextWindow(selectedModelId as unknown as string);

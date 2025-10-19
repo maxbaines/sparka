@@ -11,10 +11,7 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000006",
         "output": "0.00000024"
@@ -30,9 +27,7 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000013",
         "output": "0.0000006"
@@ -48,10 +43,7 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000008",
         "output": "0.00000029"
@@ -67,10 +59,7 @@
       "context_window": 40960,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000003"
@@ -86,9 +75,7 @@
       "context_window": 262144,
       "max_tokens": 66536,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000004",
         "output": "0.0000016"
@@ -104,10 +91,7 @@
       "context_window": 262144,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006"
@@ -123,9 +107,7 @@
       "context_window": 1000000,
       "max_tokens": 1000000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.000001",
         "output": "0.000005"
@@ -141,9 +123,7 @@
       "context_window": 262144,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000012",
         "output": "0.000006",
@@ -160,9 +140,7 @@
       "context_window": 262144,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000012",
         "output": "0.000006",
@@ -209,9 +187,7 @@
       "context_window": 131072,
       "max_tokens": 129024,
       "type": "language",
-      "tags": [
-        "vision"
-      ],
+      "tags": ["vision"],
       "pricing": {
         "input": "0.0000007",
         "output": "0.0000028"
@@ -227,9 +203,7 @@
       "context_window": 131072,
       "max_tokens": 129024,
       "type": "language",
-      "tags": [
-        "vision"
-      ],
+      "tags": ["vision"],
       "pricing": {
         "input": "0.0000007",
         "output": "0.0000084"
@@ -305,10 +279,7 @@
       "context_window": 200000,
       "max_tokens": 4096,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.00000025",
         "output": "0.00000125",
@@ -326,10 +297,7 @@
       "context_window": 200000,
       "max_tokens": 4096,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.000015",
         "output": "0.000075",
@@ -347,11 +315,7 @@
       "context_window": 200000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000008",
         "output": "0.000004",
@@ -369,11 +333,7 @@
       "context_window": 200000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015",
@@ -391,11 +351,7 @@
       "context_window": 200000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -411,12 +367,7 @@
       "context_window": 200000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015",
@@ -451,12 +402,7 @@
       "context_window": 200000,
       "max_tokens": 32000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000015",
         "output": "0.000075",
@@ -474,12 +420,7 @@
       "context_window": 200000,
       "max_tokens": 32000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000015",
         "output": "0.000075",
@@ -497,12 +438,7 @@
       "context_window": 200000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015",
@@ -520,12 +456,7 @@
       "context_window": 200000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015",
@@ -543,9 +474,7 @@
       "context_window": 256000,
       "max_tokens": 8000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000025",
         "output": "0.00001"
@@ -561,9 +490,7 @@
       "context_window": 128000,
       "max_tokens": 4096,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006"
@@ -579,9 +506,7 @@
       "context_window": 128000,
       "max_tokens": 4096,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000025",
         "output": "0.00001"
@@ -612,10 +537,7 @@
       "context_window": 163840,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000079",
         "output": "0.000004"
@@ -631,10 +553,7 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000075",
         "output": "0.00000099"
@@ -650,9 +569,7 @@
       "context_window": 163840,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000077",
         "output": "0.00000077"
@@ -668,10 +585,7 @@
       "context_window": 163840,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000001999",
         "output": "0.0000008001"
@@ -687,9 +601,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000001999",
         "output": "0.0000008001"
@@ -705,10 +617,7 @@
       "context_window": 131072,
       "max_tokens": 65536,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000027",
         "output": "0.000001"
@@ -724,11 +633,7 @@
       "context_window": 163840,
       "max_tokens": 65536,
       "type": "language",
-      "tags": [
-        "implicit-caching",
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["implicit-caching", "reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000027",
         "output": "0.00000041"
@@ -744,11 +649,7 @@
       "context_window": 163840,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "implicit-caching",
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["implicit-caching", "reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000028",
         "output": "0.00000042",
@@ -765,11 +666,7 @@
       "context_window": 1000000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000004"
@@ -785,11 +682,7 @@
       "context_window": 1048576,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.000000075",
         "output": "0.0000003"
@@ -805,12 +698,7 @@
       "context_window": 1000000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000003",
         "output": "0.0000025"
@@ -826,9 +714,7 @@
       "context_window": 32768,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "image-generation"
-      ],
+      "tags": ["image-generation"],
       "pricing": {
         "input": "0.0000003",
         "output": "0.0000025"
@@ -844,12 +730,7 @@
       "context_window": 1048576,
       "max_tokens": 65536,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000004"
@@ -865,12 +746,7 @@
       "context_window": 1048576,
       "max_tokens": 65536,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000004"
@@ -908,12 +784,7 @@
       "context_window": 1048576,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.00000125",
         "output": "0.00001"
@@ -989,9 +860,7 @@
       "context_window": 32000,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000025",
         "output": "0.000001"
@@ -1007,9 +876,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0",
         "output": "0"
@@ -1025,10 +892,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000015"
@@ -1074,9 +938,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000072",
         "output": "0.00000072"
@@ -1092,9 +954,7 @@
       "context_window": 131000,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000005",
         "output": "0.00000008"
@@ -1110,10 +970,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.00000016",
         "output": "0.00000016"
@@ -1159,10 +1016,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.00000072",
         "output": "0.00000072"
@@ -1178,9 +1032,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000072",
         "output": "0.00000072"
@@ -1196,10 +1048,7 @@
       "context_window": 131072,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006"
@@ -1215,10 +1064,7 @@
       "context_window": 131072,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.00000008",
         "output": "0.0000003"
@@ -1234,9 +1080,7 @@
       "context_window": 256000,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000003",
         "output": "0.0000009"
@@ -1267,9 +1111,7 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000003"
@@ -1285,10 +1127,7 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "vision"
-      ],
+      "tags": ["reasoning", "vision"],
       "pricing": {
         "input": "0.000002",
         "output": "0.000005"
@@ -1304,9 +1143,7 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "reasoning"
-      ],
+      "tags": ["reasoning"],
       "pricing": {
         "input": "0.000002",
         "output": "0.000005"
@@ -1322,10 +1159,7 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "vision"
-      ],
+      "tags": ["reasoning", "vision"],
       "pricing": {
         "input": "0.0000005",
         "output": "0.0000015"
@@ -1341,9 +1175,7 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "reasoning"
-      ],
+      "tags": ["reasoning"],
       "pricing": {
         "input": "0.0000005",
         "output": "0.0000015"
@@ -1359,9 +1191,7 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.00000004",
         "output": "0.00000004"
@@ -1377,9 +1207,7 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000001"
@@ -1410,9 +1238,7 @@
       "context_window": 32000,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.000002",
         "output": "0.000006"
@@ -1428,10 +1254,7 @@
       "context_window": 128000,
       "max_tokens": 64000,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.0000004",
         "output": "0.000002"
@@ -1447,10 +1270,7 @@
       "context_window": 32000,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000003"
@@ -1481,10 +1301,7 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.00000015",
         "output": "0.00000015"
@@ -1500,10 +1317,7 @@
       "context_window": 128000,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.000002",
         "output": "0.000006"
@@ -1519,9 +1333,7 @@
       "context_window": 131072,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000005",
         "output": "0.000002"
@@ -1552,9 +1364,7 @@
       "context_window": 256000,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000024",
         "output": "0.00001"
@@ -1630,10 +1440,7 @@
       "context_window": 128000,
       "max_tokens": 4096,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.00001",
         "output": "0.00003"
@@ -1649,11 +1456,7 @@
       "context_window": 1047576,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.000002",
         "output": "0.000008",
@@ -1671,11 +1474,7 @@
       "context_window": 1047576,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000004",
         "output": "0.0000016",
@@ -1693,11 +1492,7 @@
       "context_window": 1047576,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000004",
@@ -1715,11 +1510,7 @@
       "context_window": 128000,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000025",
         "output": "0.00001",
@@ -1737,11 +1528,7 @@
       "context_window": 128000,
       "max_tokens": 16384,
       "type": "language",
-      "tags": [
-        "file-input",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "tool-use", "vision"],
       "pricing": {
         "input": "0.00000015",
         "output": "0.0000006",
@@ -1759,12 +1546,7 @@
       "context_window": 400000,
       "max_tokens": 128000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.00000125",
         "output": "0.00001",
@@ -1782,12 +1564,7 @@
       "context_window": 400000,
       "max_tokens": 128000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.00000125",
         "output": "0.00001",
@@ -1805,12 +1582,7 @@
       "context_window": 400000,
       "max_tokens": 128000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.00000025",
         "output": "0.000002",
@@ -1828,12 +1600,7 @@
       "context_window": 400000,
       "max_tokens": 128000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.00000005",
         "output": "0.0000004",
@@ -1873,10 +1640,7 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000001",
         "output": "0.0000005"
@@ -1892,10 +1656,7 @@
       "context_window": 128000,
       "max_tokens": 8192,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.00000007",
         "output": "0.0000003"
@@ -1911,12 +1672,7 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000015",
         "output": "0.00006",
@@ -1934,12 +1690,7 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000002",
         "output": "0.000008",
@@ -1957,11 +1708,7 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000011",
         "output": "0.0000044",
@@ -1979,12 +1726,7 @@
       "context_window": 200000,
       "max_tokens": 100000,
       "type": "language",
-      "tags": [
-        "file-input",
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["file-input", "reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000011",
         "output": "0.0000044",
@@ -2047,10 +1789,7 @@
       "context_window": 127000,
       "max_tokens": 8000,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.000001",
         "output": "0.000001"
@@ -2066,10 +1805,7 @@
       "context_window": 200000,
       "max_tokens": 8000,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -2085,9 +1821,7 @@
       "context_window": 127000,
       "max_tokens": 8000,
       "type": "language",
-      "tags": [
-        "reasoning"
-      ],
+      "tags": ["reasoning"],
       "pricing": {
         "input": "0.000001",
         "output": "0.000005"
@@ -2103,9 +1837,7 @@
       "context_window": 127000,
       "max_tokens": 8000,
       "type": "language",
-      "tags": [
-        "reasoning"
-      ],
+      "tags": ["reasoning"],
       "pricing": {
         "input": "0.000002",
         "output": "0.000008"
@@ -2121,10 +1853,7 @@
       "context_window": 2000000,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000005",
@@ -2141,10 +1870,7 @@
       "context_window": 2000000,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000005",
@@ -2161,10 +1887,7 @@
       "context_window": 128000,
       "max_tokens": 32000,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -2180,10 +1903,7 @@
       "context_window": 128000,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -2304,9 +2024,7 @@
       "context_window": 131072,
       "max_tokens": 4000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.000002",
         "output": "0.00001"
@@ -2322,10 +2040,7 @@
       "context_window": 32768,
       "max_tokens": 32768,
       "type": "language",
-      "tags": [
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["tool-use", "vision"],
       "pricing": {
         "input": "0.000002",
         "output": "0.00001"
@@ -2341,9 +2056,7 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -2359,9 +2072,7 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.000005",
         "output": "0.000025"
@@ -2377,9 +2088,7 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000003",
         "output": "0.0000005"
@@ -2395,9 +2104,7 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000006",
         "output": "0.000004"
@@ -2413,11 +2120,7 @@
       "context_window": 256000,
       "max_tokens": 256000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.000003",
         "output": "0.000015"
@@ -2433,9 +2136,7 @@
       "context_window": 2000000,
       "max_tokens": 256000,
       "type": "language",
-      "tags": [
-        "tool-use"
-      ],
+      "tags": ["tool-use"],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000005",
@@ -2452,10 +2153,7 @@
       "context_window": 2000000,
       "max_tokens": 256000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000005",
@@ -2472,10 +2170,7 @@
       "context_window": 256000,
       "max_tokens": 256000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000015"
@@ -2491,10 +2186,7 @@
       "context_window": 131072,
       "max_tokens": 131072,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000006",
         "output": "0.0000022"
@@ -2510,10 +2202,7 @@
       "context_window": 128000,
       "max_tokens": 96000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000002",
         "output": "0.0000011"
@@ -2529,11 +2218,7 @@
       "context_window": 65536,
       "max_tokens": 66000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use",
-        "vision"
-      ],
+      "tags": ["reasoning", "tool-use", "vision"],
       "pricing": {
         "input": "0.0000006",
         "output": "0.0000018"
@@ -2549,10 +2234,7 @@
       "context_window": 200000,
       "max_tokens": 96000,
       "type": "language",
-      "tags": [
-        "reasoning",
-        "tool-use"
-      ],
+      "tags": ["reasoning", "tool-use"],
       "pricing": {
         "input": "0.0000006",
         "output": "0.0000022",

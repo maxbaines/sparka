@@ -1,25 +1,25 @@
 'use client';
 
-import * as React from 'react';
+import {
+  type InitialConfigType,
+  LexicalComposer,
+} from '@lexical/react/LexicalComposer';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
 import {
   $createParagraphNode,
   $createTextNode,
   $getRoot,
-  type EditorState,
-  type LexicalEditor,
   COMMAND_PRIORITY_HIGH,
+  type EditorState,
   KEY_ENTER_COMMAND,
+  type LexicalEditor,
 } from 'lexical';
-import {
-  LexicalComposer,
-  type InitialConfigType,
-} from '@lexical/react/LexicalComposer';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import { PlainTextPlugin } from '@lexical/react/LexicalPlainTextPlugin';
+import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 // Plugin to handle Enter key submissions
@@ -57,7 +57,9 @@ function EnterKeySubmitPlugin({
 // Plugin to get editor instance for imperative ref
 function EditorRefPlugin({
   setEditor,
-}: { setEditor: (editor: LexicalEditor) => void }) {
+}: {
+  setEditor: (editor: LexicalEditor) => void;
+}) {
   const [editor] = useLexicalComposerContext();
 
   React.useEffect(() => {
@@ -113,7 +115,7 @@ export const LexicalChatInput = React.forwardRef<
       autoFocus = false,
       className,
       'data-testid': testId,
-      ...props
+      ..._props
     },
     ref,
   ) => {

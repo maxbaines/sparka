@@ -1,17 +1,17 @@
 'use client';
 
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
+import { BrainIcon, ChevronDownIcon } from 'lucide-react';
+import type { ComponentProps, ReactNode } from 'react';
+import { createContext, memo, useContext, useEffect, useState } from 'react';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { BrainIcon, ChevronDownIcon } from 'lucide-react';
-import type { ComponentProps, ReactNode } from 'react';
-import { createContext, memo, useContext, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Response } from './response';
 import { TextShimmerLoader } from '../prompt-kit/loader';
+import { Response } from './response';
 
 type ReasoningContextValue = {
   isStreaming: boolean;
@@ -122,7 +122,7 @@ export const ReasoningTrigger = memo(
     children,
     ...props
   }: ReasoningTriggerProps) => {
-    const { isStreaming, isOpen, duration } = useReasoning();
+    const { isStreaming, isOpen, duration: _duration } = useReasoning();
 
     return (
       <CollapsibleTrigger

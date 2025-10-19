@@ -1,57 +1,56 @@
 'use client';
-import type { Attachment, ChatMessage, UiToolName } from '@/lib/ai/types';
-
+import type { UseChatHelpers } from '@ai-sdk/react';
+import { PlusIcon } from 'lucide-react';
 import type React from 'react';
 import {
+  type ChangeEvent,
+  type Dispatch,
+  memo,
+  type SetStateAction,
+  useCallback,
   useRef,
   useState,
-  useCallback,
-  type ChangeEvent,
-  memo,
-  type Dispatch,
-  type SetStateAction,
 } from 'react';
-import { toast } from 'sonner';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { useDropzone } from 'react-dropzone';
-import { useSession } from '@/providers/session-provider';
+import { toast } from 'sonner';
+import {
+  PromptInput,
+  PromptInputButton,
+  PromptInputSubmit,
+  PromptInputToolbar,
+  PromptInputTools,
+} from '@/components/ai-elements/prompt-input';
+import { ContextBar } from '@/components/context-bar';
+import { useSaveMessageMutation } from '@/hooks/chat-sync-hooks';
+import { useIsMobile } from '@/hooks/use-mobile';
+import type { AppModelId } from '@/lib/ai/app-models';
+import {
+  DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL,
+  DEFAULT_CHAT_MODEL,
+  DEFAULT_PDF_MODEL,
+  getAppModelDefinition,
+} from '@/lib/ai/app-models';
+import type { Attachment, ChatMessage, UiToolName } from '@/lib/ai/types';
+import { processFilesForUpload } from '@/lib/files/upload-prep';
 import { useChatStoreApi } from '@/lib/stores/chat-store-context';
 import {
   useChatHelperStop,
-  useSetMessages,
   useMessageIds,
+  useSetMessages,
 } from '@/lib/stores/hooks';
-import { PlusIcon } from 'lucide-react';
-import { ImageModal } from './image-modal';
-import { ChatInputTextArea } from './chat-input';
-import {
-  PromptInput,
-  PromptInputToolbar,
-  PromptInputTools,
-  PromptInputSubmit,
-  PromptInputButton,
-} from '@/components/ai-elements/prompt-input';
-import { SuggestedActions } from './suggested-actions';
-import type { UseChatHelpers } from '@ai-sdk/react';
+import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
+import { generateUUID } from '@/lib/utils';
 import { useChatInput } from '@/providers/chat-input-provider';
+import { useSession } from '@/providers/session-provider';
+import { ChatInputTextArea } from './chat-input';
+import { ImageModal } from './image-modal';
 import { ModelSelector } from './model-selector';
 import { ResponsiveTools } from './responsive-tools';
-import {
-  getAppModelDefinition,
-  DEFAULT_PDF_MODEL,
-  DEFAULT_CHAT_IMAGE_COMPATIBLE_MODEL,
-  DEFAULT_CHAT_MODEL,
-} from '@/lib/ai/app-models';
-import { LimitDisplay } from './upgrade-cta/limit-display';
+import { SuggestedActions } from './suggested-actions';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { LimitDisplay } from './upgrade-cta/limit-display';
 import { LoginPrompt } from './upgrade-cta/login-prompt';
-import { generateUUID } from '@/lib/utils';
-import { useSaveMessageMutation } from '@/hooks/chat-sync-hooks';
-import { ANONYMOUS_LIMITS } from '@/lib/types/anonymous';
-import { processFilesForUpload } from '@/lib/files/upload-prep';
-import type { AppModelId } from '@/lib/ai/app-models';
-import { ContextBar } from '@/components/context-bar';
 
 const IMAGE_UPLOAD_LIMITS = {
   maxBytes: 1024 * 1024,
@@ -325,7 +324,7 @@ function PureMultimodalInput({
         }
         const { error } = (await response.json()) as { error?: string };
         toast.error(error);
-      } catch (error) {
+      } catch (_error) {
         toast.error('Failed to upload file, please try again!');
       }
     },
@@ -662,9 +661,9 @@ function PureChatInputBottomControls({
   setSelectedTool,
   fileInputRef,
   status,
-  isEmpty,
+  isEmpty: _isEmpty,
   submitForm,
-  uploadQueue,
+  uploadQueue: _uploadQueue,
   submission,
 }: {
   selectedModelId: AppModelId;

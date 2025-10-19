@@ -103,7 +103,7 @@ export const chatRouter = createTRPCRouter({
         throw new Error('Chat not found or access denied');
       }
 
-      const res = await updateChatTitleById({
+      const _res = await updateChatTitleById({
         chatId: input.chatId,
         title: input.title,
       });

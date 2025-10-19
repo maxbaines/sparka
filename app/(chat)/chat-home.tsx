@@ -11,13 +11,11 @@ export function ChatHome({ id }: { id: string }) {
     return (value as AppModelId) || undefined;
   }, [searchParams]);
   return (
-    <>
-      <ChatSystem
-        id={id}
-        initialMessages={[]}
-        isReadonly={false}
-        overrideModelId={overrideModelId}
-      />
-    </>
+    <ChatSystem
+      id={id}
+      initialMessages={[]}
+      isReadonly={false}
+      overrideModelId={overrideModelId}
+    />
   );
 }

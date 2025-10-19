@@ -101,11 +101,7 @@ export async function getChatById({ id }: { id: string }) {
   }
 }
 
-export async function saveMessage({
-  _message,
-}: {
-  _message: DBMessage;
-}) {
+export async function saveMessage({ _message }: { _message: DBMessage }) {
   try {
     const result = await db.insert(message).values(_message);
 
@@ -120,11 +116,7 @@ export async function saveMessage({
 }
 
 // TODO: This should indicate the it's only updating messages for a single chat
-export async function saveMessages({
-  _messages,
-}: {
-  _messages: DBMessage[];
-}) {
+export async function saveMessages({ _messages }: { _messages: DBMessage[] }) {
   try {
     if (_messages.length === 0) {
       return;
@@ -144,11 +136,7 @@ export async function saveMessages({
   }
 }
 
-export async function updateMessage({
-  _message,
-}: {
-  _message: DBMessage;
-}) {
+export async function updateMessage({ _message }: { _message: DBMessage }) {
   try {
     return await db
       .update(message)
@@ -617,11 +605,7 @@ export async function updateChatIsPinnedById({
   }
 }
 
-export async function updateChatUpdatedAt({
-  chatId,
-}: {
-  chatId: string;
-}) {
+export async function updateChatUpdatedAt({ chatId }: { chatId: string }) {
   try {
     return await db
       .update(chat)
@@ -637,7 +621,9 @@ export async function updateChatUpdatedAt({
 
 export async function getUserById({
   userId,
-}: { userId: string }): Promise<User | undefined> {
+}: {
+  userId: string;
+}): Promise<User | undefined> {
   const users = await db
     .select()
     .from(user)

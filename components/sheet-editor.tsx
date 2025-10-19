@@ -1,9 +1,9 @@
 'use client';
 
+import { useTheme } from 'next-themes';
+import { parse, unparse } from 'papaparse';
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import DataGrid, { textEditor } from 'react-data-grid';
-import { parse, unparse } from 'papaparse';
-import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 
 import 'react-data-grid/lib/styles.css';
@@ -23,8 +23,8 @@ const MIN_COLS = 26;
 const PureSpreadsheetEditor = ({
   content,
   saveContent,
-  status,
-  isCurrentVersion,
+  status: _status,
+  isCurrentVersion: _isCurrentVersion,
   isReadonly,
 }: SheetEditorProps) => {
   const { theme } = useTheme();

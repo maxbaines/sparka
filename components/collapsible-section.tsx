@@ -1,9 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { CheckCircle } from '@phosphor-icons/react/CheckCircle';
 import {
   Calculator,
@@ -14,16 +11,19 @@ import {
   Copy,
   FileText,
   Loader2,
-  TrendingUp,
   type LucideIcon,
+  TrendingUp,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {
-  oneLight,
   oneDark,
+  oneLight,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const IconMapping: Record<string, LucideIcon> = {
   stock: TrendingUp,
@@ -66,8 +66,9 @@ export function CollapsibleSection({
 
   return (
     <div className="group rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-all duration-200 hover:shadow-xs">
-      <div
-        className="flex items-center justify-between px-4 py-3 cursor-pointer bg-white dark:bg-neutral-900 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+      <button
+        type="button"
+        className="flex items-center justify-between px-4 py-3 cursor-pointer bg-white dark:bg-neutral-900 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50 w-full text-left"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-3">
@@ -106,7 +107,7 @@ export function CollapsibleSection({
             )}
           />
         </div>
-      </div>
+      </button>
 
       {isExpanded && (
         <div>

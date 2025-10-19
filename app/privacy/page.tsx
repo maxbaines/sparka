@@ -1,7 +1,7 @@
 import { siteConfig } from '@/lib/config';
 
 export default function PrivacyPage() {
-  const currencySymbolMap: Record<string, string> = {
+  const _currencySymbolMap: Record<string, string> = {
     USD: '$',
     EUR: '€',
     GBP: '£',

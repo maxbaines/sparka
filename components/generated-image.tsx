@@ -1,7 +1,7 @@
 'use client';
 
-import { CopyIcon } from '@/components/icons';
 import { toast } from 'sonner';
+import { CopyIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
 interface GeneratedImageProps {
@@ -30,7 +30,7 @@ export function GeneratedImage({
         new ClipboardItem({ [blob.type]: blob }),
       ]);
       toast.success('Copied image to clipboard!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Failed to copy image to clipboard');
     }
   };
@@ -49,6 +49,7 @@ export function GeneratedImage({
   return (
     <div className="flex flex-col gap-4 w-full border rounded-lg overflow-hidden">
       <div className="relative group">
+        {/* biome-ignore lint/performance/noImgElement: Next/Image isn't desired for dynamic external URLs here */}
         <img
           src={result.imageUrl}
           alt={result.prompt}

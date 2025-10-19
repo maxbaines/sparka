@@ -21,8 +21,11 @@ type HardenReactMarkdownProps = Options & {
 
 // Handle both ESM and CJS imports
 const hardenReactMarkdown =
-  // biome-ignore lint/suspicious/noExplicitAny: "this is needed."
-  (hardenReactMarkdownImport as any).default || hardenReactMarkdownImport;
+  (
+    hardenReactMarkdownImport as unknown as {
+      default?: typeof hardenReactMarkdownImport;
+    }
+  ).default || hardenReactMarkdownImport;
 
 // Create a hardened version of ReactMarkdown
 const HardenedMarkdown: ReturnType<typeof hardenReactMarkdown> =
@@ -96,7 +99,6 @@ export const Streamdown = memo(
               }}
               content={block}
               defaultOrigin={defaultOrigin}
-              // biome-ignore lint/suspicious/noArrayIndexKey: "required"
               key={`${generatedId}-block_${index}`}
               rehypePlugins={[rehypeKatex, ...(rehypePlugins ?? [])]}
               remarkPlugins={[remarkGfm, remarkMath, ...(remarkPlugins ?? [])]}

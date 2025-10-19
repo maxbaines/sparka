@@ -1,29 +1,29 @@
 'use client';
+import { PinIcon } from 'lucide-react';
 import Link from 'next/link';
 import { memo, useState } from 'react';
 import { toast } from 'sonner';
-import { PinIcon } from 'lucide-react';
 
 import {
   MoreHorizontalIcon,
-  TrashIcon,
   PencilEditIcon,
+  TrashIcon,
 } from '@/components/icons';
+import { ShareDialog } from '@/components/share-button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { Input } from '@/components/ui/input';
-import type { UIChat } from '@/lib/types/uiChat';
-import { ShareDialog } from '@/components/share-button';
 import { ShareMenuItem } from '@/components/upgrade-cta/share-menu-item';
+import type { UIChat } from '@/lib/types/uiChat';
 
 const PureSidebarChatItem = ({
   chat,
@@ -55,7 +55,7 @@ const PureSidebarChatItem = ({
       await onRename(chat.id, editTitle.trim());
       setIsEditing(false);
       toast.success('Chat renamed successfully');
-    } catch (error) {
+    } catch (_error) {
       setEditTitle(chat.title);
       setIsEditing(false);
     }

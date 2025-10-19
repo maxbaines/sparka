@@ -1,29 +1,28 @@
+import type { ModelDefinition, ProviderId } from '@ai-models/vercel-gateway';
+import { Building, Calendar, CheckCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Calendar, Building, CheckCircle } from 'lucide-react';
-import type { ModelDefinition } from '@ai-models/vercel-gateway';
-import type { ProviderId } from '@ai-models/vercel-gateway';
-import { cn } from '@/lib/utils';
 import { getFeatureConfig, isFeatureEnabled } from '@/lib/features-config';
+import { cn } from '@/lib/utils';
 import { getProviderIcon } from './get-provider-icon';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card';
 
 const PlaceholderIcon = () => <Building className="size-6" />;
 
-const getFeatureIconsForCard = (model: ModelDefinition) => {
+const _getFeatureIconsForCard = (model: ModelDefinition) => {
   const icons: React.ReactNode[] = [];
 
   // Check for reasoning capability

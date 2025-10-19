@@ -1,4 +1,5 @@
 'use client';
+import type { UseChatHelpers } from '@ai-sdk/react';
 import cx from 'classnames';
 import {
   AnimatePresence,
@@ -6,6 +7,7 @@ import {
   useMotionValue,
   useTransform,
 } from 'motion/react';
+import { nanoid } from 'nanoid';
 import {
   type Dispatch,
   memo,
@@ -16,24 +18,20 @@ import {
   useState,
 } from 'react';
 import { useOnClickOutside } from 'usehooks-ts';
-import { nanoid } from 'nanoid';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-
-import { ArrowUpIcon, StopIcon, SummarizeIcon } from './icons';
-import { artifactDefinitions } from './artifact';
-import type { ArtifactKind } from '@/lib/artifacts/artifact-kind';
-
-import type { ArtifactToolbarItem } from './create-artifact';
-import type { UseChatHelpers } from '@ai-sdk/react';
-import { useChatInput } from '@/providers/chat-input-provider';
 import type { ChatMessage } from '@/lib/ai/types';
-import { useSendMessage } from '@/lib/stores/hooks';
+import type { ArtifactKind } from '@/lib/artifacts/artifact-kind';
 import type { useChatStoreApi } from '@/lib/stores/chat-store-context';
+import { useSendMessage } from '@/lib/stores/hooks';
+import { useChatInput } from '@/providers/chat-input-provider';
+import { artifactDefinitions } from './artifact';
+import type { ArtifactToolbarItem } from './create-artifact';
+import { ArrowUpIcon, StopIcon, SummarizeIcon } from './icons';
 
 type ToolProps = {
   description: string;
@@ -138,7 +136,7 @@ function Tool({
   );
 }
 
-const randomArr = [...Array(6)].map((x) => nanoid(5));
+const randomArr = [...Array(6)].map((_x) => nanoid(5));
 
 function ReadingLevelSelector({
   setSelectedTool,
@@ -159,7 +157,7 @@ function ReadingLevelSelector({
     'Graduate',
   ];
 
-  const { selectedModelId } = useChatInput();
+  const { selectedModelId: _selectedModelId } = useChatInput();
 
   const y = useMotionValue(-40 * 2);
   const dragConstraints = 5 * 40 + 2;
@@ -335,7 +333,7 @@ function PureToolbar({
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const { selectedModelId } = useChatInput();
+  const { selectedModelId: _selectedModelId2 } = useChatInput();
 
   useOnClickOutside(toolbarRef, () => {
     setIsToolbarVisible(false);

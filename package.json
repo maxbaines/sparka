@@ -8,8 +8,7 @@
     "dev": "next dev --turbo",
     "build": "(cd packages/models && bun run build) && tsx lib/db/migrate && next build",
     "start": "next start",
-    "lint": "next lint && biome lint --write --unsafe",
-    "lint:fix": "next lint --fix && biome lint --write --unsafe",
+    "lint": "biome check",
     "format": "biome format --write",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
@@ -184,7 +183,7 @@
     "@ai-models/vercel-gateway": "workspace:*"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.6",
     "@playwright/test": "^1.50.1",
     "@storybook/addon-links": "9.1.2",
     "@storybook/nextjs": "9.1.2",

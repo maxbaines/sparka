@@ -1,27 +1,26 @@
-import { memo } from 'react';
-import { useSession } from '@/providers/session-provider';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-
+import { memo } from 'react';
 import { Action } from '@/components/ai-elements/actions';
-import { useMessageTree } from '@/providers/message-tree-provider';
 import { useMessageById, useMessageRoleById } from '@/lib/stores/hooks';
+import { useMessageTree } from '@/providers/message-tree-provider';
+import { useSession } from '@/providers/session-provider';
 
 export function PureMessageSiblings({
   messageId,
-  isReadOnly,
+  isReadOnly: _isReadOnly,
 }: {
   messageId: string;
   isReadOnly: boolean;
 }) {
   const { data: session } = useSession();
-  const isAuthenticated = !!session?.user;
+  const _isAuthenticated = !!session?.user;
 
   const { getMessageSiblingInfo, navigateToSibling } = useMessageTree();
   const siblingInfo = getMessageSiblingInfo(messageId);
   const hasSiblings = siblingInfo && siblingInfo.siblings.length > 1;
 
-  const role = useMessageRoleById(messageId);
-  const message = useMessageById(messageId);
+  const _role = useMessageRoleById(messageId);
+  const _message = useMessageById(messageId);
 
   return (
     <div className="flex gap-1 items-center justify-center">

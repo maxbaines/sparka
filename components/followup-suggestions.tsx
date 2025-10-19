@@ -77,11 +77,7 @@ export function FollowUpSuggestions({
   );
 }
 
-export function FollowUpSuggestionsParts({
-  messageId,
-}: {
-  messageId: string;
-}) {
+export function FollowUpSuggestionsParts({ messageId }: { messageId: string }) {
   const types = useMessagePartTypesById(messageId);
 
   const partIdx = types.findIndex((t) => t === 'data-followupSuggestions');

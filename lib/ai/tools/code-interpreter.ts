@@ -32,7 +32,11 @@ Avoid:
     code,
     title,
     icon,
-  }: { code: string; title: string; icon: string }) => {
+  }: {
+    code: string;
+    title: string;
+    icon: string;
+  }) => {
     console.log('Code:', code);
     console.log('Title:', title);
     console.log('Icon:', icon);

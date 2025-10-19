@@ -1,12 +1,12 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { artifactDefinitions } from './artifact';
-import type { Suggestion } from '@/lib/db/schema';
-import { useArtifact } from '@/hooks/use-artifact';
 import { useSaveDocument } from '@/hooks/chat-sync-hooks';
-import { useSession } from '@/providers/session-provider';
-import { useDataStream } from './data-stream-provider';
+import { useArtifact } from '@/hooks/use-artifact';
+import type { Suggestion } from '@/lib/db/schema';
 import { useChatInput } from '@/providers/chat-input-provider';
+import { useSession } from '@/providers/session-provider';
+import { artifactDefinitions } from './artifact';
+import { useDataStream } from './data-stream-provider';
 
 export type DataStreamDelta = {
   type:
@@ -24,7 +24,7 @@ export type DataStreamDelta = {
   content: string | Suggestion;
 };
 
-export function DataStreamHandler({ id }: { id: string }) {
+export function DataStreamHandler({ id: _id }: { id: string }) {
   const { dataStream } = useDataStream();
   const { artifact, setArtifact, setMetadata } = useArtifact();
   const lastProcessedIndex = useRef(-1);

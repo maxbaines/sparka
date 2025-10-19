@@ -64,12 +64,12 @@ export default async function OGImage(
   const iconUrl = getProviderIconUrl(model.owned_by, baseUrl);
 
   // Extra data for richer OG card
-  const contextWindow = model?.context_window || null;
-  const maxOut = model?.max_tokens || null;
-  const pricingIn = model?.pricing?.input || null;
-  const pricingOut = model?.pricing?.output || null;
+  const _contextWindow = model?.context_window || null;
+  const _maxOut = model?.max_tokens || null;
+  const _pricingIn = model?.pricing?.input || null;
+  const _pricingOut = model?.pricing?.output || null;
   const releaseDate = model?.releaseDate || null;
-  const releaseDateDisplay = releaseDate
+  const _releaseDateDisplay = releaseDate
     ? releaseDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',

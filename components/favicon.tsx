@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import type React from 'react';
+import { cn } from '@/lib/utils';
 
 export function Favicon({
   url,
@@ -10,6 +10,7 @@ export function Favicon({
   className?: string;
 } & React.ImgHTMLAttributes<HTMLImageElement>) {
   return (
+    // biome-ignore lint/performance/noImgElement: Next/Image isn't ideal for tiny favicons here
     <img
       src={url}
       className={cn('w-4 h-4', className)}

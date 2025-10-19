@@ -278,7 +278,7 @@ export async function POST(request: NextRequest) {
     let modelDefinition: AppModelDefinition;
     try {
       modelDefinition = getAppModelDefinition(selectedModelId);
-    } catch (error) {
+    } catch (_error) {
       log.warn('Model not found');
       return new Response('Model not found', { status: 404 });
     }
@@ -610,7 +610,11 @@ export async function POST(request: NextRequest) {
           });
         },
         generateId: () => messageId,
-        onFinish: async ({ messages, isContinuation, responseMessage }) => {
+        onFinish: async ({
+          messages,
+          isContinuation: _isContinuation,
+          responseMessage,
+        }) => {
           // Clear timeout since we finished successfully
           clearTimeout(timeoutId);
 
@@ -635,7 +639,7 @@ export async function POST(request: NextRequest) {
 
                   return acc + toolDef.cost;
                 }, 0);
-            const assistantMessage = responseMessage; // TODO: Fix this in ai sdk v5 - responseMessage is not a UIMessage
+            const _assistantMessage = responseMessage; // TODO: Fix this in ai sdk v5 - responseMessage is not a UIMessage
             try {
               // TODO: Validate if this is correct ai sdk v5
               const assistantMessage = messages.at(-1);

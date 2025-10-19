@@ -54,7 +54,10 @@ export function useSaveChat() {
     mutationFn: async ({
       chatId,
       message,
-    }: { chatId: string; message: string }) => {
+    }: {
+      chatId: string;
+      message: string;
+    }) => {
       // Save chat with temporary title first
       const tempChat = {
         id: chatId,
@@ -235,7 +238,10 @@ export function useRenameChat() {
     localMutationFn: async ({
       chatId,
       title,
-    }: { chatId: string; title: string }) => {
+    }: {
+      chatId: string;
+      title: string;
+    }) => {
       await renameAnonymousChat(chatId, title);
     },
     onMutate: async ({ chatId, title }: { chatId: string; title: string }) => {
@@ -285,14 +291,20 @@ export function usePinChat() {
     localMutationFn: async ({
       chatId,
       isPinned,
-    }: { chatId: string; isPinned: boolean }) => {
+    }: {
+      chatId: string;
+      isPinned: boolean;
+    }) => {
       await pinAnonymousChat(chatId, isPinned);
       return { success: true } as const;
     },
     onMutate: async ({
       chatId,
       isPinned,
-    }: { chatId: string; isPinned: boolean }) => {
+    }: {
+      chatId: string;
+      isPinned: boolean;
+    }) => {
       await queryClient.cancelQueries({ queryKey: getAllChatsQueryKey });
       const previousChats =
         queryClient.getQueryData<UIChat[]>(getAllChatsQueryKey);
@@ -343,13 +355,19 @@ export function useDeleteTrailingMessages() {
     shouldUseLocal: () => !isAuthenticated,
     localMutationFn: async ({
       messageId,
-    }: { messageId: string; chatId: string }) => {
+    }: {
+      messageId: string;
+      chatId: string;
+    }) => {
       await deleteAnonymousTrailingMessages(messageId);
     },
     onMutate: async ({
       messageId,
       chatId,
-    }: { messageId: string; chatId: string }) => {
+    }: {
+      messageId: string;
+      chatId: string;
+    }) => {
       const messagesQueryKey = trpc.chat.getChatMessages.queryKey({ chatId });
       await queryClient.cancelQueries({ queryKey: messagesQueryKey });
       const previousMessages =
@@ -462,14 +480,20 @@ export function useSaveMessageMutation() {
     mutationFn: async ({
       message,
       chatId,
-    }: { message: ChatMessage; chatId: string }) => {
+    }: {
+      message: ChatMessage;
+      chatId: string;
+    }) => {
       // Posting chats persists via server side; local cache updates handled in onMutateAction
       return { success: true } as const;
     },
     localMutationFn: async ({
       message,
       chatId,
-    }: { message: ChatMessage; chatId: string }) => {
+    }: {
+      message: ChatMessage;
+      chatId: string;
+    }) => {
       await saveAnonymousMessage(chatMessageToDbMessage(message, chatId));
       return { success: true } as const;
     },

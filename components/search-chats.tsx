@@ -9,7 +9,7 @@ import { SearchChatsDialog } from './search-chats-dialog';
 // Helper function to get platform-specific shortcut text
 function getSearchShortcutText() {
   if (typeof window === 'undefined') return 'Ctrl+K';
-  
+
   const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
   return isMac ? 'Cmd+K' : 'Ctrl+K';
 }
@@ -45,7 +45,9 @@ export function SearchChatsButton() {
       >
         <SearchIcon className="h-4 w-4" />
         <span>Search chats</span>
-        <span className="ml-auto text-xs text-muted-foreground">{shortcutText}</span>
+        <span className="ml-auto text-xs text-muted-foreground">
+          {shortcutText}
+        </span>
       </SidebarMenuButton>
 
       {open && (

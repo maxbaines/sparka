@@ -6,14 +6,14 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import 'katex/dist/katex.min.css';
 import hardenReactMarkdownImport from 'harden-react-markdown';
-import { components as defaultComponents } from './lib/components';
-import { cn } from './lib/utils';
+import type { BundledTheme } from 'shiki';
 import {
   useMarkdownBlockByIndex,
   useMarkdownBlockCountForPart,
 } from '@/lib/stores/hooks';
 import { ShikiThemeContext } from './index';
-import type { BundledTheme } from 'shiki';
+import { components as defaultComponents } from './lib/components';
+import { cn } from './lib/utils';
 
 type HardenReactMarkdownProps = Options & {
   defaultOrigin?: string;
@@ -23,8 +23,11 @@ type HardenReactMarkdownProps = Options & {
 
 // Handle both ESM and CJS imports
 const hardenReactMarkdown =
-  // biome-ignore lint/suspicious/noExplicitAny: "this is needed."
-  (hardenReactMarkdownImport as any).default || hardenReactMarkdownImport;
+  (
+    hardenReactMarkdownImport as unknown as {
+      default?: typeof hardenReactMarkdownImport;
+    }
+  ).default || hardenReactMarkdownImport;
 
 // Create a hardened version of ReactMarkdown
 const HardenedMarkdown: ReturnType<typeof hardenReactMarkdown> =

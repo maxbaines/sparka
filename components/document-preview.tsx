@@ -1,27 +1,27 @@
 'use client';
 
+import equal from 'fast-deep-equal';
 import {
-  memo,
   type MouseEvent,
+  memo,
   useCallback,
   useEffect,
   useMemo,
   useRef,
 } from 'react';
-import type { UIArtifact } from './artifact';
-import type { ArtifactKind } from '@/lib/artifacts/artifact-kind';
-import { FileIcon, FullscreenIcon, LoaderIcon, PencilEditIcon } from './icons';
-import { cn } from '@/lib/utils';
-import type { Document } from '@/lib/db/schema';
-import { InlineDocumentSkeleton } from './document-skeleton';
-import { Editor } from './text-editor';
-import { DocumentToolCall, DocumentToolResult } from './document';
-import { CodeEditor } from './code-editor';
-import { useArtifact } from '@/hooks/use-artifact';
-import equal from 'fast-deep-equal';
-import { SpreadsheetEditor } from './sheet-editor';
-import { ImageEditor } from './image-editor';
 import { useDocuments } from '@/hooks/chat-sync-hooks';
+import { useArtifact } from '@/hooks/use-artifact';
+import type { ArtifactKind } from '@/lib/artifacts/artifact-kind';
+import type { Document } from '@/lib/db/schema';
+import { cn } from '@/lib/utils';
+import type { UIArtifact } from './artifact';
+import { CodeEditor } from './code-editor';
+import { DocumentToolCall, DocumentToolResult } from './document';
+import { InlineDocumentSkeleton } from './document-skeleton';
+import { FileIcon, FullscreenIcon, LoaderIcon, PencilEditIcon } from './icons';
+import { ImageEditor } from './image-editor';
+import { SpreadsheetEditor } from './sheet-editor';
+import { Editor } from './text-editor';
 
 interface DocumentPreviewProps {
   isReadonly: boolean;
@@ -129,7 +129,11 @@ export function DocumentPreview({
   );
 }
 
-const LoadingSkeleton = ({ artifactKind }: { artifactKind: ArtifactKind }) => (
+const LoadingSkeleton = ({
+  artifactKind: _artifactKind,
+}: {
+  artifactKind: ArtifactKind;
+}) => (
   <div className="w-full">
     <div className="p-4 border rounded-t-2xl flex flex-row gap-2 items-center justify-between dark:bg-muted h-[57px] dark:border-zinc-700 border-b-0">
       <div className="flex flex-row items-center gap-3">
@@ -226,7 +230,7 @@ const getActionText = (
 
 const PureDocumentHeader = ({
   title,
-  kind,
+  kind: _kind,
   isStreaming,
   type,
 }: {

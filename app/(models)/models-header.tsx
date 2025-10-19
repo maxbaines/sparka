@@ -18,10 +18,10 @@ import { Menu } from 'lucide-react';
 
 function PureModelsHeader({ className }: { className?: string }) {
   const pathname = usePathname();
-  const router = useRouter();
+  const _router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-  const isAuthenticated = !!user;
+  const _isAuthenticated = !!user;
 
   const isActive = (path: string) => {
     if (path === '/') {

@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { FileIcon, LoaderIcon, MessageIcon, PencilEditIcon } from './icons';
 import { useArtifact } from '@/hooks/use-artifact';
 import type { ArtifactKind } from '@/lib/artifacts/artifact-kind';
+import { FileIcon, LoaderIcon, MessageIcon, PencilEditIcon } from './icons';
 
 const getActionText = (
   type: 'create' | 'update' | 'request-suggestions',
@@ -35,7 +35,7 @@ interface DocumentToolResultProps {
 function PureDocumentToolResult({
   type,
   result,
-  isReadonly,
+  isReadonly: _isReadonly,
   messageId,
 }: DocumentToolResultProps) {
   const { setArtifact } = useArtifact();
@@ -93,7 +93,7 @@ interface DocumentToolCallProps {
 function PureDocumentToolCall({
   type,
   args,
-  isReadonly,
+  isReadonly: _isReadonly,
 }: DocumentToolCallProps) {
   const { setArtifact } = useArtifact();
 
