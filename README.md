@@ -37,6 +37,7 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 - [Langfuse](https://langfuse.com) - LLM observability & analytics
 - [Vercel Analytics](https://vercel.com/analytics) - Web analytics
 - [Biome](https://biomejs.dev) - Code linting and formatting
+- [Ultracite](https://ultracite.dev) - Biome preset for humans and AI
 - [Streamdown](https://streamdown.ai/) - Markdown for AI streaming
 - [AI Elements](https://ai-sdk.dev/elements/overview) - AI-native Components
 - [AI SDK Tools](https://ai-sdk-tools.dev/) - Developer tools for AI SDK
@@ -63,6 +64,7 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
 ## Quick Start
 
 1. **Clone and Install**
+
    ```bash
    git clone https://github.com/franciscomoretti/sparka.git
    cd sparka
@@ -70,11 +72,13 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    ```
 
 2. **Environment Setup**
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    **Required:**
+
    - `POSTGRES_URL` - Database connection
    - `AI_GATEWAY_API_KEY` - Vercel AI Gateway
    - `BLOB_READ_WRITE_TOKEN` - Vercel Blob read/write token
@@ -82,8 +86,9 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    - `AUTH_SECRET` - Better Auth secret
    - `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` - Google OAuth
    - `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` - GitHub OAuth
-   
+
    **Optional:**
+
    - `REDIS_URL` - For resumable streams
    - `OPENAI_API_KEY` - Direct OpenAI access
    - `TAVILY_API_KEY` - Web search
@@ -92,6 +97,7 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    - `SANDBOX_TEMPLATE_ID` - Code execution
 
 3. **Database Setup**
+
    ```bash
    bun run db:migrate
    ```
@@ -102,5 +108,3 @@ Ship a full-featured AI chat in minutes with Claude, GPT-4, Gemini, Grok, and 12
    ```
 
 Visit [http://localhost:3000](http://localhost:3000) to start building.
-
-
