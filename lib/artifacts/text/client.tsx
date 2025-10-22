@@ -88,14 +88,14 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
       const newContent = getDocumentContentById(currentVersionIndex);
 
       return (
-        <div className="m-auto flex max-w-3xl flex-row px-4 py-8 md:p-20">
+        <div className="m-auto flex max-w-6xl flex-row px-4 py-8 md:p-20">
           <DiffView newContent={newContent} oldContent={oldContent} />
         </div>
       );
     }
 
     return (
-      <div className="m-auto flex max-w-3xl flex-row px-4 py-8 md:p-20">
+      <div className="m-auto flex max-w-6xl flex-row px-4 py-8 md:p-20">
         <Editor
           content={content}
           currentVersionIndex={currentVersionIndex}

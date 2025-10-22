@@ -21,7 +21,7 @@ export default function TermsPage() {
     : [];
 
   return (
-    <main className="prose dark:prose-invert container mx-auto max-w-3xl py-10">
+    <main className="prose dark:prose-invert container mx-auto max-w-6xl py-10">
       <h1>{siteConfig.policies.terms.title}</h1>
       {siteConfig.policies.terms.lastUpdated ? (
         <p>
