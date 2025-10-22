@@ -10,13 +10,13 @@ import { env } from "@/lib/env";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sparka.ai"),
-  title: "Sparka AI - Production-Ready AI Chat Template",
+  title: "Baa - Production-Ready AI Chat Template",
   description:
     "Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.",
   openGraph: {
-    siteName: "Sparka AI",
+    siteName: "Baa",
     url: "https://sparka.ai",
-    title: "Sparka AI - Production-Ready AI Chat Template",
+    title: "Baa - Production-Ready AI Chat Template",
     description:
       "Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.",
   },

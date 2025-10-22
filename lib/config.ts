@@ -49,9 +49,9 @@ export const siteConfig: SiteConfig = {
   githubUrl: "https://github.com/franciscomoretti/sparka",
   appPrefix: "sparka-ai",
 
-  appName: "Sparka AI",
+  appName: "Baa",
   organization: {
-    name: "Sparka AI Ltd",
+    name: "Baa Ltd",
     contact: {
       privacyEmail: "privacy@sparka.ai",
       legalEmail: "legal@sparka.ai",

@@ -1,6 +1,6 @@
 {
-  "name": "Sparka AI - Production-Ready AI Chat Template",
-  "short_name": "Sparka AI",
+  "name": "Baa - Production-Ready AI Chat Template",
+  "short_name": "Baa",
   "description": "Build your own multi-model AI chat app with 120+ models, authentication, streaming, and advanced features.",
   "start_url": "/",
   "display": "standalone",
@@ -8,7 +8,7 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/icon.png",
       "sizes": "any",
       "type": "image/svg+xml"
     }

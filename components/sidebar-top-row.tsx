@@ -20,10 +20,10 @@ export function SidebarTopRow() {
     >
       <span className="flex cursor-pointer items-center gap-2 rounded-md p-1 font-semibold text-lg hover:bg-muted">
         <Image
-          alt="Sparka AI"
+          alt="Baa"
           className="h-6 w-6"
           height={24}
-          src="/icon.svg"
+          src="/icon.png"
           width={24}
         />
         {(open || openMobile) && "Sparka"}

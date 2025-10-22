@@ -46,7 +46,7 @@ export async function generateMetadata(
     return `${provider} ${model.name}`.trim();
   };
 
-  const siteName = "Sparka AI";
+  const siteName = "Baa";
   const perfSuffix = ENABLE_PERFORMANCE_COPY ? " & Performance" : "";
 
   const buildCompareList = () => {
@@ -62,7 +62,7 @@ export async function generateMetadata(
 
   const compareList = buildCompareList();
 
-  let title = `AI Model Comparison: Pricing, Specs${perfSuffix} | Sparka AI`;
+  let title = `AI Model Comparison: Pricing, Specs${perfSuffix} | Baa`;
   let description = `Compare AI models by ${compareList}.`;
 
   const keywordsBase = [

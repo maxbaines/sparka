@@ -40,10 +40,10 @@ function PureModelsHeader({ className }: { className?: string }) {
       <Link aria-label="Sparka home" className="py-2" href="/">
         <span className="flex h-9 cursor-pointer items-center gap-2 rounded-md px-2 font-semibold text-lg hover:bg-muted">
           <Image
-            alt="Sparka AI"
+            alt="Baa"
             className="size-6"
             height={24}
-            src="/icon.svg"
+            src="/icon.png"
             width={24}
           />
           <span className="hidden sm:inline">Sparka</span>

@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/icon.svg" alt="Sparka AI" width="64" height="64">
+<img src="public/icon.png" alt="Sparka AI" width="64" height="64">
 
 # Production-Ready AI Chat Template
 

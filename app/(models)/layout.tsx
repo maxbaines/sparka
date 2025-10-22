@@ -9,8 +9,8 @@ import { ModelsHeader } from "./models-header";
 const totalModels = allModels.length;
 const totalProviders = providers.length;
 
-const pageTitle = "Models | Sparka AI";
-const pageDescription = `Browse ${totalModels} models across ${totalProviders} providers from Vercel AI Gateway in Sparka AI. Filter and compare by provider, context window, and pricing.`;
+const pageTitle = "Models | Baa";
+const pageDescription = `Browse ${totalModels} models across ${totalProviders} providers from Vercel AI Gateway in Baa. Filter and compare by provider, context window, and pricing.`;
 
 export const metadata: Metadata = {
   title: pageTitle,

@@ -4,9 +4,9 @@ import { ModelsProvider } from "@/app/(models)/models/models-store-context";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ModelsResults } from "./models-results";
 
-const pageTitle = "Models | Sparka AI";
+const pageTitle = "Models | Baa";
 const pageDescription =
-  "Browse models across providers form Vercel AI Gateway in Sparka AI. Filter and compare by provider, context window, and pricing.";
+  "Browse models across providers form Vercel AI Gateway in Baa. Filter and compare by provider, context window, and pricing.";
 
 export const metadata: Metadata = {
   title: pageTitle,

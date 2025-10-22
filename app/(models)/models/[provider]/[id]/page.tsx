@@ -52,7 +52,7 @@ export async function generateMetadata(
     return `${prov} ${m.name}`.trim();
   };
 
-  const siteName = "Sparka AI";
+  const siteName = "Baa";
   const a = displayName(model?.id ?? modelId);
 
   const benchmarksSuffix = ENABLE_PERFORMANCE_COPY ? " & Benchmarks" : "";
