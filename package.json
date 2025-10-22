@@ -31,7 +31,7 @@
     "@ai-models/vercel-gateway": "workspace:*",
     "@ai-sdk-tools/devtools": "^0.8.4",
     "@ai-sdk/anthropic": "^2.0.3",
-    "@ai-sdk/gateway": "1.0.23",
+    "@ai-sdk/gateway": "2.0.0",
     "@ai-sdk/google": "^2.0.6",
     "@ai-sdk/openai": "^2.0.12",
     "@ai-sdk/provider": "^2.0.0",
