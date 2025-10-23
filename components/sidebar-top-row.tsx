@@ -26,7 +26,7 @@ export function SidebarTopRow() {
           src="/icon.png"
           width={24}
         />
-        {(open || openMobile) && "Sparka"}
+        {(open || openMobile) && "Baa"}
       </span>
     </Link>
   );

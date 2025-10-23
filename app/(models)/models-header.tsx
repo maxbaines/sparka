@@ -37,7 +37,7 @@ function PureModelsHeader({ className }: { className?: string }) {
         className
       )}
     >
-      <Link aria-label="Sparka home" className="py-2" href="/">
+      <Link aria-label="Baa home" className="py-2" href="/">
         <span className="flex h-9 cursor-pointer items-center gap-2 rounded-md px-2 font-semibold text-lg hover:bg-muted">
           <Image
             alt="Baa"
@@ -46,7 +46,7 @@ function PureModelsHeader({ className }: { className?: string }) {
             src="/icon.png"
             width={24}
           />
-          <span className="hidden sm:inline">Sparka</span>
+          <span className="hidden sm:inline">Baa</span>
         </span>
       </Link>
 
