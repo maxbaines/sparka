@@ -495,7 +495,7 @@ function PureMultimodalInput({
 
   return (
     <div className="relative">
-      {messageIds.length === 0 &&
+      {/*messageIds.length === 0 &&
         attachments.length === 0 &&
         uploadQueue.length === 0 &&
         !isEditMode && (
@@ -504,7 +504,7 @@ function PureMultimodalInput({
             className="mb-4"
             selectedModelId={selectedModelId}
           />
-        )}
+        )*/}
 
       <input
         accept="image/*,.pdf"
