@@ -31,6 +31,7 @@ export const env = createEnv({
     VERCEL_URL: z.string().optional(),
     VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
     CONTEXT_SIZE: z.string().optional(),
+    UNLIMITED_EMAILS: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_SANDBOX_AVAILABLE: z.boolean().optional(),
@@ -61,6 +62,7 @@ export const env = createEnv({
     VERCEL_URL: process.env.VERCEL_URL,
     VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
     CONTEXT_SIZE: process.env.CONTEXT_SIZE,
+    UNLIMITED_EMAILS: process.env.UNLIMITED_EMAILS,
     // Enable / disable features based on environment variables
     NEXT_PUBLIC_SANDBOX_AVAILABLE: Boolean(process.env.SANDBOX_TEMPLATE_ID),
     NEXT_PUBLIC_TAVILY_AVAILABLE: Boolean(process.env.TAVILY_API_KEY),
