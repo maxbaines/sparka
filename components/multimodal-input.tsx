@@ -46,7 +46,7 @@ import { ImageModal } from "./image-modal";
 import { LexicalChatInput } from "./lexical-chat-input";
 import { ModelSelector } from "./model-selector";
 import { ResponsiveTools } from "./responsive-tools";
-import { SuggestedActions } from "./suggested-actions";
+//import { SuggestedActions } from "./suggested-actions";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { LimitDisplay } from "./upgrade-cta/limit-display";
@@ -556,7 +556,7 @@ function PureMultimodalInput({
             />
           )}
 
-          <ContextBar
+          {/*<ContextBar
             attachments={attachments}
             className=""
             onImageClick={handleImageClick}
@@ -564,7 +564,7 @@ function PureMultimodalInput({
             parentMessageId={parentMessageId}
             selectedModelId={selectedModelId}
             uploadQueue={uploadQueue}
-          />
+          />*/}
 
           <LexicalChatInput
             autoFocus
