@@ -43,6 +43,7 @@ import {
 import {
   getChatById,
   getMessageById,
+  getPromptById,
   getUserById,
   saveChat,
   saveMessage,
@@ -508,12 +509,48 @@ export async function POST(request: NextRequest) {
         });
       }
 
+      // Resolve effective system prompt
+      let effectiveSystem = systemPrompt(); // default fallback
+
+      if (!isAnonymous) {
+        const chatRow = await getChatById({ id: chatId });
+        if (chatRow) {
+          if (
+            chatRow.systemPromptSnapshot &&
+            chatRow.systemPromptSnapshot.length > 0
+          ) {
+            effectiveSystem = chatRow.systemPromptSnapshot;
+          } else if (chatRow.systemPromptId) {
+            const p = await getPromptById({ id: chatRow.systemPromptId });
+            if (p && p.userId === userId) {
+              effectiveSystem = p.content;
+            }
+          }
+        } else {
+          // Chat doesn't exist yet - check if client sent prompt info via message metadata
+          const metadata = userMessage.metadata as Record<string, unknown>;
+          const promptIdFromMetadata = metadata?.promptId as string | undefined;
+          const promptContentFromMetadata = metadata?.promptContent as
+            | string
+            | undefined;
+
+          if (promptIdFromMetadata) {
+            const p = await getPromptById({ id: promptIdFromMetadata });
+            if (p && p.userId === userId) {
+              effectiveSystem = p.content;
+            }
+          } else if (promptContentFromMetadata) {
+            effectiveSystem = promptContentFromMetadata;
+          }
+        }
+      }
+
       // Build the data stream that will emit tokens
       const stream = createUIMessageStream<ChatMessage>({
         execute: async ({ writer: dataStream }) => {
           const result = streamText({
             model: getLanguageModel(modelDefinition.apiModelId),
-            system: systemPrompt(),
+            system: effectiveSystem,
             messages: contextForLLM,
             stopWhen: [
               stepCountIs(5),

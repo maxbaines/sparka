@@ -37,6 +37,10 @@ export const chat = pgTable("Chat", {
     .notNull()
     .default("private"),
   isPinned: boolean("isPinned").notNull().default(false),
+  systemPromptId: uuid("systemPromptId").references(() => prompt.id, {
+    onDelete: "set null",
+  }),
+  systemPromptSnapshot: text("systemPromptSnapshot"),
 });
 
 export type Chat = InferSelectModel<typeof chat>;
@@ -135,6 +139,27 @@ export const suggestion = pgTable(
 );
 
 export type Suggestion = InferSelectModel<typeof suggestion>;
+
+export const prompt = pgTable("Prompt", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  description: text("description"),
+  content: text("content").notNull(),
+  variables: json("variables").$type<string[] | null>(),
+  tags: json("tags").$type<string[] | null>(),
+  visibility: varchar("visibility", { enum: ["public", "private"] })
+    .notNull()
+    .default("private"),
+  isPinned: boolean("isPinned").notNull().default(false),
+});
+
+export type Prompt = InferSelectModel<typeof prompt>;
+
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),

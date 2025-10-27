@@ -54,10 +54,25 @@ export function ChatSync({
         api: "/api/chat",
         fetch: fetchWithErrorHandlers,
         prepareSendMessagesRequest({ messages, id, body }) {
+          // Check localStorage for prompt data
+          const promptId = localStorage.getItem(`chat-${id}-promptId`);
+          const promptContent = localStorage.getItem(`chat-${id}-promptContent`);
+
+          const lastMessage = messages.at(-1);
+          
+          // Add prompt data to message metadata if available
+          if (lastMessage && (promptId || promptContent)) {
+            lastMessage.metadata = {
+              ...lastMessage.metadata,
+              ...(promptId ? { promptId } : {}),
+              ...(promptContent ? { promptContent } : {}),
+            };
+          }
+
           return {
             body: {
               id,
-              message: messages.at(-1),
+              message: lastMessage,
               prevMessages: isAuthenticated ? [] : messages.slice(0, -1),
               ...body,
             },

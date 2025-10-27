@@ -9,6 +9,8 @@ import {
   type DBMessage,
   document,
   message,
+  prompt,
+  type Prompt,
   type Suggestion,
   suggestion,
   type User,
@@ -695,5 +697,248 @@ async function deleteAttachmentsFromMessages(messages: DBMessage[]) {
     console.error("Failed to delete attachments from Vercel Blob:", error);
     // Don't throw here - we still want to proceed with message deletion
     // even if blob cleanup fails
+  }
+}
+
+export async function getPromptsByUserId({
+  userId,
+}: {
+  userId: string;
+}): Promise<Prompt[]> {
+  try {
+    return await db
+      .select()
+      .from(prompt)
+      .where(eq(prompt.userId, userId))
+      .orderBy(desc(prompt.updatedAt));
+  } catch (error) {
+    console.error("Failed to get prompts by user from database");
+    throw error;
+  }
+}
+
+export async function getPromptById({
+  id,
+}: {
+  id: string;
+}): Promise<Prompt | undefined> {
+  try {
+    const [p] = await db.select().from(prompt).where(eq(prompt.id, id));
+    return p;
+  } catch (error) {
+    console.error("Failed to get prompt by id from database");
+    throw error;
+  }
+}
+
+export async function createPrompt({
+  userId,
+  title,
+  description,
+  content,
+  variables,
+  tags,
+  visibility,
+  isPinned,
+}: {
+  userId: string;
+  title: string;
+  description?: string | null;
+  content: string;
+  variables?: string[] | null;
+  tags?: string[] | null;
+  visibility?: "public" | "private";
+  isPinned?: boolean;
+}) {
+  try {
+    return await db.insert(prompt).values({
+      userId,
+      title,
+      description: description ?? null,
+      content,
+      variables: variables ?? null,
+      tags: tags ?? null,
+      visibility: visibility ?? "private",
+      isPinned: isPinned ?? false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  } catch (error) {
+    console.error("Failed to create prompt in database");
+    throw error;
+  }
+}
+
+export async function updatePrompt({
+  id,
+  userId,
+  title,
+  description,
+  content,
+  variables,
+  tags,
+  visibility,
+  isPinned,
+}: {
+  id: string;
+  userId: string;
+  title?: string;
+  description?: string | null;
+  content?: string;
+  variables?: string[] | null;
+  tags?: string[] | null;
+  visibility?: "public" | "private";
+  isPinned?: boolean;
+}) {
+  try {
+    // Ownership guard
+    const [own] = await db
+      .select({ userId: prompt.userId })
+      .from(prompt)
+      .where(eq(prompt.id, id));
+    if (!own || own.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    return await db
+      .update(prompt)
+      .set({
+        ...(title !== undefined ? { title } : {}),
+        ...(description !== undefined ? { description } : {}),
+        ...(content !== undefined ? { content } : {}),
+        ...(variables !== undefined ? { variables } : {}),
+        ...(tags !== undefined ? { tags } : {}),
+        ...(visibility !== undefined ? { visibility } : {}),
+        ...(isPinned !== undefined ? { isPinned } : {}),
+        updatedAt: new Date(),
+      })
+      .where(eq(prompt.id, id));
+  } catch (error) {
+    console.error("Failed to update prompt in database");
+    throw error;
+  }
+}
+
+export async function deletePrompt({
+  id,
+  userId,
+}: {
+  id: string;
+  userId: string;
+}) {
+  try {
+    // Ownership guard
+    const [own] = await db
+      .select({ userId: prompt.userId })
+      .from(prompt)
+      .where(eq(prompt.id, id));
+    if (!own || own.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    return await db.delete(prompt).where(eq(prompt.id, id));
+  } catch (error) {
+    console.error("Failed to delete prompt from database");
+    throw error;
+  }
+}
+
+export async function setChatPromptById({
+  chatId,
+  promptId,
+  userId,
+}: {
+  chatId: string;
+  promptId: string;
+  userId: string;
+}) {
+  try {
+    const c = await tryGetChatById({ id: chatId });
+    if (!c) {
+      throw new Error("Chat not found");
+    }
+    if (c.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    // Validate prompt ownership
+    const p = await getPromptById({ id: promptId });
+    if (!p || p.userId !== userId) {
+      throw new Error("Prompt not found or access denied");
+    }
+
+    return await db
+      .update(chat)
+      .set({
+        systemPromptId: promptId,
+        systemPromptSnapshot: null,
+        updatedAt: new Date(),
+      })
+      .where(eq(chat.id, chatId));
+  } catch (error) {
+    console.error("Failed to set chat prompt by id in database");
+    throw error;
+  }
+}
+
+export async function setChatPromptSnapshot({
+  chatId,
+  content,
+  userId,
+}: {
+  chatId: string;
+  content: string;
+  userId: string;
+}) {
+  try {
+    const c = await tryGetChatById({ id: chatId });
+    if (!c) {
+      throw new Error("Chat not found");
+    }
+    if (c.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    return await db
+      .update(chat)
+      .set({
+        systemPromptId: null,
+        systemPromptSnapshot: content,
+        updatedAt: new Date(),
+      })
+      .where(eq(chat.id, chatId));
+  } catch (error) {
+    console.error("Failed to set chat prompt snapshot in database");
+    throw error;
+  }
+}
+
+export async function clearChatPrompt({
+  chatId,
+  userId,
+}: {
+  chatId: string;
+  userId: string;
+}) {
+  try {
+    const c = await tryGetChatById({ id: chatId });
+    if (!c) {
+      throw new Error("Chat not found");
+    }
+    if (c.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    return await db
+      .update(chat)
+      .set({
+        systemPromptId: null,
+        systemPromptSnapshot: null,
+        updatedAt: new Date(),
+      })
+      .where(eq(chat.id, chatId));
+  } catch (error) {
+    console.error("Failed to clear chat prompt in database");
+    throw error;
   }
 }

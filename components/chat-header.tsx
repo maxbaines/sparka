@@ -3,6 +3,7 @@ import { Share } from "lucide-react";
 import { memo } from "react";
 import { HeaderActions } from "@/components/header-actions";
 import { SidebarToggle } from "@/components/sidebar-toggle";
+import { SystemPromptControl } from "@/components/system-prompt-control";
 import type { Session } from "@/lib/auth";
 import { ShareButton } from "./share-button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -24,6 +25,7 @@ function PureChatHeader({
         <SidebarToggle />
 
         {!isReadonly && hasMessages && <ShareButton chatId={chatId} />}
+        {!isReadonly && <SystemPromptControl chatId={chatId} />}
         {isReadonly && (
           <Tooltip>
             <TooltipTrigger asChild>
