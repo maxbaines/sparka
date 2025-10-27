@@ -66,7 +66,12 @@ export function useSaveChat() {
         visibility: "private" as const,
       };
 
-      await saveAnonymousChatToStorage({ ...tempChat, isPinned: false });
+      await saveAnonymousChatToStorage({
+        ...tempChat,
+        isPinned: false,
+        systemPromptId: null,
+        systemPromptSnapshot: null,
+      });
       return { tempChat, message };
     },
     onSuccess: async ({ tempChat, message }) => {
@@ -78,6 +83,8 @@ export function useSaveChat() {
           ...tempChat,
           title: data.title,
           isPinned: false,
+          systemPromptId: null,
+          systemPromptSnapshot: null,
         });
 
         // Invalidate chats to refresh the UI
@@ -736,6 +743,8 @@ export function useGetAllChats(limit?: number) {
             visibility: chat.visibility,
             userId: "",
             isPinned: chat.isPinned,
+            systemPromptId: chat.systemPromptId ?? null,
+            systemPromptSnapshot: chat.systemPromptSnapshot ?? null,
           }) satisfies UIChat
       );
     },

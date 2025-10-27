@@ -47,6 +47,8 @@ import {
   getUserById,
   saveChat,
   saveMessage,
+  setChatPromptById,
+  setChatPromptSnapshot,
   updateMessage,
 } from "@/lib/db/queries";
 import { env } from "@/lib/env";
@@ -520,11 +522,26 @@ export async function POST(request: NextRequest) {
         const promptIdFromMetadata = metadata?.promptId as string | undefined;
         const promptContentFromMetadata = metadata?.promptContent as string | undefined;
 
+        // Persist prompt from metadata to DB if chat has no prompt set yet
+        if (chatRow && !chatRow.systemPromptSnapshot && !chatRow.systemPromptId) {
+          if (promptIdFromMetadata) {
+            const p = await getPromptById({ id: promptIdFromMetadata });
+            if (p && p.userId === userId) {
+              await setChatPromptById({ chatId, promptId: p.id, userId });
+            }
+          } else if (promptContentFromMetadata) {
+            await setChatPromptSnapshot({ chatId, content: promptContentFromMetadata, userId });
+          }
+        }
+
+        // Reload chat after potential persistence to get updated state
+        const updatedChatRow = await getChatById({ id: chatId });
+
         // Priority: DB snapshot > DB promptId > message metadata (promptId or promptContent) > default
-        if (chatRow?.systemPromptSnapshot && chatRow.systemPromptSnapshot.length > 0) {
-          effectiveSystem = chatRow.systemPromptSnapshot;
-        } else if (chatRow?.systemPromptId) {
-          const p = await getPromptById({ id: chatRow.systemPromptId });
+        if (updatedChatRow?.systemPromptSnapshot && updatedChatRow.systemPromptSnapshot.length > 0) {
+          effectiveSystem = updatedChatRow.systemPromptSnapshot;
+        } else if (updatedChatRow?.systemPromptId) {
+          const p = await getPromptById({ id: updatedChatRow.systemPromptId });
           if (p && p.userId === userId) {
             effectiveSystem = p.content;
           }
