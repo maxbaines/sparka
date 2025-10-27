@@ -6,4 +6,6 @@ export type UIChat = {
   visibility: "private" | "public";
   userId: string;
   isPinned: boolean;
+  systemPromptId: string | null;
+  systemPromptSnapshot: string | null;
 };
