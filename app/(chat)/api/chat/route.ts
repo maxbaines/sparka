@@ -514,34 +514,29 @@ export async function POST(request: NextRequest) {
 
       if (!isAnonymous) {
         const chatRow = await getChatById({ id: chatId });
-        if (chatRow) {
-          if (
-            chatRow.systemPromptSnapshot &&
-            chatRow.systemPromptSnapshot.length > 0
-          ) {
-            effectiveSystem = chatRow.systemPromptSnapshot;
-          } else if (chatRow.systemPromptId) {
-            const p = await getPromptById({ id: chatRow.systemPromptId });
-            if (p && p.userId === userId) {
-              effectiveSystem = p.content;
-            }
-          }
-        } else {
-          // Chat doesn't exist yet - check if client sent prompt info via message metadata
-          const metadata = userMessage.metadata as Record<string, unknown>;
-          const promptIdFromMetadata = metadata?.promptId as string | undefined;
-          const promptContentFromMetadata = metadata?.promptContent as
-            | string
-            | undefined;
 
-          if (promptIdFromMetadata) {
-            const p = await getPromptById({ id: promptIdFromMetadata });
-            if (p && p.userId === userId) {
-              effectiveSystem = p.content;
-            }
-          } else if (promptContentFromMetadata) {
-            effectiveSystem = promptContentFromMetadata;
+        // Always extract metadata so we can use it as fallback
+        const metadata = userMessage.metadata as Record<string, unknown> | undefined;
+        const promptIdFromMetadata = metadata?.promptId as string | undefined;
+        const promptContentFromMetadata = metadata?.promptContent as string | undefined;
+
+        // Priority: DB snapshot > DB promptId > message metadata (promptId or promptContent) > default
+        if (chatRow?.systemPromptSnapshot && chatRow.systemPromptSnapshot.length > 0) {
+          effectiveSystem = chatRow.systemPromptSnapshot;
+        } else if (chatRow?.systemPromptId) {
+          const p = await getPromptById({ id: chatRow.systemPromptId });
+          if (p && p.userId === userId) {
+            effectiveSystem = p.content;
           }
+        } else if (promptIdFromMetadata) {
+          // Fallback to metadata if no DB prompt is set
+          const p = await getPromptById({ id: promptIdFromMetadata });
+          if (p && p.userId === userId) {
+            effectiveSystem = p.content;
+          }
+        } else if (promptContentFromMetadata) {
+          // Fallback to snapshot content from metadata
+          effectiveSystem = promptContentFromMetadata;
         }
       }
 

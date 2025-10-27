@@ -55,7 +55,7 @@ export function SystemPromptControl({ chatId }: { chatId: string }) {
     staleTime: 5_000,
   });
 
-  // Determine active prompt name
+  // Determine active prompt name (client-side only for localStorage)
   const activePromptName = (() => {
     // Check if there's a snapshot (one-off prompt)
     if (currentChat?.systemPromptSnapshot) {
@@ -70,18 +70,20 @@ export function SystemPromptControl({ chatId }: { chatId: string }) {
       }
     }
     
-    // Check localStorage for new chats
-    const localPromptId = localStorage.getItem(`chat-${chatId}-promptId`);
-    if (localPromptId) {
-      const localPrompt = prompts?.find((p) => p.id === localPromptId);
-      if (localPrompt) {
-        return localPrompt.title;
+    // Check localStorage for new chats (only on client side)
+    if (typeof window !== "undefined") {
+      const localPromptId = localStorage.getItem(`chat-${chatId}-promptId`);
+      if (localPromptId) {
+        const localPrompt = prompts?.find((p) => p.id === localPromptId);
+        if (localPrompt) {
+          return localPrompt.title;
+        }
       }
-    }
-    
-    const localPromptContent = localStorage.getItem(`chat-${chatId}-promptContent`);
-    if (localPromptContent) {
-      return "Custom";
+      
+      const localPromptContent = localStorage.getItem(`chat-${chatId}-promptContent`);
+      if (localPromptContent) {
+        return "Custom";
+      }
     }
     
     return null;
